@@ -1,6 +1,6 @@
 # Guide for Craft CMS 3
 
-Craft CMS is intuitive. Marketing plans and integrations aren&rsquo;t. Take this.
+Craft CMS is intuitive. Marketing plans and organizational workflows—not so much.
 
 ![Screenshot](resources/img/guide-cp.png)
 
