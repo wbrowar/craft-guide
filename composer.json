@@ -1,0 +1,50 @@
+{
+    "name": "wbrowar/guide",
+    "description": "Description",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "guide"
+    ],
+    "support": {
+        "docs": "https://github.com/wbrowar/guide/blob/master/README.md",
+        "issues": "https://github.com/wbrowar/guide/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Will Browar",
+            "homepage": "https://wbrowar.com"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0-RC1"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+          "wbrowar\\guide\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Guide",
+        "handle": "guide",
+        "schemaVersion": "1.0.0",
+        "hasCpSettings": true,
+        "hasCpSection": true,
+        "changelogUrl": "https://raw.githubusercontent.com/wbrowar/guide/master/CHANGELOG.md",
+        "components": {
+            "guideService": "wbrowar\\guide\\services\\GuideService"
+        },
+        "class": "wbrowar\\guide\\Guide"
+    }
+}

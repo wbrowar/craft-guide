@@ -1,0 +1,17 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.textField({
+    label: 'Template Path',
+    id: 'guideTemplatePath',
+    name: 'guideTemplatePath',
+    value: settings.guideTemplatePath,
+    instructions: 'Path to Guide Twig templates relative to your templates folder.'
+}) }}
+
+{{ forms.textareaField({
+    label: 'Custom CSS',
+    id: 'customCss',
+    name: 'customCss',
+    rows: 10,
+    value: settings.customCss})
+}}

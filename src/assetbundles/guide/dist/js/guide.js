@@ -1,0 +1,1 @@
+"use strict";var jq=jQuery;jq(".guide_cp").length>0&&jq("html").addClass("guide-cp");
