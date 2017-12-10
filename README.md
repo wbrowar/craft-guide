@@ -1,6 +1,6 @@
 # Guide for Craft CMS 3
 
-Craft CMS is intuitive. Marketing plans and integrations aren&rsquo;t.
+Craft CMS is intuitive. Marketing plans and integrations aren&rsquo;t. Take this.
 
 ![Screenshot](resources/img/guide-cp.png)
 
@@ -24,17 +24,14 @@ To install the plugin, follow these instructions.
 3. In the Control Panel, go to Settings → Plugins and click the “Install” button for Guide.
 
 4. Use the following instructions to add components to the Control Panel:
-   - Guide CP Section
-   - Guide Widget
+   - [Guide CP Section](https://github.com/wbrowar/craft-3-guide#guide-cp-section)
+   - [Guide Widget](https://github.com/wbrowar/craft-3-guide#guide-widget)
 
 ## Guide Overview
 
 Guide helps you explain the rules of the road right where the rules need to be read. Create your CMS Guide within a section of the Control Panel and write your own Dashboard welcome widget.
 
-There's more to come.
-
 ## Guide CP Section
-Put your CMS Guide into the Control Panel.
 
 ![Screenshot](resources/img/guide-cp-custom.png)
 
@@ -44,7 +41,7 @@ Use templates to create your CMS guide, in a way that's easily portable from one
 
 1. Create an Home template in your site's `templates` directory. It can be named whatever you want, but the default is `_guide/index`, so if you create an `index.twig` file at this path, `/templates/_guide/index.twig`, it will show up in the Guide CP Section. 
 2. If you want to change your Guide Home template's location, edit the path to your new location on the Guide plugin settings page.
-3. You can create multiple pages and link to them through a navigation set in your Guide Home template. Configure this code anywhere within your template.
+3. You can create multiple pages and link to them through a navigation set in your Guide Home template. Configure this code anywhere within your Home template. *NOTE: this code does not need to be located on any other template.*
     
     ```$twig
     {{ updateGuideCpNav({
@@ -56,11 +53,11 @@ Use templates to create your CMS guide, in a way that's easily portable from one
     
 4. Edit your templates as needed. You can use these helper components to change the layout.
 
-5. Most of Guide's CSS relies on Craft's CP default CSS, but if you need to override styles or add your own CSS, use the Custom CSS field in Guide's plugin settings.
+5. Most of Guide's CSS relies on Craft's default Control Panel CSS, but if you need to override styles or add your own CSS, use the Custom CSS field in Guide's plugin settings.
 
-*NOTE: Your templates will be pulled in like it would if it were using {% include %}, so your template will not extend other templates or use macros outside of the template.*
+*NOTE: Your templates will be pulled in like it would if it were using {% include %}, so your template cannot extend other templates.*
 
-*The Guide CP Nav gets updated whenever the Guide Home template is loaded. To update Guide CP Nav, just click on the Guide tab in CP.*
+*ALSO: The Guide CP Nav gets updated whenever the Guide Home template is loaded. To update Guide CP Nav, just click on the Guide tab in CP.*
 
 ## Guide Widget
 
@@ -68,7 +65,7 @@ A welcome message can be a good starting point for your clients. Let them know w
 
 ![Screenshot](resources/img/guide-widget.png)
 
-This can include just a simple note, written in markdown, or add some dynamic content via Twig. You can create and customize as many Guide Widgets as you'd like.
+This can include just a simple note written in markdown or you can use dynamic content via Twig. You can create and customize as many Guide Widgets as you'd like.
 
 ![Screenshot](resources/img/guide-widget-settings.png)
 
@@ -88,7 +85,7 @@ Here's a list of available components:
 
 ## CSS Variables
 
-Guide is color neutral by default, but some simple CSS changes can help you rebrand Guide to your liking. To make it easier than writing multiple CSS selectors, you can change [CSS Custom Properties](https://developer.mozilla.org/en-US/docs/Web/CSS/--*) that drive Guide's default theme.
+Guide is color neutral by default, but some simple CSS changes can help you rebrand Guide to your liking. To make it easier than hunting down CSS selectors, you can change [CSS Custom Properties](https://developer.mozilla.org/en-US/docs/Web/CSS/--*) that drive Guide's default theme.
 
 ![Screenshot](resources/img/guide-setting-colors-example.png)
 
@@ -105,17 +102,18 @@ For example, if you want to show your Craft CMS pride, enter this into the Custo
 
 ![Screenshot](resources/img/guide-settings.png)
 
-Another idea could be to rebrand Guide to your own company's brand colors.
+Regular CSS can be used, as well.
+ 
+*NOTE: Another idea could be to rebrand Guide to your own company's brand colors.*
 
 ## Guide Roadmap
 
 Some things to do, and ideas for potential features:
 
-- Create a plugin icon
-- Expand theming css options
+- Expand theming CSS options and components
 - Add sub-navigation to CP Section pages
 - Add a default template to Guide widgets for easy portability
 - Add the ability to create guide notes and pages within Craft CMS (stored in the DB)
-- A few more things to come
+- A few more ideas are in the works
 
 Brought to you by [Will Browar](https://twitter.com/wbrowar)
