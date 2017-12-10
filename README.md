@@ -89,7 +89,7 @@ Guide is color neutral by default, but some simple CSS changes can help you rebr
 
 ![Screenshot](resources/img/guide-setting-colors-example.png)
 
-For example, if you want to show your Craft CMS pride, enter this into the Custom CSS field in Guide's plugin settings. Anywhere these colors are set they will be updated.
+For example, if you want to match Craft's sidebar, enter this into the Custom CSS field in Guide's plugin settings. Anywhere these colors are set they will be updated.
 
 ```$css
 :root {
@@ -102,7 +102,7 @@ For example, if you want to show your Craft CMS pride, enter this into the Custo
 
 ![Screenshot](resources/img/guide-settings.png)
 
-Regular CSS can be used, as well.
+Regular CSS can be used, as well. Custom CSS entered in Guide's plugin settings will appear on all pages within the CP.
  
 *NOTE: Another idea could be to rebrand Guide to your own company's brand colors.*
 
