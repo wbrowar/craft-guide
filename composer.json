@@ -1,6 +1,6 @@
 {
     "name": "wbrowar/guide",
-    "description": "Description",
+    "description": "A CMS Guide for Craft CMS.",
     "type": "craft-plugin",
     "version": "1.0.0",
     "keywords": [
