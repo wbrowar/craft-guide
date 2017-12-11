@@ -84,81 +84,85 @@ class Guide extends Plugin
 
         // Add our CSS
         $view = Craft::$app->getView();
-        $view->registerAssetBundle(GuideAsset::class);
-        $view->registerCss($this->getSettings()->customCss);
 
-        // Register our site routes
-        Event::on(
-            UrlManager::class,
-            UrlManager::EVENT_REGISTER_SITE_URL_RULES,
-            function (RegisterUrlRulesEvent $event) {
-                $event->rules['siteActionTrigger1'] = 'guide/default';
-            }
-        );
+        if ($view->getTemplateMode() === View::TEMPLATE_MODE_CP) {
+            $view->registerAssetBundle(GuideAsset::class);
+            $view->registerCss($this->getSettings()->customCss);
 
-        // Register our CP routes
-        Event::on(
-            UrlManager::class,
-            UrlManager::EVENT_REGISTER_CP_URL_RULES,
-            function (RegisterUrlRulesEvent $event) {
-                $settings = $this->getSettings();
-
-                // Check to see if user's template exists
-                Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_SITE);
-                if (Craft::$app->view->doesTemplateExist($settings->guideTemplatePath)) {
-                    $guideTemplatePath = Craft::$app->view->resolveTemplate($settings->guideTemplatePath);
-
-                    $guideTemplatePathAsString = $this->_getTemplateFileAsString($guideTemplatePath);
-                } else {
-                    $guideTemplatePathAsString = null;
+            // Register our site routes
+            Event::on(
+                UrlManager::class,
+                UrlManager::EVENT_REGISTER_SITE_URL_RULES,
+                function (RegisterUrlRulesEvent $event) {
+                    $event->rules['siteActionTrigger1'] = 'guide/default';
                 }
+            );
 
-                // Register CP Section home templates
-                $event->rules['guide/home'] = ['template' => 'guide/home', 'variables' => ['pageContent' => $guideTemplatePathAsString, 'settings' => $settings]];
+            // Register our CP routes
+            Event::on(
+                UrlManager::class,
+                UrlManager::EVENT_REGISTER_CP_URL_RULES,
+                function (RegisterUrlRulesEvent $event) {
+                    $settings = $this->getSettings();
 
-                // Register other CP Section templates
-                //Craft::dd($this->getSettings());
-                $guideNav = $settings->guideNav;
-                foreach ($guideNav as $item) {
-                    $templatePath = Craft::$app->view->resolveTemplate($item['template']);
-                    $templateAsString = $this->_getTemplateFileAsString($templatePath);
-                    $event->rules['guide/page/' . $item['id']] = ['template' => 'guide/home', 'variables' => ['pageContent' => $templateAsString, 'settings' => $settings]];
+                    // Check to see if user's template exists
+                    Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_SITE);
+                    if (Craft::$app->view->doesTemplateExist($settings->guideTemplatePath)) {
+                        $guideTemplatePath = Craft::$app->view->resolveTemplate($settings->guideTemplatePath);
+
+                        $guideTemplatePathAsString = $this->_getTemplateFileAsString($guideTemplatePath);
+                    } else {
+                        $guideTemplatePathAsString = null;
+                    }
+
+                    // Register CP Section home templates
+                    $event->rules['guide/home'] = ['template' => 'guide/home', 'variables' => ['pageContent' => $guideTemplatePathAsString, 'settings' => $settings]];
+                    $event->rules['guide/components'] = ['template' => 'guide/home', 'variables' => ['settings' => $settings]];
+
+                    // Register other CP Section templates
+                    //Craft::dd($this->getSettings());
+                    $guideNav = $settings->guideNav;
+                    foreach ($guideNav as $item) {
+                        $templatePath = Craft::$app->view->resolveTemplate($item['template']);
+                        $templateAsString = $this->_getTemplateFileAsString($templatePath);
+                        $event->rules['guide/page/' . $item['id']] = ['template' => 'guide/home', 'variables' => ['pageContent' => $templateAsString, 'settings' => $settings]];
+                    }
+
+                    Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_CP);
+
+                    // Register Nav
+                    //$event->rules['siteActionTrigger1'] = 'guide/default';
                 }
+            );
 
-                Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_CP);
-
-                // Register Nav
-                //$event->rules['siteActionTrigger1'] = 'guide/default';
-            }
-        );
-
-        // Register our fields
-        Event::on(
-            Fields::class,
-            Fields::EVENT_REGISTER_FIELD_TYPES,
-            function (RegisterComponentTypesEvent $event) {
-            }
-        );
-
-        // Register our widgets
-        Event::on(
-            Dashboard::class,
-            Dashboard::EVENT_REGISTER_WIDGET_TYPES,
-            function (RegisterComponentTypesEvent $event) {
-                $event->types[] = GuideWidgetWidget::class;
-            }
-        );
-
-        // Do something after we're installed
-        Event::on(
-            Plugins::class,
-            Plugins::EVENT_AFTER_INSTALL_PLUGIN,
-            function (PluginEvent $event) {
-                if ($event->plugin === $this) {
-                    // We were just installed
+            // Register our fields
+            Event::on(
+                Fields::class,
+                Fields::EVENT_REGISTER_FIELD_TYPES,
+                function (RegisterComponentTypesEvent $event) {
                 }
-            }
-        );
+            );
+
+            // Register our widgets
+            Event::on(
+                Dashboard::class,
+                Dashboard::EVENT_REGISTER_WIDGET_TYPES,
+                function (RegisterComponentTypesEvent $event) {
+                    $event->types[] = GuideWidgetWidget::class;
+                }
+            );
+
+            // Do something after we're installed
+            Event::on(
+                Plugins::class,
+                Plugins::EVENT_AFTER_INSTALL_PLUGIN,
+                function (PluginEvent $event) {
+                    if ($event->plugin === $this) {
+                        // We were just installed
+                    }
+                }
+            );
+        }
 
 /**
  * Logging in Craft involves using one of the following methods:

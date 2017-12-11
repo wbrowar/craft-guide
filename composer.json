@@ -2,7 +2,7 @@
     "name": "wbrowar/guide",
     "description": "A CMS Guide for Craft CMS.",
     "type": "craft-plugin",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "keywords": [
         "craft",
         "cms",
@@ -11,8 +11,8 @@
         "guide"
     ],
     "support": {
-        "docs": "https://github.com/wbrowar/guide/blob/master/README.md",
-        "issues": "https://github.com/wbrowar/guide/issues"
+        "docs": "https://github.com/wbrowar/craft-3-guide/blob/master/README.md",
+        "issues": "https://github.com/wbrowar/craft-3-guide/issues"
     },
     "license": "MIT",
     "authors": [
@@ -41,7 +41,7 @@
         "schemaVersion": "1.0.0",
         "hasCpSettings": true,
         "hasCpSection": true,
-        "changelogUrl": "https://raw.githubusercontent.com/wbrowar/guide/master/CHANGELOG.md",
+        "changelogUrl": "https://raw.githubusercontent.com/wbrowar/craft-3-guide/master/CHANGELOG.md",
         "components": {
             "guideService": "wbrowar\\guide\\services\\GuideService"
         },

@@ -67,10 +67,11 @@
         {% if pageContent ?? false %}
             {{ include(template_from_string(pageContent)) }}
         {% else %}
-            <h1>Hi, {{ currentUser.friendlyName }}.</h1>
+            {% if craft.app.request.getSegment(3) == 'home' %}
+                <h1>Hi, {{ currentUser.friendlyName }}.</h1>
 
-            <p>You&rsquo;re seeing this page because there isn&rsquo;t a template that lives at the path set in Guide plugin settings: <span class="guide__code_inline">{{ settings.guideTemplatePath }}</span></p>
-
+                <p>You&rsquo;re seeing this page because there isn&rsquo;t a template that lives at the path set in Guide plugin settings: <span class="guide__code_inline">{{ settings.guideTemplatePath }}</span></p>
+            {% endif %}
 
             <h2>Components</h2>
 
