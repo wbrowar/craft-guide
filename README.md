@@ -1,6 +1,6 @@
 # Guide for Craft CMS 3
 
-Craft CMS is intuitive. Marketing plans and organizational workflows—not so much.
+A CMS Guide for Craft CMS.
 
 ![Screenshot](resources/img/guide-cp.png)
 
@@ -29,7 +29,7 @@ To install the plugin, follow these instructions.
 
 ## Guide Overview
 
-Guide helps you explain the rules of the road right where the rules need to be read. Create your CMS Guide within a section of the Control Panel and write your own Dashboard welcome widget.
+Craft CMS is intuitive. Marketing plans and organizational workflows—not so much. Guide helps you explain the rules of the road right where the rules need to be read. Create your CMS Guide within a section of the Control Panel and write your own Dashboard welcome widget.
 
 ## Guide CP Section
 
