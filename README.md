@@ -37,11 +37,11 @@ Craft CMS is intuitive. Marketing plans and organizational workflows—not so mu
 
 ### Guide Template
 
-Use templates to create your CMS guide, in a way that's easily portable from one site to another. Follow these instructions to create your guide in the CP Section:
+Use templates to create your CMS guide, in a way that's easily portable from one site to another. Follow these instructions to create your guide within the Guide CP Section:
 
-1. Create an Home template in your site's `templates` directory. It can be named whatever you want, but the default is `_guide/index`, so if you create an `index.twig` file at this path, `/templates/_guide/index.twig`, it will show up in the Guide CP Section. 
-2. If you want to change your Guide Home template's location, edit the path to your new location on the Guide plugin settings page.
-3. You can create multiple pages and link to them through a navigation set in your Guide Home template. Configure this code anywhere within your Home template. *NOTE: this code does not need to be located on any other template.*
+1. Create an index template in your site's `templates` directory. It can be named whatever you want, but the default is `_guide/index`. So if you create an `index.twig` file at this path, `/templates/_guide/index.twig`, it will show up in the Guide CP Section. 
+2. If you want to change your Guide index template's location, edit the path to your new location on the Guide plugin settings page.
+3. You can create multiple pages and link to them through a navigation set in your Guide index template. Configure this code anywhere within your Home template. *NOTE: this code does not need to be located on any other template.*
     
     ```$twig
     {{ updateGuideCpNav({
@@ -55,13 +55,11 @@ Use templates to create your CMS guide, in a way that's easily portable from one
 
 5. Most of Guide's CSS relies on Craft's default Control Panel CSS, but if you need to override styles or add your own CSS, use the Custom CSS field in Guide's plugin settings.
 
-*NOTE: Your templates will be pulled in like it would if it were using {% include %}, so your template cannot extend other templates.*
-
-*ALSO: The Guide CP Nav gets updated whenever the Guide Home template is loaded. To update Guide CP Nav, just click on the Guide tab in CP.*
+*NOTE: The Guide CP Nav gets updated whenever the Guide Home template is loaded. To update Guide CP Nav, just click on the Guide tab in CP.*
 
 ## Guide Widget
 
-A welcome message can be a good starting point for your clients. Let them know where to begin once they've logged into the CMS by creating a Guide Widget.
+A welcome message can be a good starting point for your content editors. Let them know where to begin once they've logged into the CMS by creating a Guide Widget.
 
 ![Screenshot](resources/img/guide-widget.png)
 
@@ -94,9 +92,9 @@ For example, if you want to match Craft's sidebar, enter this into the Custom CS
 ```$css
 :root {
   --guide-color-bg: rgb(51, 63, 77);
-  --guide-color-link: rgb(13, 120, 242);
+  --guide-color-link: rgb(255, 255, 255);
   --guide-color-text: rgb(187, 187, 187);
-  --guide-color-h1: rgb(216, 216, 216);
+  --guide-color-h1: rgb(236, 236, 236);
 }
 ```
 
