@@ -53,7 +53,9 @@ Use templates to create your CMS guide, in a way that's easily portable from one
     
 4. Edit your templates as needed. You can use these helper components to change the layout.
 
-5. Most of Guide's CSS relies on Craft's default Control Panel CSS, but if you need to override styles or add your own CSS, use the Custom CSS field in Guide's plugin settings.
+5. If you have several sections of content on one page, add the `data-guide-section` attribute to any `h1, h2, h3`, or `h4` to add a drop down navigation that scrolls to each section.
+
+6. Most of Guide's CSS relies on Craft's default Control Panel CSS, but if you need to override styles or add your own CSS, use the Custom CSS field in Guide's plugin settings.
 
 *NOTE: The Guide CP Nav gets updated whenever the Guide Home template is loaded. To update Guide CP Nav, just click on the Guide tab in CP.*
 
@@ -78,8 +80,12 @@ Here's a list of available components:
 | `.guide__code_block` | Call out code or other text in `div` or block element |
 | `.guide__code_inline` | Highlight code or other text. |
 | `.guide_grid` | Grid only enables CSS Grid Layout on it's own. If you add a modifier, you can create multiple column layouts. |
-| `.guide_grid .guide_grid--2_column` | Creates a 2-column grid when the viewport is wider than 700px. |
-| `.guide_grid .guide_grid--3_column` | Creates a 3-column grid when the viewport is wider than 700px. |
+| `.guide_grid .guide_grid--2_column` | Creates a 2-column grid. |
+| `.guide_grid .guide_grid--3_column` | Creates a 3-column grid. |
+| `.guide_grid .guide_grid--image` | Feature an image (or content) with a large area on the left and text on the right. |
+| `.guide_grid .guide_grid--image--right` | The same as `.guide_grid--image` but switched, with the large area on the right. |
+
+![Screenshot](resources/img/guide-components.png)
 
 ## CSS Variables
 

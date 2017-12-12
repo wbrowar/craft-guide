@@ -116,8 +116,8 @@ class Guide extends Plugin
                     }
 
                     // Register CP Section home templates
-                    $event->rules['guide/home'] = ['template' => 'guide/home', 'variables' => ['pageContent' => $guideTemplatePathAsString, 'settings' => $settings]];
-                    $event->rules['guide/components'] = ['template' => 'guide/home', 'variables' => ['settings' => $settings]];
+                    $event->rules['guide/home'] = ['template' => 'guide/home', 'variables' => ['pageContent' => $guideTemplatePathAsString, 'settings' => $settings, 'title' => 'Guide']];
+                    $event->rules['guide/components'] = ['template' => 'guide/home', 'variables' => ['settings' => $settings, 'title' => 'Guide Components']];
 
                     // Register other CP Section templates
                     //Craft::dd($this->getSettings());
@@ -125,7 +125,7 @@ class Guide extends Plugin
                     foreach ($guideNav as $item) {
                         $templatePath = Craft::$app->view->resolveTemplate($item['template']);
                         $templateAsString = $this->_getTemplateFileAsString($templatePath);
-                        $event->rules['guide/page/' . $item['id']] = ['template' => 'guide/home', 'variables' => ['pageContent' => $templateAsString, 'settings' => $settings]];
+                        $event->rules['guide/page/' . $item['id']] = ['template' => 'guide/home', 'variables' => ['pageContent' => $templateAsString, 'settings' => $settings, 'title' => $item['title']]];
                     }
 
                     Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_CP);

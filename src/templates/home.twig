@@ -32,13 +32,6 @@
 {# Get a URL to an image in our AssetBundle #}
 {% set iconUrl = view.getAssetManager().getPublishedUrl('@wbrowar/guide/assetbundles/indexcpsection/dist', true) ~ '/img/Index-icon.svg' %}
 
-{# Content that should appear in the page header#}
-{% set extraPageHeaderHtml %}
-    <div class="buttons">
-        <a href="{{ pluginCpUrl }}" class="btn submit add icon">{{ "Click Me!"|t('guide') }}</a>
-    </div>
-{% endset %}
-
 {# The content of the CP Section#}
 {% if (pageContent ?? false) and settings.guideNav|length %}
     {% set sidebar %}
@@ -62,24 +55,74 @@
         </nav>
     {% endset %}
 {% endif %}
+{% block header %}
+{#{{ svg(iconUrl) }}#}
+    <h1>{{ title ?? 'Guide' }}</h1>
+    <div class="flex-grow"></div>
+{% endblock %}
 {% set content %}
     <div class="guide_cp guide_text">
         {% if pageContent ?? false %}
             {{ include(template_from_string(pageContent)) }}
         {% else %}
-            {% if craft.app.request.getSegment(3) == 'home' %}
+            {% if craft.app.request.getSegment(2) == 'home' %}
                 <h1>Hi, {{ currentUser.friendlyName }}.</h1>
 
                 <p>You&rsquo;re seeing this page because there isn&rsquo;t a template that lives at the path set in Guide plugin settings: <span class="guide__code_inline">{{ settings.guideTemplatePath }}</span></p>
             {% endif %}
 
-            <h2>Components</h2>
+            <h2 data-guide-section>Navigation</h2>
+
+            <p>Once you've created your Guide index template, you can link to other pages by creating a subnav. Use the following snippet to configure your subnav:</p>
+
+{% set example %}{% verbatim %}{{ updateGuideCpNav({
+    'Editing Content': '_guide/edit-entries',
+    'Menus': '_guide/menus',
+    'Forms': { admin: true, template: '_guide/forms' },
+}) }}{% endverbatim %}{% endset %}
+
+            <div class="guide__code_block">{{ example|e }}</div>
+
+            <p>If you pass in a string, Guide will look for a template in your <span class="guide__code_inline">templates</span> directory. If you pass in an object, you can restrict a navigation item to different user permissions.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Type</td>
+                        <td>Description</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><b>admin</b></td>
+                        <td><i>boolean</i></td>
+                        <td>If <span class="guide__code_inline">admin</span> is set to <span class="guide__code_inline">true</span>, subnav item will be restricted to Admin users.</td>
+                    </tr>
+                    <tr>
+                        <td><b>permissions</b></td>
+                        <td><i>array</i></td>
+                        <td>Passing in an array of user permissions will restrict subnav item to users who have at least one of the permissions given.</td>
+                    </tr>
+                    <tr>
+                        <td><b>template</b> - <i>required</i></td>
+                        <td><i>string</i></td>
+                        <td>The path to the template in your <span class="guide__code_inline">templates</span> directory.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2 data-guide-section>Page Sections</h2>
+
+            <p>A drop down will appear if you add one or more page sections to a Guide template. To add a menu item to the drop down, add the data attribute, <span class="guide__code_inline">data-guide-section</span>, to any <span class="guide__code_inline">h1, h2, h3,</span> or <span class="guide__code_inline">h4</span> element. Clicking on a link in the drop down will scroll you down to that section on the page.</p>
+
+            <h2 data-guide-section>Components</h2>
 
             <p>Use these components to style your guide, or add your own css to the Custom CSS field in Guide plugin settings.</p>
 
             <hr>
 
-            <h2>2-Column Grid</h2>
+            <h2 data-guide-section>2-Column Grid</h2>
 
 {% set example %}
 <div class="guide_grid guide_grid--2_column">
@@ -100,7 +143,7 @@
 
             <hr>
 
-            <h2>3-Column Grid</h2>
+            <h2 data-guide-section>3-Column Grid</h2>
 
 {% set example %}
 <div class="guide_grid guide_grid--3_column">
@@ -120,6 +163,48 @@
                 </div>
                 <div>
                     <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.</p>
+                </div>
+            </div>
+
+            <hr>
+
+            <h2 data-guide-section>Image Grid - (image left)</h2>
+
+            {% set example %}
+                <div class="guide_grid guide_grid--image">
+                    <div><!-- image --></div>
+                    <div><!-- description --></div>
+                </div>{% endset %}
+
+            <div class="guide__code_block">{{ example|e }}</div>
+
+            <div class="guide_grid guide_grid--image">
+                <div>
+                    <img src="http://via.placeholder.com/800x500" alt="placeholder image">
+                </div>
+                <div>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                </div>
+            </div>
+
+            <hr>
+
+            <h2 data-guide-section>Image Grid - (image right)</h2>
+
+            {% set example %}
+                <div class="guide_grid guide_grid--image--right">
+                    <div><!-- description --></div>
+                    <div><!-- image --></div>
+                </div>{% endset %}
+
+            <div class="guide__code_block">{{ example|e }}</div>
+
+            <div class="guide_grid guide_grid--image--right">
+                <div>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                </div>
+                <div>
+                    <img src="http://via.placeholder.com/800x500" alt="placeholder image">
                 </div>
             </div>
         {% endif %}
