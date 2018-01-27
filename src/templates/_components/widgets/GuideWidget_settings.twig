@@ -17,14 +17,6 @@
 
 {% do view.registerAssetBundle("wbrowar\\guide\\assetbundles\\guide\\GuideAsset") %}
 
-{{ forms.textareaField({
-    label: 'Note',
-    id: 'message',
-    name: 'message',
-    rows: 10,
-    value: widget['message']})
-}}
-
 {{ forms.selectField({
     label: 'Format',
     instructions: 'Choose the format of your note.',
@@ -35,5 +27,13 @@
         markdown: 'Markdown',
         twig: 'Twig',
     }
-    })
+})
+}}
+
+{{ forms.textareaField({
+    label: 'Note',
+    id: 'message',
+    name: 'message',
+    rows: 10,
+    value: widget['message']})
 }}

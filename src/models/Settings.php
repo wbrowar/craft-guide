@@ -43,6 +43,14 @@ class Settings extends Model
     // Path to Guide CP Section templates
     public $guideTemplatePath = '_guide/index';
 
+    // Who can edit User Guides
+    // all, admin, permission
+    public $userGuidesEditableBy = 'admin';
+
+    // Twig variable setting
+    public $clientName = '';
+    public $myCompanyName = '';
+
     // Public Methods
     // =========================================================================
 
@@ -59,7 +67,7 @@ class Settings extends Model
     public function rules()
     {
         return [
-            [['customCss', 'guideTemplatePath'], 'string'],
+            [['clientName', 'customCss', 'guideTemplatePath'], 'string'],
             ['guideTemplatePath', 'default', 'value' => '_guide/index'],
         ];
     }

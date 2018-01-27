@@ -16,7 +16,7 @@ use Craft;
 use craft\db\ActiveRecord;
 
 /**
- * GuideRecord Record
+ * UserGuides Record
  *
  * ActiveRecord is the base class for classes representing relational data in terms of objects.
  *
@@ -31,7 +31,7 @@ use craft\db\ActiveRecord;
  * @package   Guide
  * @since     1.0.0
  */
-class GuideRecord extends ActiveRecord
+class UserGuides extends ActiveRecord
 {
     // Public Static Methods
     // =========================================================================
@@ -50,6 +50,6 @@ class GuideRecord extends ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%guide_guiderecord}}';
+        return '{{%guide_userguides}}';
     }
 }

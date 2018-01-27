@@ -11,7 +11,11 @@
 namespace wbrowar\guide\services;
 
 use craft\helpers\StringHelper;
+use craft\models\Section;
+use function PHPSTORM_META\type;
 use wbrowar\guide\Guide;
+use wbrowar\guide\models\UserGuide;
+use wbrowar\guide\records\UserGuides;
 
 use Craft;
 use craft\base\Component;
@@ -36,8 +40,179 @@ class GuideService extends Component
     // =========================================================================
 
     /**
-     * This function can literally be anything you want, and you can have as many service
-     * functions as you want
+     * Updates subnavigation in the Guide CP Section
+     *
+     * From any other plugin file, call it like this:
+     *
+     *     Guide::$plugin->guideService->saveUserGuide()
+     *
+     * @return string
+     */
+    public function deleteUserGuide($params):bool
+    {
+        $record = UserGuides::findOne(['sectionId' => $params['sectionId'], 'siteId' => Craft::$app->sites->currentSite->id, 'typeId' => $params['typeId']]);
+
+        if ($record) {
+            return $record->delete();
+        }
+
+        return false;
+    }
+
+    /**
+     * Updates subnavigation in the Guide CP Section
+     *
+     * From any other plugin file, call it like this:
+     *
+     *     Guide::$plugin->guideService->getUserGuideForElementType()
+     *
+     * @return string
+     */
+    public function getGuideVariableValue($name):string
+    {
+        $settings = Guide::$plugin->getSettings();
+        $value = '';
+
+        switch ($name) {
+            case 'clientName':
+                $value = $settings->clientName != '' ? $settings->clientName :  '';
+                break;
+            case 'myCompanyName':
+                $value = $settings->myCompanyName != '' ? $settings->myCompanyName : Craft::$app->getUser()->getIdentity()->getFriendlyName();
+                break;
+        }
+
+        return $value;
+    }
+
+    /**
+     * Updates subnavigation in the Guide CP Section
+     *
+     * From any other plugin file, call it like this:
+     *
+     *     Guide::$plugin->guideService->getUserGuideForElementType()
+     *
+     * @return string
+     */
+    public function getUserGuideForElementType($siteId, $sectionId, $typeId)
+    {
+        $userGuide = UserGuides::find()->where(['siteId' => $siteId, 'sectionId' => $sectionId, 'typeId' => $typeId])->one();
+
+        return $userGuide ?? null;
+    }
+
+    /**
+     * Updates subnavigation in the Guide CP Section
+     *
+     * From any other plugin file, call it like this:
+     *
+     *     Guide::$plugin->guideService->renderUserGuideBody()
+     *
+     * @return string
+     */
+    public function renderUserGuideBody($params = []):string
+    {
+        $content = $params['content'];
+        $format = $params['format'];
+        $userGuide = $params['userGuide'];
+
+        $variables = [
+            'content' => $content,
+            'format' => $format,
+            'userGuide' => $userGuide,
+        ];
+
+        if ($format == 'template' && isset($userGuide->templatePath)) {
+            Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_SITE);
+            if (Craft::$app->view->doesTemplateExist($userGuide->templatePath)) {
+                //$userGuide->templatePath
+                $variables['content'] = file_get_contents(Craft::$app->view->resolveTemplate($userGuide->templatePath));
+
+                // $variables['templatePath'] = Craft::$app->view->resolveTemplate($userGuide->templatePath);
+            }
+            Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_CP);
+        }
+
+        //Craft::dd($variables['content']);
+
+        return Craft::$app->view->renderTemplate('guide/_user_guide/user_guide_body', $variables);
+    }
+
+    /**
+     * Updates subnavigation in the Guide CP Section
+     *
+     * From any other plugin file, call it like this:
+     *
+     *     Guide::$plugin->guideService->renderUserGuideTemplate()
+     *
+     * @return string
+     */
+    public function renderUserGuideTemplate($templatePath, $entry):string
+    {
+        $variables = [
+            'entry' => $entry,
+            'settings' => Guide::$plugin->getSettings(),
+        ];
+
+        $siteId = Craft::$app->sites->currentSite->id;
+        $sectionId = $entry['sectionId'];
+        $typeId = $entry['typeId'];
+
+        $userGuide = $this->getUserGuideForElementType($siteId, $sectionId, $typeId);
+        if ($userGuide) {
+            $variables['userGuide'] = $userGuide;
+        } else {
+            $variables['userGuide'] = new UserGuide();
+        }
+
+        $sectionTypes = Craft::$app->getSections()->getEntryTypesBySectionId($sectionId);
+
+        foreach ($sectionTypes as $item) {
+            if ($item->id == $typeId) {
+                $variables['sectionName'] = $item->name;
+            }
+        }
+
+        $variables['userCanDelete'] = $this->_userCanDeleteUserGuides();
+        $variables['userCanEdit'] = $this->_userCanEditUserGuides();
+
+        return Craft::$app->view->renderTemplate($templatePath, $variables);
+    }
+
+    /**
+     * Updates subnavigation in the Guide CP Section
+     *
+     * From any other plugin file, call it like this:
+     *
+     *     Guide::$plugin->guideService->saveUserGuide()
+     *
+     * @return string
+     */
+    public function saveUserGuide(UserGuide $model):bool
+    {
+        $record = UserGuides::findOne(['sectionId' => $model->sectionId, 'siteId' => Craft::$app->sites->currentSite->id, 'typeId' => $model->typeId]);
+
+        if (!$record) {
+            $record = new UserGuides();
+        }
+
+        $record->authorId = $model->authorId;
+        $record->content = $model->content;
+        $record->elementType = $model->elementType;
+        $record->format = $model->format;
+        $record->moreInfo = $model->moreInfo;
+        $record->sectionId = $model->sectionId;
+        $record->templatePath = $model->templatePath;
+        $record->typeId = $model->typeId;
+        $record->siteId = Craft::$app->sites->currentSite->id;
+
+        $record->save();
+
+        return true;
+    }
+
+    /**
+     * Updates subnavigation in the Guide CP Section
      *
      * From any other plugin file, call it like this:
      *
@@ -45,7 +220,7 @@ class GuideService extends Component
      *
      * @return mixed
      */
-    public function updateGuideCpNav($array = [])
+    public function updateGuideCpNav($array = []):bool
     {
         $newNav = [];
         $settings = Guide::$plugin->getSettings();
@@ -96,5 +271,53 @@ class GuideService extends Component
         Craft::$app->plugins->savePluginSettings(Guide::$plugin, $settings->toArray());
 
         return true;
+    }
+
+    // Private Methods
+    // =========================================================================
+
+    /**
+     * Updates subnavigation in the Guide CP Section
+     *
+     * From any other plugin file, call it like this:
+     *
+     *     Guide::$plugin->guideService->exampleService()
+     *
+     * @return mixed
+     */
+    private function _userCanDeleteUserGuides():bool
+    {
+        $user = Craft::$app->getUser();
+
+        if ($user->getIsAdmin() || $user->checkPermission('deleteGuides')) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Updates subnavigation in the Guide CP Section
+     *
+     * From any other plugin file, call it like this:
+     *
+     *     Guide::$plugin->guideService->exampleService()
+     *
+     * @return mixed
+     */
+    private function _userCanEditUserGuides():bool
+    {
+        $setting = Guide::$plugin->settings;
+        $user = Craft::$app->getUser();
+
+        if ($setting->userGuidesEditableBy == 'all') {
+            return true;
+        } else if ($setting->userGuidesEditableBy == 'permission' && $user->checkPermission('editGuides')) {
+            return true;
+        } else if ($user->getIsAdmin()) {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -16,7 +16,7 @@ use Craft;
 use craft\base\Model;
 
 /**
- * GuideModel Model
+ * UserGuide Model
  *
  * Models are containers for data. Just about every time information is passed
  * between services, controllers, and templates in Craft, it’s passed via a model.
@@ -27,17 +27,20 @@ use craft\base\Model;
  * @package   Guide
  * @since     1.0.0
  */
-class GuideModel extends Model
+class UserGuide extends Model
 {
     // Public Properties
     // =========================================================================
 
-    /**
-     * Some model attribute
-     *
-     * @var string
-     */
-    public $someAttribute = 'Some Default';
+    public $authorId = 0;
+    public $content = '';
+    public $elementType = 0;
+    public $format = 'markdown';
+    public $moreInfo = '';
+    public $permissions = ['accessPlugin-guide'];
+    public $sectionId = 0;
+    public $templatePath = '';
+    public $typeId = 0;
 
     // Public Methods
     // =========================================================================
@@ -55,8 +58,15 @@ class GuideModel extends Model
     public function rules()
     {
         return [
-            ['someAttribute', 'string'],
-            ['someAttribute', 'default', 'value' => 'Some Default'],
+            [['authorId', 'content', 'format', 'elementType', 'sectionId', 'typeId'], 'required'],
+            [['authorId', 'elementType', 'sectionId', 'typeId'], 'integer'],
+
+            ['permissions', 'mixed'],
+            ['permissions', 'default', 'value' => ['accessPlugin-guide']],
+
+            [['content', 'format', 'moreInfo', 'templatePath'], 'string'],
+            ['content', 'default', 'value' => 'A guide has not been created yet.'],
+            ['format', 'default', 'value' => 'markdown'],
         ];
     }
 }

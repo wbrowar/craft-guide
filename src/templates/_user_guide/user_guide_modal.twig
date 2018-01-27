@@ -1,0 +1,90 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+
+{% import "_includes/forms" as forms %}
+
+{% set userGuideIsNew = userGuide.typeId == 0 %}
+
+{% do view.registerAssetBundle("wbrowar\\guide\\assetbundles\\indexcpsection\\IndexCPSectionAsset") %}
+{% set iconUrl = view.getAssetManager().getPublishedPath('@wbrowar/guide/assetbundles/indexcpsection/dist', true) ~ '/img/Index-icon.svg' %}
+
+<div id="guide_cp__user_guide">
+    <div class="guide__modal modal globalmodal" style="display: none;">
+        <div class="guide__modal__flex_wrapper">
+            <header class="guide__modal__header">
+                <div class="guide_logo_lockup guide_logo_lockup--35">
+                    <div>{{ svg(iconUrl) }}</div>
+                    <div><h1>{{ sectionName }}</h1></div>
+                </div>
+            </header>
+            <div class="guide__modal__content">
+                {% if userGuide %}
+                    {{ renderUserGuideBody({
+                        content: userGuide.content,
+                        format: userGuide.format,
+                        userGuide: userGuide,
+                    })|raw }}
+                {% endif %}
+            </div>
+
+            {% if userGuide.moreInfo|length %}
+                <footer class="guide__modal__more_info">
+                    <a class="btn sharebtn submit" href="{{ url(userGuide.moreInfo) }}">More info</a>
+                </footer>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% if userCanEdit %}
+    <div id="guide_cp__user_guide_edit">
+        <div class="guide__modal guide__modal--settings modal globalmodal" style="display: none;">
+            <form id="user_guide_edit_form" action="">
+                {{ forms.selectField({
+                    label: 'Format',
+                    id: 'format',
+                    name: 'format',
+                    value: userGuide['format'] ?? 'markdown',
+                    options: {
+                        markdown: 'Markdown',
+                        twig: 'Twig',
+                        template: 'Template',
+                    }
+                }) }}
+
+                {{ forms.textField({
+                    label: 'Template Path',
+                    id: 'templatePath',
+                    name: 'templatePath',
+                    placeholder: '_guide/entries/' ~ entry.section.handle,
+                    value: userGuide['templatePath'] ?? '',
+                    instructions: 'Path to a Twig template relative to your site\'s templates folder.',
+                }) }}
+
+                {{ forms.textareaField({
+                    label: 'Content',
+                    id: 'content',
+                    name: 'content',
+                    rows: 10,
+                    value: userGuide['content'] ?? '',
+                }) }}
+
+                {{ forms.textField({
+                    label: 'More Info URL',
+                    id: 'moreInfo',
+                    name: 'moreInfo',
+                    placeholder: 'guide/page/entry',
+                    value: userGuide['moreInfo'] ?? '',
+                    instructions: 'Adding a URL to this field will create a button that will link to this URL.',
+                }) }}
+
+                {{ csrfInput() }}
+                <input type="hidden" name="authorId" value="{{ currentUser.id }}">
+                <input type="hidden" name="elementType" value="entry">
+                <input type="hidden" name="sectionId" value="{{ entry.section.id }}">
+                <input type="hidden" name="typeId" value="{{ entry.type.id }}">
+
+                <input type="submit" id="user_guide_edit_form__save" class="btn submit" value="{{ userGuideIsNew ? 'Save' : 'Update' }}">
+                {% if userCanDelete %}<input type="submit" id="user_guide_edit_form__delete" class="btn submit" value="Delete">{% endif %}
+            </form>
+        </div>
+    </div>
+{% endif %}

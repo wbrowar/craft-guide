@@ -64,6 +64,8 @@ class GuideTwigExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
+            new \Twig_SimpleFunction('guideVar', [$this, 'guideVar']),
+            new \Twig_SimpleFunction('renderUserGuideBody', [$this, 'renderUserGuideBody']),
             new \Twig_SimpleFunction('updateGuideCpNav', [$this, 'updateGuideCpNav']),
         ];
     }
@@ -72,6 +74,30 @@ class GuideTwigExtension extends \Twig_Extension
      * Our function called via Twig; it can do anything you want
      *
      * @param null $text
+     *
+     * @return string
+     */
+    public function guideVar($name)
+    {
+        return Guide::$plugin->guideService->getGuideVariableValue($name);
+    }
+
+    /**
+     * Our function called via Twig; it can do anything you want
+     *
+     * @param null $text
+     *
+     * @return string
+     */
+    public function renderUserGuideBody($params = [])
+    {
+        return Guide::$plugin->guideService->renderUserGuideBody($params);
+    }
+
+    /**
+     * Creates the Guide CP subnav
+     *
+     * @param null $array
      *
      * @return string
      */

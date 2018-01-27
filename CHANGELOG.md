@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## 1.1.0 - 2018-01-07
+### Added
+- Added collaborative guides to Entry edit pages
+  - For each Entry Type you can set instructions that appear when clicking on a button in the sidebar
+  - Users with the right permissions can edit these guides using either Markdown, Twig, or by pointing to a frontend template in the site's `templates` directory
+- Added Twig extensions that make it easier to personalize guides that are copied from one client to another. See Settings for more information
+- Added a "More info" button to the bottom of guides that appear in edit pages
+  - This button can link to the Guide CP section, or anywhere else that could be useful for content editors (like Craft documentation pages)
+- Added "Create Guides" and "Delete Guides" permissions
+- Added CSS Custom Properties defaults above the Settings > Custom CSS field to make it easier to rebrand style containers
+- Added a `max-width` to guides in the Guide CP Section. This can be adjusted in Setting > Custom CSS
+
+### Changed
+- Changed "Sections" button in Guide CP Section over to a button that should be clicked/tapped to show section links. Clicking or tapping the button will hide the sections links
+- For consistency, changed `guide__code_block` to `guide_code_block` and `guide__code_inline` to `guide_code_inline`
+- Updated Schema version
+  - [looks at camera and breaks the fourth wall] This is my first time creating a migration, so if it doesn't work, please let me know.
+
+### Fixed
+- Fixed an issue that prevented Guide from being installed via the console
+- Fixed a Javascript bug that prevented the ability to jump to sections on the Guide CP Section
+
+
 ## 1.0.2 - 2017-12-12
 ### Added
 - Added a drop down subnavigation to jump down to a sections on a page

@@ -1,0 +1,12 @@
+{% spaceless %}{% if (content ?? false) and (format ?? false) %}
+    {% switch format %}
+        {% case 'markdown' %}
+            {{ content|markdown }}
+        {% case 'template' %}
+            {{ include(template_from_string(content)) }}
+        {% case 'twig' %}
+            {{ include(template_from_string(content)) }}
+    {% endswitch %}
+{% else %}
+    <p>A Guide couldn't be loaded for this section type. Please check your settings and refresh the page.</p>
+{% endif %}{% endspaceless %}

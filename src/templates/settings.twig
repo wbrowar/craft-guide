@@ -1,17 +1,93 @@
 {% import "_includes/forms" as forms %}
 
+{% do view.registerAssetBundle("wbrowar\\guide\\assetbundles\\indexcpsection\\IndexCPSectionAsset") %}
+{% set iconUrl = view.getAssetManager().getPublishedPath('@wbrowar/guide/assetbundles/indexcpsection/dist', true) ~ '/img/Index-icon.svg' %}
+
+<h2>Content Guides</h2>
+<p>Guides can be created for each entry type.</p>
+
+{{ forms.selectField({
+    label: 'Who can edit guides?',
+    id: 'userGuidesEditableBy',
+    name: 'userGuidesEditableBy',
+    value: settings.userGuidesEditableBy,
+    options: [
+        { label: 'Admins', value: 'admin' },
+        { label: 'Users with Guide permissions + Admins', value: 'permission' },
+        { label: 'Anyone who can access CP', value: 'all' },
+    ]
+}) }}
+
+<hr>
+<h2>Guide CP Section</h2>
 {{ forms.textField({
     label: 'Template Path',
     id: 'guideTemplatePath',
     name: 'guideTemplatePath',
     value: settings.guideTemplatePath,
-    instructions: 'Path to Guide Twig templates relative to your templates folder.'
+    instructions: 'Path to Guide Twig templates relative to your site\'s templates folder.'
 }) }}
+
+<hr>
+<h2>Template Variables</h2>
+{{ forms.textField({
+    label: 'Client Name',
+    id: 'clientName',
+    name: 'clientName',
+    value: settings.clientName,
+    instructions: 'The name of the person or organization that the website is built for. This can be displayed in your templates by using Twig tag: `{{ guideVar("clientName") }}`',
+    placeholder: 'Acme Company, LLC'
+}) }}
+{{ forms.textField({
+    label: 'My Company Name',
+    id: 'myCompanyName',
+    name: 'myCompanyName',
+    value: settings.myCompanyName,
+    instructions: 'The name of the person or organization that built the website: `{{ guideVar("myCompanyName") }}`',
+    placeholder: 'Shelby Company Limited'
+}) }}
+
+<hr>
+<h2>Custom Styles</h2>
+<p>Guide uses CSS Custom Properties to help you rebrand and theme guides used throughout Craft CMS's CP. Change these CSS Custom Properties or write your own custom CSS in the textarea below.</p>
+
+{#
+<div class="guide__modal" style="margin-bottom: 30px; width: 100%; max-width: 700px;">
+    <div class="guide__modal__header">
+        <div class="guide_logo_lockup guide_logo_lockup--35">
+            <div>{{ svg(iconUrl) }}</div>
+            <div><h1>Demo Guide</h1></div>
+        </div>
+    </div>
+    <div>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    </div>
+</div>
+#}
+
+{% set guideVariables = [
+    ['<b>--guide-border-radius</b>: 5px;', 'Rounds the corners of guide containers.'],
+    ['<b>--guide-border-radius-media</b>: 3px;', 'Rounds the corners of <i>canvas, img, picture,</i> and <i>video</i> tags.'],
+    ['<b>--guide-color-bg</b>: rgba(0, 0, 0, .8);', 'Background color for guide containers.'],
+    ['<b>--guide-color-border</b>: rgb(200, 200, 200);', 'Color of border placed around <i>canvas, img, picture,</i> and <i>video</i> tags.'],
+    ['<b>--guide-color-code-bg</b>: rgba(60, 60, 60, .1);', 'Background color used to highlight code examples.'],
+    ['<b>--guide-color-link</b>: rgb(219, 81, 61);', 'Color of links in Guide containers.'],
+    ['<b>--guide-color-text</b>: rgb(255, 255, 255);', 'Color of text in Guide containers.'],
+    ['<b>--guide-max-width</b>: 1100px;', 'Max width of Guide CP sections pages.'],
+    ['<b>--guide-color-h1</b>: var(--guide-color-text);', 'Color of h1 tags in Guide containers.'],
+] %}
+<div style="display: grid; grid-template-columns: minmax(100px, 350px) auto; grid-template-rows: auto; grid-gap: 5px 30px;">
+    {% for item in guideVariables %}
+        <div>{{ item[0]|raw }}</div>
+        <div>{{ item[1]|raw }}</div>
+    {% endfor %}
+</div>
 
 {{ forms.textareaField({
     label: 'Custom CSS',
     id: 'customCss',
     name: 'customCss',
     rows: 10,
-    value: settings.customCss})
-}}
+    value: settings.customCss,
+    placeholder: ':root {\n  --guide-color-code-bg: #ddd;\n  --guide-color-text: #c0c;\n}'
+}) }}

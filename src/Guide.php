@@ -10,6 +10,10 @@
 
 namespace wbrowar\guide;
 
+use craft\elements\Entry;
+use craft\events\RegisterUserPermissionsEvent;
+use craft\records\UserPermission;
+use craft\services\UserPermissions;
 use wbrowar\guide\services\GuideService as GuideServiceService;
 use wbrowar\guide\twigextensions\GuideTwigExtension;
 use wbrowar\guide\models\Settings;
@@ -18,8 +22,6 @@ use wbrowar\guide\assetbundles\guide\GuideAsset;
 
 use Craft;
 use craft\base\Plugin;
-use craft\services\Plugins;
-use craft\events\PluginEvent;
 use craft\web\UrlManager;
 use craft\web\View;
 use craft\services\Fields;
@@ -60,6 +62,8 @@ class Guide extends Plugin
      */
     public static $plugin;
 
+    public $schemaVersion = '1.1.0';
+
     // Public Methods
     // =========================================================================
 
@@ -85,18 +89,30 @@ class Guide extends Plugin
         // Add our CSS
         $view = Craft::$app->getView();
 
+        // Add custom permissions
+        if (Craft::$app->getEdition() > 0) {
+            Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
+                $event->permissions[\Craft::t('guide', 'Guides')] = [
+                    'editGuides' => ['label' => \Craft::t('guide', 'Edit Guides')],
+                    'deleteGuides' => ['label' => \Craft::t('guide', 'Delete Guides')],
+                ];
+            });
+        }
+
         if ($view->getTemplateMode() === View::TEMPLATE_MODE_CP) {
-            $view->registerAssetBundle(GuideAsset::class);
-            $view->registerCss($this->getSettings()->customCss);
+            Event::on(View::class, View::EVENT_BEFORE_RENDER_TEMPLATE, function() {
+                $view = Craft::$app->getView();
+                $view->registerAssetBundle(GuideAsset::class);
+                $view->registerCss($this->getSettings()->customCss);
+            });
 
             // Register our site routes
-            Event::on(
-                UrlManager::class,
-                UrlManager::EVENT_REGISTER_SITE_URL_RULES,
-                function (RegisterUrlRulesEvent $event) {
-                    $event->rules['siteActionTrigger1'] = 'guide/default';
-                }
-            );
+            //Event::on(
+            //    UrlManager::class,
+            //    UrlManager::EVENT_REGISTER_SITE_URL_RULES,
+            //    function (RegisterUrlRulesEvent $event) {
+            //    }
+            //);
 
             // Register our CP routes
             Event::on(
@@ -120,7 +136,6 @@ class Guide extends Plugin
                     $event->rules['guide/components'] = ['template' => 'guide/home', 'variables' => ['settings' => $settings, 'title' => 'Guide Components']];
 
                     // Register other CP Section templates
-                    //Craft::dd($this->getSettings());
                     $guideNav = $settings->guideNav;
                     foreach ($guideNav as $item) {
                         $templatePath = Craft::$app->view->resolveTemplate($item['template']);
@@ -129,9 +144,6 @@ class Guide extends Plugin
                     }
 
                     Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_CP);
-
-                    // Register Nav
-                    //$event->rules['siteActionTrigger1'] = 'guide/default';
                 }
             );
 
@@ -152,16 +164,41 @@ class Guide extends Plugin
                 }
             );
 
-            // Do something after we're installed
-            Event::on(
-                Plugins::class,
-                Plugins::EVENT_AFTER_INSTALL_PLUGIN,
-                function (PluginEvent $event) {
-                    if ($event->plugin === $this) {
-                        // We were just installed
-                    }
+            // Add CP Buttons
+            Craft::$app->view->hook('cp.entries.edit.details', function(&$context) {
+                if ($context['entry'] ?? false) {
+                    // return sidebar template
+                    return Guide::$plugin->guideService->renderUserGuideTemplate('guide/_user_guide/user_guide_sidebar', $context['entry']);
                 }
-            );
+
+                return false;
+            });
+
+            // add modal template to footer
+            Event::on(View::class, View::EVENT_END_BODY, function(Event $event) {
+                $id = Craft::$app->controller->actionParams['entryId'] ?? null;
+
+                //Craft::dd(Craft::$app->request->getSegment(2));
+
+                if ($id) {
+                    $entry = Entry::find()
+                        ->id($id)
+                        ->one();
+
+                    echo Guide::$plugin->guideService->renderUserGuideTemplate('guide/_user_guide/user_guide_modal', $entry);
+                }
+            });
+
+            // Do something after we're installed
+            //Event::on(
+            //    Plugins::class,
+            //    Plugins::EVENT_AFTER_INSTALL_PLUGIN,
+            //    function (PluginEvent $event) {
+            //        if ($event->plugin === $this) {
+            //            // We were just installed
+            //        }
+            //    }
+            //);
         }
 
 /**
@@ -194,18 +231,9 @@ class Guide extends Plugin
 
     public function getCpNavItem()
     {
-        // $subnav = [];
-        $settings = $this->getSettings();
-        // $guideNav = $settings->guideNav;
-
-        // foreach ($guideNav as $item) {
-        //     $subnav[$item['id']] = ['label' => $item['title'], 'url' => 'guide/page/' . $item['id']];
-        // }
-
         // Use the default name & icon, but customize the URL
         $navItem = parent::getCpNavItem();
         $navItem['url'] = 'guide/home';
-        // $navItem['subnav'] = $subnav;
         return $navItem;
     }
 
@@ -233,7 +261,7 @@ class Guide extends Plugin
         return Craft::$app->view->renderTemplate(
             'guide/settings',
             [
-                'settings' => $this->getSettings()
+                'settings' => $this->getSettings(),
             ]
         );
     }
@@ -246,5 +274,7 @@ class Guide extends Plugin
 
             return $source;
         }
+
+        return false;
     }
 }

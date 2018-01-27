@@ -1,0 +1,11 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+
+{% set userGuideIsNew = userGuide.typeId == 0 %}
+
+<div class="guide__user_guide__sidebar meta">
+    <span class="guide_cp__btn_show_user_guide guide_button{% if not (userGuide.content ?? false or userGuide.templatePath ?? false) %} guide_hidden{% endif %} btn">Need Help?</span>
+
+    {% if userCanEdit %}
+        <span class="guide_cp__btn_show_user_guide_edit btn"><span{% if userGuideIsNew %} class="guide_hidden"{% endif %}>Edit Guide</span><span{% if not userGuideIsNew %} class="guide_hidden"{% endif %}>Add Guide +</span></span>
+    {% endif %}
+</div>

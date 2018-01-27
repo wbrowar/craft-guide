@@ -1,36 +1,14 @@
 <?php
-/**
- * Guide plugin for Craft CMS 3.x
- *
- * Description
- *
- * @link      https://wbrowar.com
- * @copyright Copyright (c) 2017 Will Browar
- */
 
 namespace wbrowar\guide\migrations;
 
-use wbrowar\guide\Guide;
-
 use Craft;
-use craft\config\DbConfig;
 use craft\db\Migration;
 
 /**
- * Guide Install Migration
- *
- * If your plugin needs to create any custom database tables when it gets installed,
- * create a migrations/ folder within your plugin folder, and save an Install.php file
- * within it using the following template:
- *
- * If you need to perform any additional actions on install/uninstall, override the
- * safeUp() and safeDown() methods.
- *
- * @author    Will Browar
- * @package   Guide
- * @since     1.0.0
+ * m180126_220026_add_user_guide_table migration.
  */
-class Install extends Migration
+class m180126_220026_add_user_guide_table extends Migration
 {
     // Public Properties
     // =========================================================================
@@ -61,8 +39,10 @@ class Install extends Migration
             $this->addForeignKeys();
             // Refresh the db schema caches
             Craft::$app->db->schema->refresh();
-            $this->insertDefaultData();
         }
+
+        // guide_userguides table
+        $this->dropTableIfExists('{{%guide_guiderecord}}');
 
         return true;
     }
@@ -97,12 +77,12 @@ class Install extends Migration
     {
         $tablesCreated = false;
 
-        // guide_guiderecord table
-        $tableSchema = Craft::$app->db->schema->getTableSchema('{{%guide_guiderecord}}');
+        // guide_userguides table
+        $tableSchema = Craft::$app->db->schema->getTableSchema('{{%guide_userguides}}');
         if ($tableSchema === null) {
             $tablesCreated = true;
             $this->createTable(
-                '{{%guide_guiderecord}}',
+                '{{%guide_userguides}}',
                 [
                     'id' => $this->primaryKey(),
                     'dateCreated' => $this->dateTime()->notNull(),
@@ -110,7 +90,15 @@ class Install extends Migration
                     'uid' => $this->uid(),
                     // Custom columns in the table
                     'siteId' => $this->integer()->notNull(),
-                    'some_field' => $this->string(255)->notNull()->defaultValue(''),
+                    'authorId' => $this->integer()->notNull(),
+                    'content' => $this->text(),
+                    'elementType' => $this->string(),
+                    'format' => $this->string(11)->notNull()->defaultValue(''),
+                    'moreInfo' => $this->string(1024),
+                    'permissions' => $this->string(512),
+                    'sectionId' => $this->integer(),
+                    'templatePath' => $this->string(),
+                    'typeId' => $this->integer()->notNull(),
                 ]
             );
         }
@@ -125,24 +113,43 @@ class Install extends Migration
      */
     protected function createIndexes()
     {
-        // guide_guiderecord table
+        // guide_userguides table
         $this->createIndex(
-            $this->db->getIndexName(
-                '{{%guide_guiderecord}}',
-                'some_field',
-                true
-            ),
-            '{{%guide_guiderecord}}',
-            'some_field',
-            true
+            null,
+            '{{%guide_userguides}}',
+            'authorId',
+            false
         );
-        // Additional commands depending on the db driver
-        switch ($this->driver) {
-            case DbConfig::DRIVER_MYSQL:
-                break;
-            case DbConfig::DRIVER_PGSQL:
-                break;
-        }
+        $this->createIndex(
+            null,
+            '{{%guide_userguides}}',
+            'elementType',
+            false
+        );
+        $this->createIndex(
+            null,
+            '{{%guide_userguides}}',
+            'format',
+            false
+        );
+        $this->createIndex(
+            null,
+            '{{%guide_userguides}}',
+            'sectionId',
+            false
+        );
+        $this->createIndex(
+            null,
+            '{{%guide_userguides}}',
+            'typeId',
+            false
+        );
+        $this->createIndex(
+            null,
+            '{{%guide_userguides}}',
+            'templatePath',
+            false
+        );
     }
 
     /**
@@ -152,10 +159,10 @@ class Install extends Migration
      */
     protected function addForeignKeys()
     {
-        // guide_guiderecord table
+        // guide_userguides table
         $this->addForeignKey(
-            $this->db->getForeignKeyName('{{%guide_guiderecord}}', 'siteId'),
-            '{{%guide_guiderecord}}',
+            $this->db->getForeignKeyName('{{%guide_userguides}}', 'siteId'),
+            '{{%guide_userguides}}',
             'siteId',
             '{{%sites}}',
             'id',
@@ -165,22 +172,13 @@ class Install extends Migration
     }
 
     /**
-     * Populates the DB with the default data.
-     *
-     * @return void
-     */
-    protected function insertDefaultData()
-    {
-    }
-
-    /**
      * Removes the tables needed for the Records used by the plugin
      *
      * @return void
      */
     protected function removeTables()
     {
-        // guide_guiderecord table
-        $this->dropTableIfExists('{{%guide_guiderecord}}');
+        // guide_userguides table
+        $this->dropTableIfExists('{{%guide_userguides}}');
     }
 }

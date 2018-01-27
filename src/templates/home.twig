@@ -30,7 +30,7 @@
 {% set pluginCpUrl = url('guide/home') %}
 
 {# Get a URL to an image in our AssetBundle #}
-{% set iconUrl = view.getAssetManager().getPublishedUrl('@wbrowar/guide/assetbundles/indexcpsection/dist', true) ~ '/img/Index-icon.svg' %}
+{% set iconUrl = view.getAssetManager().getPublishedPath('@wbrowar/guide/assetbundles/indexcpsection/dist', true) ~ '/img/Index-icon.svg' %}
 
 {# The content of the CP Section#}
 {% if (pageContent ?? false) and settings.guideNav|length %}
@@ -56,9 +56,12 @@
     {% endset %}
 {% endif %}
 {% block header %}
-{#{{ svg(iconUrl) }}#}
-    <h1>{{ title ?? 'Guide' }}</h1>
+    <div class="guide_logo_lockup">
+        <div>{{ svg(iconUrl) }}</div>
+        <div><h1>{{ title ?? 'Guide' }}</h1></div>
+    </div>
     <div class="flex-grow"></div>
+    <div class="guide_action_buttons"></div>
 {% endblock %}
 {% set content %}
     <div class="guide_cp guide_text">
@@ -68,7 +71,7 @@
             {% if craft.app.request.getSegment(2) == 'home' %}
                 <h1>Hi, {{ currentUser.friendlyName }}.</h1>
 
-                <p>You&rsquo;re seeing this page because there isn&rsquo;t a template that lives at the path set in Guide plugin settings: <span class="guide__code_inline">{{ settings.guideTemplatePath }}</span></p>
+                <p>You&rsquo;re seeing this page because there isn&rsquo;t a template that lives at the path set in Guide plugin settings: <span class="guide_code_inline">{{ settings.guideTemplatePath }}</span></p>
             {% endif %}
 
             <h2 data-guide-section>Navigation</h2>
@@ -81,9 +84,9 @@
     'Forms': { admin: true, template: '_guide/forms' },
 }) }}{% endverbatim %}{% endset %}
 
-            <div class="guide__code_block">{{ example|e }}</div>
+            <div class="guide_code_block">{{ example|e }}</div>
 
-            <p>If you pass in a string, Guide will look for a template in your <span class="guide__code_inline">templates</span> directory. If you pass in an object, you can restrict a navigation item to different user permissions.</p>
+            <p>If you pass in a string, Guide will look for a template in your <span class="guide_code_inline">templates</span> directory. If you pass in an object, you can restrict a navigation item to different user permissions.</p>
 
             <table>
                 <thead>
@@ -97,7 +100,7 @@
                     <tr>
                         <td><b>admin</b></td>
                         <td><i>boolean</i></td>
-                        <td>If <span class="guide__code_inline">admin</span> is set to <span class="guide__code_inline">true</span>, subnav item will be restricted to Admin users.</td>
+                        <td>If <span class="guide_code_inline">admin</span> is set to <span class="guide_code_inline">true</span>, subnav item will be restricted to Admin users.</td>
                     </tr>
                     <tr>
                         <td><b>permissions</b></td>
@@ -107,14 +110,14 @@
                     <tr>
                         <td><b>template</b> - <i>required</i></td>
                         <td><i>string</i></td>
-                        <td>The path to the template in your <span class="guide__code_inline">templates</span> directory.</td>
+                        <td>The path to the template in your <span class="guide_code_inline">templates</span> directory.</td>
                     </tr>
                 </tbody>
             </table>
 
             <h2 data-guide-section>Page Sections</h2>
 
-            <p>A drop down will appear if you add one or more page sections to a Guide template. To add a menu item to the drop down, add the data attribute, <span class="guide__code_inline">data-guide-section</span>, to any <span class="guide__code_inline">h1, h2, h3,</span> or <span class="guide__code_inline">h4</span> element. Clicking on a link in the drop down will scroll you down to that section on the page.</p>
+            <p>A drop down will appear if you add one or more page sections to a Guide template. To add a menu item to the drop down, add the data attribute, <span class="guide_code_inline">data-guide-section</span>, to any <span class="guide_code_inline">h1, h2, h3,</span> or <span class="guide_code_inline">h4</span> element. Clicking on a link in the drop down will scroll you down to that section on the page.</p>
 
             <h2 data-guide-section>Components</h2>
 
@@ -130,7 +133,7 @@
     <div><!-- content --></div>
 </div>{% endset %}
 
-            <div class="guide__code_block">{{ example|e }}</div>
+            <div class="guide_code_block">{{ example|e }}</div>
 
             <div class="guide_grid guide_grid--2_column">
                 <div>
@@ -152,7 +155,7 @@
     <div><!-- content --></div>
 </div>{% endset %}
 
-            <div class="guide__code_block">{{ example|e }}</div>
+            <div class="guide_code_block">{{ example|e }}</div>
 
             <div class="guide_grid guide_grid--3_column">
                 <div>
@@ -176,7 +179,7 @@
                     <div><!-- description --></div>
                 </div>{% endset %}
 
-            <div class="guide__code_block">{{ example|e }}</div>
+            <div class="guide_code_block">{{ example|e }}</div>
 
             <div class="guide_grid guide_grid--image">
                 <div>
@@ -197,7 +200,7 @@
                     <div><!-- image --></div>
                 </div>{% endset %}
 
-            <div class="guide__code_block">{{ example|e }}</div>
+            <div class="guide_code_block">{{ example|e }}</div>
 
             <div class="guide_grid guide_grid--image--right">
                 <div>
