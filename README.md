@@ -161,7 +161,7 @@ For example, if you want to match Craft's sidebar, enter this into the Custom CS
 
 Regular CSS can be used, as well. Custom CSS entered in Guide's plugin settings will appear on all pages within the CP.
  
-*NOTE: Another idea could be to rebrand Guide to your own company's brand colors.*
+*NOTE: Another idea could be to re-brand Guide to your own company's brand colors.*
 
 ## Guide Roadmap
 
