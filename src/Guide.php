@@ -45,7 +45,7 @@ use yii\base\Event;
  * @package   Guide
  * @since     1.0.0
  *
- * @property  GuideServiceService $guideService
+ * @property  GuideServiceService $guide
  * @property  Settings $settings
  * @method    Settings getSettings()
  */
@@ -63,6 +63,15 @@ class Guide extends Plugin
     public static $plugin;
 
     public $schemaVersion = '1.1.0';
+
+    public $adminBarWidgets = [[
+        'description' => 'Display the Content Guide for the current entry.',
+        'handle' => 'guide-for-entry',
+        'iconPath' => 'icon-mask.svg',
+        'layout' => 'center',
+        'name' => 'Content Guide',
+        'template' => 'guide/adminbar_guide_for_entry',
+    ]];
 
     // Public Methods
     // =========================================================================
@@ -168,7 +177,7 @@ class Guide extends Plugin
             Craft::$app->view->hook('cp.entries.edit.details', function(&$context) {
                 if ($context['entry'] ?? false) {
                     // return sidebar template
-                    return Guide::$plugin->guideService->renderUserGuideTemplate('guide/_user_guide/user_guide_sidebar', $context['entry']);
+                    return Guide::$plugin->guide->renderUserGuideTemplate('guide/_user_guide/user_guide_sidebar', $context['entry']);
                 }
 
                 return false;
@@ -185,7 +194,7 @@ class Guide extends Plugin
                         ->id($id)
                         ->one();
 
-                    echo Guide::$plugin->guideService->renderUserGuideTemplate('guide/_user_guide/user_guide_modal', $entry);
+                    echo Guide::$plugin->guide->renderUserGuideTemplate('guide/_user_guide/user_guide_modal', $entry);
                 }
             });
 
@@ -200,6 +209,8 @@ class Guide extends Plugin
             //    }
             //);
         }
+
+
 
 /**
  * Logging in Craft involves using one of the following methods:

@@ -62,9 +62,20 @@ Use templates to create your CMS guide in a way that's easily portable from one 
 
 *NOTE: The Guide CP Nav gets updated whenever the Guide Home template is loaded. To update Guide CP Nav, just click on the Guide tab in CP.*
 
+### Twig Extensions
+
+Guide comes with a few helper tags that make it easier to do template logic and to bring content into your Guide CP Sectiong guides, Content Guides, and Guide Widgets.
+
+| Variable Key | Description |
+| --- | --- |
+| `{{ guideAsset('FILENAME') }}` | Does a simple query for an image asset based on file name. |
+| `{{ guideQuery(OBJECT) }}` | Find Content Guides based on the given criteria. For example, `{{ guideQuery({ sectionId: 1, typeId: 1 }) }}` might return the Content Guide for the Homepage section. |
+| `{{ guideVar('VAR_KEY') }}` | Pull in content set in settings, see [Guide Variables](https://github.com/wbrowar/craft-3-guide#guide-variables) for more information. |
+| `{{ pluginEnabled('PLUGIN_HANDLE') }}` | A boolean that checks to see if a plugin is currently installed. |
+
 ### Guide Variables
 
-Guides provides a set of variables that can be placed in your Twig templates to make it easy to swap out project-specific information.
+Guide provides a set of variables that can be placed in your Twig templates to make it easy to swap out project-specific information.
 
 To display a Guide Variable in your Twig templates, you can set the value of each variable in the Guide plugin settings page, then use the `{{ guideVar() }}` Twig extension to display that value in your page templates.
 

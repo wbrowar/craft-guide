@@ -11,7 +11,6 @@
 namespace wbrowar\guide\services;
 
 use craft\helpers\StringHelper;
-use craft\models\Section;
 use function PHPSTORM_META\type;
 use wbrowar\guide\Guide;
 use wbrowar\guide\models\UserGuide;
@@ -44,7 +43,7 @@ class GuideService extends Component
      *
      * From any other plugin file, call it like this:
      *
-     *     Guide::$plugin->guideService->saveUserGuide()
+     *     Guide::$plugin->guide->saveUserGuide()
      *
      * @return string
      */
@@ -64,7 +63,7 @@ class GuideService extends Component
      *
      * From any other plugin file, call it like this:
      *
-     *     Guide::$plugin->guideService->getUserGuideForElementType()
+     *     Guide::$plugin->guide->getUserGuideForElementType()
      *
      * @return string
      */
@@ -90,7 +89,7 @@ class GuideService extends Component
      *
      * From any other plugin file, call it like this:
      *
-     *     Guide::$plugin->guideService->getUserGuideForElementType()
+     *     Guide::$plugin->guide->getUserGuideForElementType()
      *
      * @return string
      */
@@ -106,7 +105,26 @@ class GuideService extends Component
      *
      * From any other plugin file, call it like this:
      *
-     *     Guide::$plugin->guideService->renderUserGuideBody()
+     *     Guide::$plugin->guide->getUserGuides()
+     *
+     * @return string
+     */
+    public function getUserGuides($params = [])
+    {
+        $orderBy = $params['orderBy'] ?? 'elementType';
+        $params['siteId'] = $params['siteId'] ?? Craft::$app->sites->currentSite->id;
+
+        $userGuides = UserGuides::find()->where($params)->orderBy($orderBy)->all();
+
+        return $userGuides ?? null;
+    }
+
+    /**
+     * Updates subnavigation in the Guide CP Section
+     *
+     * From any other plugin file, call it like this:
+     *
+     *     Guide::$plugin->guide->renderUserGuideBody()
      *
      * @return string
      */
@@ -125,15 +143,10 @@ class GuideService extends Component
         if ($format == 'template' && isset($userGuide->templatePath)) {
             Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_SITE);
             if (Craft::$app->view->doesTemplateExist($userGuide->templatePath)) {
-                //$userGuide->templatePath
                 $variables['content'] = file_get_contents(Craft::$app->view->resolveTemplate($userGuide->templatePath));
-
-                // $variables['templatePath'] = Craft::$app->view->resolveTemplate($userGuide->templatePath);
             }
             Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_CP);
         }
-
-        //Craft::dd($variables['content']);
 
         return Craft::$app->view->renderTemplate('guide/_user_guide/user_guide_body', $variables);
     }
@@ -143,7 +156,7 @@ class GuideService extends Component
      *
      * From any other plugin file, call it like this:
      *
-     *     Guide::$plugin->guideService->renderUserGuideTemplate()
+     *     Guide::$plugin->guide->renderUserGuideTemplate()
      *
      * @return string
      */
@@ -184,7 +197,7 @@ class GuideService extends Component
      *
      * From any other plugin file, call it like this:
      *
-     *     Guide::$plugin->guideService->saveUserGuide()
+     *     Guide::$plugin->guide->saveUserGuide()
      *
      * @return string
      */
@@ -216,7 +229,7 @@ class GuideService extends Component
      *
      * From any other plugin file, call it like this:
      *
-     *     Guide::$plugin->guideService->exampleService()
+     *     Guide::$plugin->guide->exampleService()
      *
      * @return mixed
      */
@@ -281,7 +294,7 @@ class GuideService extends Component
      *
      * From any other plugin file, call it like this:
      *
-     *     Guide::$plugin->guideService->exampleService()
+     *     Guide::$plugin->guide->exampleService()
      *
      * @return mixed
      */
@@ -301,7 +314,7 @@ class GuideService extends Component
      *
      * From any other plugin file, call it like this:
      *
-     *     Guide::$plugin->guideService->exampleService()
+     *     Guide::$plugin->guide->exampleService()
      *
      * @return mixed
      */

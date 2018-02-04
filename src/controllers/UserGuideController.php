@@ -79,7 +79,7 @@ class UserGuideController extends Controller
 
         $params = Craft::$app->getRequest()->getBodyParams();
 
-        return $this->asJson(Guide::$plugin->guideService->deleteUserGuide($params));
+        return $this->asJson(Guide::$plugin->guide->deleteUserGuide($params));
     }
 
     /**
@@ -98,7 +98,7 @@ class UserGuideController extends Controller
         $sectionId = $params['sectionId'];
         $typeId = $params['typeId'];
 
-        $userGuide = Guide::$plugin->guideService->getUserGuideForElementType($siteId, $sectionId, $typeId);
+        $userGuide = Guide::$plugin->guide->getUserGuideForElementType($siteId, $sectionId, $typeId);
 
         if ($userGuide) {
             $variables = [
@@ -107,7 +107,7 @@ class UserGuideController extends Controller
                 'userGuide' => $userGuide,
             ];
 
-            return $this->asJson(['guideAsString' => Guide::$plugin->guideService->renderUserGuideBody($variables)]);
+            return $this->asJson(['guideAsString' => Guide::$plugin->guide->renderUserGuideBody($variables)]);
         }
 
         return false;
@@ -136,6 +136,6 @@ class UserGuideController extends Controller
             'typeId' => $params['typeId'],
         ]);
 
-        return $this->asJson(Guide::$plugin->guideService->saveUserGuide($userGuide));
+        return $this->asJson(Guide::$plugin->guide->saveUserGuide($userGuide));
     }
 }

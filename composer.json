@@ -2,7 +2,7 @@
     "name": "wbrowar/guide",
     "description": "A CMS Guide for Craft CMS.",
     "type": "craft-plugin",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "keywords": [
         "craft",
         "cms",
@@ -43,7 +43,7 @@
         "hasCpSection": true,
         "changelogUrl": "https://raw.githubusercontent.com/wbrowar/craft-3-guide/master/CHANGELOG.md",
         "components": {
-            "guideService": "wbrowar\\guide\\services\\GuideService"
+            "guide": "wbrowar\\guide\\services\\GuideService"
         },
         "class": "wbrowar\\guide\\Guide"
     }

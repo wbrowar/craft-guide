@@ -23,8 +23,16 @@
  */
 
 return [
+    'customCss' => '',
+    'guideNav' => [],
 
-    // This controls blah blah blah
-    "someAttribute" => true,
+    // path relative to your site's templates folder
+    'guideTemplatePath' => '_guide/index',
 
+    // OPTIONS: all, admin, permission
+    'userGuidesEditableBy' => 'admin',
+
+    // guideVar() settings
+    'clientName' => '',
+    'myCompanyName' => '',
 ];

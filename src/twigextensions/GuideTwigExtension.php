@@ -10,6 +10,8 @@
 
 namespace wbrowar\guide\twigextensions;
 
+use craft\elements\Asset;
+use craft\helpers\Db;
 use wbrowar\guide\Guide;
 
 use Craft;
@@ -64,8 +66,11 @@ class GuideTwigExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
+            new \Twig_SimpleFunction('guideAsset', [$this, 'guideAsset'], array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('guideQuery', [$this, 'guideQuery']),
             new \Twig_SimpleFunction('guideVar', [$this, 'guideVar']),
             new \Twig_SimpleFunction('renderUserGuideBody', [$this, 'renderUserGuideBody']),
+            new \Twig_SimpleFunction('pluginEnabled', [$this, 'pluginEnabled']),
             new \Twig_SimpleFunction('updateGuideCpNav', [$this, 'updateGuideCpNav']),
         ];
     }
@@ -77,9 +82,65 @@ class GuideTwigExtension extends \Twig_Extension
      *
      * @return string
      */
+    public function guideAsset($fileName, $type = 'image'):string
+    {
+        $output = '';
+
+        switch ($type) {
+            case 'image':
+                $file = Asset::find()
+                            ->filename(Db::escapeParam($fileName))
+                            ->one();
+
+                if ($file) {
+                    $output = '<img src="' . $file->getUrl() . '" alt="' . $file->title . '">';
+                }
+                break;
+        }
+
+        return $output;
+    }
+
+    /**
+     * Our function called via Twig; it can do anything you want
+     *
+     * @param null $text
+     *
+     * @return string
+     */
+    public function guideQuery($params = [])
+    {
+        $guides = Guide::$plugin->guide->getUserGuides($params);
+
+        for ($i=0; $i<count($guides); $i++) {
+            //$guides .= $types[$i];
+        }
+
+        return $guides;
+    }
+
+    /**
+     * Our function called via Twig; it can do anything you want
+     *
+     * @param null $text
+     *
+     * @return string
+     */
     public function guideVar($name)
     {
-        return Guide::$plugin->guideService->getGuideVariableValue($name);
+        return Guide::$plugin->guide->getGuideVariableValue($name);
+    }
+
+    /**
+     * Our function called via Twig; it can do anything you want
+     *
+     * @param null $text
+     *
+     * @return string
+     */
+    public function pluginEnabled($pluginHandle)
+    {
+        return Craft::$app->plugins->isPluginInstalled($pluginHandle) && Craft::$app->plugins->isPluginEnabled($pluginHandle);
     }
 
     /**
@@ -91,7 +152,7 @@ class GuideTwigExtension extends \Twig_Extension
      */
     public function renderUserGuideBody($params = [])
     {
-        return Guide::$plugin->guideService->renderUserGuideBody($params);
+        return Guide::$plugin->guide->renderUserGuideBody($params);
     }
 
     /**
@@ -103,7 +164,7 @@ class GuideTwigExtension extends \Twig_Extension
      */
     public function updateGuideCpNav($array = [])
     {
-        Guide::$plugin->guideService->updateGuideCpNav($array);
+        Guide::$plugin->guide->updateGuideCpNav($array);
 
         return '';
     }

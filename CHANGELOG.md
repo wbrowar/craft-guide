@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## 1.1.1 - 2018-02-04
+### Added
+- Added Custom CSS preview in Guide plugin settings to make re-branding easier
+- Add an [Admin Bar Widget](https://github.com/wbrowar/craft-3-adminbar)
+  - If a user is on an entry that has a Content Guide it will appear in Admin Bar
+- Added `guideAsset()` twig tag to get image assets based on their filename
+- Added `guideQuery()` twig tag to query existing Content Guides
+- Added `pluginEnabled()` twig tag to check to see if a plugin is installed
+- Added a `config.php` file to override plugin settings (copy this to `config/guide.php` to get it to work)
+
+
 ## 1.1.0 - 2018-01-27
 ### Added
 - Added collaborative guides to Entry edit pages

@@ -48,39 +48,30 @@
 }) }}
 
 <hr>
-<h2>Custom Styles</h2>
-<p>Guide uses CSS Custom Properties to help you rebrand and theme guides used throughout Craft CMS's CP. Change these CSS Custom Properties or write your own custom CSS in the textarea below.</p>
 
-{#
-<div class="guide__modal" style="margin-bottom: 30px; width: 100%; max-width: 700px;">
-    <div class="guide__modal__header">
+<div id="guide__demo__css"></div>
+<div class="guide__demo">
+    <div class="guide__demo__header">
         <div class="guide_logo_lockup guide_logo_lockup--35">
             <div>{{ svg(iconUrl) }}</div>
-            <div><h1>Demo Guide</h1></div>
+            <div>
+                <h1>Custom Styles</h1>
+            </div>
+        </div>
+        {#<a class="guide_button btn" href="https://github.com/wbrowar/craft-3-guide#css-variables">More info</a>#}
+    </div>
+    <div class="guide__demo__text guide_text">
+        <div class="guide_grid guide_grid--2_column">
+            <div>
+                <img src="http://via.placeholder.com/900x450" alt="Placeolder image">
+            </div>
+            <div>
+                <h2>Theme Demo</h2>
+                <p>Guide uses <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/--*">CSS Custom Properties</a> to help you rebrand and theme guides used throughout <i>Craft CMS's CP</i>. Change these <b>CSS Custom Properties</b> or write your own custom <span class="guide_code_inline">CSS</span> in the textarea below.</p>
+                <a class="guide_button btn" href="https://github.com/wbrowar/craft-3-guide#css-variables">More info</a>
+            </div>
         </div>
     </div>
-    <div>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-    </div>
-</div>
-#}
-
-{% set guideVariables = [
-    ['<b>--guide-border-radius</b>: 5px;', 'Rounds the corners of guide containers.'],
-    ['<b>--guide-border-radius-media</b>: 3px;', 'Rounds the corners of <i>canvas, img, picture,</i> and <i>video</i> tags.'],
-    ['<b>--guide-color-bg</b>: rgba(0, 0, 0, .8);', 'Background color for guide containers.'],
-    ['<b>--guide-color-border</b>: rgb(200, 200, 200);', 'Color of border placed around <i>canvas, img, picture,</i> and <i>video</i> tags.'],
-    ['<b>--guide-color-code-bg</b>: rgba(60, 60, 60, .1);', 'Background color used to highlight code examples.'],
-    ['<b>--guide-color-link</b>: rgb(219, 81, 61);', 'Color of links in Guide containers.'],
-    ['<b>--guide-color-text</b>: rgb(255, 255, 255);', 'Color of text in Guide containers.'],
-    ['<b>--guide-max-width</b>: 1100px;', 'Max width of Guide CP sections pages.'],
-    ['<b>--guide-color-h1</b>: var(--guide-color-text);', 'Color of h1 tags in Guide containers.'],
-] %}
-<div style="display: grid; grid-template-columns: minmax(100px, 350px) auto; grid-template-rows: auto; grid-gap: 5px 30px;">
-    {% for item in guideVariables %}
-        <div>{{ item[0]|raw }}</div>
-        <div>{{ item[1]|raw }}</div>
-    {% endfor %}
 </div>
 
 {{ forms.textareaField({
@@ -91,3 +82,26 @@
     value: settings.customCss,
     placeholder: ':root {\n  --guide-color-code-bg: #ddd;\n  --guide-color-text: #c0c;\n}'
 }) }}
+
+{% set guideVariables = [
+    ['<b>--guide-border-radius</b>: 5px;', 'Rounds the corners of guide containers.'],
+    ['<b>--guide-border-radius-media</b>: 3px;', 'Rounds the corners of <i>canvas, img, picture,</i> and <i>video</i> tags.'],
+    ['<b>--guide-color-bg</b>: rgba(0, 0, 0, .8);', 'Background color for guide containers.'],
+    ['<b>--guide-color-border</b>: rgb(200, 200, 200);', 'Color of border placed around <i>canvas, img, picture,</i> and <i>video</i> tags.'],
+    ['<b>--guide-color-code-bg</b>: rgba(60, 60, 60, .1);', 'Background color used to highlight code examples.'],
+    ['<b>--guide-color-link</b>: rgb(219, 81, 61);', 'Color of links in Guide containers.'],
+    ['<b>--guide-color-link-hover</b>: rgb(186, 78, 58);', 'Color of links and buttons when in the :hover state.'],
+    ['<b>--guide-color-link-active</b>: rgb(123, 51, 36);', 'Color of links and buttons when in the :active state.'],
+    ['<b>--guide-color-text</b>: rgb(255, 255, 255);', 'Color of text in Guide containers.'],
+    ['<b>--guide-max-width</b>: 1100px;', 'Max width of Guide CP sections pages.'],
+    ['<b>--guide-color-button-bg</b>: var(--guide-color-bg);', 'Background color of <i>.guide_button</i> elements.'],
+    ['<b>--guide-color-h1</b>: var(--guide-color-text);', 'Color of h1 tags in Guide containers.'],
+] %}
+<div style="display: grid; grid-template-columns: minmax(100px, 350px) auto; grid-template-rows: auto; grid-gap: 5px 30px;">
+    {% for item in guideVariables %}
+        <div>{{ item[0]|raw }}</div>
+        <div>{{ item[1]|raw }}</div>
+    {% endfor %}
+</div>
+
+<p><i>NOTE: Some of these defaults may change over time—especially while Craft 3 is in the RC phase.</i></p>
