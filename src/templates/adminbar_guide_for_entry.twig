@@ -1,14 +1,14 @@
-<div id="adminbar_guide_for_entry__body" class="guide_text guide__modal">
-    {% if entry ?? false %}
-        {% for userGuide in guideQuery({ sectionId: entry.section.id, typeId: entry.type.id }) %}
+{% if entry ?? false %}
+    {% for userGuide in guideQuery({ sectionId: entry.section.id, typeId: entry.type.id }) %}
+         <div id="adminbar_guide_for_entry__body" class="guide_text guide__modal">
             {{ renderUserGuideBody({
                 content: userGuide.content,
                 format: userGuide.format,
                 userGuide: userGuide,
             })|raw }}
-        {% endfor %}
-    {% endif %}
-</div>
+         </div>
+    {% endfor %}
+{% endif %}
 
 {% css view.registerCssFile(view.getAssetManager().getPublishedUrl('@wbrowar/guide/assetbundles/guide/dist', true) ~ '/css/guide.css') %}
 
@@ -18,7 +18,7 @@
 {% endset %}
 
 {% set js %}
-    if (document.getElementById('adminbar_guide_for_entry__body').innerHTML === '') { adminBarRemoveWidget('{{ id }}'); };
+    if (document.getElementById('adminbar_guide_for_entry__body') === null) { adminBarRemoveWidget('{{ id }}'); };
 {% endset %}
 
 {% if includeAssets ?? false %}
