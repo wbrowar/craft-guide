@@ -84,18 +84,19 @@
 }) }}
 
 {% set guideVariables = [
+    ['<b>--guide-bg</b>: var(--guide-color-bg);', 'Background for guide containers. This is used as shorthand for the CSS `background` property.'],
     ['<b>--guide-border-radius</b>: 5px;', 'Rounds the corners of guide containers.'],
     ['<b>--guide-border-radius-media</b>: 3px;', 'Rounds the corners of <i>canvas, img, picture,</i> and <i>video</i> tags.'],
-    ['<b>--guide-color-bg</b>: rgba(0, 0, 0, .8);', 'Background color for guide containers.'],
+    ['<b>--guide-color-bg</b>: rgba(0, 0, 0, .8);', 'Background for guide containers.'],
     ['<b>--guide-color-border</b>: rgb(200, 200, 200);', 'Color of border placed around <i>canvas, img, picture,</i> and <i>video</i> tags.'],
+    ['<b>--guide-color-button-bg</b>: var(--guide-color-bg);', 'Background color of <i>.guide_button</i> elements.'],
     ['<b>--guide-color-code-bg</b>: rgba(60, 60, 60, .1);', 'Background color used to highlight code examples.'],
+    ['<b>--guide-color-h1</b>: var(--guide-color-text);', 'Color of h1 tags in Guide containers.'],
     ['<b>--guide-color-link</b>: rgb(219, 81, 61);', 'Color of links in Guide containers.'],
     ['<b>--guide-color-link-hover</b>: rgb(186, 78, 58);', 'Color of links and buttons when in the :hover state.'],
     ['<b>--guide-color-link-active</b>: rgb(123, 51, 36);', 'Color of links and buttons when in the :active state.'],
     ['<b>--guide-color-text</b>: rgb(255, 255, 255);', 'Color of text in Guide containers.'],
     ['<b>--guide-max-width</b>: 1100px;', 'Max width of Guide CP sections pages.'],
-    ['<b>--guide-color-button-bg</b>: var(--guide-color-bg);', 'Background color of <i>.guide_button</i> elements.'],
-    ['<b>--guide-color-h1</b>: var(--guide-color-text);', 'Color of h1 tags in Guide containers.'],
 ] %}
 <div style="display: grid; grid-template-columns: minmax(100px, 350px) auto; grid-template-rows: auto; grid-gap: 5px 30px;">
     {% for item in guideVariables %}

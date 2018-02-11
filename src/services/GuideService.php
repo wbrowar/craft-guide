@@ -74,10 +74,10 @@ class GuideService extends Component
 
         switch ($name) {
             case 'clientName':
-                $value = $settings->clientName != '' ? $settings->clientName :  '';
+                $value = $settings->clientName != '' ? $settings->clientName :  '<span class="guide_fpo">CLIENT NAME</span>';
                 break;
             case 'myCompanyName':
-                $value = $settings->myCompanyName != '' ? $settings->myCompanyName : Craft::$app->getUser()->getIdentity()->getFriendlyName();
+                $value = $settings->myCompanyName != '' ? $settings->myCompanyName : '<span class="guide_fpo">MY COMPANY NAME</span>';
                 break;
         }
 
@@ -109,12 +109,22 @@ class GuideService extends Component
      *
      * @return string
      */
-    public function getUserGuides($params = [])
+    public function getUserGuides($params = [], $queryType = 'all')
     {
         $orderBy = $params['orderBy'] ?? 'elementType';
         $params['siteId'] = $params['siteId'] ?? Craft::$app->sites->currentSite->id;
 
-        $userGuides = UserGuides::find()->where($params)->orderBy($orderBy)->all();
+        switch ($queryType) {
+            case 'all':
+                $userGuides = UserGuides::find()->where($params)->orderBy($orderBy)->all();
+                break;
+            case 'one':
+                $userGuides = UserGuides::find()->where($params)->orderBy($orderBy)->one();
+                break;
+            case 'count':
+                $userGuides = UserGuides::find()->where($params)->count();
+                break;
+        }
 
         return $userGuides ?? null;
     }

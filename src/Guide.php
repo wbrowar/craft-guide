@@ -12,13 +12,14 @@ namespace wbrowar\guide;
 
 use craft\elements\Entry;
 use craft\events\RegisterUserPermissionsEvent;
-use craft\records\UserPermission;
 use craft\services\UserPermissions;
 use wbrowar\guide\services\GuideService as GuideServiceService;
 use wbrowar\guide\twigextensions\GuideTwigExtension;
 use wbrowar\guide\models\Settings;
 use wbrowar\guide\widgets\GuideWidget as GuideWidgetWidget;
 use wbrowar\guide\assetbundles\guide\GuideAsset;
+use wbrowar\adminbar\events\AdminBarRenderEvent;
+use wbrowar\adminbar\services\Bar;
 
 use Craft;
 use craft\base\Plugin;
@@ -108,6 +109,24 @@ class Guide extends Plugin
             });
         }
 
+        Event::on(Bar::class, Bar::EVENT_ADMIN_BAR_BEFORE_RENDER, function(AdminBarRenderEvent $event) {
+            // Get the entry from the $event var
+            $entry = $event->entry;
+
+            if ($entry) {
+                // Check for a Content Guide for this entry
+                $total = Guide::$plugin->guide->getUserGuides([
+                    'sectionId' => $entry->sectionId,
+                    'typeId' => $entry->sectionId,
+                ], 'count');
+
+                // If no guide exists, disable the widget
+                if ($total < 1) {
+                    $this->adminBarWidgets[0]['enabled'] = false;
+                }
+            }
+        });
+
         if ($view->getTemplateMode() === View::TEMPLATE_MODE_CP) {
             Event::on(View::class, View::EVENT_BEFORE_RENDER_TEMPLATE, function() {
                 $view = Craft::$app->getView();
@@ -187,8 +206,6 @@ class Guide extends Plugin
             Event::on(View::class, View::EVENT_END_BODY, function(Event $event) {
                 $id = Craft::$app->controller->actionParams['entryId'] ?? null;
 
-                //Craft::dd(Craft::$app->request->getSegment(2));
-
                 if ($id) {
                     $entry = Entry::find()
                         ->id($id)
@@ -197,17 +214,6 @@ class Guide extends Plugin
                     echo Guide::$plugin->guide->renderUserGuideTemplate('guide/_user_guide/user_guide_modal', $entry);
                 }
             });
-
-            // Do something after we're installed
-            //Event::on(
-            //    Plugins::class,
-            //    Plugins::EVENT_AFTER_INSTALL_PLUGIN,
-            //    function (PluginEvent $event) {
-            //        if ($event->plugin === $this) {
-            //            // We were just installed
-            //        }
-            //    }
-            //);
         }
 
 

@@ -6,7 +6,7 @@ A CMS Guide for Craft CMS.
 
 ## Requirements
 
-- This plugin requires Craft CMS 3.0.0-RC7 or later.
+- This plugin requires Craft CMS 3.0.0-RC9 or later.
 - A browser that support CSS Grid Layout and CSS Custom Properties.
 
 ## Installation
@@ -130,13 +130,15 @@ Here's a list of available components:
 
 | Classes | Description |
 | --- | --- |
-| `.guide_code_block` | Call out code or other text in `div` or block element |
+| `.guide_button btn` | Style CP buttons with Guide's theme. |
+| `.guide_code_block` | Call out code or other text in `div` or block element. |
 | `.guide_code_inline` | Highlight code or other text. |
 | `.guide_grid` | Grid only enables CSS Grid Layout on it's own. If you add a modifier, you can create multiple column layouts. |
 | `.guide_grid .guide_grid--2_column` | Creates a 2-column grid. |
 | `.guide_grid .guide_grid--3_column` | Creates a 3-column grid. |
 | `.guide_grid .guide_grid--image` | Feature an image (or content) with a large area on the left and text on the right. |
 | `.guide_grid .guide_grid--image--right` | The same as `.guide_grid--image` but switched, with the large area on the right. |
+| `.guide_logo_lockup` | Use icons or logos to spruce up your headers. |
 
 ![Screenshot](resources/img/guide-components.png)
 

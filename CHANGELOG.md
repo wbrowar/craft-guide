@@ -5,18 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## 1.1.2 - 2018-02-05
+## 1.1.3 - 2018-02-10
 ### Added
-- Added Custom CSS preview in Guide plugin settings to make re-branding easier
-- Add an [Admin Bar Widget](https://github.com/wbrowar/craft-3-adminbar)
-  - If a user is on an entry that has a Content Guide it will appear in Admin Bar
-- Added `guideAsset()` twig tag to get image assets based on their filename
-- Added `guideQuery()` twig tag to query existing Content Guides
-- Added `pluginEnabled()` twig tag to check to see if a plugin is installed
-- Added a `config.php` file to override plugin settings (copy this to `config/guide.php` to get it to work)
+- Added a `guide_fpo` class that outlines an element in a bright pink color so you don't forget to change it
+  - Added this class around the output of `guideVar()` variables that haven't been set in Settings
+- Admin Bar Widget is now validated via PHP
+- Added the ability to change `guideQuery()` from `all` to either `one` or `count` by passing in a second parameter
+- Added more examples to Components page
 
 ### Fixed
-(1.1.2) Fixed Admin Bar widget not getting removed
+- Removed header styles that bled out of Admin Bar widget
+
+
+## 1.1.2 - 2018-02-05
+### Fixed
+- Fixed Admin Bar widget not getting removed
 
 
 ## 1.1.1 - 2018-02-04

@@ -66,9 +66,9 @@ class GuideTwigExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('guideAsset', [$this, 'guideAsset'], array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('guideAsset', [$this, 'guideAsset'], ['is_safe' => array('html')]),
             new \Twig_SimpleFunction('guideQuery', [$this, 'guideQuery']),
-            new \Twig_SimpleFunction('guideVar', [$this, 'guideVar']),
+            new \Twig_SimpleFunction('guideVar', [$this, 'guideVar'], ['is_safe' => array('html')]),
             new \Twig_SimpleFunction('renderUserGuideBody', [$this, 'renderUserGuideBody']),
             new \Twig_SimpleFunction('pluginEnabled', [$this, 'pluginEnabled']),
             new \Twig_SimpleFunction('updateGuideCpNav', [$this, 'updateGuideCpNav']),
@@ -108,13 +108,9 @@ class GuideTwigExtension extends \Twig_Extension
      *
      * @return string
      */
-    public function guideQuery($params = [])
+    public function guideQuery($params = [], $queryType = 'all')
     {
-        $guides = Guide::$plugin->guide->getUserGuides($params);
-
-        for ($i=0; $i<count($guides); $i++) {
-            //$guides .= $types[$i];
-        }
+        $guides = Guide::$plugin->guide->getUserGuides($params, $queryType);
 
         return $guides;
     }

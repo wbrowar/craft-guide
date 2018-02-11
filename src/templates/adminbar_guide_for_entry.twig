@@ -13,18 +13,13 @@
 {% css view.registerCssFile(view.getAssetManager().getPublishedUrl('@wbrowar/guide/assetbundles/guide/dist', true) ~ '/css/guide.css') %}
 
 {% set css %}
-    h1 { font-size: 2.2em; color: var(--adminbar-color-highlight); }
-    h2 { font-size: 1.4em; color: var(--adminbar-color-highlight); }
+    #adminbar_guide_for_entry__body h1 { font-size: 2.2em; color: var(--adminbar-color-highlight); }
+    #adminbar_guide_for_entry__body h2 { font-size: 1.4em; color: var(--adminbar-color-highlight); }
 {% endset %}
 
 {% set js %}
     if (document.getElementById('adminbar_guide_for_entry__body') === null) { adminBarRemoveWidget('{{ id }}'); };
 {% endset %}
 
-{% if includeAssets ?? false %}
-    <style>{{ css }}</style>
-    <script>{{ js }}</script>
-{% else %}
-    {% css css %}
-    {% js js|raw %}
-{% endif %}
+{{ addAdminBarCss(css) }}
+{{ addAdminBarJs(js) }}

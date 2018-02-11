@@ -119,6 +119,69 @@
 
             <p>A drop down will appear if you add one or more page sections to a Guide template. To add a menu item to the drop down, add the data attribute, <span class="guide_code_inline">data-guide-section</span>, to any <span class="guide_code_inline">h1, h2, h3,</span> or <span class="guide_code_inline">h4</span> element. Clicking on a link in the drop down will scroll you down to that section on the page.</p>
 
+            <hr>
+
+            <h2 data-guide-section>Styled Elements</h2>
+
+            <div class="guide_grid guide_grid--2_column">
+                <div>
+                    <h3>Buttons</h3>
+
+                    <a class="guide_button btn" href="#">A Button</a>
+
+                    {% set example %}<a class="guide_button btn" href="#">A Button</a>{% endset %}
+                    <div class="guide_code_block">{{ example|e }}</div>
+                </div>
+                <div>
+                    <h3>Logo Lockup</h3>
+
+                    <div class="guide_logo_lockup">
+                        <div><img src="http://via.placeholder.com/50x50" alt="placeholder image"></div>
+                        <div>
+                            <h1>Text that goes alongside the icon</h1>
+                        </div>
+                    </div>
+
+{% set example %}{% verbatim %}<div class="guide_logo_lockup">
+    <div>
+        <img src="http://via.placeholder.com/50x50" alt="icon">
+    </div>
+    <div>
+        <h1>Text that goes alongside the icon</h1>
+    </div>
+</div>{% endverbatim %}{% endset %}
+
+                    <div class="guide_code_block">{{ example|e }}</div>
+                </div>
+                <div>
+                    <h3>Inline Code Example</h3>
+
+                    <p>The text that goes around the <span class="guide_code_inline">code snippet</span> looks like this.</p>
+
+{% set example %}<p>The text that goes around the
+<span class="guide_code_inline">code snippet</span>
+looks like this.</p>{% endset %}
+                    <div class="guide_code_block">{{ example|e }}</div>
+                </div>
+                <div>
+                    <h3>Code Example Block</h3>
+
+{% set example %}
+    <p>Code within the example block</p>
+{% endset %}
+                    <div class="guide_code_block">{{ example|e }}</div>
+
+{% set example %}{% verbatim %}{% set example %}
+    <p>Code within the example block</p>
+{% endset %}
+<div class="guide_code_block">{{ example|e }}</div>{% endverbatim %}{% endset %}
+
+                    <div class="guide_code_block">{{ example|e }}</div>
+                </div>
+            </div>
+
+            <hr>
+
             <h2 data-guide-section>Components</h2>
 
             <p>Use these components to style your guide, or add your own css to the Custom CSS field in Guide plugin settings.</p>
