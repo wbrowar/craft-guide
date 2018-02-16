@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## 1.1.4 - 2018-02-16
+### Added
+- You can now store custom guideVar() variables by setting their keys and values in Guide Plugin Settings
+  - You can store plain strings, as well as encrypted strings for displaying passwords and sensitive information in your CMS guide 
+
+### Changed
+- Modified the style of the Sections dropdown to show hierarchy based on element types (`h1, h2, h3, and h4`)
+
+### Fixed
+- Fixed some wonky migration bugs
+- Fixed a bug that occurred when Admin Bar wasn't installed
+- Fixed guide CP section not displaying the currently selected subnav page
+
+
 ## 1.1.3 - 2018-02-10
 ### Added
 - Added a `guide_fpo` class that outlines an element in a bright pink color so you don't forget to change it

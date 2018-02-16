@@ -47,6 +47,33 @@
     placeholder: 'Shelby Company Limited'
 }) }}
 
+{{ forms.editableTableField({
+    label: 'Custom Variables',
+    id: 'customVars',
+    name: 'customVars',
+    addRowLabel: 'Add a link',
+    instructions: 'Store custom variables that can be accessed in Twig by using `{{ guideVar("REPLACE_WITH_KEY") }}`',
+    cols: {
+        varKey: {
+            heading: 'Key',
+            type: 'singleline',
+        },
+        varValue: {
+            heading: 'Value',
+            type: 'singleline',
+        },
+        varType: {
+            heading: 'Type',
+            type: 'select',
+            options: {
+                string: 'String',
+                password: 'String (Encrypted)',
+            }
+        },
+    },
+    rows: settings.customVars ?? ['','',''],
+}) }}
+
 <hr>
 
 <div id="guide__demo__css"></div>

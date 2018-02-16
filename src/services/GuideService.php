@@ -74,11 +74,26 @@ class GuideService extends Component
 
         switch ($name) {
             case 'clientName':
-                $value = $settings->clientName != '' ? $settings->clientName :  '<span class="guide_fpo">CLIENT NAME</span>';
+                $value = $settings->clientName != '' ? $settings->clientName : '<span class="guide_fpo">CLIENT NAME</span>';
                 break;
             case 'myCompanyName':
                 $value = $settings->myCompanyName != '' ? $settings->myCompanyName : '<span class="guide_fpo">MY COMPANY NAME</span>';
                 break;
+        }
+
+        if ($value === '') {
+            for ($i=0; $i<count($settings->customVars); $i++) {
+                if ($settings->customVars[$i]['varKey'] === $name) {
+                    if ($settings->customVars[$i]['varType'] === 'password') {
+                        $value = StringHelper::decdec($settings->customVars[$i]['varValue']);
+                    } else {
+                        $value = $settings->customVars[$i]['varValue'];
+                    }
+                    break;
+                }
+            }
+        } else if ($value === 'FPO') {
+            $value = '<span class="guide_fpo">FPO</span>';
         }
 
         return $value;

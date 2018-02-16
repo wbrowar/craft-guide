@@ -7,9 +7,9 @@ use craft\config\DbConfig;
 use craft\db\Migration;
 
 /**
- * m180126_220026_add_user_guide_table migration.
+ * m180214_023255_fix_old_install migration.
  */
-class m180126_220026_add_user_guide_table extends Migration
+class m180214_023255_fix_old_install extends Migration
 {
     // Public Properties
     // =========================================================================

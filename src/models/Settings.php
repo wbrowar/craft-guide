@@ -37,6 +37,9 @@ class Settings extends Model
     // Custom CSS used to style Guide components
     public $customCss = '';
 
+    // Additional variables available for the "guideVars()" Twig tag
+    public $customVars = [];
+
     // Array of navigation items used in Guide CP Section
     public $guideNav = [];
 
@@ -68,6 +71,7 @@ class Settings extends Model
     {
         return [
             [['clientName', 'customCss', 'guideTemplatePath'], 'string'],
+            ['customVars', 'default', 'value' => ['','','']],
             ['guideTemplatePath', 'default', 'value' => '_guide/index'],
         ];
     }

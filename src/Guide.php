@@ -11,7 +11,9 @@
 namespace wbrowar\guide;
 
 use craft\elements\Entry;
+use craft\events\PluginEvent;
 use craft\events\RegisterUserPermissionsEvent;
+use craft\helpers\StringHelper;
 use craft\services\UserPermissions;
 use wbrowar\guide\services\GuideService as GuideServiceService;
 use wbrowar\guide\twigextensions\GuideTwigExtension;
@@ -27,6 +29,7 @@ use craft\web\UrlManager;
 use craft\web\View;
 use craft\services\Fields;
 use craft\services\Dashboard;
+use craft\services\Plugins;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
 
@@ -63,7 +66,7 @@ class Guide extends Plugin
      */
     public static $plugin;
 
-    public $schemaVersion = '1.1.0';
+    public $schemaVersion = '1.1.4';
 
     public $adminBarWidgets = [[
         'description' => 'Display the Content Guide for the current entry.',
@@ -109,23 +112,47 @@ class Guide extends Plugin
             });
         }
 
-        Event::on(Bar::class, Bar::EVENT_ADMIN_BAR_BEFORE_RENDER, function(AdminBarRenderEvent $event) {
-            // Get the entry from the $event var
-            $entry = $event->entry;
+        Event::on( Plugins::class, Plugins::EVENT_BEFORE_SAVE_PLUGIN_SETTINGS, function(PluginEvent $event) {
+            $settings = Guide::$plugin->settings;
+            $vars = $settings->customVars;
+            $customVars = [];
 
-            if ($entry) {
-                // Check for a Content Guide for this entry
-                $total = Guide::$plugin->guide->getUserGuides([
-                    'sectionId' => $entry->sectionId,
-                    'typeId' => $entry->sectionId,
-                ], 'count');
+            // Validate each variable
+            for ($i=0; $i<count($vars); $i++) {
+                if (($vars[$i]['varKey'] ?? false) && ($vars[$i]['varValue'] ?? false)) {
+                    if ($vars[$i]['varType'] === 'password') {
+                        // if the variable is a password, encrypt it
+                        $vars[$i]['varValue'] = StringHelper::encenc($vars[$i]['varValue']);
+                    }
 
-                // If no guide exists, disable the widget
-                if ($total < 1) {
-                    $this->adminBarWidgets[0]['enabled'] = false;
+                    // add variable to new customVars array
+                    $customVars[] = $vars[$i];
                 }
             }
+
+            // add all custom variables back in to plugin settings
+            Guide::$plugin->setSettings(['customVars' => $customVars]);
         });
+
+        if (class_exists(Bar::class)) {
+            Event::on(Bar::class, Bar::EVENT_ADMIN_BAR_BEFORE_RENDER, function(AdminBarRenderEvent $event) {
+                // Get the entry from the $event var
+                $entry = $event->entry;
+
+                if ($entry) {
+                    // Check for a Content Guide for this entry
+                    $total = Guide::$plugin->guide->getUserGuides([
+                        'sectionId' => $entry->sectionId,
+                        'typeId' => $entry->sectionId,
+                    ], 'count');
+
+                    // If no guide exists, disable the widget
+                    if ($total < 1) {
+                        $this->adminBarWidgets[0]['enabled'] = false;
+                    }
+                }
+            });
+        }
 
         if ($view->getTemplateMode() === View::TEMPLATE_MODE_CP) {
             Event::on(View::class, View::EVENT_BEFORE_RENDER_TEMPLATE, function() {
@@ -275,6 +302,31 @@ class Guide extends Plugin
      */
     protected function settingsHtml(): string
     {
+        $settings = $this->getSettings();
+
+        // Create one empty table row if non are present
+        if (empty($settings->customVars)) {
+            $settings['customVars'] = [['','','string']];
+        } else {
+            $settings = Guide::$plugin->settings;
+            $vars = $settings->customVars;
+            $customVars = [];
+
+            // Validate each variable
+            for ($i=0; $i<count($vars); $i++) {
+                if ($vars[$i]['varType'] === 'password') {
+                    // if the variable is a password, decrypt it
+                    $vars[$i]['varValue'] = StringHelper::decdec($vars[$i]['varValue']);
+                }
+
+                // add variable to new customVars array
+                $customVars[] = $vars[$i];
+            }
+
+            // add all custom variables back in to plugin settings
+            $settings['customVars'] = $customVars;
+        }
+
         return Craft::$app->view->renderTemplate(
             'guide/settings',
             [

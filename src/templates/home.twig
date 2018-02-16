@@ -47,7 +47,7 @@
                         {% set sel = craft.app.request.getSegment(3) == item.id ? ' class="sel"' : '' %}
 
                         <li>
-                            <a{{ sel }} href="{{ url('guide/page/' ~ item.id) }}">{{ item.title }}</a>
+                            <a{{ sel|raw }} href="{{ url('guide/page/' ~ item.id) }}">{{ item.title }}</a>
                         </li>
                     {% endif %}
                 {% endfor %}
@@ -188,7 +188,7 @@ looks like this.</p>{% endset %}
 
             <hr>
 
-            <h2 data-guide-section>2-Column Grid</h2>
+            <h3 data-guide-section>2-Column Grid</h3>
 
 {% set example %}
 <div class="guide_grid guide_grid--2_column">
@@ -209,7 +209,7 @@ looks like this.</p>{% endset %}
 
             <hr>
 
-            <h2 data-guide-section>3-Column Grid</h2>
+            <h3 data-guide-section>3-Column Grid</h3>
 
 {% set example %}
 <div class="guide_grid guide_grid--3_column">
@@ -234,7 +234,7 @@ looks like this.</p>{% endset %}
 
             <hr>
 
-            <h2 data-guide-section>Image Grid - (image left)</h2>
+            <h3 data-guide-section>Image Grid - (image left)</h3>
 
             {% set example %}
                 <div class="guide_grid guide_grid--image">
@@ -255,7 +255,7 @@ looks like this.</p>{% endset %}
 
             <hr>
 
-            <h2 data-guide-section>Image Grid - (image right)</h2>
+            <h3 data-guide-section>Image Grid - (image right)</h3>
 
             {% set example %}
                 <div class="guide_grid guide_grid--image--right">
