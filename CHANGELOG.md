@@ -16,7 +16,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Fixed
 - Fixed some wonky migration bugs
 - Fixed a bug that occurred when Admin Bar wasn't installed
-- Fixed guide CP section not displaying the currently selected subnav page
+- Fixed guide CP section not displaying the currently selected page in the sidebar nav
 
 
 ## 1.1.3 - 2018-02-10
