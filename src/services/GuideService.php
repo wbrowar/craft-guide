@@ -73,6 +73,9 @@ class GuideService extends Component
         $value = '';
 
         switch ($name) {
+            case 'FPO':
+                $value = '<span class="guide_fpo">FPO</span>';
+                break;
             case 'clientName':
                 $value = $settings->clientName != '' ? $settings->clientName : '<span class="guide_fpo">CLIENT NAME</span>';
                 break;
@@ -92,8 +95,6 @@ class GuideService extends Component
                     break;
                 }
             }
-        } else if ($value === 'FPO') {
-            $value = '<span class="guide_fpo">FPO</span>';
         }
 
         return $value;
@@ -174,6 +175,40 @@ class GuideService extends Component
         }
 
         return Craft::$app->view->renderTemplate('guide/_user_guide/user_guide_body', $variables);
+    }
+
+    /**
+     * Updates subnavigation in the Guide CP Section
+     *
+     * From any other plugin file, call it like this:
+     *
+     *     Guide::$plugin->guide->prepareCustomVarsForSave()
+     *
+     * @return string
+     */
+    public function prepareCustomVarsForSave($settings):array
+    {
+        $newVars = [];
+
+        // Create one empty table row if non are present
+        if (empty($settings->customVars)) {
+            $newVars = [['','','string']];
+        } else {
+            $vars = $settings->customVars;
+
+            // Validate each variable
+            for ($i=0; $i<count($vars); $i++) {
+                if ($vars[$i]['varType'] === 'password') {
+                    // if the variable is a password, decrypt it
+                    $vars[$i]['varValue'] = StringHelper::decdec($vars[$i]['varValue']);
+                }
+
+                // add variable to new customVars array
+                $newVars[] = $vars[$i];
+            }
+        }
+
+        return $newVars;
     }
 
     /**
@@ -303,6 +338,9 @@ class GuideService extends Component
                 }
             }
         }
+
+        // Process custom variables before saving
+        $settings['customVars'] = Guide::$plugin->guide->prepareCustomVarsForSave($settings);
 
         // Save Guide settings with Updated Nav
         $settings['guideNav'] = $newNav;

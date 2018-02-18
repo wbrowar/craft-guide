@@ -113,25 +113,27 @@ class Guide extends Plugin
         }
 
         Event::on( Plugins::class, Plugins::EVENT_BEFORE_SAVE_PLUGIN_SETTINGS, function(PluginEvent $event) {
-            $settings = Guide::$plugin->settings;
-            $vars = $settings->customVars;
-            $customVars = [];
+            if ($event->plugin->getHandle() === 'guide') {
+                $settings = Guide::$plugin->settings;
+                $vars = $settings->customVars;
+                $customVars = [];
 
-            // Validate each variable
-            for ($i=0; $i<count($vars); $i++) {
-                if (($vars[$i]['varKey'] ?? false) && ($vars[$i]['varValue'] ?? false)) {
-                    if ($vars[$i]['varType'] === 'password') {
-                        // if the variable is a password, encrypt it
-                        $vars[$i]['varValue'] = StringHelper::encenc($vars[$i]['varValue']);
+                // Validate each variable
+                for ($i=0; $i<count($vars); $i++) {
+                    if (($vars[$i]['varKey'] ?? false) && ($vars[$i]['varValue'] ?? false)) {
+                        if ($vars[$i]['varType'] === 'password') {
+                            // if the variable is a password, encrypt it
+                            $vars[$i]['varValue'] = StringHelper::encenc($vars[$i]['varValue']);
+                        }
+
+                        // add variable to new customVars array
+                        $customVars[] = $vars[$i];
                     }
-
-                    // add variable to new customVars array
-                    $customVars[] = $vars[$i];
                 }
-            }
 
-            // add all custom variables back in to plugin settings
-            Guide::$plugin->setSettings(['customVars' => $customVars]);
+                // add all custom variables back in to plugin settings
+                Guide::$plugin->setSettings(['customVars' => $customVars]);
+            }
         });
 
         if (class_exists(Bar::class)) {
@@ -304,28 +306,7 @@ class Guide extends Plugin
     {
         $settings = $this->getSettings();
 
-        // Create one empty table row if non are present
-        if (empty($settings->customVars)) {
-            $settings['customVars'] = [['','','string']];
-        } else {
-            $settings = Guide::$plugin->settings;
-            $vars = $settings->customVars;
-            $customVars = [];
-
-            // Validate each variable
-            for ($i=0; $i<count($vars); $i++) {
-                if ($vars[$i]['varType'] === 'password') {
-                    // if the variable is a password, decrypt it
-                    $vars[$i]['varValue'] = StringHelper::decdec($vars[$i]['varValue']);
-                }
-
-                // add variable to new customVars array
-                $customVars[] = $vars[$i];
-            }
-
-            // add all custom variables back in to plugin settings
-            $settings['customVars'] = $customVars;
-        }
+        $settings['customVars'] = Guide::$plugin->guide->prepareCustomVarsForSave($settings);
 
         return Craft::$app->view->renderTemplate(
             'guide/settings',

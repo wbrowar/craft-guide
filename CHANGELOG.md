@@ -5,9 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## 1.1.5 - 2018-02-17
+### Changed
+- Added `margin` above and below `hr` tags
+
+### Fixed
+- Fixed a bug that duplicated encrypted custom `guideVars()`
+
+
 ## 1.1.4 - 2018-02-16
 ### Added
-- You can now store custom guideVar() variables by setting their keys and values in Guide Plugin Settings
+- You can now store custom `guideVar()` variables by setting their keys and values in Guide Plugin Settings
   - You can store plain strings, as well as encrypted strings for displaying passwords and sensitive information in your CMS guide 
 
 ### Changed
