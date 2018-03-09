@@ -1,0 +1,102 @@
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("wbrowar\\guide\\assetbundles\\guide\\GuideAsset") %}
+
+{# Link for the ? icon at the bottom of the page #}
+{% set docsUrl = "https://github.com/wbrowar/guide/blob/master/README.md" %}
+
+{# The title of this CP section #}
+{% set title = "Admin’s Log Widget" %}
+
+{# The URL to this plugin's base CP section #}
+{% set pluginCpUrl = url('guide/home') %}
+
+{# The selected CP subnav item #}
+{% set selectedSubnavItem = 'admins_log_settings' %}
+
+{# Get a URL to an image in our AssetBundle #}
+{% set iconUrl = view.getAssetManager().getPublishedPath('@wbrowar/guide/assetbundles/indexcpsection/dist', true) ~ '/img/Index-icon.svg' %}
+
+{% set fullPageForm = true %}
+
+{% set selectedSubnavItem = 'adminsLogSettings' %}
+
+{% block actionButton %}
+    <input class="btn submit" type="submit" value="Update">
+{% endblock %}
+
+{% set content %}
+    <input type="hidden" name="action" value="guide/user-guide/update-admins-log">
+
+    <h2>Admin&rsquo;s Log</h2>
+    <p>Inform your clients about new changes that have recently been made.</p>
+
+    {% set logEntries = guideQuery({
+        elementType: 'adminsLog',
+        orderBy: 'dateCreated desc',
+    }, 'all') %}
+
+    {% set recentLogEntry = logEntries|length ? logEntries[0] : null %}
+
+{% set contentTemplate %}### Added
+- Newly added features listed here
+
+### Changed
+- Updates to existing features
+
+### Fixed
+- Issues that have been fixed{% endset %}
+
+    <h3>Add a new log entry</h3>
+
+    {{ forms.textField({
+        label: 'Update Version Number',
+        id: 'version',
+        name: 'version',
+        size: 5,
+        placeholder: '1.0.0',
+        instructions: 'Give your log a version number.',
+    }) }}
+
+    {{ forms.dateField({
+        label: 'Update Date',
+        id: 'date',
+        name: 'date',
+        value: now,
+        instructions: 'Record when the updates were made by adding a date.'
+    }) }}
+
+    {{ forms.textareaField({
+        label: 'Log Content',
+        id: 'content',
+        name: 'content',
+        rows: 10,
+        placeholder: contentTemplate,
+        value: (recentLogEntry ?? false) ? '' : contentTemplate,
+    }) }}
+
+    {% if logEntries|length %}
+        <h3>Previous Logs</h3>
+        <div class="widget wbrowar\guide\widgets\adminslog last">
+            <div class="guide_widget front">
+                <div class="pane">
+                    <div class="guide_widget__content guide_text">
+                        {% for item in logEntries %}
+                            {{ item.content|markdown }}
+
+                            {{ forms.lightswitchField({
+                                label: 'Delete',
+                                name: "deleteLogEntries[" ~ item.id ~ "]",
+                                on: false,
+                                instructions: 'Turn this switch on and click "Update" to delete this log entry.'
+                            }) }}
+
+                            {% if not loop.last %}<hr>{% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endset %}

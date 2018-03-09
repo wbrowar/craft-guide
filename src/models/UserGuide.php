@@ -34,7 +34,7 @@ class UserGuide extends Model
 
     public $authorId = 0;
     public $content = '';
-    public $elementType = 0;
+    public $elementType = '';
     public $format = 'markdown';
     public $moreInfo = '';
     public $permissions = ['accessPlugin-guide'];
@@ -58,13 +58,14 @@ class UserGuide extends Model
     public function rules()
     {
         return [
-            [['authorId', 'content', 'format', 'elementType', 'sectionId', 'typeId'], 'required'],
-            [['authorId', 'elementType', 'sectionId', 'typeId'], 'integer'],
+            [['format', 'elementType'], 'required'],
+
+            [['authorId', 'sectionId', 'typeId'], 'integer'],
 
             ['permissions', 'mixed'],
             ['permissions', 'default', 'value' => ['accessPlugin-guide']],
 
-            [['content', 'format', 'moreInfo', 'templatePath'], 'string'],
+            [['content', 'elementType', 'format', 'moreInfo', 'templatePath'], 'string'],
             ['content', 'default', 'value' => 'A guide has not been created yet.'],
             ['format', 'default', 'value' => 'markdown'],
         ];

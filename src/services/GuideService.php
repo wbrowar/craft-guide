@@ -47,15 +47,25 @@ class GuideService extends Component
      *
      * @return string
      */
-    public function deleteUserGuide($params):bool
+    public function deleteUserGuide($params = [], $queryType = 'one'):bool
     {
-        $record = UserGuides::findOne(['sectionId' => $params['sectionId'], 'siteId' => Craft::$app->sites->currentSite->id, 'typeId' => $params['typeId']]);
+        $params['siteId'] = $params['siteId'] ?? Craft::$app->sites->currentSite->id;
 
-        if ($record) {
-            return $record->delete();
+        switch ($queryType) {
+            case 'all':
+                $userGuides = UserGuides::find()->where($params)->all();
+                break;
+            case 'one':
+                $userGuides = UserGuides::find()->where($params)->one();
+                break;
+            case 'count':
+                $userGuides = UserGuides::find()->where($params)->count();
+                break;
         }
 
-        return false;
+        $userGuides->delete();
+
+        return true;
     }
 
     /**
@@ -127,12 +137,25 @@ class GuideService extends Component
      */
     public function getUserGuides($params = [], $queryType = 'all')
     {
-        $orderBy = $params['orderBy'] ?? 'elementType';
+        if ($params['limit'] ?? false) {
+            $limit = $params['limit'];
+            unset($params['limit']);
+        } else {
+            $limit = null;
+        }
+
+        if ($params['orderBy'] ?? false) {
+            $orderBy = $params['orderBy'];
+            unset($params['orderBy']);
+        } else {
+            $orderBy = 'elementType';
+        }
+
         $params['siteId'] = $params['siteId'] ?? Craft::$app->sites->currentSite->id;
 
         switch ($queryType) {
             case 'all':
-                $userGuides = UserGuides::find()->where($params)->orderBy($orderBy)->all();
+                $userGuides = UserGuides::find()->where($params)->limit($limit)->orderBy($orderBy)->all();
                 break;
             case 'one':
                 $userGuides = UserGuides::find()->where($params)->orderBy($orderBy)->one();
@@ -188,17 +211,17 @@ class GuideService extends Component
      */
     public function prepareCustomVarsForSave($settings):array
     {
-        $newVars = [];
+        $newSettings = [];
 
-        // Create one empty table row if non are present
-        if (empty($settings->customVars)) {
-            $newVars = [['','','string']];
-        } else {
+        // CUSTOM VARS
+        $newVars = [['','','string']];
+        if (!empty($settings->customVars)) {
+            $newVars = [];
             $vars = $settings->customVars;
 
             // Validate each variable
             for ($i=0; $i<count($vars); $i++) {
-                if ($vars[$i]['varType'] === 'password') {
+                if (($vars[$i]['varType'] ?? false) && $vars[$i]['varType'] === 'password') {
                     // if the variable is a password, decrypt it
                     $vars[$i]['varValue'] = StringHelper::decdec($vars[$i]['varValue']);
                 }
@@ -207,8 +230,27 @@ class GuideService extends Component
                 $newVars[] = $vars[$i];
             }
         }
+        $newSettings['customVars'] = $newVars;
 
-        return $newVars;
+        // GUIDE NAV
+        $newNav = [];
+        if (!empty($settings->guideNav)) {
+            $nav = array_values($settings->guideNav);
+
+            // Validate each variable
+            for ($i=0; $i<count($nav); $i++) {
+                if (isset($nav[$i]['permissions']) && is_array($nav[$i]['permissions'])) {
+                    // if the variable is a password, decrypt it
+                    $nav[$i]['permissions'] = implode(',', $nav[$i]['permissions']);
+                }
+
+                // add variable to new customVars array
+                $newNav[] = $nav[$i];
+            }
+        }
+        $newSettings['guideNav'] = $newNav;
+
+        return $newSettings;
     }
 
     /**
@@ -231,25 +273,29 @@ class GuideService extends Component
         $sectionId = $entry['sectionId'];
         $typeId = $entry['typeId'];
 
-        $userGuide = $this->getUserGuideForElementType($siteId, $sectionId, $typeId);
-        if ($userGuide) {
-            $variables['userGuide'] = $userGuide;
-        } else {
-            $variables['userGuide'] = new UserGuide();
-        }
-
-        $sectionTypes = Craft::$app->getSections()->getEntryTypesBySectionId($sectionId);
-
-        foreach ($sectionTypes as $item) {
-            if ($item->id == $typeId) {
-                $variables['sectionName'] = $item->name;
+        if (($siteId ?? false) && ($sectionId ?? false) && ($typeId ?? false)) {
+            $userGuide = $this->getUserGuideForElementType($siteId, $sectionId, $typeId);
+            if ($userGuide) {
+                $variables['userGuide'] = $userGuide;
+            } else {
+                $variables['userGuide'] = new UserGuide();
             }
+
+            $sectionTypes = Craft::$app->getSections()->getEntryTypesBySectionId($sectionId);
+
+            foreach ($sectionTypes as $item) {
+                if ($item->id == $typeId) {
+                    $variables['sectionName'] = $item->name;
+                }
+            }
+
+            $variables['userCanDelete'] = $this->userCanDeleteUserGuides();
+            $variables['userCanEdit'] = $this->userCanEditUserGuides();
+
+            return Craft::$app->view->renderTemplate($templatePath, $variables);
         }
 
-        $variables['userCanDelete'] = $this->_userCanDeleteUserGuides();
-        $variables['userCanEdit'] = $this->_userCanEditUserGuides();
-
-        return Craft::$app->view->renderTemplate($templatePath, $variables);
+        return '';
     }
 
     /**
@@ -261,9 +307,22 @@ class GuideService extends Component
      *
      * @return string
      */
-    public function saveUserGuide(UserGuide $model):bool
+    public function saveUserGuide(UserGuide $model, int $id = null):int
     {
-        $record = UserGuides::findOne(['sectionId' => $model->sectionId, 'siteId' => Craft::$app->sites->currentSite->id, 'typeId' => $model->typeId]);
+        if ($id ?? false) {
+            $record = UserGuides::findOne(['id' => $id]);
+        } else {
+            switch ($model->elementType) {
+                case 'entry':
+                    $record = UserGuides::findOne(['sectionId' => $model->sectionId, 'siteId' => Craft::$app->sites->currentSite->id, 'typeId' => $model->typeId]);
+                    break;
+                case 'welcomeWidget':
+                    $record = UserGuides::findOne(['elementType' => 'welcomeWidget']);
+                    break;
+                default:
+                    $record = null;
+            }
+        }
 
         if (!$record) {
             $record = new UserGuides();
@@ -281,7 +340,7 @@ class GuideService extends Component
 
         $record->save();
 
-        return true;
+        return $record->id;
     }
 
     /**
@@ -293,75 +352,85 @@ class GuideService extends Component
      *
      * @return mixed
      */
-    public function updateGuideCpNav($array = []):bool
+    public function updateGuideCpNav($array = [], $force = false):bool
     {
         $newNav = [];
         $settings = Guide::$plugin->getSettings();
 
-        // Process array values
-        foreach ($array as $key => $item) {
-            $itemKey = StringHelper::toKebabCase($key);
-            $itemTitle = $key;
-
-            // Get template path from item
-            if (is_array($item)) {
-                $itemTemplateString = $item['template'] ?? null;
-                $itemAdmin = $item['admin'] ?? false;
-                $itemPermissions = $item['permissions'] ?? [];
-            } else if (is_string($item)) {
-                $itemTemplateString = $item;
-            }
-
-            // Verify that template path file exists
-            if (isset($itemTemplateString)) {
-                Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_SITE);
-                if (Craft::$app->view->doesTemplateExist($itemTemplateString)) {
-                    $itemTemplate = $itemTemplateString;
-                }
-                Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_CP);
-            }
-
-            // Add navigation item
-            if (($itemKey ?? false) && ($itemTitle ?? false) && ($itemTemplate ?? false)) {
-                $newNav[$itemKey] = [
-                    'id' => $itemKey,
-                    'title' => $itemTitle,
-                    'template' => $itemTemplate,
-                ];
-
-                if ($itemAdmin ?? false) {
-                    $newNav[$itemKey]['admin'] = $itemAdmin;
+        if ($force || empty($settings['guideNav'])) {
+            // Process array values
+            foreach ($array as $key => $item) {
+                // Get template path from item
+                if (is_array($item)) {
+                    $itemTemplateString = $item['template'] ?? null;
+                    $itemAdmin = $item['admin'] ?? false;
+                    $itemPermissions = $item['permissions'] ?? [];
+                    $itemSlug = $item['id'] ?? StringHelper::toKebabCase($key);
+                    $itemTitle = $item['title'] ?? $key;
+                    $userGuideId = $item['userGuideId'] ?? null;
+                } else if (is_string($item)) {
+                    $itemTemplateString = $item;
+                    $itemSlug = StringHelper::toKebabCase($key);
+                    $itemTitle = $key;
                 }
 
-                if ($itemPermissions ?? false) {
-                    $newNav[$itemKey]['permissions'] = $itemPermissions;
+                // Verify that template path file exists
+                if (isset($itemTemplateString)) {
+                    Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_SITE);
+                    if (Craft::$app->view->doesTemplateExist($itemTemplateString)) {
+                        $itemTemplate = $itemTemplateString;
+                    }
+                    Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_CP);
+                }
+
+                // Add navigation item
+                if (($itemSlug ?? false) && ($itemTitle ?? false)) {
+                    $newNav[$itemSlug] = [
+                        'id' => $itemSlug,
+                        'title' => $itemTitle,
+                    ];
+
+                    if ($itemTemplate ?? false) {
+                        $newNav[$itemSlug]['template'] = $itemTemplate;
+                    }
+
+                    if ($itemPermissions ?? false) {
+                        $newNav[$itemSlug]['permissions'] = $itemPermissions;
+                    }
+
+                    if ($itemAdmin ?? false) {
+                        $newNav[$itemSlug]['admin'] = $itemAdmin;
+                    }
+
+                    if ($userGuideId ?? false) {
+                        $newNav[$itemSlug]['userGuideId'] = $userGuideId;
+                    }
                 }
             }
+
+            // Process custom variables before saving
+            $newSettings = Guide::$plugin->guide->prepareCustomVarsForSave($settings);
+            $settings['customVars'] = $newSettings['customVars'];
+
+            // Save Guide settings with Updated Nav
+            $settings['guideNav'] = array_values($newNav);
+
+            Craft::$app->plugins->savePluginSettings(Guide::$plugin, $settings->toArray());
         }
-
-        // Process custom variables before saving
-        $settings['customVars'] = Guide::$plugin->guide->prepareCustomVarsForSave($settings);
-
-        // Save Guide settings with Updated Nav
-        $settings['guideNav'] = $newNav;
-        Craft::$app->plugins->savePluginSettings(Guide::$plugin, $settings->toArray());
 
         return true;
     }
-
-    // Private Methods
-    // =========================================================================
 
     /**
      * Updates subnavigation in the Guide CP Section
      *
      * From any other plugin file, call it like this:
      *
-     *     Guide::$plugin->guide->exampleService()
+     *     Guide::$plugin->guide->userCanDeleteUserGuides()
      *
      * @return mixed
      */
-    private function _userCanDeleteUserGuides():bool
+    public function userCanDeleteUserGuides():bool
     {
         $user = Craft::$app->getUser();
 
@@ -377,11 +446,11 @@ class GuideService extends Component
      *
      * From any other plugin file, call it like this:
      *
-     *     Guide::$plugin->guide->exampleService()
+     *     Guide::$plugin->guide->userCanEditUserGuides()
      *
      * @return mixed
      */
-    private function _userCanEditUserGuides():bool
+    public function userCanEditUserGuides():bool
     {
         $setting = Guide::$plugin->settings;
         $user = Craft::$app->getUser();
@@ -396,4 +465,7 @@ class GuideService extends Component
 
         return false;
     }
+
+    // Private Methods
+    // =========================================================================
 }

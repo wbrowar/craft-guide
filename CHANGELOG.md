@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## 1.2.0 - 2018-03-09
+### Added
+- Added the ability to add, edit, and delete User Guides in the Guide CP Section
+  - Existing template-based guides can continue to be edited via Twig templates, or can be "converted" over to a User Guide—stored in the database
+  - Guides in the CP section can be created using Twig or Markdown
+- Added a new Welcome Widget
+  - Unlike the Guide Widgets that are created for individual users, this widget can be set in one place and updated across all users who have this widget installed
+  - To edit Welcome Widget's content, use the "Guide > Welcome Widget" tab in the global sidebar
+- Added an Admin's Log widget
+  - Create a changelog for your clients and collaborators
+  - Manage the log in the "Guide > Admin's Log" tab in the global sidebar
+  - Logs are shown with the newest first and users can choose how many log entries they would like to see on their dashboard
+
+### Changed
+- `updateGuideCpNav` now only sets the Guide CP Section subnav when no navigation has been created
+  - Going forward, use `updateGuideCpNav` in your Guide CP templates to set the initial subnav links, then edit the subnav in Guide plugin settings
+  - This was changed to help facilitate the ability to manage the subnav in plugin settings, as well as to help reduce unneeded re-setting of the subnav on every page load
+
+### Fixed
+- Fixed a bug when looking for a Content Guide on an entry edit page when an entry wasn't enabled
+
+
 ## 1.1.5 - 2018-02-17
 ### Changed
 - Added `margin` above and below `hr` tags

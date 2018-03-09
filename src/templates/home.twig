@@ -17,6 +17,17 @@
 {% extends "_layouts/cp" %}
 {% import "_includes/forms" as forms %}
 
+{% set userCanDelete = userCanDelete ?? false %}
+{% set userCanEdit = userCanEdit ?? false %}
+
+{% set pageFormat = 'twig' %}
+
+{% if userGuideId ?? false %}
+    {% set guide = guideQuery({ id: userGuideId })[0] %}
+    {% set pageContent = guide.content %}
+    {% set pageFormat = guide.format %}
+{% endif %}
+
 {% do view.registerAssetBundle("wbrowar\\guide\\assetbundles\\guide\\GuideAsset") %}
 {% do view.registerAssetBundle("wbrowar\\guide\\assetbundles\\indexcpsection\\IndexCPSectionAsset") %}
 
@@ -29,11 +40,14 @@
 {# The URL to this plugin's base CP section #}
 {% set pluginCpUrl = url('guide/home') %}
 
+{# The selected CP subnav item #}
+{% set selectedSubnavItem = craft.app.request.segment(1) == 'components' ?  : 'home' %}
+
 {# Get a URL to an image in our AssetBundle #}
 {% set iconUrl = view.getAssetManager().getPublishedPath('@wbrowar/guide/assetbundles/indexcpsection/dist', true) ~ '/img/Index-icon.svg' %}
 
 {# The content of the CP Section#}
-{% if (pageContent ?? false) and settings.guideNav|length %}
+{% if ((pageContent ?? false) and settings.guideNav|length) or userCanEdit %}
     {% set sidebar %}
         <nav>
             <ul>
@@ -53,22 +67,55 @@
                 {% endfor %}
             </ul>
         </nav>
+
+        {% if userCanEdit %}
+            {% if settings.guideNav|length %}
+                <hr>
+            {% endif %}
+
+            {% set path = (templatePath ?? null) ? templatePath|url_encode : '' %}
+            {% set id = userGuideId ?? '' %}
+            <p><a class="btn add icon" href="{{ url('guide/new/') }}">New Guide</a></p>
+            {% if guide ?? false %}
+                <p><a class="btn edit icon" href="{{ url('guide/edit/' ~ id) }}">Edit Guide</a></p>
+
+                {% if userCanDelete %}
+                    <p><a class="btn delete icon" href="{{ url('guide/delete/' ~ id) }}">Delete Guide</a></p>
+                {% endif %}
+            {% else %}
+                <p><a class="btn edit icon" href="{{ url('guide/new/' ~ path) }}">Convert to User Guide</a></p>
+            {% endif %}
+        {% endif %}
     {% endset %}
 {% endif %}
-{% block header %}
+
+{% block pageTitle %}
     <div class="guide_logo_lockup">
         <div>{{ svg(iconUrl) }}</div>
         <div><h1>{{ title ?? 'Guide' }}</h1></div>
     </div>
     <div class="flex-grow"></div>
+{% endblock %}
+
+{% block actionButton %}
     <div class="guide_action_buttons"></div>
 {% endblock %}
+
 {% set content %}
     <div class="guide_cp guide_text">
         {% if pageContent ?? false %}
-            {{ include(template_from_string(pageContent)) }}
+            {% switch pageFormat %}
+                {% case 'markdown' %}
+                    {{ pageContent|markdown }}
+                {% case 'twig' %}
+                    {{ include(template_from_string(pageContent)) }}
+            {% endswitch %}
         {% else %}
             {% if craft.app.request.getSegment(2) == 'home' %}
+                {% if settings.guideNav|length %}
+                    {% redirect url('guide/page/' ~ settings.guideNav[0].id) %}
+                {% endif %}
+
                 <h1>Hi, {{ currentUser.friendlyName }}.</h1>
 
                 <p>You&rsquo;re seeing this page because there isn&rsquo;t a template that lives at the path set in Guide plugin settings: <span class="guide_code_inline">{{ settings.guideTemplatePath }}</span></p>

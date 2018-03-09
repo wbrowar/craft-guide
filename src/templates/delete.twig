@@ -1,0 +1,51 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+
+{#
+/**
+ * Guide plugin for Craft CMS 3.x
+ *
+ * Guide index.twig
+ *
+ * @author    Will Browar
+ * @copyright Copyright (c) 2017 Will Browar
+ * @link      https://wbrowar.com
+ * @package   Guide
+ * @since     1.0.0
+ */
+#}
+
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{% if not (userCanEdit and userCanDelete) %}
+    {% redirect url('guide/home') %}
+{% endif %}
+
+{% do view.registerAssetBundle("wbrowar\\guide\\assetbundles\\guide\\GuideAsset") %}
+{% do view.registerAssetBundle("wbrowar\\guide\\assetbundles\\indexcpsection\\IndexCPSectionAsset") %}
+
+{# Link for the ? icon at the bottom of the page #}
+{% set docsUrl = "https://github.com/wbrowar/guide/blob/master/README.md" %}
+
+{# The title of this CP section #}
+{% set title = "Delete User Guide" %}
+
+{# Get a URL to an image in our AssetBundle #}
+{% set iconUrl = view.getAssetManager().getPublishedPath('@wbrowar/guide/assetbundles/indexcpsection/dist', true) ~ '/img/Index-icon.svg' %}
+
+{% set fullPageForm = true %}
+
+{% block actionButton %}
+    <input class="btn submit" type="submit" value="Delete">
+{% endblock %}
+
+{% set content %}
+    <input type="hidden" name="action" value="guide/user-guide/delete-cp-user-guide">
+    <input type="hidden" name="id" value="{{ guideId }}">
+
+    <p><b>Are you sure you want to delete this User Guide?</b></p>
+
+    <p>The page will be removed from Guide Navigation. Content stored in the database will be deleted. No template files will be deleted.</p>
+
+    <p><a class="btn" href="{{ url('guide/home') }}">Back to Guide Home</a></p>
+{% endset %}

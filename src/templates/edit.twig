@@ -1,0 +1,111 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+
+{#
+/**
+ * Guide plugin for Craft CMS 3.x
+ *
+ * Guide index.twig
+ *
+ * @author    Will Browar
+ * @copyright Copyright (c) 2017 Will Browar
+ * @link      https://wbrowar.com
+ * @package   Guide
+ * @since     1.0.0
+ */
+#}
+
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{% if not userCanEdit %}
+    {% redirect url('guide/home') %}
+{% endif %}
+
+{% set guideNavItem = null %}
+{% if (guideId ?? false) %}
+    {% set guide = guideQuery({ id: guideId })[0] %}
+{% endif %}
+
+{% set guideContent = '' %}
+{% set guideFormat = 'markdown' %}
+
+{% for item in guideNav %}
+    {% if (item.userGuideId ?? false) and (guide ?? false) and item.userGuideId == guide.id %}
+        {% set guideNavItem = item %}
+        {% set guideContent = guide.content %}
+        {% set guideFormat = guide.format %}
+    {% elseif (item.template ?? false) and (templatePath ?? false) and item.template == templatePath %}
+        {% set guideNavItem = item %}
+        {% set guideContent = (item.pageContent ?? false) ? include(template_from_string(item.pageContent)) : '' %}
+        {% set guideFormat = 'twig' %}
+    {% endif %}
+{% endfor %}
+
+{% do view.registerAssetBundle("wbrowar\\guide\\assetbundles\\guide\\GuideAsset") %}
+{% do view.registerAssetBundle("wbrowar\\guide\\assetbundles\\indexcpsection\\IndexCPSectionAsset") %}
+
+{# Link for the ? icon at the bottom of the page #}
+{% set docsUrl = "https://github.com/wbrowar/guide/blob/master/README.md" %}
+
+{# The title of this CP section #}
+{% set title = "Edit User Guide" %}
+
+{# Get a URL to an image in our AssetBundle #}
+{% set iconUrl = view.getAssetManager().getPublishedPath('@wbrowar/guide/assetbundles/indexcpsection/dist', true) ~ '/img/Index-icon.svg' %}
+
+{% set fullPageForm = true %}
+
+{% block actionButton %}
+    <input class="btn submit" type="submit" value="Save">
+{% endblock %}
+
+{% set content %}
+    <input type="hidden" name="action" value="guide/user-guide/save-cp-user-guide">
+    <input type="hidden" name="templatePath" value="{{ templatePath ?? '' }}">
+
+    {% if guide ?? false %}
+        <input type="hidden" name="id" value="{{ guide.id }}">
+    {% endif %}
+
+    {{ forms.textareaField({
+        label: 'Content',
+        id: 'content',
+        name: 'content',
+        rows: 20,
+        value: guideContent,
+    }) }}
+{% endset %}
+
+{% block details %}
+    <div class="meta">
+
+        {{ forms.selectField({
+            label: 'Format',
+            id: 'format',
+            name: 'format',
+            value: guideFormat,
+            options: {
+                markdown: 'Markdown',
+                twig: 'Twig',
+            }
+        }) }}
+
+        {{ forms.textField({
+            label: 'Title',
+            id: 'title',
+            name: 'title',
+            placeholder: 'Page Title',
+            required: true,
+            value: guideNavItem.title ?? '',
+        }) }}
+
+        {{ forms.textField({
+            label: 'Slug',
+            id: 'slug',
+            name: 'slug',
+            placeholder: 'page-uri',
+            required: true,
+            value: guideNavItem.id ?? '',
+        }) }}
+    </div>
+{% endblock %}

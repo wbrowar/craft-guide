@@ -1,0 +1,28 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Guide plugin for Craft CMS
+ *
+ * AdminsLog Widget Settings
+ *
+ * @author    Will Browar
+ * @copyright Copyright (c) 2018 Will Browar
+ * @link      https://wbrowar.com
+ * @package   Guide
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("wbrowar\\guide\\assetbundles\\guide\\GuideAsset") %}
+
+{{ forms.textField({
+    label: 'Message',
+    instructions: 'Enter a message here.',
+    id: 'totalLogs',
+    name: 'totalLogs',
+    size: 3,
+    type: 'number',
+    value: widget['totalLogs'] ?? 1,
+}) }}

@@ -28,6 +28,41 @@
     instructions: 'Path to Guide Twig templates relative to your site\'s templates folder.'
 }) }}
 
+{{ forms.editableTableField({
+    label: 'Navigation',
+    id: 'guideNav',
+    name: 'guideNav',
+    addRowLabel: 'Add a link',
+    instructions: 'Manage Guide CP Section navigation',
+    cols: {
+        id: {
+            heading: 'Slug',
+            type: 'singleline',
+        },
+        title: {
+            heading: 'Title',
+            type: 'singleline',
+        },
+        template: {
+            heading: 'Template Path',
+            type: 'singleline',
+        },
+        permissions: {
+            heading: 'Permissions (separate by comma)',
+            type: 'singleline',
+        },
+        admin: {
+            heading: 'Admin Only',
+            type: 'checkbox',
+        },
+        userGuideId: {
+            heading: 'ID',
+            type: 'number',
+        },
+    },
+    rows: settings.guideNav ?? [],
+}) }}
+
 <hr>
 <h2>Template Variables</h2>
 {{ forms.textField({

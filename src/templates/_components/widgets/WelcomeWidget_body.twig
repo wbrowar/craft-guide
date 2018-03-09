@@ -1,0 +1,39 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Guide plugin for Craft CMS
+ *
+ * WelcomeWidget Widget Body
+ *
+ * @author    Will Browar
+ * @copyright Copyright (c) 2018 Will Browar
+ * @link      https://wbrowar.com
+ * @package   Guide
+ * @since     1.0.0
+ */
+#}
+
+<div class="guide_widget">
+    <div class="guide_widget__content guide_text">
+        {% set welcomeGuide = guideQuery({
+            elementType: 'welcomeWidget'
+        }, 'one') %}
+
+        {% if (welcomeGuide ?? false) and (welcomeGuide.content|trim != '') %}
+            {% set content = welcomeGuide.content %}
+            {% set format = welcomeGuide.format %}
+        {% else %}
+            {% set content = '' %}
+            {% set format = 'twig' %}
+        {% endif %}
+
+        <h1>Hello, {{ craft.app.user.identity.friendlyName }}</h1>
+
+        {% switch format %}
+            {% case 'markdown' %}
+                {{ content|markdown }}
+            {% case 'twig' %}
+                {{ include(template_from_string(content)) }}
+        {% endswitch %}
+    </div>
+</div>

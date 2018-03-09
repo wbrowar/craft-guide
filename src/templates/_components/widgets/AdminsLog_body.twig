@@ -1,0 +1,34 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Guide plugin for Craft CMS
+ *
+ * AdminsLog Widget Body
+ *
+ * @author    Will Browar
+ * @copyright Copyright (c) 2018 Will Browar
+ * @link      https://wbrowar.com
+ * @package   Guide
+ * @since     1.0.0
+ */
+#}
+
+<div class="guide_widget">
+    <div class="guide_widget__content guide_text">
+        <h1>Website Updates</h1>
+
+        {% set logEntries = guideQuery({
+            elementType: 'adminsLog',
+            orderBy: 'dateCreated desc',
+            limit: totalLogs ?? 1,
+        }, 'all') %}
+
+        {% if logEntries|length %}
+            {% for item in logEntries %}
+                {{ item.content|markdown }}
+
+                {% if not loop.last %}<hr>{% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>

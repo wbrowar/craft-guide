@@ -1,0 +1,89 @@
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("wbrowar\\guide\\assetbundles\\guide\\GuideAsset") %}
+
+{# Link for the ? icon at the bottom of the page #}
+{% set docsUrl = "https://github.com/wbrowar/guide/blob/master/README.md" %}
+
+{# The title of this CP section #}
+{% set title = "Welcome Widget" %}
+
+{# The URL to this plugin's base CP section #}
+{% set pluginCpUrl = url('guide/home') %}
+
+{# The selected CP subnav item #}
+{% set selectedSubnavItem = 'welcomeWidgetSettings' %}
+
+{# Get a URL to an image in our AssetBundle #}
+{% set iconUrl = view.getAssetManager().getPublishedPath('@wbrowar/guide/assetbundles/indexcpsection/dist', true) ~ '/img/Index-icon.svg' %}
+
+{% set fullPageForm = true %}
+
+{% block actionButton %}
+    <input class="btn submit" type="submit" value="Update">
+{% endblock %}
+
+{% set content %}
+    <input type="hidden" name="action" value="guide/user-guide/save-welcome-widget">
+
+    <h2>Welcome Widget</h2>
+    <p>Welcome your clients and provide them with a starting point after logging in.</p>
+
+    {% set welcomeGuide = guideQuery({
+        elementType: 'welcomeWidget'
+    }, 'one') %}
+
+    {% set welcomeGuideContent = (welcomeGuide ?? false) ? welcomeGuide.content : '' %}
+    {% set welcomeGuideFormat = (welcomeGuide ?? false) ? welcomeGuide.format : 'markdown' %}
+
+    {{ forms.textareaField({
+        label: 'Widget Content',
+        id: 'content',
+        name: 'content',
+        rows: 10,
+        value: welcomeGuideContent,
+    }) }}
+
+    {{ forms.selectField({
+        label: 'Format',
+        id: 'format',
+        name: 'format',
+        value: welcomeGuideFormat,
+        options: {
+            markdown: 'Markdown',
+            twig: 'Twig',
+        }
+    }) }}
+
+    <h2>Preview</h2>
+
+    {% set welcomeGuide = guideQuery({
+        elementType: 'welcomeWidget'
+    }, 'one') %}
+
+    {% if (welcomeGuide ?? false) and (welcomeGuide.content|trim != '') %}
+        {% set content = welcomeGuide.content %}
+        {% set format = welcomeGuide.format %}
+    {% else %}
+        {% set content = '' %}
+        {% set format = 'twig' %}
+    {% endif %}
+
+    <div class="widget wbrowar\guide\widgets\welcomewidget last">
+        <div class="guide_widget front">
+            <div class="pane">
+                <div class="guide_widget__content guide_text">
+                    <h1>Hello, {{ craft.app.user.identity.friendlyName }}</h1>
+
+                    {% switch format %}
+                        {% case 'markdown' %}
+                            {{ content|markdown }}
+                        {% case 'twig' %}
+                            {{ include(template_from_string(content)) }}
+                    {% endswitch %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endset %}

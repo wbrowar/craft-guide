@@ -4,9 +4,11 @@ A CMS Guide for Craft CMS.
 
 ![Screenshot](resources/img/guide-cp.png)
 
+> Until Craft's 3.0 release on April 4, I'll be focusing on finding bugs, adding code comments, and trying to find efficiencies. If you find any bugs, [please let me know on GitHub](https://github.com/wbrowar/craft-3-guide/issues)
+
 ## Requirements
 
-- This plugin requires Craft CMS 3.0.0-RC9 or later.
+- This plugin requires Craft CMS 3.0.0-RC14 or later.
 - A browser that support CSS Grid Layout and CSS Custom Properties.
 
 ## Installation
@@ -27,6 +29,8 @@ To install the plugin, you can find it in the Craft Plugin Store, or follow thes
    - [Guide CP Section](https://github.com/wbrowar/craft-3-guide#guide-cp-section)
    - [Content Guides](https://github.com/wbrowar/craft-3-guide#content-guides)
    - [Guide Widget](https://github.com/wbrowar/craft-3-guide#guide-widget)
+   
+5. Checkout [Craft Guide Templates](https://github.com/wbrowar/craft-guide-templates) for ideas or to use a starter template to work from.
 
 ## Guide Overview
 
@@ -40,7 +44,7 @@ Craft CMS is intuitive. Marketing plans and organizational workflows—not so mu
 
 Use templates to create your CMS guide in a way that's easily portable from one site to another. Follow these instructions to create your guide within the Guide CP Section:
 
-1. Create an index template in your site's `templates` directory. It can be named whatever you want, but the default is `_guide/index`. So if you create an `index.twig` file and placce it in the `./templates/_guide/` directory, it will show up in the Guide CP Section. 
+1. Create an index template in your site's `templates` directory. It can be named whatever you want, but the default is `_guide/index`. So if you create an `index.twig` file and place it in the `./templates/_guide/` directory, it will show up in the Guide CP Section. 
 2. If you want to change your Guide index template's location, edit the path to your new location on the Guide plugin settings page.
 3. You can create multiple pages and link to them through a navigation set in your Guide index template. Configure this code anywhere within your Home template. *NOTE: this code does not need to be located on any other template.*
     
@@ -60,11 +64,19 @@ Use templates to create your CMS guide in a way that's easily portable from one 
 
 7. Once you've written your first CMS guide, you can re-use the template files in another site—swapping out specific information using [Guide Variables](https://github.com/wbrowar/craft-3-guide#guide-variables)
 
-*NOTE: The Guide CP Nav gets updated whenever the Guide Home template is loaded. To update Guide CP Nav, just click on the Guide tab in CP.*
+*NOTE: The Guide CP Nav gets created on the first time you load a template that contains the `updateGuideCpNav` Twig tag in it. You may then edit the navigation—or create it from scratch—in Guide Plugin Settings.*
+
+### Guide CP User Guides
+
+User Guides (Guides that are editable via the CMS) can be added to the Guide CP Section by clicking on the "+ New Guide" button. User Guides can be created in Markdown or Twig formats.
+
+If you are using the Twig format, many of Craft's Twig extensions and tags will be available, but certain tags, such as `extend`, will not work.
+
+You can also start from an existing Guide CP template by clicking on the "Convert to User Guide" button when you're on a page that loads a Guide CP template. This makes a copy of the template file's Twig code and stores it into the database as a User Guide.
 
 ### Twig Extensions
 
-Guide comes with a few helper tags that make it easier to do template logic and to bring content into your Guide CP Sectiong guides, Content Guides, and Guide Widgets.
+Guide comes with a few helper tags that make it easier to do template logic and to bring content into your Guide CP Section guides, Content Guides, and Guide Widgets.
 
 | Variable Key | Description |
 | --- | --- |
@@ -91,7 +103,7 @@ And it would output this:
 <h1>Hello, Acme Co.</h1>
 ```
 
-Guide templates are available in all of your Twig templates, so anywher you can write Twig code, you can access the values of Guide Variables.
+Guide templates are available in all of your Twig templates, so anywhere you can write Twig code, you can access the values of Guide Variables.
 
 Here are all of the available Guide Variables;
 
@@ -102,7 +114,7 @@ Here are all of the available Guide Variables;
 
 ## Content Guides
 
-Say your client is already editing an entry and they want to look something up. Instead of sending them off to the Guide CP Section, you can leave instructions right on the Entry Edit page. Using action buttons in the sidebar—under Publish Options—you can create a Guide that appears on all Entry Edit pages of that entry type. The guide will appear in a modal—in front of the entry fields—so your content editor won't lose their place.
+Say your client is already editing an entry and they want to look something up. Instead of sending them off to the Guide CP Section, you can leave instructions right on the Entry Edit page. Using action buttons in the sidebar—under Publish Options—you can create a Guide that appears on all Entry Edit pages of that entry type. The guide will appear in a modal—in front of the entry fields—so your content editor won't lose their place by loading a new page.
 
 ![Screenshot](resources/img/guide-content.png)
 
@@ -112,13 +124,29 @@ You can create the guide using Markdown, Twig, or by pointing to a template in y
 
 Content Guides can be collaborative, too. By changing the "Who can edit guides?" field in Guide plugin settings, clients will be able to update existing guides and create their own guides. 
 
-## Guide Widget
+## Guide Widgets
+
+![Screenshot](resources/img/guide-widgets.png)
+
+### Welcome Widget
 
 A welcome message can be a good starting point for your content editors. Let them know where to begin once they've logged into the CMS by creating a Guide Widget.
 
-![Screenshot](resources/img/guide-widget.png)
+Users can add a Welcome Widget to their dashboard and see the same content as all other users who have added the Welcome Widget. Welcome Widget's content is created using the Welcome Widget link in the Guide CP Section.
 
-This can include just a simple note written in markdown or you can use dynamic content via Twig. You can create and customize as many Guide Widgets as you'd like.
+![Screenshot](resources/img/guide-widget-welcome-widget-settings.png)
+
+### Admin's Log
+
+Admin's Log is a changelog for your website. Let clients and collaborators know what has changed as features are added to the website.
+
+Log entries can be added to Admin's Log via the Admin's Log link in the Guide CP Section. Here you can view all the past log entries, create a new log entry, and delete unwanted log entries.
+
+![Screenshot](resources/img/guide-widget-admins-log-settings.png)
+
+### Guide Widget
+
+This can include just a simple note written in markdown or you can use dynamic content via Twig. You can create and customize as many Guide Widgets as you'd like. Each Guide Widget is specific to the user who's Dashboard it is crated on.
 
 ![Screenshot](resources/img/guide-widget-settings.png)
 
@@ -169,12 +197,12 @@ Regular CSS can be used, as well. Custom CSS entered in Guide's plugin settings 
 
 Some things to do, and ideas for potential features:
 
-- Expand theming CSS options and components
 - ~~Add sub-navigation to CP Section pages~~
-- Add a default template to Guide widgets for easy portability
 - ~~Add the ability to create guide notes and pages within Craft CMS (stored in the DB)~~
+- ~~Make guides in Guide CP Section collaborative~~
+- Expand theming CSS options and components
+- Add a default template to Guide widgets for easy portability
 - Expand Content Guides into Users and Categories
-- Make guides in Guide CP Section collaborative
 - A few more ideas are in the works
 
 Brought to you by [Will Browar](https://twitter.com/wbrowar)
