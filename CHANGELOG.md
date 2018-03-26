@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## 1.2.1 - 2018-03-25
+### Changed
+- In places where the template mode is being set, the template mode is returned back to what it previously was
+
+### Fixed
+- Fixed a bug that occurred when `{{ guideVar() }}` was called and no Custom Variables were set
+- Fixed a bug that prevented User Guides from being deleted on Entry Edit pages
+- Hid the "Delete" button on new User Guides
+
+
 ## 1.2.0 - 2018-03-09
 ### Added
 - Added the ability to add, edit, and delete User Guides in the Guide CP Section

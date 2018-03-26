@@ -63,9 +63,13 @@ class GuideService extends Component
                 break;
         }
 
-        $userGuides->delete();
+        if ($userGuides) {
+            $userGuides->delete();
 
-        return true;
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -96,7 +100,7 @@ class GuideService extends Component
 
         if ($value === '') {
             for ($i=0; $i<count($settings->customVars); $i++) {
-                if ($settings->customVars[$i]['varKey'] === $name) {
+                if (($settings->customVars[$i]['varKey'] ?? false) && $settings->customVars[$i]['varKey'] === $name) {
                     if ($settings->customVars[$i]['varType'] === 'password') {
                         $value = StringHelper::decdec($settings->customVars[$i]['varValue']);
                     } else {
@@ -190,11 +194,12 @@ class GuideService extends Component
         ];
 
         if ($format == 'template' && isset($userGuide->templatePath)) {
+            $oldMode = Craft::$app->view->getTemplateMode();
             Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_SITE);
             if (Craft::$app->view->doesTemplateExist($userGuide->templatePath)) {
                 $variables['content'] = file_get_contents(Craft::$app->view->resolveTemplate($userGuide->templatePath));
             }
-            Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_CP);
+            Craft::$app->view->setTemplateMode($oldMode);
         }
 
         return Craft::$app->view->renderTemplate('guide/_user_guide/user_guide_body', $variables);
@@ -376,11 +381,12 @@ class GuideService extends Component
 
                 // Verify that template path file exists
                 if (isset($itemTemplateString)) {
+                    $oldMode = Craft::$app->view->getTemplateMode();
                     Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_SITE);
                     if (Craft::$app->view->doesTemplateExist($itemTemplateString)) {
                         $itemTemplate = $itemTemplateString;
                     }
-                    Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_CP);
+                    Craft::$app->view->setTemplateMode($oldMode);
                 }
 
                 // Add navigation item

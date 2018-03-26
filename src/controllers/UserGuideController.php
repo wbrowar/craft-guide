@@ -80,6 +80,12 @@ class UserGuideController extends Controller
 
         $params = Craft::$app->getRequest()->getBodyParams();
 
+        // Remove CSRF token
+        $csrfTokenName = Craft::$app->getConfig()->getGeneral()->csrfTokenName;
+        if ($params[$csrfTokenName] ?? false) {
+            unset($params[$csrfTokenName]);
+        }
+
         return $this->asJson(Guide::$plugin->guide->deleteUserGuide($params));
     }
 
