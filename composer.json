@@ -14,7 +14,7 @@
         "docs": "https://github.com/wbrowar/craft-3-guide/blob/master/README.md",
         "issues": "https://github.com/wbrowar/craft-3-guide/issues"
     },
-    "license": "MIT",
+    "license": "proprietary",
     "authors": [
         {
             "name": "Will Browar",
@@ -22,7 +22,7 @@
         }
     ],
     "require": {
-        "craftcms/cms": "^3.0.0-RC16"
+        "craftcms/cms": "^3.0.9"
     },
     "repositories": [
         {
