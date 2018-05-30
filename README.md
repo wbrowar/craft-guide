@@ -4,11 +4,13 @@ A CMS Guide for Craft CMS.
 
 ![Screenshot](resources/img/guide-cp.png)
 
-> Until Craft's 3.0 release on April 4, I'll be focusing on finding bugs, adding code comments, and trying to find efficiencies. If you find any bugs, [please let me know on GitHub](https://github.com/wbrowar/craft-3-guide/issues)
+> I'm currently focusing on finding bugs, adding code comments, and trying to find efficiencies. If you find any bugs, [please let me know on GitHub](https://github.com/wbrowar/craft-3-guide/issues)
+
+**Note:** *The license fee for this plugin is $39.00 via the Craft Plugin Store.*
 
 ## Requirements
 
-- This plugin requires Craft CMS 3.0.0-RC14 or later.
+- This plugin requires Craft CMS 3.0.9 or later.
 - A browser that support CSS Grid Layout and CSS Custom Properties.
 
 ## Installation
