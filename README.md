@@ -4,11 +4,13 @@ A CMS Guide for Craft CMS.
 
 ![Screenshot](resources/img/guide-cp.png)
 
-> Until Craft's 3.0 release on April 4, I'll be focusing on finding bugs, adding code comments, and trying to find efficiencies. If you find any bugs, [please let me know on GitHub](https://github.com/wbrowar/craft-3-guide/issues)
+Guide is made up of two parts:
+- [The commercial plugin for Craft 3](https://github.com/wbrowar/craft-3-guide)
+- [The open source user guide template](https://github.com/wbrowar/craft-guide-templates)
 
 ## Requirements
 
-- This plugin requires Craft CMS 3.0.0-RC14 or later.
+- This plugin requires Craft CMS 3.0.14 or later.
 - A browser that support CSS Grid Layout and CSS Custom Properties.
 
 ## Installation
@@ -34,7 +36,7 @@ To install the plugin, you can find it in the Craft Plugin Store, or follow thes
 
 ## Guide Overview
 
-Craft CMS is intuitive. Marketing plans and organizational workflows—not so much. Guide lets you create a user manual within Craft CMS so clients don't need to go far to get the answers they need.
+Craft CMS is intuitive. Marketing plans and organizational workflows—not so much. Guide lets you create a user manual within Craft CMS so clients don‘t need to go far to get the answers they need.
 
 ## Guide CP Section
 
@@ -81,8 +83,8 @@ Guide comes with a few helper tags that make it easier to do template logic and 
 | Variable Key | Description |
 | --- | --- |
 | `{{ guideAsset('FILENAME') }}` | Does a simple query for an image asset based on file name. |
-| `{{ guideQuery(OBJECT) }}` | Find Content Guides based on the given criteria. For example, `{{ guideQuery({ sectionId: 1, typeId: 1 }) }}` might return the Content Guide for the Homepage section. |
-| `{{ guideVar('VAR_KEY') }}` | Pull in content set in settings, see [Guide Variables](https://github.com/wbrowar/craft-3-guide#guide-variables) for more information. |
+| `{{ guideQuery(OBJECT) }}` | Find User Guides based on the given criteria. For example, `{{ guideQuery({ sectionId: 1, typeId: 1 }) }}` might return the Content Guide for the Homepage section. |
+| `{{ guideVar('VAR_KEY') }}` | Pull in content set in Guide plugin settings, see [Guide Variables](https://github.com/wbrowar/craft-3-guide#guide-variables) for more information. |
 | `{{ pluginEnabled('PLUGIN_HANDLE') }}` | A boolean that checks to see if a plugin is currently installed. |
 
 ### Guide Variables
@@ -136,13 +138,21 @@ Users can add a Welcome Widget to their dashboard and see the same content as al
 
 ![Screenshot](resources/img/guide-widget-welcome-widget-settings.png)
 
-### Admin's Log
+### Email Support
 
-Admin's Log is a changelog for your website. Let clients and collaborators know what has changed as features are added to the website.
+The Email Support widget lets your clients get in touch with you—or a dedicated support person set in Guide plugin settings—when they have an issue that isn‘t explained though Guide or Craft, itself.
 
-Log entries can be added to Admin's Log via the Admin's Log link in the Guide CP Section. Here you can view all the past log entries, create a new log entry, and delete unwanted log entries.
+The client may enter in a custom message and/or choose to send along basic system details that may help you diagnose their issues.
 
-![Screenshot](resources/img/guide-widget-admins-log-settings.png)
+![Screenshot](resources/img/guide-email-support-email.png)
+
+### Website Updates
+
+Website Updates is a changelog for your website. Let clients and collaborators know what has changed as features are added to the website and to the CP.
+
+Log entries can be added to Website Updates via the Website Updates link in the Guide CP Section. Here you can view all the past log entries, create a new log entry, and delete unwanted log entries.
+
+![Screenshot](resources/img/guide-widget-website-updates-settings.png)
 
 ### Guide Widget
 
@@ -187,20 +197,14 @@ For example, if you want to match Craft's sidebar, enter this into the Custom CS
 }
 ```
 
-![Screenshot](resources/img/guide-settings.png)
-
 Regular CSS can be used, as well. Custom CSS entered in Guide's plugin settings will appear on all pages within the CP.
  
-*NOTE: Another idea could be to re-brand Guide to your own company's brand colors.*
+*Another idea could be to re-brand Guide to your own company's brand colors.*
 
 ## Guide Roadmap
 
 Some things to do, and ideas for potential features:
 
-- ~~Add sub-navigation to CP Section pages~~
-- ~~Add the ability to create guide notes and pages within Craft CMS (stored in the DB)~~
-- ~~Make guides in Guide CP Section collaborative~~
-- Expand theming CSS options and components
 - Add a default template to Guide widgets for easy portability
 - Expand Content Guides into Users and Categories
 - A few more ideas are in the works

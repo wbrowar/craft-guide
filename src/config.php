@@ -20,19 +20,23 @@
  * Once copied to 'craft/config', this file will be multi-environment aware as
  * well, so you can have different settings groups for each environment, just as
  * you do for 'general.php'
+ *
+ * For descriptions of each parameter,
+ * look in \wbrowar\guide\modals\Settings.php
  */
 
 return [
     'customCss' => '',
-    'guideNav' => [],
-
-    // path relative to your site's templates folder
+    'customVars' => [],
+    'emailSupportContacts' => [],
+    'enableAllUserGuides' => true,
+    'enableAllEmailSupport' => true,
+    'enableAllWelcomeWidget' => true,
+    'enableAllWebsiteUpdates' => true,
+    'enableEmailSupportForm' => true,
+    '$guideNav' => [],
     'guideTemplatePath' => '_guide/index',
-
-    // OPTIONS: all, admin, permission
     'userGuidesEditableBy' => 'admin',
-
-    // guideVar() settings
     'clientName' => '',
     'myCompanyName' => '',
 ];

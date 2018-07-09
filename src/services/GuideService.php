@@ -39,13 +39,11 @@ class GuideService extends Component
     // =========================================================================
 
     /**
-     * Updates subnavigation in the Guide CP Section
+     * Deletes a User Guide based on the supplied parameters.
      *
-     * From any other plugin file, call it like this:
+     *     Guide::$plugin->guide->deleteUserGuide()
      *
-     *     Guide::$plugin->guide->saveUserGuide()
-     *
-     * @return string
+     * @return bool
      */
     public function deleteUserGuide($params = [], $queryType = 'one'):bool
     {
@@ -73,11 +71,10 @@ class GuideService extends Component
     }
 
     /**
-     * Updates subnavigation in the Guide CP Section
+     * Retrieves a variable saved in the "Guide Variables" section of the
+     * Guide plugin settings.
      *
-     * From any other plugin file, call it like this:
-     *
-     *     Guide::$plugin->guide->getUserGuideForElementType()
+     *     Guide::$plugin->guide->getGuideVariableValue()
      *
      * @return string
      */
@@ -115,9 +112,7 @@ class GuideService extends Component
     }
 
     /**
-     * Updates subnavigation in the Guide CP Section
-     *
-     * From any other plugin file, call it like this:
+     * Gets a User Guide for a Content Guide modal.
      *
      *     Guide::$plugin->guide->getUserGuideForElementType()
      *
@@ -131,13 +126,11 @@ class GuideService extends Component
     }
 
     /**
-     * Updates subnavigation in the Guide CP Section
-     *
-     * From any other plugin file, call it like this:
+     * Finds User Guides based on the supplied parameters.
      *
      *     Guide::$plugin->guide->getUserGuides()
      *
-     * @return string
+     * @return UserGuides|array|null
      */
     public function getUserGuides($params = [], $queryType = 'all')
     {
@@ -173,9 +166,8 @@ class GuideService extends Component
     }
 
     /**
-     * Updates subnavigation in the Guide CP Section
-     *
-     * From any other plugin file, call it like this:
+     * Renders the content of a User Guide based on the format it was
+     * saved with.
      *
      *     Guide::$plugin->guide->renderUserGuideBody()
      *
@@ -206,9 +198,8 @@ class GuideService extends Component
     }
 
     /**
-     * Updates subnavigation in the Guide CP Section
-     *
-     * From any other plugin file, call it like this:
+     * Validates Custom Vars saved in the "Custom Variables" section of the
+     * Guide Plugin settings.
      *
      *     Guide::$plugin->guide->prepareCustomVarsForSave()
      *
@@ -259,9 +250,7 @@ class GuideService extends Component
     }
 
     /**
-     * Updates subnavigation in the Guide CP Section
-     *
-     * From any other plugin file, call it like this:
+     * Renders a User Guide template.
      *
      *     Guide::$plugin->guide->renderUserGuideTemplate()
      *
@@ -304,9 +293,7 @@ class GuideService extends Component
     }
 
     /**
-     * Updates subnavigation in the Guide CP Section
-     *
-     * From any other plugin file, call it like this:
+     * Saves a User Guide based on the supplied parameters.
      *
      *     Guide::$plugin->guide->saveUserGuide()
      *
@@ -351,9 +338,7 @@ class GuideService extends Component
     /**
      * Updates subnavigation in the Guide CP Section
      *
-     * From any other plugin file, call it like this:
-     *
-     *     Guide::$plugin->guide->exampleService()
+     *     Guide::$plugin->guide->updateGuideCpNav()
      *
      * @return mixed
      */
@@ -428,9 +413,7 @@ class GuideService extends Component
     }
 
     /**
-     * Updates subnavigation in the Guide CP Section
-     *
-     * From any other plugin file, call it like this:
+     * Validates whether or not the logged in user can delete User Guides.
      *
      *     Guide::$plugin->guide->userCanDeleteUserGuides()
      *
@@ -448,9 +431,7 @@ class GuideService extends Component
     }
 
     /**
-     * Updates subnavigation in the Guide CP Section
-     *
-     * From any other plugin file, call it like this:
+     * Validates whether or not the logged in user can edit User Guides.
      *
      *     Guide::$plugin->guide->userCanEditUserGuides()
      *
@@ -471,7 +452,4 @@ class GuideService extends Component
 
         return false;
     }
-
-    // Private Methods
-    // =========================================================================
 }

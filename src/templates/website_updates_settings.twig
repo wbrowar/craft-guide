@@ -7,20 +7,20 @@
 {% set docsUrl = "https://github.com/wbrowar/guide/blob/master/README.md" %}
 
 {# The title of this CP section #}
-{% set title = "Admin’s Log Widget" %}
+{% set title = "Website Updates Widget" %}
 
 {# The URL to this plugin's base CP section #}
 {% set pluginCpUrl = url('guide/home') %}
 
 {# The selected CP subnav item #}
-{% set selectedSubnavItem = 'admins_log_settings' %}
+{% set selectedSubnavItem = 'website_updates_settings' %}
 
 {# Get a URL to an image in our AssetBundle #}
-{% set iconUrl = view.getAssetManager().getPublishedPath('@wbrowar/guide/assetbundles/indexcpsection/dist', true) ~ '/img/Index-icon.svg' %}
+{% set iconUrl = view.getAssetManager().getPublishedPath('@wbrowar/guide/assetbundles/guide/dist', true) ~ '/icon/guide-mask.svg' %}
 
 {% set fullPageForm = true %}
 
-{% set selectedSubnavItem = 'adminsLogSettings' %}
+{% set selectedSubnavItem = 'websiteUpdatesSettings' %}
 
 {% block actionButton %}
     <input class="btn submit" type="submit" value="Update">
@@ -29,7 +29,7 @@
 {% set content %}
     <input type="hidden" name="action" value="guide/user-guide/update-admins-log">
 
-    <h2>Admin&rsquo;s Log</h2>
+    <h2>Website Updates</h2>
     <p>Inform your clients about new changes that have recently been made.</p>
 
     {% set logEntries = guideQuery({

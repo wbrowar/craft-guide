@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## 1.3.0 - 2018-07-09
+### Added
+- Added a new widget, Email Support, that lets clients send a custom message and basic browser and site details to a support contact
+  - Support contacts can be added in Guide plugin settings
+- Added options to turn off entire features from the Guide plugin settings page
+  - These settings can also be multi-environment aware by adding them to config/guide.php
+  - NOTE: Craft cannot globally disable widgets, so disabling a widget requires that instances of that widget are manually removed
+
+### Changed
+- Updated the plugin icon
+- Changed the name of "Admin‘s Log" to "Website Updates" throughout
+- Cleaned up unused classes
+
+### Fixed
+- Fixed a bug where the Guide CP subnav wasn‘t scrolling upon click
+
+
+## 1.2.1 - 2018-04-29
+### Fixed
+- Fixed an issue where the icon wasn’t appearing in PHP 7.2
+
 ## 1.2.1 - 2018-03-25
 ### Changed
 - In places where the template mode is being set, the template mode is returned back to what it previously was

@@ -10,16 +10,17 @@
 
 namespace wbrowar\guide\controllers;
 
-use craft\helpers\DateTimeHelper;
 use wbrowar\guide\Guide;
+use wbrowar\guide\models\UserGuide;
 
 use Craft;
+use craft\helpers\Template;
+use yii\helpers\Markdown;
+use craft\mail\Message;
 use craft\web\Controller;
-use wbrowar\guide\models\UserGuide;
-use yii\web\User;
 
 /**
- * Default Controller
+ * User Guide Controller
  *
  * Generally speaking, controllers are the middlemen between the front end of
  * the CP/website and your plugin’s services. They contain action methods which
@@ -49,7 +50,6 @@ class UserGuideController extends Controller
      *         The actions must be in 'kebab-case'
      * @access protected
      */
-    //protected $allowAnonymous = ['index', 'save-user-guide'];
     protected $allowAnonymous = true;
 
     // Public Methods
@@ -69,8 +69,10 @@ class UserGuideController extends Controller
     }
 
     /**
-     * Handle a request going to our plugin's actionDoSomething URL,
-     * e.g.: actions/guide/user-guide-controller/save-user-guide
+     * Deletes a User Guide based on the supplied parameters.
+     * Returns 'true' or 'false' as JSON.
+     *
+     *      actions/guide/user-guide-controller/save-user-guide
      *
      * @return mixed
      */
@@ -90,8 +92,9 @@ class UserGuideController extends Controller
     }
 
     /**
-     * Handle a request going to our plugin's actionDoSomething URL,
-     * e.g.: actions/guide/user-guide-controller/save-user-guide
+     * Deletes a CP User Guide and updates the Guide CP Navigation.
+     *
+     *      actions/guide/user-guide-controller/delete-cp-user-guide
      *
      * @return mixed
      */
@@ -122,8 +125,10 @@ class UserGuideController extends Controller
     }
 
     /**
-     * Handle a request going to our plugin's actionDoSomething URL,
-     * e.g.: actions/guide/user-guide-controller/save-user-guide
+     * Gets the body of a User Guide.
+     * Used when Content Guides are updated to refresh the preview on the page.
+     *
+     *      actions/guide/user-guide-controller/get-user-guide-body
      *
      * @return mixed
      */
@@ -155,8 +160,10 @@ class UserGuideController extends Controller
     }
 
     /**
-     * Handle a request going to our plugin's actionDoSomething URL,
-     * e.g.: actions/guide/user-guide-controller/save-user-guide
+     * Saves a User Guide based on the supplied parameters.
+     * Returns 'true' or 'false' as JSON.
+     *
+     *      actions/guide/user-guide-controller/save-user-guide
      *
      * @return mixed
      */
@@ -181,8 +188,9 @@ class UserGuideController extends Controller
     }
 
     /**
-     * Handle a request going to our plugin's actionDoSomething URL,
-     * e.g.: actions/guide/user-guide-controller/save-user-guide
+     * Deletes a CP User Guide and updates the Guide CP Navigation.
+     *
+     *      actions/guide/user-guide-controller/save-user-guide
      *
      * @return mixed
      */
@@ -240,8 +248,7 @@ class UserGuideController extends Controller
     }
 
     /**
-     * Handle a request going to our plugin's actionDoSomething URL,
-     * e.g.: actions/guide/user-guide-controller/save-user-guide
+     * Saves the Welcome Widget User Guide from the Welcome Widget CP page.
      *
      * @return mixed
      */
@@ -266,8 +273,101 @@ class UserGuideController extends Controller
     }
 
     /**
-     * Handle a request going to our plugin's actionDoSomething URL,
-     * e.g.: actions/guide/user-guide-controller/save-user-guide
+     * Sends the email message from the Email Support widget.
+     *
+     * @return mixed
+     */
+    public function actionSendEmailSupportEmail()
+    {
+        $this->requirePostRequest();
+
+        $params = Craft::$app->getRequest()->getBodyParams();
+
+        $results = [
+            'status' => 'error',
+            'message' => 'DATA_NOT_VALID',
+        ];
+
+        if (($params['contactEmail'] ?? false) && ($params['details'] ?? false)) {
+            // set defaults
+            $contactEmail = ($params['contactEmail'] != 'system') ? $params['contactEmail'] : Craft::$app->systemSettings->getSettings('email')['fromEmail'];
+            $sendDetails = $params['details'] == 'true';
+            $siteName = Craft::$app->getSites()->getCurrentSite()->name ?? 'Craft CMS Website';
+            $timestamp = date("F j, Y, g:i a");
+            $userEmail = Craft::$app->getUser()->getIdentity()->email;
+            $userFriendlyName = Craft::$app->getUser()->getIdentity()->friendlyName;
+
+            // prepare mail message
+            $emailMessage = "<h2>Email Support Message from " . $siteName . "</h2>"
+                            ."<p><b>Date:</b> " . $timestamp . "<br>"
+                            ."<b>User:</b> " . $userFriendlyName . " (<a href='mailto:" . $userEmail . "'>" . $userEmail . "</a>)</p>";
+
+            if ($params['message'] ?? false) {
+                $emailMessage .= '<hr><h3>Message</h3>' . Template::raw(Markdown::process($params['message'])) . '<br>';
+            }
+
+            if ($sendDetails) {
+
+                // start table
+                $emailMessage .= "<hr><h3>Support Details</h3><table width='100%'><tbody>";
+
+                // system info
+                $emailMessage .= "<tr><td width='30%' style='border-bottom: 1px solid lightgrey'><br><b>SYSTEM INFO</b></td><td style='border-bottom: 1px solid lightgrey'>&nbsp;</td></tr>"
+                    ."<tr><td><b>Edition</b></td><td>" . Craft::$app->getEditionName() . "</td></tr>"
+                    ."<tr><td><b>Craft Environment</b></td><td>" . CRAFT_ENVIRONMENT . "</td></tr>"
+                    ."<tr><td><b>System On</b></td><td>" . (Craft::$app->getIsSystemOn() ? 'YES' : 'NO') . "</td></tr>"
+                    ."<tr><td><b>Dev Mode</b></td><td>" . (Craft::$app->getConfig()->getGeneral()->devMode ? 'YES' : 'NO') . "</td></tr>";
+
+                $emailMessage .= "<tr><td width='30%' style='border-bottom: 1px solid lightgrey'><br><br><b>REQUEST INFO</b></td><td style='border-bottom: 1px solid lightgrey'>&nbsp;</td></tr>"
+                    ."<tr><td><b>OS</b></td><td>" . Craft::$app->getRequest()->getClientOs() . "</td></tr>"
+                    ."<tr><td><b>User Agent</b></td><td>" . Craft::$app->getRequest()->getUserAgent() . "</td></tr>"
+                    ."<tr><td><b>User IP</b></td><td>" . Craft::$app->getRequest()->getUserIP() . "</td></tr>";
+
+                $emailMessage .= "<tr><td width='30%' style='border-bottom: 1px solid lightgrey'><br><br><b>BROWSER INFO</b></td><td style='border-bottom: 1px solid lightgrey'>&nbsp;</td></tr>";
+
+                foreach ($params['browserInfo'] as $key => $item) {
+                    $emailMessage .= "<tr><td><b>" . $key . "</b></td><td>" . $item . "</td></tr>";
+                }
+
+                $plugins = Craft::$app->getPlugins()->getAllPlugins();
+
+                if ($plugins ?? false) {
+                    $emailMessage .= "<tr><td width='30%' style='border-bottom: 1px solid lightgrey'><br><br><b>PLUGINS</b></td><td style='border-bottom: 1px solid lightgrey'>&nbsp;</td></tr>";
+
+                    foreach ($plugins as $item) {
+                        $emailMessage .= "<tr><td>&nbsp;</td><td>" . $item->name . "</td></tr>";
+                    }
+                }
+
+                // close table
+                $emailMessage .= "</tbody></table>";
+            }
+
+            $emailSubject = "Email Support Message from " . $siteName;
+
+            // setup mail message
+            $message = new Message();
+
+            $message->setFrom([$userEmail => $userFriendlyName]);
+            $message->setTo($contactEmail);
+            $message->setSubject($emailSubject);
+            $message->setHtmlBody($emailMessage);
+
+            if (Craft::$app->mailer->send($message)) {
+                $results = [
+                    'status' => 'success',
+                    'message' => 'EMAIL_SENT',
+                ];
+            }
+        }
+
+        // save new admin log
+        return $this->asJson($results);
+    }
+
+    /**
+     * Updates Website Updates data from the Website Updates CP page.
+     * This can add a new log entry, and/or delete existing entries.
      *
      * @return mixed
      */
@@ -311,6 +411,6 @@ class UserGuideController extends Controller
             }
         }
 
-        return $this->redirectToPostedUrl(true, 'guide/admins-log');
+        return $this->redirectToPostedUrl(true, 'guide/website-updates');
     }
 }

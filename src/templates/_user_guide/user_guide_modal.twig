@@ -4,8 +4,8 @@
 
 {% set userGuideIsNew = userGuide.typeId == 0 %}
 
-{% do view.registerAssetBundle("wbrowar\\guide\\assetbundles\\indexcpsection\\IndexCPSectionAsset") %}
-{% set iconUrl = view.getAssetManager().getPublishedPath('@wbrowar/guide/assetbundles/indexcpsection/dist', true) ~ '/img/Index-icon.svg' %}
+{% do view.registerAssetBundle("wbrowar\\guide\\assetbundles\\guide\\GuideAsset") %}
+{% set iconUrl = view.getAssetManager().getPublishedPath('@wbrowar/guide/assetbundles/guide/dist', true) ~ '/icon/guide-mask.svg' %}
 
 <div id="guide_cp__user_guide">
     <div class="guide__modal modal globalmodal" style="display: none;">

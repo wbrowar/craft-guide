@@ -17,7 +17,7 @@
 {% import "_includes/forms" as forms %}
 
 {% do view.registerAssetBundle("wbrowar\\guide\\assetbundles\\guide\\GuideAsset") %}
-{% do view.registerAssetBundle("wbrowar\\guide\\assetbundles\\indexcpsection\\IndexCPSectionAsset") %}
+{% do view.registerAssetBundle("wbrowar\\guide\\assetbundles\\guide\\GuideAsset") %}
 
 {# Link for the ? icon at the bottom of the page #}
 {% set docsUrl = "https://github.com/wbrowar/guide/blob/master/README.md" %}
@@ -29,7 +29,7 @@
 {% set pluginCpUrl = url('guide') %}
 
 {# Get a URL to an image in our AssetBundle #}
-{% set iconUrl = view.getAssetManager().getPublishedUrl('@wbrowar/guide/assetbundles/indexcpsection/dist', true) ~ '/img/Index-icon.svg' %}
+{% set iconUrl = view.getAssetManager().getPublishedUrl('@wbrowar/guide/assetbundles/guide/dist', true) ~ '/icon/guide-mask.svg' %}
 
 {# Content that should appear in the page header#}
 {% set extraPageHeaderHtml %}

@@ -1,25 +1,57 @@
 {% import "_includes/forms" as forms %}
 
-{% do view.registerAssetBundle("wbrowar\\guide\\assetbundles\\indexcpsection\\IndexCPSectionAsset") %}
-{% set iconUrl = view.getAssetManager().getPublishedPath('@wbrowar/guide/assetbundles/indexcpsection/dist', true) ~ '/img/Index-icon.svg' %}
+{% do view.registerAssetBundle("wbrowar\\guide\\assetbundles\\guide\\GuideAsset") %}
+{% set iconUrl = view.getAssetManager().getPublishedPath('@wbrowar/guide/assetbundles/guide/dist', true) ~ '/icon/guide-mask.svg' %}
 
-<h2>Content Guides</h2>
-<p>Guides can be created for each entry type.</p>
+<h2>Features</h2>
+<p>Enable or disable plugin features, altogether. More settings for each feature may be found below.</p>
 
-{{ forms.selectField({
-    label: 'Who can edit guides?',
-    id: 'userGuidesEditableBy',
-    name: 'userGuidesEditableBy',
-    value: settings.userGuidesEditableBy,
-    options: [
-        { label: 'Admins', value: 'admin' },
-        { label: 'Users with Guide permissions + Admins', value: 'permission' },
-        { label: 'Anyone who can access CP', value: 'all' },
-    ]
-}) }}
+<br>
+
+<div class="guide__settings__grid guide__settings__grid--4">
+    <div>
+        {{ forms.lightswitchField({
+            label: 'User Guides',
+            id: 'enableAllUserGuides',
+            name: 'enableAllUserGuides',
+            on: settings.enableAllUserGuides,
+        }) }}
+        <p>Guides that can be edited by users logged into the CP. User Guides appear on entry edit pages and in the Guide CP section.</p>
+    </div>
+    <div>
+        {{ forms.lightswitchField({
+            label: 'Email Support',
+            id: 'enableAllEmailSupport',
+            name: 'enableAllEmailSupport',
+            on: settings.enableAllEmailSupport,
+        }) }}
+        <p>A widget that provides a private contact form, letting content editors notify their support contact of issues they run into while updating their website.</p>
+    </div>
+    <div>
+        {{ forms.lightswitchField({
+            label: 'Website Updates',
+            id: 'enableAllWebsiteUpdates',
+            name: 'enableAllWebsiteUpdates',
+            on: settings.enableAllWebsiteUpdates,
+        }) }}
+        <p>A widget that allows admins to communicate major changes in how the CMS functions. It‘s like a changelog for content editors.</p>
+    </div>
+    <div>
+        {{ forms.lightswitchField({
+            label: 'Welcome Widget',
+            id: 'enableAllWelcomeWidget',
+            name: 'enableAllWelcomeWidget',
+            on: settings.enableAllWelcomeWidget,
+        }) }}
+        <p>Welcome content editors with a widget that shares the same content with any all users who have the widget installed.</p>
+    </div>
+</div>
+
 
 <hr>
-<h2>Guide CP Section</h2>
+
+
+<h2 id="guide-section-guide-cp-section">Guide CP Section</h2>
 {{ forms.textField({
     label: 'Template Path',
     id: 'guideTemplatePath',
@@ -32,6 +64,7 @@
     label: 'Navigation',
     id: 'guideNav',
     name: 'guideNav',
+    minRows: 0,
     addRowLabel: 'Add a link',
     instructions: 'Manage Guide CP Section navigation',
     cols: {
@@ -63,7 +96,10 @@
     rows: settings.guideNav ?? [],
 }) }}
 
+
 <hr>
+
+
 <h2>Template Variables</h2>
 {{ forms.textField({
     label: 'Client Name',
@@ -81,12 +117,12 @@
     instructions: 'The name of the person or organization that built the website: `{{ guideVar("myCompanyName") }}`',
     placeholder: 'Shelby Company Limited'
 }) }}
-
 {{ forms.editableTableField({
     label: 'Custom Variables',
     id: 'customVars',
     name: 'customVars',
-    addRowLabel: 'Add a link',
+    minRows: 0,
+    addRowLabel: 'Add a variable',
     instructions: 'Store custom variables that can be accessed in Twig by using `{{ guideVar("REPLACE_WITH_KEY") }}`',
     cols: {
         varKey: {
@@ -109,7 +145,69 @@
     rows: settings.customVars ?? ['','',''],
 }) }}
 
+
 <hr>
+
+
+<h2>User Guides</h2>
+{{ forms.selectField({
+    label: 'Who can edit guides?',
+    id: 'userGuidesEditableBy',
+    name: 'userGuidesEditableBy',
+    value: settings.userGuidesEditableBy,
+    options: [
+        { label: 'Admins', value: 'admin' },
+        { label: 'Users with Guide permissions + Admins', value: 'permission' },
+        { label: 'Anyone who can access CP', value: 'all' },
+    ]
+}) }}
+
+
+<hr>
+
+
+<h2>Email Support</h2>
+{{ forms.lightswitchField({
+    label: 'Email Support Form',
+    id: 'enableEmailSupportForm',
+    name: 'enableEmailSupportForm',
+    instructions: 'Enables display and functionality of the form in the Email Support widget',
+    on: settings.enableEmailSupportForm ?? false ? settings.enableEmailSupportForm : false,
+}) }}
+{{ forms.editableTableField({
+    label: 'Support Contacts',
+    id: 'emailSupportContacts',
+    name: 'emailSupportContacts',
+    minRows: 0,
+    addRowLabel: 'Add a contact',
+    instructions: 'Contact information used in the Email Support widget',
+    cols: {
+        email: {
+            heading: 'Email Address',
+            type: 'singleline',
+            placeholder: '(required)',
+        },
+        name: {
+            heading: 'Name',
+            type: 'singleline',
+            placeholder: '(required)',
+        },
+        jobTitle: {
+            heading: 'Job Title',
+            type: 'singleline',
+        },
+        phone: {
+            heading: 'Phone Number',
+            type: 'singleline',
+            placeholder: '(tel URL format: +15551234567)',
+        },
+    },
+    rows: settings.emailSupportContacts ?? ['','','', ''],
+}) }}
+
+
+<hr>
+
 
 <div id="guide__demo__css"></div>
 <div class="guide__demo">
@@ -166,5 +264,3 @@
         <div>{{ item[1]|raw }}</div>
     {% endfor %}
 </div>
-
-<p><i>NOTE: Some of these defaults may change over time—especially while Craft 3 is in the RC phase.</i></p>

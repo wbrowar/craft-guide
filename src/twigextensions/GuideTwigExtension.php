@@ -110,9 +110,7 @@ class GuideTwigExtension extends \Twig_Extension
      */
     public function guideQuery($params = [], $queryType = 'all')
     {
-        $guides = Guide::$plugin->guide->getUserGuides($params, $queryType);
-
-        return $guides;
+        return Guide::$plugin->guide->getUserGuides($params, $queryType);
     }
 
     /**

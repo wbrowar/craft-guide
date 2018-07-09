@@ -11,7 +11,6 @@
 namespace wbrowar\guide\widgets;
 
 use wbrowar\guide\Guide;
-use wbrowar\guide\assetbundles\adminslogwidget\AdminsLogWidgetAsset;
 
 use Craft;
 use craft\base\Widget;
@@ -49,7 +48,7 @@ class AdminsLog extends Widget
      */
     public static function displayName(): string
     {
-        return Craft::t('guide', 'Admin’s Log');
+        return Craft::t('guide', 'Website Updates');
     }
 
     /**
@@ -59,7 +58,7 @@ class AdminsLog extends Widget
      */
     public static function iconPath()
     {
-        return Craft::getAlias("@wbrowar/guide/assetbundles/guidewidgetwidget/dist/img/GuideWidget-icon.svg");
+        return Craft::getAlias("@wbrowar/guide/assetbundles/guide/dist/icon/guide-mask.svg");
     }
 
     /**
@@ -209,13 +208,16 @@ class AdminsLog extends Widget
      */
     public function getBodyHtml()
     {
-        Craft::$app->getView()->registerAssetBundle(AdminsLogWidgetAsset::class);
-
-        return Craft::$app->getView()->renderTemplate(
-            'guide/_components/widgets/AdminsLog_body',
-            [
-                'totalLogs' => $this->totalLogs
-            ]
-        );
+        if (Guide::$plugin->getSettings()->enableAllWebsiteUpdates) {
+//            Craft::$app->getView()->registerAssetBundle(AdminsLogWidgetAsset::class);
+            return Craft::$app->getView()->renderTemplate(
+                'guide/_components/widgets/AdminsLog_body',
+                [
+                    'totalLogs' => $this->totalLogs
+                ]
+            );
+        } else {
+            return 'Website Updates has been disabled. You may remove this widget now.';
+        }
     }
 }

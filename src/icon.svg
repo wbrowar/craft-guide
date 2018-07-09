@@ -1,9 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
 <svg id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" width="75.44" height="96.02" viewBox="0 0 75.44 96.02">
   <title>icon</title>
-  <rect fill="var(--guide-color-link)" x="25.87" y="5.36" width="50.59" height="85.6" transform="translate(-5.96 -7.72) rotate(7.76)"/>
-  <rect fill="var(--guide-color-link-active)" x="30.87" y="10.91" width="47.4" height="76.63" transform="matrix(0.96, 0.29, -0.29, 0.96, 3.71, -14.97)"/>
-  <rect fill="var(--guide-color-logo-outline)" x="21.01" y="5.38" width="55.81" height="87.77" rx="5" ry="5" transform="translate(-0.72 -10.91) rotate(12.87)"/>
-  <rect x="26.42" y="10.69" width="44.98" height="77.16" rx="3" ry="3" transform="translate(-0.72 -10.91) rotate(12.87)" fill="var(--guide-color-bg)"/>
+  <g fill="#3e4e61">
+    <rect fill="var(--guide-color-link)" x="25.87" y="5.36" width="50.59" height="85.6" transform="translate(-5.96 -7.72) rotate(7.76)"/>
+  </g>
+  <g fill="#5d7590">
+    <rect fill="var(--guide-color-link-active)" x="30.87" y="10.91" width="47.4" height="76.63" transform="matrix(0.96, 0.29, -0.29, 0.96, 3.71, -14.97)"/>
+  </g>
+  <g fill="#7e9fc3">
+    <rect fill="var(--guide-color-bg)" x="21.01" y="5.38" width="55.81" height="87.77" rx="5" ry="5" transform="translate(-0.72 -10.91) rotate(12.87)"/>
+    <rect fill="var(--guide-color-bg)" x="26.42" y="10.69" width="44.98" height="77.16" rx="3" ry="3" transform="translate(-0.72 -10.91) rotate(12.87)"/>
+  </g>
   <g fill="#FFFFFF">
     <path fill="var(--guide-color-text)" d="M61.75,45.87,39.19,40.72a1.62,1.62,0,0,0-1.94,1.22l-4,17.7a1.63,1.63,0,0,0,1.22,1.94L57,66.74a1.62,1.62,0,0,0,1.94-1.22l4-17.7A1.63,1.63,0,0,0,61.75,45.87ZM57.44,64.21a.65.65,0,0,1-.78.48l-21-4.81a.64.64,0,0,1-.49-.77l3.62-15.86a.65.65,0,0,1,.78-.49l21,4.81a.65.65,0,0,1,.49.78Z" transform="translate(-12.92 -1.26)"/>
     <circle fill="var(--guide-color-text)" cx="29.17" cy="46.73" r="2.57"/>

@@ -19,7 +19,9 @@ use wbrowar\guide\services\GuideService as GuideServiceService;
 use wbrowar\guide\twigextensions\GuideTwigExtension;
 use wbrowar\guide\models\Settings;
 use wbrowar\guide\widgets\AdminsLog;
+use wbrowar\guide\widgets\EmailSupport as EmailSupportWidget;
 use wbrowar\guide\widgets\GuideWidget as GuideWidgetWidget;
+use wbrowar\guide\widgets\WelcomeWidget;
 use wbrowar\guide\assetbundles\guide\GuideAsset;
 use wbrowar\adminbar\events\AdminBarRenderEvent;
 use wbrowar\adminbar\services\Bar;
@@ -28,13 +30,11 @@ use Craft;
 use craft\base\Plugin;
 use craft\web\UrlManager;
 use craft\web\View;
-use craft\services\Fields;
 use craft\services\Dashboard;
 use craft\services\Plugins;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
 
-use wbrowar\guide\widgets\WelcomeWidget;
 use yii\base\Event;
 
 /**
@@ -195,7 +195,7 @@ class Guide extends Plugin
                     $settings = $this->getSettings();
 
                     $userCanDelete = Guide::$plugin->guide->userCanDeleteUserGuides();
-                    $userCanEdit = Guide::$plugin->guide->userCanEditUserGuides();
+                    $userCanEdit = $settings->enableAllUserGuides && Guide::$plugin->guide->userCanEditUserGuides();
 
                     // Check to see if user's template exists
                     $oldMode = Craft::$app->view->getTemplateMode();
@@ -232,18 +232,10 @@ class Guide extends Plugin
                     $event->rules['guide/new/<templatePath:(.*)>'] = ['template' => 'guide/edit', 'variables' => ['settings' => $settings, 'title' => 'New User Guide', 'guideNav' => $guideNav, 'userCanEdit' => $userCanEdit, 'userCanDelete' => $userCanDelete]];
                     $event->rules['guide/edit/<guideId:\d{1,}>'] = ['template' => 'guide/edit', 'variables' => ['settings' => $settings, 'title' => 'Edit User Guide', 'guideNav' => $guideNav, 'userCanEdit' => $userCanEdit, 'userCanDelete' => $userCanDelete]];
                     $event->rules['guide/delete/<guideId:\d{1,}>'] = ['template' => 'guide/delete', 'variables' => ['userCanEdit' => $userCanEdit, 'userCanDelete' => $userCanDelete]];
-                    $event->rules['guide/admins-log'] = ['template' => 'guide/admins_log_settings', 'variables' => ['settings' => $settings, 'title' => 'Admin’s Log']];
+                    $event->rules['guide/website-updates'] = ['template' => 'guide/website_updates_settings', 'variables' => ['settings' => $settings, 'title' => 'Website Updates']];
                     $event->rules['guide/welcome-widget'] = ['template' => 'guide/welcome_widget_settings', 'variables' => ['settings' => $settings, 'title' => 'Welcome Widget']];
 
                     Craft::$app->view->setTemplateMode($oldMode);
-                }
-            );
-
-            // Register our fields
-            Event::on(
-                Fields::class,
-                Fields::EVENT_REGISTER_FIELD_TYPES,
-                function (RegisterComponentTypesEvent $event) {
                 }
             );
 
@@ -252,17 +244,26 @@ class Guide extends Plugin
                 Dashboard::class,
                 Dashboard::EVENT_REGISTER_WIDGET_TYPES,
                 function (RegisterComponentTypesEvent $event) {
-                    $event->types[] = AdminsLog::class;
                     $event->types[] = GuideWidgetWidget::class;
-                    $event->types[] = WelcomeWidget::class;
+                    if ($this->getSettings()->enableAllWebsiteUpdates) {
+                        $event->types[] = AdminsLog::class;
+                    }
+                    if ($this->getSettings()->enableAllEmailSupport) {
+                        $event->types[] = EmailSupportWidget::class;
+                    }
+                    if ($this->getSettings()->enableAllWelcomeWidget) {
+                        $event->types[] = WelcomeWidget::class;
+                    }
                 }
             );
 
             // Add CP Buttons
             Craft::$app->view->hook('cp.entries.edit.details', function(&$context) {
                 if ($context['entry'] ?? false) {
-                    // return sidebar template
-                    return Guide::$plugin->guide->renderUserGuideTemplate('guide/_user_guide/user_guide_sidebar', $context['entry']);
+                    if ($this->getSettings()->enableAllUserGuides) {
+                        // return sidebar template
+                        return Guide::$plugin->guide->renderUserGuideTemplate('guide/_user_guide/user_guide_sidebar', $context['entry']);
+                    }
                 }
 
                 return false;
@@ -327,8 +328,12 @@ class Guide extends Plugin
             $navItem['subnav']['components'] = ['label' => 'Guide Components', 'url' => 'guide/components'];
         }
         if (Craft::$app->getUser()->getIsAdmin()) {
-            $navItem['subnav']['adminsLogSettings'] = ['label' => 'Admin’s Log', 'url' => 'guide/admins-log'];
-            $navItem['subnav']['welcomeWidgetSettings'] = ['label' => 'Welcome Widget', 'url' => 'guide/welcome-widget'];
+            if ($this->getSettings()->enableAllWebsiteUpdates) {
+                $navItem['subnav']['websiteUpdatesSettings'] = ['label' => 'Website Updates', 'url' => 'guide/website-updates'];
+            }
+            if ($this->getSettings()->enableAllWelcomeWidget) {
+                $navItem['subnav']['welcomeWidgetSettings'] = ['label' => 'Welcome Widget', 'url' => 'guide/welcome-widget'];
+            }
         }
 
         return $navItem;

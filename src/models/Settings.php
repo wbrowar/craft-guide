@@ -40,6 +40,24 @@ class Settings extends Model
     // Additional variables available for the "guideVars()" Twig tag
     public $customVars = [];
 
+    // A list of emails and available for use in the Email Supports widget
+    public $emailSupportContacts = [];
+
+    // Enables display and functionality of the Email Support widget
+    public $enableAllUserGuides = true;
+
+    // Enables display and functionality of the Email Support widget
+    public $enableAllEmailSupport = true;
+
+    // Enables display and functionality of the Welcome widget and CP page
+    public $enableAllWelcomeWidget = true;
+
+    // Enables display and functionality of the Website Updates widget and CP page
+    public $enableAllWebsiteUpdates = true;
+
+    // Enables display and functionality of the form in the Email Support widget
+    public $enableEmailSupportForm = true;
+
     // Array of navigation items used in Guide CP Section
     public $guideNav = [];
 
@@ -71,7 +89,6 @@ class Settings extends Model
     {
         return [
             [['clientName', 'customCss', 'guideTemplatePath'], 'string'],
-            ['customVars', 'default', 'value' => ['','','']],
             ['guideTemplatePath', 'default', 'value' => '_guide/index'],
         ];
     }

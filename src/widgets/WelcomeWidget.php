@@ -11,7 +11,6 @@
 namespace wbrowar\guide\widgets;
 
 use wbrowar\guide\Guide;
-use wbrowar\guide\assetbundles\welcomewidgetwidget\WelcomeWidgetWidgetAsset;
 
 use Craft;
 use craft\base\Widget;
@@ -34,6 +33,16 @@ class WelcomeWidget extends Widget
     // =========================================================================
 
     /**
+     * Returns whether the widget can be selected more than once.
+     *
+     * @return bool
+     */
+    protected static function allowMultipleInstances():bool
+    {
+        return false;
+    }
+
+    /**
      * Returns the display name of this class.
      *
      * @return string The display name of this class.
@@ -50,7 +59,7 @@ class WelcomeWidget extends Widget
      */
     public static function iconPath()
     {
-        return Craft::getAlias("@wbrowar/guide/assetbundles/guidewidgetwidget/dist/img/GuideWidget-icon.svg");
+        return Craft::getAlias("@wbrowar/guide/assetbundles/guide/dist/icon/guide-mask.svg");
     }
 
     /**
@@ -80,8 +89,11 @@ class WelcomeWidget extends Widget
      */
     public function getBodyHtml()
     {
-        Craft::$app->getView()->registerAssetBundle(WelcomeWidgetWidgetAsset::class);
-
-        return Craft::$app->getView()->renderTemplate('guide/_components/widgets/WelcomeWidget_body');
+        if (Guide::$plugin->getSettings()->enableAllEmailSupport) {
+//            Craft::$app->getView()->registerAssetBundle(WelcomeWidgetWidgetAsset::class);
+            return Craft::$app->getView()->renderTemplate('guide/_components/widgets/WelcomeWidget_body');
+        } else {
+            return 'Welcome Widget has been disabled. You may remove this widget now.';
+        }
     }
 }

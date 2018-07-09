@@ -2,10 +2,10 @@
 /**
  * Guide plugin for Craft CMS 3.x
  *
- * Description
+ * dd
  *
- * @link      https://wbrowar.com
- * @copyright Copyright (c) 2017 Will Browar
+ * @link      http://dd.com
+ * @copyright Copyright (c) 2018 dd
  */
 
 namespace wbrowar\guide\widgets;
@@ -23,29 +23,32 @@ use craft\base\Widget;
  *
  * https://craftcms.com/docs/plugins/widgets
  *
- * @author    Will Browar
+ * @author    dd
  * @package   Guide
  * @since     1.0.0
  */
-class GuideWidget extends Widget
+class EmailSupport extends Widget
 {
-
     // Public Properties
     // =========================================================================
 
-    // Format of the $message text value
-    // Values: markdown\twig
-    public $format = 'markdown';
-
-    // The text fed into the widget
-    public $message = "#Hello.\n\n"
-    . "Here you can use Markdown or Twig to provide notes or helpful information.\n\n"
-    . "This example uses Markdown, so you can use **bold** or *italic* formatting, and you can [link to things](https://daringfireball.net/projects/markdown/basics)!\n\n"
-    . "<p>You can even use HTML tags, too.</p>\n\n"
-    . "For more Markdown options, <a href='https://daringfireball.net/projects/markdown/basics' target='_blank'>visit this page.</a>";
+    /**
+     * @var string The message to display
+     */
+    public $contact = '';
 
     // Static Methods
     // =========================================================================
+
+    /**
+     * Returns whether the widget can be selected more than once.
+     *
+     * @return bool
+     */
+    protected static function allowMultipleInstances():bool
+    {
+        return false;
+    }
 
     /**
      * Returns the display name of this class.
@@ -54,7 +57,7 @@ class GuideWidget extends Widget
      */
     public static function displayName(): string
     {
-        return Craft::t('guide', 'Guide');
+        return Craft::t('guide', 'Email Support');
     }
 
     /**
@@ -96,9 +99,7 @@ class GuideWidget extends Widget
         $rules = array_merge(
             $rules,
             [
-                [['format', 'message'], 'string'],
-                ['format', 'default', 'value' => 'markdown'],
-                ['message', 'default', 'value' => 'Use the settings icon to add a note.'],
+                ['contact', 'string'],
             ]
         );
         return $rules;
@@ -199,9 +200,10 @@ class GuideWidget extends Widget
     public function getSettingsHtml()
     {
         return Craft::$app->getView()->renderTemplate(
-            'guide/_components/widgets/GuideWidget_settings',
+            'guide/_components/widgets/EmailSupport_settings',
             [
-                'widget' => $this
+                'guideSettings' => Guide::$plugin->getSettings(),
+                'widget' => $this,
             ]
         );
     }
@@ -215,12 +217,16 @@ class GuideWidget extends Widget
      */
     public function getBodyHtml()
     {
-        return Craft::$app->getView()->renderTemplate(
-            'guide/_components/widgets/GuideWidget_body',
-            [
-                'format' => $this->format,
-                'message' => $this->message,
-            ]
-        );
+        if (Guide::$plugin->getSettings()->enableAllEmailSupport) {
+            return Craft::$app->getView()->renderTemplate(
+                'guide/_components/widgets/EmailSupport_body',
+                [
+                    'guideSettings' => Guide::$plugin->getSettings(),
+                    'contact' => $this->contact,
+                ]
+            );
+        } else {
+            return 'Email Support has been disabled. You may remove this widget now.';
+        }
     }
 }

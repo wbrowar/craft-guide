@@ -1,0 +1,33 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Guide plugin for Craft CMS
+ *
+ * EmailSupport Widget Settings
+ *
+ * @author    dd
+ * @copyright Copyright (c) 2018 dd
+ * @link      http://dd.com
+ * @package   Guide
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{% if guideSettings.emailSupportContacts|length %}
+    {% set contacts = [] %}
+    {% for item in guideSettings.emailSupportContacts %}
+        {% set contacts = contacts|merge([{ label: item.name, value: item.email }]) %}
+    {% endfor %}
+
+    {{ forms.selectField({
+        label: 'Contact Person',
+        id: 'contact',
+        name: 'contact',
+        value: widget['contact'] ?? null,
+        options: contacts
+    }) }}
+{% else %}
+    <p>ddd</p>
+{% endif %}
