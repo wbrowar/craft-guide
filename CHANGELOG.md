@@ -19,7 +19,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Cleaned up unused classes
 
 ### Fixed
-- Fixed a bug where the Guide CP subnav wasn‘t scrolling upon click
+- Fixed a bug where the Guide CP section navigation wasn‘t scrolling upon click
 
 
 ## 1.2.1 - 2018-04-29
