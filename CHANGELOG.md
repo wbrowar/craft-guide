@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## 1.3.1 - 2018-08-21
+### Fixed
+- Fixed an issue that caused subnav to disappear when in Guide CP section pages ([#2](https://github.com/wbrowar/craft-3-guide/issues/2))
+- Fixed a bug that occurred when all Guide Nav items are removed ([#9](https://github.com/wbrowar/craft-3-guide/issues/9))
+
 ## 1.3.0 - 2018-07-09
 ### Added
 - Added a new widget, Email Support, that lets clients send a custom message and basic browser and site details to a support contact

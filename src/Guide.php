@@ -209,25 +209,28 @@ class Guide extends Plugin
                     }
 
                     // Register CP Section templates
-                    $guideNav = $settings->guideNav;
-                    foreach ($guideNav as $key => $item) {
-                        $navItemVars = ['pageContent' => '', 'settings' => $settings, 'templatePath' => $item['template'] ?? null, 'title' => $item['title'], 'userCanEdit' => $userCanEdit, 'userCanDelete' => $userCanDelete];
+                    $guideNav = $settings->guideNav ?? [];
+                    if (!empty($guideNav)) {
+                        foreach ($guideNav as $key => $item) {
+                            $navItemVars = ['pageContent' => '', 'settings' => $settings, 'templatePath' => $item['template'] ?? null, 'title' => $item['title'], 'userCanEdit' => $userCanEdit, 'userCanDelete' => $userCanDelete];
 
-                        if ($item['userGuideId'] ?? false) {
-                            $navItemVars['userGuideId'] = $item['userGuideId'];
-                        } else if ($item['template'] ?? false) {
-                            $templatePath = Craft::$app->view->resolveTemplate($item['template']);
-                            $navItemVars['pageContent'] = $this->_getTemplateFileAsString($templatePath);
-                            $navItemPageContent = $navItemVars['pageContent'];
+                            if ($item['userGuideId'] ?? false) {
+                                $navItemVars['userGuideId'] = $item['userGuideId'];
+                            } else if ($item['template'] ?? false) {
+                                $templatePath = Craft::$app->view->resolveTemplate($item['template']);
+                                $navItemVars['pageContent'] = $this->_getTemplateFileAsString($templatePath);
+                                $navItemPageContent = $navItemVars['pageContent'];
+                            }
+
+                            $event->rules['guide/page/' . $item['id']] = ['template' => 'guide/index', 'variables' => $navItemVars];
+                            $guideNav[$key]['pageContent'] = $navItemPageContent ?? null;
                         }
-
-                        $event->rules['guide/page/' . $item['id']] = ['template' => 'guide/home', 'variables' => $navItemVars];
-                        $guideNav[$key]['pageContent'] = $navItemPageContent ?? null;
                     }
 
                     // Register CP Section home templates
-                    $event->rules['guide/home'] = ['template' => 'guide/home', 'variables' => ['pageContent' => $guideTemplatePathAsString, 'settings' => $settings, 'templatePath' => $settings->guideTemplatePath, 'title' => 'Guide', 'guideNav' => $guideNav, 'userCanEdit' => $userCanEdit]];
-                    $event->rules['guide/components'] = ['template' => 'guide/home', 'variables' => ['settings' => $settings, 'title' => 'Guide Components', 'guideNav' => $guideNav]];
+                    $event->rules['guide'] = ['template' => 'guide/index', 'variables' => ['pageContent' => $guideTemplatePathAsString, 'settings' => $settings, 'templatePath' => $settings->guideTemplatePath, 'title' => 'Guide', 'guideNav' => $guideNav, 'userCanEdit' => $userCanEdit]];
+                    $event->rules['guide/home'] = ['template' => 'guide/home'];
+                    $event->rules['guide/components'] = ['template' => 'guide/index', 'variables' => ['settings' => $settings, 'title' => 'Guide Components', 'guideNav' => $guideNav]];
                     $event->rules['guide/new'] = ['template' => 'guide/edit', 'variables' => ['settings' => $settings, 'title' => 'New User Guide', 'guideNav' => $guideNav, 'userCanEdit' => $userCanEdit, 'userCanDelete' => $userCanDelete]];
                     $event->rules['guide/new/<templatePath:(.*)>'] = ['template' => 'guide/edit', 'variables' => ['settings' => $settings, 'title' => 'New User Guide', 'guideNav' => $guideNav, 'userCanEdit' => $userCanEdit, 'userCanDelete' => $userCanDelete]];
                     $event->rules['guide/edit/<guideId:\d{1,}>'] = ['template' => 'guide/edit', 'variables' => ['settings' => $settings, 'title' => 'Edit User Guide', 'guideNav' => $guideNav, 'userCanEdit' => $userCanEdit, 'userCanDelete' => $userCanDelete]];
@@ -316,12 +319,10 @@ class Guide extends Plugin
 
     public function getCpNavItem()
     {
-        // Use the default name & icon, but customize the URL
         $navItem = parent::getCpNavItem();
-        $navItem['url'] = 'guide/home';
 
         $navItem['subnav'] = [
-            'home' => ['label' => 'Guide', 'url' => 'guide/home'],
+            'home' => ['label' => 'Guide', 'url' => 'guide'],
         ];
 
         if (Craft::$app->getUser()->getIsAdmin() || Craft::$app->getUser()->checkPermission('editGuides')) {
