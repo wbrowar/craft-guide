@@ -29,6 +29,10 @@
 {% set guideContent = '' %}
 {% set guideFormat = 'markdown' %}
 
+{% if templatePath ?? false %}
+    {% set templatePath = templatePath|replace('._.', '/') %}
+{% endif %}
+
 {% for item in guideNav %}
     {% if (item.userGuideId ?? false) and (guide ?? false) and item.userGuideId == guide.id %}
         {% set guideNavItem = item %}
