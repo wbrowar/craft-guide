@@ -68,7 +68,7 @@ class Guide extends Plugin
      */
     public static $plugin;
 
-    public $schemaVersion = '1.1.4';
+    public $schemaVersion = '1.4.0';
 
     public $adminBarWidgets = [[
         'description' => 'Display the Content Guide for the current entry.',
@@ -109,6 +109,7 @@ class Guide extends Plugin
             Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
                 $event->permissions[\Craft::t('guide', 'Guides')] = [
                     'editGuides' => ['label' => \Craft::t('guide', 'Edit Guides')],
+                    'editGuideNavigation' => ['label' => \Craft::t('guide', 'Edit Guide Navigation')],
                     'deleteGuides' => ['label' => \Craft::t('guide', 'Delete Guides')],
                 ];
             });
@@ -209,21 +210,23 @@ class Guide extends Plugin
                     }
 
                     // Register CP Section templates
-                    $guideNav = $settings->guideNav ?? [];
+                    $guideNav = Guide::$plugin->guide->getCpNavigationForTemplates();
                     if (!empty($guideNav)) {
-                        foreach ($guideNav as $key => $item) {
-                            $navItemVars = ['pageContent' => '', 'settings' => $settings, 'templatePath' => $item['template'] ?? null, 'title' => $item['title'], 'userCanEdit' => $userCanEdit, 'userCanDelete' => $userCanDelete];
+                        for ($i=0; $i<count($guideNav); $i++) {
+                            $navItemVars = ['guideNav' => $guideNav, 'pageContent' => '', 'settings' => $settings, 'templatePath' => $guideNav[$i]['templatePath'] ?? null, 'title' => $guideNav[$i]['title'], 'userCanEdit' => $userCanEdit, 'userCanDelete' => $userCanDelete];
 
-                            if ($item['userGuideId'] ?? false) {
-                                $navItemVars['userGuideId'] = $item['userGuideId'];
-                            } else if ($item['template'] ?? false) {
-                                $templatePath = Craft::$app->view->resolveTemplate($item['template']);
+                            if ($guideNav[$i]['guideId'] ?? false) {
+                                $navItemVars['userGuideId'] = $guideNav[$i]['guideId'];
+                            } else if ($guideNav[$i]['templatePath'] ?? false) {
+                                $templatePath = Craft::$app->view->resolveTemplate($guideNav[$i]['templatePath']);
                                 $navItemVars['pageContent'] = $this->_getTemplateFileAsString($templatePath);
                                 $navItemPageContent = $navItemVars['pageContent'];
                             }
+                            
+//                            Craft::dd($guideNav[$i]);
 
-                            $event->rules['guide/page/' . $item['id']] = ['template' => 'guide/index', 'variables' => $navItemVars];
-                            $guideNav[$key]['pageContent'] = $navItemPageContent ?? null;
+                            $event->rules['guide/page/' . $guideNav[$i]['slug']] = ['template' => 'guide/index', 'variables' => $navItemVars];
+                            $guideNav[$i]['pageContent'] = $navItemPageContent ?? null;
                         }
                     }
 
@@ -234,6 +237,7 @@ class Guide extends Plugin
                     $event->rules['guide/new'] = ['template' => 'guide/edit', 'variables' => ['settings' => $settings, 'title' => 'New User Guide', 'guideNav' => $guideNav, 'userCanEdit' => $userCanEdit, 'userCanDelete' => $userCanDelete]];
                     $event->rules['guide/new/<templatePath:(.*)>'] = ['template' => 'guide/edit', 'variables' => ['settings' => $settings, 'title' => 'New User Guide', 'guideNav' => $guideNav, 'userCanEdit' => $userCanEdit, 'userCanDelete' => $userCanDelete]];
                     $event->rules['guide/edit/<guideId:\d{1,}>'] = ['template' => 'guide/edit', 'variables' => ['settings' => $settings, 'title' => 'Edit User Guide', 'guideNav' => $guideNav, 'userCanEdit' => $userCanEdit, 'userCanDelete' => $userCanDelete]];
+                    $event->rules['guide/navigation'] = ['template' => 'guide/edit_guide_navigation', 'variables' => ['settings' => $settings, 'guideNav' => $guideNav, 'title' => 'Navigation']];
                     $event->rules['guide/delete/<guideId:\d{1,}>'] = ['template' => 'guide/delete', 'variables' => ['userCanEdit' => $userCanEdit, 'userCanDelete' => $userCanDelete]];
                     $event->rules['guide/website-updates'] = ['template' => 'guide/website_updates_settings', 'variables' => ['settings' => $settings, 'title' => 'Website Updates']];
                     $event->rules['guide/welcome-widget'] = ['template' => 'guide/welcome_widget_settings', 'variables' => ['settings' => $settings, 'title' => 'Welcome Widget']];
@@ -325,6 +329,9 @@ class Guide extends Plugin
             'home' => ['label' => 'Guide', 'url' => 'guide'],
         ];
 
+        if (Craft::$app->getUser()->getIsAdmin() || Craft::$app->getUser()->checkPermission('editGuideNavigation')) {
+            $navItem['subnav']['navigation'] = ['label' => 'Navigation', 'url' => 'guide/navigation'];
+        }
         if (Craft::$app->getUser()->getIsAdmin() || Craft::$app->getUser()->checkPermission('editGuides')) {
             $navItem['subnav']['components'] = ['label' => 'Guide Components', 'url' => 'guide/components'];
         }
@@ -365,7 +372,6 @@ class Guide extends Plugin
 
         $newSettings = Guide::$plugin->guide->prepareCustomVarsForSave($settings);
         $settings['customVars'] = $newSettings['customVars'];
-        $settings['guideNav'] = $newSettings['guideNav'];
 
         return Craft::$app->view->renderTemplate(
             'guide/settings',

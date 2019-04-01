@@ -46,31 +46,58 @@
 {# Get a URL to an image in our AssetBundle #}
 {% set iconUrl = view.getAssetManager().getPublishedPath('@wbrowar/guide/assetbundles/guide/dist', true) ~ '/icon/guide-mask.svg' %}
 
+{# Guide Navigation first link #}
+{% set navFirstLink = null %}
+
 {# The content of the CP Section#}
 {% if ((pageContent ?? false) and settings.guideNav|length) or userCanEdit %}
     {% set sidebar %}
-        <nav>
-            <ul>
-                {% for item in settings.guideNav %}
-                    {% set showItem = true %}
-                    {% if item.admin is defined and item.admin and not currentUser.admin %}
-                        {% set showItem = false %}
-                    {% endif %}
+        {% if guideNav ?? false %}
+            <nav>
+                <ul>
+                    {% set firstItemShown = false %}
+                    {% for item in guideNav %}
+                        {% set showItem = true %}
 
-                    {% if showItem %}
-                        {% if craft.app.request.getSegment(3) %}
-                            {% set sel = craft.app.request.getSegment(3) == item.id ? ' class="sel"' : '' %}
-                        {% else %}
-                            {% set sel = loop.first ? ' class="sel"' : '' %}
+                        {% if item.permissions ?? false %}
+                            {% set userCanViewItem = false %}
+                            {% set itemPermissions = item.permissions|split(',') %}
+
+                            {% for permission in itemPermissions %}
+                                {% if currentUser.can(permission|trim) %}
+                                    {% set userCanViewItem = true %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {% set showItem = userCanViewItem %}
                         {% endif %}
 
-                        <li>
-                            <a{{ sel|raw }} href="{{ url('guide/page/' ~ item.id) }}">{{ item.title }}</a>
-                        </li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-        </nav>
+                        {% if (item.adminOnly) and not currentUser.admin %}
+                            {% set showItem = false %}
+                        {% endif %}
+
+                        {% if showItem %}
+                            {% set itemUrl = url('guide/page/' ~ item.slug) %}
+
+                            {% if not firstItemShown %}
+                                {% set navFirstLink = itemUrl %}
+                            {% endif %}
+                            {% set firstItemShown = true %}
+
+                            {% if craft.app.request.getSegment(3) %}
+                                {% set sel = craft.app.request.getSegment(3) == item.slug ? ' class="sel"' : '' %}
+                            {% else %}
+                                {% set sel = loop.first ? ' class="sel"' : '' %}
+                            {% endif %}
+
+                            <li>
+                                <a{{ sel|raw }} href="{{ itemUrl }}">{{ item.title }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </nav>
+        {% endif %}
 
         {% if userCanEdit %}
             {% if settings.guideNav|length %}
@@ -115,6 +142,8 @@
                 {{ include(template_from_string(pageContent)) }}
                     {#{% include('guide/_guide/seo.twig') %}#}
             {% endswitch %}
+        {% elseif navFirstLink ?? false %}
+            {% redirect navFirstLink %}
         {% else %}
             {% if craft.app.request.getSegment(2) == 'home' %}
                 {% if settings.guideNav|length %}

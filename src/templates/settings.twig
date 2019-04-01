@@ -60,41 +60,8 @@
     instructions: 'Path to Guide Twig templates relative to your site\'s templates folder.'
 }) }}
 
-{{ forms.editableTableField({
-    label: 'Navigation',
-    id: 'guideNav',
-    name: 'guideNav',
-    minRows: 0,
-    addRowLabel: 'Add a link',
-    instructions: 'Manage Guide CP Section navigation',
-    cols: {
-        id: {
-            heading: 'Slug',
-            type: 'singleline',
-        },
-        title: {
-            heading: 'Title',
-            type: 'singleline',
-        },
-        template: {
-            heading: 'Template Path',
-            type: 'singleline',
-        },
-        permissions: {
-            heading: 'Permissions (separate by comma)',
-            type: 'singleline',
-        },
-        admin: {
-            heading: 'Admin Only',
-            type: 'checkbox',
-        },
-        userGuideId: {
-            heading: 'ID',
-            type: 'number',
-        },
-    },
-    rows: settings.guideNav ?? [],
-}) }}
+<h3>Navigation</h3>
+<p><i>Navigation settings have been moved to the <a href="{{ url('guide/navigation') }}">Guide CP section.</a></i></p>
 
 
 <hr>
@@ -264,3 +231,15 @@
         <div>{{ item[1]|raw }}</div>
     {% endfor %}
 </div>
+
+
+<hr>
+
+
+{{ forms.lightswitchField({
+    label: 'Show Guide 2.0 Warnings',
+    id: 'guideTwoWarnings',
+    name: 'guideTwoWarnings',
+    instructions: 'These messages are only shown to Admin users, but they can be hidden with this setting.',
+    on: settings.guideTwoWarnings,
+}) }}

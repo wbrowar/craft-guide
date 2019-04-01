@@ -10,7 +10,9 @@
 
 namespace wbrowar\guide\controllers;
 
+use craft\helpers\Json;
 use wbrowar\guide\Guide;
+use wbrowar\guide\models\Navigation;
 use wbrowar\guide\models\UserGuide;
 
 use Craft;
@@ -109,16 +111,22 @@ class UserGuideController extends Controller
             Guide::$plugin->guide->deleteUserGuide(['id' => $userGuideId]);
 
             // update Guide CP nav
-            $nav = Guide::$plugin->getSettings()->guideNav;
-            $navCount = count($nav);
+            $nav = Guide::$plugin->guide->getCpNavigation();
+            $navLinks = $nav->links;
+            $navCount = count($navLinks);
+            $navChanged = false;
 
             for ($i=0; $i<$navCount; $i++) {
-                if (isset($nav[$i]['userGuideId']) && ($nav[$i]['userGuideId'] == $userGuideId)) {
-                    unset($nav[$i]);
+                if (isset($navLinks[$i]['guideId']) && ($navLinks[$i]['guideId'] == $userGuideId)) {
+                    array_splice($navLinks, $i, 1);
+                    $navChanged = true;
                 }
             }
 
-            Guide::$plugin->guide->updateGuideCpNav($nav, true);
+            if ($navChanged) {
+                $nav->links = $navLinks;
+                Guide::$plugin->guide->saveCpNavigation($nav);
+            }
 
             return $this->redirectToPostedUrl(true, 'guide/home');
         }
@@ -157,6 +165,27 @@ class UserGuideController extends Controller
         }
 
         return false;
+    }
+
+    /**
+     *
+     *      actions/guide/user-guide-controller/save-cp-navigation
+     *
+     * @return mixed
+     */
+    public function actionSaveCpNavigation()
+    {
+        $this->requirePostRequest();
+
+        $params = Craft::$app->getRequest()->getBodyParams();
+
+        $navigation = new Navigation([
+            'links' => $params['links'],
+        ]);
+
+        Guide::$plugin->guide->saveCpNavigation($navigation);
+
+        return $this->redirectToPostedUrl(true );
     }
 
     /**
@@ -217,31 +246,33 @@ class UserGuideController extends Controller
             $userGuideId = Guide::$plugin->guide->saveUserGuide($userGuide, $params['id'] ?? null);
 
 
-            // update Guide CP nav
-            $nav = Guide::$plugin->getSettings()->guideNav;
-            $navCount = count($nav);
+            // Update Guide CP nav
+            $nav = Guide::$plugin->guide->getCpNavigation();
+            $navLinks = $nav->links;
+            $navCount = count($navLinks);
 
             $userGuideInNav = false;
             for ($i=0; $i<$navCount; $i++) {
-                if (isset($nav[$i]['userGuideId']) && $nav[$i]['userGuideId'] === $userGuideId) {
+                if (isset($navLinks[$i]['guideId']) && $navLinks[$i]['guideId'] === $userGuideId) {
                     $userGuideInNav = true;
-                    $nav[$i]['id'] = $params['slug'];
-                    $nav[$i]['title'] = $params['title'];
+                    $navLinks[$i]['slug'] = $params['slug'];
+                    $navLinks[$i]['title'] = $params['title'];
                 }
             }
 
             if (!$userGuideInNav) {
-                $nav[] = [
-                    'userGuideId' => $userGuideId,
-                    'id' => $params['slug'],
+                $navLinks[] = [
+                    'guideId' => $userGuideId,
+                    'slug' => $params['slug'],
                     'title' => $params['title'],
                     'templatePath' => $params['templatePath'] ?? '',
                     'permissions' => '',
-                    'admin' => '',
+                    'adminOnly' => '',
                 ];
             }
 
-            Guide::$plugin->guide->updateGuideCpNav($nav, true);
+            $nav->links = $navLinks;
+            Guide::$plugin->guide->saveCpNavigation($nav);
 
             return $this->redirectToPostedUrl(true, 'guide/page/' . $params['slug']);
         }

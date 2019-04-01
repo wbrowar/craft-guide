@@ -27,6 +27,10 @@
 {% set content %}
     <input type="hidden" name="action" value="guide/user-guide/save-welcome-widget">
 
+    {% if settings.guideTwoWarnings %}
+        <div class="guide_fpo" style="margin-bottom: 30px; padding: 20px; font-size: 1rem;">Guide 2.0 is in the works and this feature is getting removed. Communicator is its replacement and it can be <a style="color: white !important; text-decoration: underline !important;" href="{{ url('plugin-store/communicator') }}">found in the Plugin Store</a></div>
+    {% endif %}
+
     <h2>Welcome Widget</h2>
     <p>Welcome your clients and provide them with a starting point after logging in.</p>
 

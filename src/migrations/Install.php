@@ -40,6 +40,11 @@ class Install extends Migration
      */
     public $driver;
 
+    /**
+     * @var array The database driver to use
+     */
+    public $tablesCreated = [];
+
     // Public Methods
     // =========================================================================
 
@@ -97,12 +102,10 @@ class Install extends Migration
      */
     protected function createTables()
     {
-        $tablesCreated = false;
-
-        // guide_userguides table
+        // Add guide_userguides table
         $tableSchema = Craft::$app->db->schema->getTableSchema('{{%guide_userguides}}');
         if ($tableSchema === null) {
-            $tablesCreated = true;
+            $this->tablesCreated[] = 'userguides';
             $this->createTable(
                 '{{%guide_userguides}}',
                 [
@@ -125,7 +128,24 @@ class Install extends Migration
             );
         }
 
-        return $tablesCreated;
+        // Add guide_navigation table
+        $tableSchema = Craft::$app->db->schema->getTableSchema('{{%guide_navigation}}');
+        if ($tableSchema === null) {
+            $this->tablesCreated[] = 'navigation';
+            $this->createTable(
+                '{{%guide_navigation}}',
+                [
+                    'id' => $this->primaryKey(),
+                    'dateCreated' => $this->dateTime()->notNull(),
+                    'dateUpdated' => $this->dateTime()->notNull(),
+                    'uid' => $this->uid(),
+                    // Custom columns in the table
+                    'links' => $this->text()->notNull(),
+                ]
+            );
+        }
+
+        return count($this->tablesCreated) > 0;
     }
 
     /**
@@ -135,43 +155,45 @@ class Install extends Migration
      */
     protected function createIndexes()
     {
-        // guide_userguides table
-        $this->createIndex(
-            null,
-            '{{%guide_userguides}}',
-            'authorId',
-            false
-        );
-        $this->createIndex(
-            null,
-            '{{%guide_userguides}}',
-            'elementType',
-            false
-        );
-        $this->createIndex(
-            null,
-            '{{%guide_userguides}}',
-            'format',
-            false
-        );
-        $this->createIndex(
-            null,
-            '{{%guide_userguides}}',
-            'sectionId',
-            false
-        );
-        $this->createIndex(
-            null,
-            '{{%guide_userguides}}',
-            'typeId',
-            false
-        );
-        $this->createIndex(
-            null,
-            '{{%guide_userguides}}',
-            'templatePath',
-            false
-        );
+        if ($this->tablesCreated['userguides'] ?? false) {
+            // guide_userguides table
+            $this->createIndex(
+                null,
+                '{{%guide_userguides}}',
+                'authorId',
+                false
+            );
+            $this->createIndex(
+                null,
+                '{{%guide_userguides}}',
+                'elementType',
+                false
+            );
+            $this->createIndex(
+                null,
+                '{{%guide_userguides}}',
+                'format',
+                false
+            );
+            $this->createIndex(
+                null,
+                '{{%guide_userguides}}',
+                'sectionId',
+                false
+            );
+            $this->createIndex(
+                null,
+                '{{%guide_userguides}}',
+                'typeId',
+                false
+            );
+            $this->createIndex(
+                null,
+                '{{%guide_userguides}}',
+                'templatePath',
+                false
+            );
+        }
     }
 
     /**
@@ -181,16 +203,18 @@ class Install extends Migration
      */
     protected function addForeignKeys()
     {
-        // guide_userguides table
-        $this->addForeignKey(
-            $this->db->getForeignKeyName('{{%guide_userguides}}', 'siteId'),
-            '{{%guide_userguides}}',
-            'siteId',
-            '{{%sites}}',
-            'id',
-            'CASCADE',
-            'CASCADE'
-        );
+        if ($this->tablesCreated['userguides'] ?? false) {
+            // guide_userguides table
+            $this->addForeignKey(
+                $this->db->getForeignKeyName('{{%guide_userguides}}', 'siteId'),
+                '{{%guide_userguides}}',
+                'siteId',
+                '{{%sites}}',
+                'id',
+                'CASCADE',
+                'CASCADE'
+            );
+        }
     }
 
     /**
@@ -200,7 +224,7 @@ class Install extends Migration
      */
     protected function removeTables()
     {
-        // guide_userguides table
+        $this->dropTableIfExists('{{%guide_navigation}}');
         $this->dropTableIfExists('{{%guide_userguides}}');
     }
 }

@@ -30,5 +30,9 @@
                 {% if not loop.last %}<hr>{% endif %}
             {% endfor %}
         {% endif %}
+
+        {% if guideSettings.guideTwoWarnings %}
+            <div class="guide_fpo" style="margin-top: 20px; padding: 20px; font-size: .9rem;">Guide 2.0 is in the works and this feature is getting removed. Communicator is its replacement and it can be <a style="color: white !important; text-decoration: underline !important;" href="{{ url('plugin-store/communicator') }}">found in the Plugin Store</a></div>
+        {% endif %}
     </div>
 </div>

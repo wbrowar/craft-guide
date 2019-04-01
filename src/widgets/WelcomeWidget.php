@@ -91,7 +91,11 @@ class WelcomeWidget extends Widget
     {
         if (Guide::$plugin->getSettings()->enableAllEmailSupport) {
 //            Craft::$app->getView()->registerAssetBundle(WelcomeWidgetWidgetAsset::class);
-            return Craft::$app->getView()->renderTemplate('guide/_components/widgets/WelcomeWidget_body');
+            return Craft::$app->getView()->renderTemplate(
+                'guide/_components/widgets/WelcomeWidget_body',
+                [
+                    'guideSettings' => Guide::$plugin->getSettings(),
+                ]);
         } else {
             return 'Welcome Widget has been disabled. You may remove this widget now.';
         }

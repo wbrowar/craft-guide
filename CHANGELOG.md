@@ -4,15 +4,30 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.4.0 - 2018-03-31
+### Added
+- Added a new `Edit Guide Navigation` permission
+- Added Guide 2.0 deprecation warnings for widget features
+  - Guide 2.0 is in the works! The Email Support, Website Updates, and Welcome Widget will all be removed from Guide in 2.0, but a new plugin, called Communicator, is available for free and includes all of these widgets. You can download it in the Craft Plugin Store: https://plugins.craftcms.com/communicator 
+
+### Changed
+- Bumped the minimum required version of Craft to `3.1.20.1`
+- CP navigation management has been moved from the Guide plugin settings page to its own CP tab
+
+### Fixed
+- Fixed user permissions set in the navigation not getting validated correctly
+
 
 ## 1.3.2 - 2018-09-18
 ### Fixed
 - Fixed an issue that occurred when converting template guides to User Guides on some servers ([#10](https://github.com/wbrowar/craft-3-guide/issues/10))
 
+
 ## 1.3.1 - 2018-08-21
 ### Fixed
 - Fixed an issue that caused subnav to disappear when in Guide CP section pages ([#2](https://github.com/wbrowar/craft-3-guide/issues/2))
 - Fixed a bug that occurred when all Guide Nav items are removed ([#9](https://github.com/wbrowar/craft-3-guide/issues/9))
+
 
 ## 1.3.0 - 2018-07-09
 ### Added

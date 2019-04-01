@@ -8,9 +8,11 @@ Guide is made up of two parts:
 - [The commercial plugin for Craft 3](https://github.com/wbrowar/craft-3-guide)
 - [The open source user guide template](https://github.com/wbrowar/craft-guide-templates)
 
+*Note: The license fee for this plugin is $39.00 via the [Craft Plugin Store](https://plugins.craftcms.com/guide).*
+
 ## Requirements
 
-- This plugin requires Craft CMS 3.0.14 or later.
+- This plugin requires Craft CMS 3.1.20.1 or later.
 - A browser that support CSS Grid Layout and CSS Custom Properties.
 
 ## Installation
@@ -48,8 +50,17 @@ Use templates to create your CMS guide in a way that's easily portable from one 
 
 1. Create an index template in your site's `templates` directory. It can be named whatever you want, but the default is `_guide/index`. So if you create an `index.twig` file and place it in the `./templates/_guide/` directory, it will show up in the Guide CP Section. 
 2. If you want to change your Guide index template's location, edit the path to your new location on the Guide plugin settings page.
-3. You can create multiple pages and link to them through a navigation set in your Guide index template. Configure this code anywhere within your Home template. *NOTE: this code does not need to be located on any other template.*
-    
+3. You can create multiple pages and link to them through a navigation set in the Navigation tab in the Guide CP section.    
+4. Edit your templates as needed. You can use these [style components](https://github.com/wbrowar/craft-3-guide#components) to change the layout.
+5. If you have several sections of content on one page, add the `data-guide-section` attribute to any `h1, h2, h3`, or `h4` to add a drop down navigation that scrolls up and down the page to each section.
+6. Most of Guide's CSS relies on Craft's default Control Panel CSS, but if you need to override styles or add your own CSS, use the [Custom CSS](https://github.com/wbrowar/craft-3-guide#css-variables) field in Guide's plugin settings.
+
+#### Re-usable Guide Templates
+
+Once you've written your first CMS guide, you can re-use the template files for another site—swapping out specific information using [Guide Variables](https://github.com/wbrowar/craft-3-guide#guide-variables)
+
+You can also let your template generate the navigation by placing this code anywhere within your Home template. *NOTE: this code does not need to be located on any other template.*
+
     ```$twig
     {{ updateGuideCpNav({
         'Editing Content': '_guide/edit-entries',
@@ -57,16 +68,8 @@ Use templates to create your CMS guide in a way that's easily portable from one 
         'Forms': { admin: true, template: '_guide/forms' },
     }) }}
     ```
-    
-4. Edit your templates as needed. You can use these [style components](https://github.com/wbrowar/craft-3-guide#components) to change the layout.
 
-5. If you have several sections of content on one page, add the `data-guide-section` attribute to any `h1, h2, h3`, or `h4` to add a drop down navigation that scrolls up and down the page to each section.
-
-6. Most of Guide's CSS relies on Craft's default Control Panel CSS, but if you need to override styles or add your own CSS, use the [Custom CSS](https://github.com/wbrowar/craft-3-guide#css-variables) field in Guide's plugin settings.
-
-7. Once you've written your first CMS guide, you can re-use the template files in another site—swapping out specific information using [Guide Variables](https://github.com/wbrowar/craft-3-guide#guide-variables)
-
-*NOTE: The Guide CP Nav gets created on the first time you load a template that contains the `updateGuideCpNav` Twig tag in it. You may then edit the navigation—or create it from scratch—in Guide Plugin Settings.*
+*NOTE: The Guide CP Nav gets created on the first time you load a template that contains the `updateGuideCpNav` Twig tag in it. You may then edit the navigation—or create it from scratch—on the Navigation CP page.*
 
 ### Guide CP User Guides
 

@@ -213,7 +213,8 @@ class AdminsLog extends Widget
             return Craft::$app->getView()->renderTemplate(
                 'guide/_components/widgets/AdminsLog_body',
                 [
-                    'totalLogs' => $this->totalLogs
+                    'guideSettings' => Guide::$plugin->getSettings(),
+                    'totalLogs' => $this->totalLogs,
                 ]
             );
         } else {

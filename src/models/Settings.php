@@ -64,6 +64,9 @@ class Settings extends Model
     // Path to Guide CP Section templates
     public $guideTemplatePath = '_guide/index';
 
+    // Array of navigation items used in Guide CP Section
+    public $guideTwoWarnings = true;
+
     // Who can edit User Guides
     // all, admin, permission
     public $userGuidesEditableBy = 'admin';

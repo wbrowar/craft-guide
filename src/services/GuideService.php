@@ -10,10 +10,13 @@
 
 namespace wbrowar\guide\services;
 
+use craft\helpers\Json;
 use craft\helpers\StringHelper;
 use function PHPSTORM_META\type;
 use wbrowar\guide\Guide;
+use wbrowar\guide\models\Navigation;
 use wbrowar\guide\models\UserGuide;
+use wbrowar\guide\records\GuideNavigation;
 use wbrowar\guide\records\UserGuides;
 
 use Craft;
@@ -68,6 +71,39 @@ class GuideService extends Component
         }
 
         return false;
+    }
+
+    /**
+     * Gets the navigation for the CP
+     *
+     *     Guide::$plugin->guide->getCpNavigation()
+     *
+     * @return string
+     */
+    public function getCpNavigation()
+    {
+        $loadedNav = GuideNavigation::find()
+            ->one();
+
+        $nav = new Navigation([
+            'links' => ($loadedNav->links ?? false) ? Json::decodeIfJson($loadedNav->links) : [],
+        ]);
+
+        return $nav;
+    }
+
+    /**
+     * Gets the navigation for the CP
+     *
+     *     Guide::$plugin->guide->getCpNavigation()
+     *
+     * @return string
+     */
+    public function getCpNavigationForTemplates()
+    {
+        $navData = $this->getCpNavigation();
+
+        return $navData->links;
     }
 
     /**
@@ -228,24 +264,6 @@ class GuideService extends Component
         }
         $newSettings['customVars'] = $newVars;
 
-        // GUIDE NAV
-        $newNav = [];
-        if (!empty($settings->guideNav)) {
-            $nav = array_values($settings->guideNav);
-
-            // Validate each variable
-            for ($i=0; $i<count($nav); $i++) {
-                if (isset($nav[$i]['permissions']) && is_array($nav[$i]['permissions'])) {
-                    // if the variable is a password, decrypt it
-                    $nav[$i]['permissions'] = implode(',', $nav[$i]['permissions']);
-                }
-
-                // add variable to new customVars array
-                $newNav[] = $nav[$i];
-            }
-        }
-        $newSettings['guideNav'] = $newNav;
-
         return $newSettings;
     }
 
@@ -299,6 +317,34 @@ class GuideService extends Component
      *
      * @return string
      */
+    public function saveCpNavigation(Navigation $model):int
+    {
+        $record = GuideNavigation::find()
+            ->one();
+
+        if (!$record) {
+            $record = new GuideNavigation();
+        }
+
+        $links = [];
+        if (!empty($model->links)) {
+            foreach ($model->links as $link) {
+                $links[] = $link;
+            }
+        }
+
+        $record->links = $links;
+
+        return $record->save();
+    }
+
+    /**
+     * Saves a User Guide based on the supplied parameters.
+     *
+     *     Guide::$plugin->guide->saveUserGuide()
+     *
+     * @return string
+     */
     public function saveUserGuide(UserGuide $model, int $id = null):int
     {
         if ($id ?? false) {
@@ -342,19 +388,20 @@ class GuideService extends Component
      *
      * @return mixed
      */
-    public function updateGuideCpNav($array = [], $force = false):bool
+    public function updateGuideCpNav($array = []):bool
     {
         $newNav = [];
-        $settings = Guide::$plugin->getSettings();
+        $nav = Guide::$plugin->guide->getCpNavigation();
+        $navLinks = $nav->links;
 
-        if ($force || empty($settings['guideNav'])) {
+        if (empty($navLinks)) {
             // Process array values
             foreach ($array as $key => $item) {
                 // Get template path from item
                 if (is_array($item)) {
                     $itemTemplateString = $item['template'] ?? null;
                     $itemAdmin = $item['admin'] ?? false;
-                    $itemPermissions = $item['permissions'] ?? [];
+                    $itemPermissions = ($item['permissions'] ?? false) ? is_array($item['permissions']) ? implode(',', $item['permissions']) : $item['permissions'] : '';
                     $itemSlug = $item['id'] ?? StringHelper::toKebabCase($key);
                     $itemTitle = $item['title'] ?? $key;
                     $userGuideId = $item['userGuideId'] ?? null;
@@ -376,37 +423,19 @@ class GuideService extends Component
 
                 // Add navigation item
                 if (($itemSlug ?? false) && ($itemTitle ?? false)) {
-                    $newNav[$itemSlug] = [
-                        'id' => $itemSlug,
+                    $newNav[] = [
                         'title' => $itemTitle,
+                        'slug' => $itemSlug,
+                        'templatePath' => $itemTemplate ?? '',
+                        'permissions' => $itemPermissions ?? '',
+                        'adminOnly' => $itemAdmin ?? '',
+                        'guideId' => $userGuideId ?? '',
                     ];
-
-                    if ($itemTemplate ?? false) {
-                        $newNav[$itemSlug]['template'] = $itemTemplate;
-                    }
-
-                    if ($itemPermissions ?? false) {
-                        $newNav[$itemSlug]['permissions'] = $itemPermissions;
-                    }
-
-                    if ($itemAdmin ?? false) {
-                        $newNav[$itemSlug]['admin'] = $itemAdmin;
-                    }
-
-                    if ($userGuideId ?? false) {
-                        $newNav[$itemSlug]['userGuideId'] = $userGuideId;
-                    }
                 }
             }
 
-            // Process custom variables before saving
-            $newSettings = Guide::$plugin->guide->prepareCustomVarsForSave($settings);
-            $settings['customVars'] = $newSettings['customVars'];
-
-            // Save Guide settings with Updated Nav
-            $settings['guideNav'] = array_values($newNav);
-
-            Craft::$app->plugins->savePluginSettings(Guide::$plugin, $settings->toArray());
+            $nav->links = $newNav;
+            Guide::$plugin->guide->saveCpNavigation($nav);
         }
 
         return true;
