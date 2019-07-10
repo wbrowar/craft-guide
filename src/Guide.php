@@ -339,9 +339,11 @@ class Guide extends Plugin
         $navItem = parent::getCpNavItem();
         $user = Craft::$app->getUser()->getIdentity();
 
-        $navItem['subnav'] = [
-            'home' => ['label' => 'Guide', 'url' => 'guide'],
-        ];
+        if ((self::$settings->templatePath ?? false) && (self::$settings->assetVolume ?? false)) {
+            $navItem['subnav'] = [
+                'home' => ['label' => 'Guide', 'url' => 'guide'],
+            ];
+        }
 
         if (self::$userOperations['useOrganizer']) {
             $navItem['subnav']['organizer'] = ['label' => 'Organizer', 'url' => 'guide/organizer'];
