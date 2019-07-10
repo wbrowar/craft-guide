@@ -63,6 +63,8 @@ When setting up a guide, you’ll set the following options:
 
 ### Components
 
+![Guide Component](resources/img/guide-component.png)
+
 When using the editor field to create a guide, you’ll see a column of components to the left. Each component can be dragged from the list onto the editor field and the component will be added at the place where the cursor is set.
 
 Components are made up of either plain HTML, Markdown, Twig, or Vue components. HTML and Markdown-based components are meant to be simpler components where only content needs to be changed. Styles may change over time, but the markup will remain the same.
