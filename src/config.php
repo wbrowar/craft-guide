@@ -2,10 +2,10 @@
 /**
  * Guide plugin for Craft CMS 3.x
  *
- * Description
+ * A CMS Guide for Craft CMS.
  *
  * @link      https://wbrowar.com
- * @copyright Copyright (c) 2017 Will Browar
+ * @copyright Copyright (c) 2019 Will Browar
  */
 
 /**
@@ -20,23 +20,11 @@
  * Once copied to 'craft/config', this file will be multi-environment aware as
  * well, so you can have different settings groups for each environment, just as
  * you do for 'general.php'
- *
- * For descriptions of each parameter,
- * look in \wbrowar\guide\modals\Settings.php
  */
 
 return [
-    'customCss' => '',
-    'customVars' => [],
-    'emailSupportContacts' => [],
-    'enableAllUserGuides' => true,
-    'enableAllEmailSupport' => true,
-    'enableAllWelcomeWidget' => true,
-    'enableAllWebsiteUpdates' => true,
-    'enableEmailSupportForm' => true,
-    '$guideNav' => [],
-    'guideTemplatePath' => '_guide/index',
-    'userGuidesEditableBy' => 'admin',
-    'clientName' => '',
-    'myCompanyName' => '',
+
+    // This controls blah blah blah
+    "someAttribute" => true,
+
 ];

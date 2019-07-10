@@ -1,0 +1,35 @@
+{# /**
+ * Guide plugin for Craft CMS
+ *
+ * Guide Widget Body
+ *
+ * @author    Will Browar
+ * @copyright Copyright (c) 2019 Will Browar
+ * @link      https://wbrowar.com
+ * @package   Guide
+ * @since     2.0.0
+ */ #}
+
+{% import "_includes/forms" as forms %}
+
+{% set guideOptions = [] %}
+{% if selectableGuides|length %}
+    {% for item in selectableGuides %}
+        {% set guideOptions = guideOptions|merge([{
+            value: item.id,
+            label: item.title,
+        }]) %}
+    {% endfor %}
+
+    {{ forms.selectField({
+        label: 'Guide',
+        id: 'guideId',
+        name: 'guideId',
+        options: guideOptions,
+        required: true,
+        value: widget.guideId,
+    }) }}
+{% else %}
+    No guides are available for widgets right now.{% if userOperations.useOrganizer %} <a href="{{ url('guide/organizer') }}">Use the Organizer</a> to enable guides for widgets.{% endif %}
+    <input type="hidden" name="guideId" value="0">
+{% endif %}

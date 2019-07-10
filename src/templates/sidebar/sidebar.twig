@@ -1,0 +1,31 @@
+{# /**
+ * Guide plugin for Craft CMS
+ *
+ * Guide Widget Body
+ *
+ * @author    Will Browar
+ * @copyright Copyright (c) 2019 Will Browar
+ * @link      https://wbrowar.com
+ * @package   Guide
+ * @since     2.0.0
+ */ #}
+
+{% if guides|length %}
+    <div class="guide_sidebar guide_styles" data-guide-sidebar>
+        <div class="guide_sidebar__header">
+            {% include 'guide/_partials/guide_header.twig' with {
+                settings: settings,
+                title: guides|length > 1 ? 'Guides' : 'Guide',
+            } only %}
+        </div>
+
+        {% for item in guides %}
+            <div class="guide_sidebar__toggle">
+                <div class="guide_sidebar__toggle__title" data-modal-id="{{ item.slug }}">{{ item.title }}</div>
+                {% if userOperations.editGuides %}
+                    <div><a class="guide_sidebar__toggle__button btn small" href="{{ url('guide/edit/' ~ item.id, 'return=' ~ craft.app.request.url) }}">Edit</a></div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}

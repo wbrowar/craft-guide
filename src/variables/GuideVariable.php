@@ -2,31 +2,23 @@
 /**
  * Guide plugin for Craft CMS 3.x
  *
- * dd
+ * A CMS Guide for Craft CMS.
  *
- * @link      http://dd.com
- * @copyright Copyright (c) 2018 dd
+ * @link      https://wbrowar.com
+ * @copyright Copyright (c) 2019 Will Browar
  */
 
 namespace wbrowar\guide\variables;
 
-use craft\elements\Asset;
-use craft\helpers\Db;
+use craft\helpers\Template;
 use wbrowar\guide\Guide;
 
 use Craft;
 
 /**
- * Guide Variable
- *
- * Craft allows plugins to provide their own template variables, accessible from
- * the {{ craft }} global variable (e.g. {{ craft.guide }}).
- *
- * https://craftcms.com/docs/plugins/variables
- *
- * @author    dd
+ * @author    Will Browar
  * @package   Guide
- * @since     1.0.0
+ * @since     2.0.0
  */
 class GuideVariable
 {
@@ -34,47 +26,51 @@ class GuideVariable
     // =========================================================================
 
     /**
-     * Whatever you want to output to a Twig template can go into a Variable method.
-     * You can have as many variable functions as you want.  From any Twig template,
-     * call it like this:
-     *
-     *     {{ craft.guide.exampleVariable }}
-     *
-     * Or, if your variable requires parameters from Twig:
-     *
-     *     {{ craft.guide.exampleVariable(twigValue) }}
-     *
-     * @param null $optional
-     * @return string
+     * @return mixed
      */
-    public function asset($fileName, $type = 'image')
+    public function component($handle, $options = [])
     {
-        $output = '';
+        return Template::raw(Guide::$plugin->guideComponents->renderComponent($handle, $options));
+    }
 
-        switch ($type) {
-            case 'image':
-                $file = Asset::find()
-                    ->filename(Db::escapeParam($fileName))
-                    ->one();
+    /**
+     * @return mixed
+     */
+    public function getAll($params = [], $queryType = 'all')
+    {
+        return Guide::$plugin->guide->getGuides($params, $queryType);
+    }
 
-                if ($file) {
-                    $output = '<img src="' . $file->getUrl() . '" alt="' . $file->title . '">';
-                }
+    /**
+     * @return mixed
+     */
+    public function getAllForUser($params = [], $queryType = 'all')
+    {
+        return Guide::$plugin->guide->getGuidesForUser($params, $queryType);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOne($params = [])
+    {
+        return Guide::$plugin->guide->getGuides($params, 'one');
+    }
+
+    /**
+     * @return string|null
+     */
+    public function var($variable)
+    {
+        switch ($variable) {
+            case 'clientName':
+                $value = !empty(Guide::$settings->clientName) ? Guide::$settings->clientName : Template::raw('<span class="fpo">Client Name</span>');
+                break;
+            case 'myCompanyName':
+                $value = !empty(Guide::$settings->myCompanyName) ? Guide::$settings->myCompanyName : Template::raw('<span class="fpo">My Company Name</span>');
                 break;
         }
 
-//        Craft::dd(htmlspecialchars($output));
-
-        return $output;
-    }
-
-    public function query($params = [], $queryType = 'all')
-    {
-        return Guide::$plugin->guide->getUserGuides($params, $queryType);
-    }
-
-    public function var($name)
-    {
-        return Guide::$plugin->guide->getGuideVariableValue($name);
+        return $value ?? null;
     }
 }

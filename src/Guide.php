@@ -2,275 +2,258 @@
 /**
  * Guide plugin for Craft CMS 3.x
  *
- * Description
+ * A CMS Guide for Craft CMS.
  *
  * @link      https://wbrowar.com
- * @copyright Copyright (c) 2017 Will Browar
+ * @copyright Copyright (c) 2019 Will Browar
  */
 
 namespace wbrowar\guide;
 
-use craft\elements\Entry;
-use craft\events\PluginEvent;
+use craft\events\RegisterTemplateRootsEvent;
 use craft\events\RegisterUserPermissionsEvent;
-use craft\helpers\StringHelper;
+use craft\fields\data\ColorData;
+use craft\helpers\FileHelper;
+use craft\helpers\UrlHelper;
 use craft\services\UserPermissions;
-use wbrowar\guide\services\GuideService as GuideServiceService;
+use craft\web\View;
+use wbrowar\guide\assetbundles\Guide\GuideAsset;
+use wbrowar\guide\services\Guide as GuideService;
+use wbrowar\guide\services\GuideComponents as GuideComponentsService;
+use wbrowar\guide\services\Organizer as OrganizerService;
+use wbrowar\guide\variables\GuideVariable;
 use wbrowar\guide\twigextensions\GuideTwigExtension;
 use wbrowar\guide\models\Settings;
-use wbrowar\guide\widgets\AdminsLog;
-use wbrowar\guide\widgets\EmailSupport as EmailSupportWidget;
-use wbrowar\guide\widgets\GuideWidget as GuideWidgetWidget;
-use wbrowar\guide\widgets\WelcomeWidget;
-use wbrowar\guide\assetbundles\guide\GuideAsset;
-use wbrowar\adminbar\events\AdminBarRenderEvent;
-use wbrowar\adminbar\services\Bar;
+use wbrowar\guide\utilities\ExportGuideTemplate as ExportGuideTemplateUtility;
+use wbrowar\guide\widgets\Guide as GuideWidget;
 
 use Craft;
 use craft\base\Plugin;
-use craft\web\UrlManager;
-use craft\web\View;
-use craft\services\Dashboard;
 use craft\services\Plugins;
+use craft\events\PluginEvent;
+use craft\web\UrlManager;
+use craft\services\Utilities;
+use craft\web\twig\variables\CraftVariable;
+use craft\services\Dashboard;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterUrlRulesEvent;
 
 use yii\base\Event;
 
 /**
- * Craft plugins are very much like little applications in and of themselves. We’ve made
- * it as simple as we can, but the training wheels are off. A little prior knowledge is
- * going to be required to write a plugin.
- *
- * For the purposes of the plugin docs, we’re going to assume that you know PHP and SQL,
- * as well as some semi-advanced concepts like object-oriented programming and PHP namespaces.
- *
- * https://craftcms.com/docs/plugins/introduction
+ * Class Guide
  *
  * @author    Will Browar
  * @package   Guide
- * @since     1.0.0
+ * @since     2.0.0
  *
- * @property  GuideServiceService $guide
- * @property  Settings $settings
- * @method    Settings getSettings()
+ * @property  GuideService $guide
+ * @property  OrganizerService $organizer
+ * @property  GuideComponentsService $guideComponents
  */
 class Guide extends Plugin
 {
+    // Constants
+    // =========================================================================
+    const EDITION_LITE = 'lite';
+    const EDITION_PRO = 'pro';
+
     // Static Properties
     // =========================================================================
 
     /**
-     * Static property that is an instance of this plugin class so that it can be accessed via
-     * Guide::$plugin
-     *
+     * @var bool
+     */
+    public static $pro;
+
+    /**
      * @var Guide
      */
     public static $plugin;
 
-    public $schemaVersion = '1.4.0';
+    /**
+     * @var Settings
+     */
+    public static $settings;
 
-    public $adminBarWidgets = [[
-        'description' => 'Display the Content Guide for the current entry.',
-        'handle' => 'guide-for-entry',
-        'iconPath' => 'icon-mask.svg',
-        'layout' => 'center',
-        'name' => 'Content Guide',
-        'template' => 'guide/adminbar_guide_for_entry',
-    ]];
+    /**
+     * @var array
+     */
+    public static $userOperations;
+
+    /**
+     * @var View
+     */
+    public static $view;
+
+    // Public Properties
+    // =========================================================================
+
+    /**
+     * @var string
+     */
+    public $schemaVersion = '2.0.0';
 
     // Public Methods
     // =========================================================================
 
     /**
-     * Set our $plugin static property to this class so that it can be accessed via
-     * Guide::$plugin
-     *
-     * Called after the plugin class is instantiated; do any one-time initialization
-     * here such as hooks and events.
-     *
-     * If you have a '/vendor/autoload.php' file, it will be loaded for you automatically;
-     * you do not need to load it in your init() method.
-     *
+     * @inheritdoc
      */
     public function init()
     {
         parent::init();
         self::$plugin = $this;
+        self::$pro = self::$plugin->is(Guide::EDITION_PRO);
+        self::$settings = $this->getSettings();
+        self::$userOperations = $this->_getUserOperations();
+        self::$view = Craft::$app->getView();
 
-        // Add in our Twig extensions
-        Craft::$app->view->registerTwigExtension(new GuideTwigExtension());
+        // Add our services
+        $this->setComponents([
+            'guide' => 'wbrowar\guide\services\Guide',
+            'guideComponents' => 'wbrowar\guide\services\GuideComponents',
+            'organizer' => 'wbrowar\guide\services\Organizer',
+        ]);
 
-        // Add our CSS
-        $view = Craft::$app->getView();
-
-        // Add custom permissions
-        if (Craft::$app->getEdition() > 0) {
-            Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
-                $event->permissions[\Craft::t('guide', 'Guides')] = [
-                    'editGuides' => ['label' => \Craft::t('guide', 'Edit Guides')],
-                    'editGuideNavigation' => ['label' => \Craft::t('guide', 'Edit Guide Navigation')],
-                    'deleteGuides' => ['label' => \Craft::t('guide', 'Delete Guides')],
-                ];
-            });
-        }
-
-        Event::on( Plugins::class, Plugins::EVENT_BEFORE_SAVE_PLUGIN_SETTINGS, function(PluginEvent $event) {
-            if ($event->plugin->getHandle() === 'guide') {
-                //$settings = $event->plugin->getSettings();
-                $params = Craft::$app->request->getBodyParams();
-                $settingsFromPost = $params['settings'] ?? null;
-                $newSettings = [];
-
-                // Validate each variable
-                $vars = $settingsFromPost['customVars'] ?? null;
-                $customVars = [];
-                if ($vars ?? false) {
-                    for ($i=0; $i<count($vars); $i++) {
-                        if (($vars[$i]['varKey'] ?? false) && ($vars[$i]['varValue'] ?? false)) {
-                            if ($vars[$i]['varType'] === 'password') {
-                                // if the variable is a password, encrypt it
-                                $vars[$i]['varValue'] = StringHelper::encenc($vars[$i]['varValue']);
-                            }
-
-                            // add variable to new customVars array
-                            $customVars[] = $vars[$i];
-                        }
-                    }
-                    $newSettings['customVars'] = $customVars;
-                }
-
-                // Validate nav items
-                $nav = $settingsFromPost['guideNav'] ?? null;
-                $navCount = 0;
-
-                if ($nav ?? false) {
-                    for ($i=0; $i<count($nav); $i++) {
-                        if (!empty($nav[$i]['id'])) {
-                            $navCount++;
-                        }
-                    }
-                    $guideNav = $navCount > 0 ? $settingsFromPost['guideNav'] : [];
-                    $newSettings['guideNav'] = $guideNav;
-                }
-
-                // add all custom variables back in to plugin settings
-                if (!empty($newSettings)) {
-                    Guide::$plugin->setSettings($newSettings);
-                }
+        if (self::$view->getTemplateMode() === View::TEMPLATE_MODE_CP) {
+            // Add in our asset bundle
+            if (!Craft::$app->getRequest()->isConsoleRequest) {
+                self::$view->registerAssetBundle(GuideAsset::class);
             }
-        });
 
-        if (class_exists(Bar::class)) {
-            Event::on(Bar::class, Bar::EVENT_ADMIN_BAR_BEFORE_RENDER, function(AdminBarRenderEvent $event) {
-                // Get the entry from the $event var
-                $entry = $event->entry;
+            // Add in our Twig extensions
+            self::$view->registerTwigExtension(new GuideTwigExtension());
 
-                if ($entry) {
-                    // Check for a Content Guide for this entry
-                    $total = Guide::$plugin->guide->getUserGuides([
-                        'sectionId' => $entry->sectionId,
-                        'typeId' => $entry->sectionId,
-                    ], 'count');
+            // Add our variables
+            Event::on(
+                CraftVariable::class,
+                CraftVariable::EVENT_INIT,
+                function (Event $event) {
+                    /** @var CraftVariable $variable */
+                    $variable = $event->sender;
+                    $variable->set('guide', GuideVariable::class);
+                }
+            );
 
-                    // If no guide exists, disable the widget
-                    if ($total < 1) {
-                        $this->adminBarWidgets[0]['enabled'] = false;
-                    }
+            // Insert JS into CP
+            Event::on(View::class, View::EVENT_BEFORE_RENDER_TEMPLATE, function() {
+                $assetDist = self::$view->getAssetManager()->getPublishedUrl('@wbrowar/guide/assetbundles/guide/dist');
+                $js = 'window.WBGuideAssets = "' . $assetDist . '";';
+                $js .= 'window.WBJsDevMode = window.WBJsDevMode || ' . (Craft::$app->getConfig()->getGeneral()->devMode ? 'true' : 'false') . ';';
+                self::$view->registerJs($js, 1);
+
+                if (self::$pro && (self::$settings['rebrand'] ?? false)) {
+                    self::$view->registerCss($this->_generateCustomCssFromRebrand(self::$settings['rebrand']));
                 }
             });
-        }
 
-        if ($view->getTemplateMode() === View::TEMPLATE_MODE_CP) {
-            Event::on(View::class, View::EVENT_BEFORE_RENDER_TEMPLATE, function() {
-                $view = Craft::$app->getView();
-                $view->registerAssetBundle(GuideAsset::class);
-                $view->registerCss($this->getSettings()->customCss);
-            });
+            // Add template routes
+            Event::on(
+                View::class,
+                View::EVENT_REGISTER_CP_TEMPLATE_ROOTS,
+                function(RegisterTemplateRootsEvent $event) {
+                    if ($this->getSettings()->templatePath ?? false) {
+                        $oldMode = self::$view->getTemplateMode();
+                        self::$view->setTemplateMode(self::$view::TEMPLATE_MODE_SITE);
+                        $templatePath = self::$view->getTemplatesPath() . '/' . $this->getSettings()->templatePath . '/';
+                        self::$view->setTemplateMode($oldMode);
+                        $event->roots['guide_template_path'] = $templatePath;
+                    }
+                }
+            );
 
-            // Register our CP routes
+            // Add CP URLs
             Event::on(
                 UrlManager::class,
                 UrlManager::EVENT_REGISTER_CP_URL_RULES,
                 function (RegisterUrlRulesEvent $event) {
-                    $settings = $this->getSettings();
+                    $event->rules['guide'] = ['template' => 'guide/index', 'variables' => ['organizer' => self::$plugin->organizer->getOrganizer(), 'settings' => self::$settings, 'userOperations' => self::$userOperations]];
+                    $event->rules['guide/welcome'] = ['template' => 'guide/welcome', 'variables' => ['settings' => self::$settings]];
+                    $event->rules['guide/page/<slug:(.*)>'] = ['template' => 'guide/page', 'variables' => ['organizer' => self::$plugin->organizer->getOrganizer(), 'settings' => self::$settings, 'userOperations' => self::$userOperations]];
+                    $event->rules['guide/settings/general'] = ['template' => 'guide/settings', 'variables' => ['proEdition' => self::$pro, 'selectedTab' => 'general', 'settings' => self::$settings]];
+                    $event->rules['guide/settings/variables'] = ['template' => 'guide/settings', 'variables' => ['proEdition' => self::$pro, 'selectedTab' => 'variables', 'settings' => self::$settings]];
 
-                    $userCanDelete = Guide::$plugin->guide->userCanDeleteUserGuides();
-                    $userCanEdit = $settings->enableAllUserGuides && Guide::$plugin->guide->userCanEditUserGuides();
+                    if (self::$userOperations['editGuides']) {
+                        $editVariables = [
+                            'assetComponents' => self::$plugin->guideComponents->getAssetComponents(),
+                            'components' => self::$plugin->guideComponents->getComponentsList('settings'),
+                            'proEdition' => self::$pro,
+                            'settings' => self::$settings,
+                            'templates' => $this->_getTemplatesFromUserTemplatePath(),
+                            'userOperations' => self::$userOperations,
+                        ];
 
-                    // Check to see if user's template exists
-                    $oldMode = Craft::$app->view->getTemplateMode();
-                    Craft::$app->view->setTemplateMode(View::TEMPLATE_MODE_SITE);
-                    if (Craft::$app->view->doesTemplateExist($settings->guideTemplatePath)) {
-                        $guideTemplatePath = Craft::$app->view->resolveTemplate($settings->guideTemplatePath);
+                        $editVariables['title'] = 'New Guide';
+                        $event->rules['guide/new'] = ['template' => 'guide/edit', 'variables' => $editVariables];
 
-                        $guideTemplatePathAsString = $this->_getTemplateFileAsString($guideTemplatePath);
-                    } else {
-                        $guideTemplatePathAsString = null;
+                        $editVariables['title'] = 'Edit Guide';
+                        $event->rules['guide/edit/<guideId:\d{1,}>'] = ['template' => 'guide/edit', 'variables' => $editVariables];
+                    }
+                    if (self::$userOperations['deleteGuides']) {
+                        $event->rules['guide/delete/<guideId:\d{1,}>'] = ['template' => 'guide/delete', 'variables' => ['userOperations' => self::$userOperations]];
+                    }
+                    if (self::$userOperations['useOrganizer']) {
+                        $event->rules['guide/organizer'] = ['template' => 'guide/organizer', 'variables' => ['organizerConfig' => self::$plugin->organizer->getOrganizerConfig(), 'settings' => self::$settings, 'userOperations' => self::$userOperations]];
                     }
 
-                    // Register CP Section templates
-                    $guideNav = Guide::$plugin->guide->getCpNavigationForTemplates();
-                    if (!empty($guideNav)) {
-                        for ($i=0; $i<count($guideNav); $i++) {
-                            $navItemVars = ['guideNav' => $guideNav, 'pageContent' => '', 'settings' => $settings, 'templatePath' => $guideNav[$i]['templatePath'] ?? null, 'title' => $guideNav[$i]['title'], 'userCanEdit' => $userCanEdit, 'userCanDelete' => $userCanDelete];
-
-                            if ($guideNav[$i]['guideId'] ?? false) {
-                                $navItemVars['userGuideId'] = $guideNav[$i]['guideId'];
-                            } else if ($guideNav[$i]['templatePath'] ?? false) {
-                                $templatePath = Craft::$app->view->resolveTemplate($guideNav[$i]['templatePath']);
-                                $navItemVars['pageContent'] = $this->_getTemplateFileAsString($templatePath);
-                                $navItemPageContent = $navItemVars['pageContent'];
-                            }
-                            
-//                            Craft::dd($guideNav[$i]);
-
-                            $event->rules['guide/page/' . $guideNav[$i]['slug']] = ['template' => 'guide/index', 'variables' => $navItemVars];
-                            $guideNav[$i]['pageContent'] = $navItemPageContent ?? null;
-                        }
-                    }
-
-                    // Register CP Section home templates
-                    $event->rules['guide'] = ['template' => 'guide/index', 'variables' => ['pageContent' => $guideTemplatePathAsString, 'settings' => $settings, 'templatePath' => $settings->guideTemplatePath, 'title' => 'Guide', 'guideNav' => $guideNav, 'userCanEdit' => $userCanEdit]];
-                    $event->rules['guide/home'] = ['template' => 'guide/home'];
-                    $event->rules['guide/components'] = ['template' => 'guide/index', 'variables' => ['settings' => $settings, 'title' => 'Guide Components', 'guideNav' => $guideNav]];
-                    $event->rules['guide/new'] = ['template' => 'guide/edit', 'variables' => ['settings' => $settings, 'title' => 'New User Guide', 'guideNav' => $guideNav, 'userCanEdit' => $userCanEdit, 'userCanDelete' => $userCanDelete]];
-                    $event->rules['guide/new/<templatePath:(.*)>'] = ['template' => 'guide/edit', 'variables' => ['settings' => $settings, 'title' => 'New User Guide', 'guideNav' => $guideNav, 'userCanEdit' => $userCanEdit, 'userCanDelete' => $userCanDelete]];
-                    $event->rules['guide/edit/<guideId:\d{1,}>'] = ['template' => 'guide/edit', 'variables' => ['settings' => $settings, 'title' => 'Edit User Guide', 'guideNav' => $guideNav, 'userCanEdit' => $userCanEdit, 'userCanDelete' => $userCanDelete]];
-                    $event->rules['guide/navigation'] = ['template' => 'guide/edit_guide_navigation', 'variables' => ['settings' => $settings, 'guideNav' => $guideNav, 'title' => 'Navigation']];
-                    $event->rules['guide/delete/<guideId:\d{1,}>'] = ['template' => 'guide/delete', 'variables' => ['userCanEdit' => $userCanEdit, 'userCanDelete' => $userCanDelete]];
-                    $event->rules['guide/website-updates'] = ['template' => 'guide/website_updates_settings', 'variables' => ['settings' => $settings, 'title' => 'Website Updates']];
-                    $event->rules['guide/welcome-widget'] = ['template' => 'guide/welcome_widget_settings', 'variables' => ['settings' => $settings, 'title' => 'Welcome Widget']];
-
-                    Craft::$app->view->setTemplateMode($oldMode);
-                }
-            );
-
-            // Register our widgets
-            Event::on(
-                Dashboard::class,
-                Dashboard::EVENT_REGISTER_WIDGET_TYPES,
-                function (RegisterComponentTypesEvent $event) {
-                    $event->types[] = GuideWidgetWidget::class;
-                    if ($this->getSettings()->enableAllWebsiteUpdates) {
-                        $event->types[] = AdminsLog::class;
-                    }
-                    if ($this->getSettings()->enableAllEmailSupport) {
-                        $event->types[] = EmailSupportWidget::class;
-                    }
-                    if ($this->getSettings()->enableAllWelcomeWidget) {
-                        $event->types[] = WelcomeWidget::class;
+                    if (self::$pro) {
+                        $event->rules['guide/settings/components'] = ['template' => 'guide/settings', 'variables' => ['components' => self::$plugin->guideComponents->getComponentsList(), 'proEdition' => self::$pro, 'selectedTab' => 'components', 'settings' => self::$settings]];
+                        $event->rules['guide/settings/rebrand'] = ['template' => 'guide/settings', 'variables' => ['proEdition' => self::$pro, 'selectedTab' => 'rebrand', 'settings' => self::$settings]];
                     }
                 }
             );
+        }
+
+        // Default events
+
+        // Pro events
+        if (self::$pro) {
+            // Add custom permissions
+            if (Craft::$app->getEdition() > 0) {
+                Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
+                    $event->permissions[Craft::t('guide', 'Guide')] = [
+                        'editGuides' => ['label' => Craft::t('guide', 'Edit Guides')],
+                        'setAccessPermissions' => ['label' => Craft::t('guide', 'Set Guide Access Permissions')],
+                        'deleteGuides' => ['label' => Craft::t('guide', 'Delete Guides')],
+                        'useOrganizer' => ['label' => Craft::t('guide', 'Use Organizer')],
+                    ];
+                });
+            }
 
             // Add CP Buttons
+            Craft::$app->view->hook('cp.categories.edit.details', function(&$context) {
+                if ($context['category'] ?? false) {
+                    // Render sidebar template
+                    return self::$view->renderTemplate('guide/sidebar/sidebar', [
+                        'guides' => self::$plugin->guide->getGuidesForUser(['parentUid' => $context['category']->group->uid, 'parentType' => 'sidebar']),
+                        'settings' => self::$settings,
+                        'userOperations' => self::$userOperations,
+                    ]);
+                }
+
+                return false;
+            });
             Craft::$app->view->hook('cp.entries.edit.details', function(&$context) {
                 if ($context['entry'] ?? false) {
-                    if ($this->getSettings()->enableAllUserGuides) {
-                        // return sidebar template
-                        return Guide::$plugin->guide->renderUserGuideTemplate('guide/_user_guide/user_guide_sidebar', $context['entry']);
-                    }
+                    // Render sidebar template
+                    return self::$view->renderTemplate('guide/sidebar/sidebar', [
+                        'guides' => self::$plugin->guide->getGuidesForUser(['parentUid' => $context['entry']->section->uid, 'parentType' => 'sidebar']),
+                        'settings' => self::$settings,
+                        'userOperations' => self::$userOperations,
+                    ]);
+                }
+
+                return false;
+            });
+            Craft::$app->view->hook('cp.users.edit.details', function(&$context) {
+                if ($context['user'] ?? false) {
+                    // Render sidebar template
+                    return self::$view->renderTemplate('guide/sidebar/sidebar', [
+                        'guides' => self::$plugin->guide->getGuidesForUser(['parentType' => 'user']),
+                        'settings' => self::$settings,
+                        'userOperations' => self::$userOperations,
+                    ]);
                 }
 
                 return false;
@@ -278,39 +261,69 @@ class Guide extends Plugin
 
             // add modal template to footer
             Event::on(View::class, View::EVENT_END_BODY, function(Event $event) {
-                $id = Craft::$app->controller->actionParams['entryId'] ?? null;
+//                Craft::dd(Craft::$app->controller->actionParams);
+                if (Craft::$app->controller->actionParams['entryId'] ?? false) {
+                    $element = Craft::$app->getSections()->getSectionByHandle(Craft::$app->controller->actionParams['section']);
 
-                if ($id) {
-                    $entry = Entry::find()
-                        ->id($id)
-                        ->status(null)
-                        ->one();
+                    if ($element ?? false) {
+                        $guides = self::$plugin->guide->getGuides([
+                            'parentType' => 'sidebar',
+                            'parentUid' => $element->uid,
+                        ]);
+                    }
+                } else if (Craft::$app->controller->actionParams['categoryId'] ?? false) {
+                    $element = Craft::$app->getCategories()->getGroupByHandle(Craft::$app->controller->actionParams['groupHandle']);
+                    
+                    if ($element ?? false) {
+                        $guides = self::$plugin->guide->getGuides([
+                            'parentType' => 'sidebar',
+                            'parentUid' => $element->uid,
+                        ]);
+                    }
+                } else if (Craft::$app->controller->actionParams['userId'] ?? false) {
+                    $guides = self::$plugin->guide->getGuides([
+                        'parentType' => 'user',
+                    ]);
+                }
 
-                    echo Guide::$plugin->guide->renderUserGuideTemplate('guide/_user_guide/user_guide_modal', $entry);
+                if ($guides ?? false) {
+                    echo self::$view->renderTemplate('guide/_partials/render_guide_modals', ['guides' => $guides]);
                 }
             });
+
+            // Add our utilities
+            Event::on(
+                Utilities::class,
+                Utilities::EVENT_REGISTER_UTILITY_TYPES,
+                function (RegisterComponentTypesEvent $event) {
+                    $event->types[] = ExportGuideTemplateUtility::class;
+                }
+            );
+
+            // Add our widgets
+            Event::on(
+                Dashboard::class,
+                Dashboard::EVENT_REGISTER_WIDGET_TYPES,
+                function (RegisterComponentTypesEvent $event) {
+                    $event->types[] = GuideWidget::class;
+                }
+            );
         }
 
+        Event::on(
+            Plugins::class,
+            Plugins::EVENT_AFTER_INSTALL_PLUGIN,
+            function (PluginEvent $event) {
+                if ($event->plugin === $this) {
+                    // Send them to our welcome screen
+                    $request = Craft::$app->getRequest();
+                    if ($request->isCpRequest) {
+                        Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('guide/welcome'))->send();
+                    }
+                }
+            }
+        );
 
-
-        /**
-         * Logging in Craft involves using one of the following methods:
-         *
-         * Craft::trace(): record a message to trace how a piece of code runs. This is mainly for development use.
-         * Craft::info(): record a message that conveys some useful information.
-         * Craft::warning(): record a warning message that indicates something unexpected has happened.
-         * Craft::error(): record a fatal error that should be investigated as soon as possible.
-         *
-         * Unless `devMode` is on, only Craft::warning() & Craft::error() will log to `craft/storage/logs/web.log`
-         *
-         * It's recommended that you pass in the magic constant `__METHOD__` as the second parameter, which sets
-         * the category to the method (prefixed with the fully qualified class name) where the constant appears.
-         *
-         * To enable the Yii debug toolbar, go to your user account in the AdminCP and check the
-         * [] Show the debug toolbar on the front end & [] Show the debug toolbar on the Control Panel
-         *
-         * http://www.yiiframework.com/doc-2.0/guide-runtime-logging.html
-         */
         Craft::info(
             Craft::t(
                 'guide',
@@ -324,36 +337,40 @@ class Guide extends Plugin
     public function getCpNavItem()
     {
         $navItem = parent::getCpNavItem();
+        $user = Craft::$app->getUser()->getIdentity();
 
         $navItem['subnav'] = [
             'home' => ['label' => 'Guide', 'url' => 'guide'],
         ];
 
-        if (Craft::$app->getUser()->getIsAdmin() || Craft::$app->getUser()->checkPermission('editGuideNavigation')) {
-            $navItem['subnav']['navigation'] = ['label' => 'Navigation', 'url' => 'guide/navigation'];
+        if (self::$userOperations['useOrganizer']) {
+            $navItem['subnav']['organizer'] = ['label' => 'Organizer', 'url' => 'guide/organizer'];
         }
-        if (Craft::$app->getUser()->getIsAdmin() || Craft::$app->getUser()->checkPermission('editGuides')) {
-            $navItem['subnav']['components'] = ['label' => 'Guide Components', 'url' => 'guide/components'];
-        }
-        if (Craft::$app->getUser()->getIsAdmin()) {
-            if ($this->getSettings()->enableAllWebsiteUpdates) {
-                $navItem['subnav']['websiteUpdatesSettings'] = ['label' => 'Website Updates', 'url' => 'guide/website-updates'];
-            }
-            if ($this->getSettings()->enableAllWelcomeWidget) {
-                $navItem['subnav']['welcomeWidgetSettings'] = ['label' => 'Welcome Widget', 'url' => 'guide/welcome-widget'];
-            }
+
+        if ($user->admin && Craft::$app->getConfig()->getGeneral()->allowAdminChanges) {
+            $navItem['subnav']['settings'] = ['label' => 'Settings', 'url' => 'guide/settings/general'];
         }
 
         return $navItem;
+    }
+
+    /**
+     * Set plugin editions
+     */
+
+    public static function editions(): array
+    {
+        return [
+            self::EDITION_LITE,
+            self::EDITION_PRO,
+        ];
     }
 
     // Protected Methods
     // =========================================================================
 
     /**
-     * Creates and returns the model used to store the plugin’s settings.
-     *
-     * @return \craft\base\Model|null
+     * @inheritdoc
      */
     protected function createSettingsModel()
     {
@@ -361,35 +378,121 @@ class Guide extends Plugin
     }
 
     /**
-     * Returns the rendered settings HTML, which will be inserted into the content
-     * block on the settings page.
-     *
-     * @return string The rendered settings HTML
+     * @inheritdoc
      */
-    protected function settingsHtml(): string
+    public function getSettingsResponse()
     {
-        $settings = $this->getSettings();
-
-        $newSettings = Guide::$plugin->guide->prepareCustomVarsForSave($settings);
-        $settings['customVars'] = $newSettings['customVars'];
-
-        return Craft::$app->view->renderTemplate(
-            'guide/settings',
-            [
-                'settings' => $this->getSettings(),
-            ]
-        );
+        // Just redirect to the plugin settings page
+        Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('guide/settings/general'));
     }
 
-    public function _getTemplateFileAsString($file)
-    {
-        if (is_readable($file))
-        {
-            $source = file_get_contents($file);
+    // Private Methods
+    // =========================================================================
 
-            return $source;
+    /**
+     * @return string
+     */
+    private function _generateCustomCssFromRebrand($rebrand):string
+    {
+        $css = '';
+
+        $properties = [
+            'gridGap' => 'grid-gap',
+            'headerIconWidth' => 'header-icon-width',
+            'headerIconHeight' => 'header-icon-height',
+            'maxWidthText' => 'max-width-text',
+        ];
+
+        foreach ($properties as $key => $property) {
+            if ($rebrand[$key] ?? false) {
+                $css .= '--' . $property . ':' . $rebrand[$key] . ';';
+            }
         }
 
-        return false;
+        $colors = [
+            'anchor' => 'anchor',
+            'anchorHover' => 'anchor_hover',
+            'border' => 'border',
+            'buttonBg' => 'button_bg',
+            'buttonText' => 'button_text',
+            'codeBg' => 'code_bg',
+            'codeText' => 'code_text',
+            'contentBg' => 'content_bg',
+            'contentHeader' => 'content_header',
+            'contentText' => 'content_text',
+            'headerBg' => 'header_bg',
+            'headerText' => 'header_text',
+            'pageSidebarBg' => 'page_sidebar_bg',
+            'pageSidebarButtonBg' => 'page_sidebar_button_bg',
+            'pageSidebarButtonText' => 'page_sidebar_button_text',
+            'pageSidebarButtonTextHover' => 'page_sidebar_button_text_hover',
+            'tableHeadBg' => 'table_head_bg',
+            'tableHeadText' => 'table_head_text',
+            'tip' => 'tip',
+        ];
+
+        foreach ($colors as $key => $color) {
+            if ($rebrand[$key] ?? false) {
+                $colorData = new ColorData($rebrand[$key]);
+                $css .= '--color-' . $color . '-rgb:' . $colorData->getRed() . ',' . $colorData->getGreen() . ',' . $colorData->getBlue() . ';';
+            }
+        }
+
+        $css = '.guide_styles{' . $css . '}';
+
+        if ($rebrand['customCss']) {
+            $css .= $rebrand['customCss'];
+        }
+
+        return $css;
+    }
+
+    /**
+     * @return array
+     */
+    private function _getTemplatesFromUserTemplatePath():array
+    {
+        $templates = ['__none__' => 'Select a Template'];
+
+        $oldMode = Craft::$app->getView()->getTemplateMode();
+        Craft::$app->getView()->setTemplateMode(View::TEMPLATE_MODE_SITE);
+        $userTemplatePath = Craft::$app->getView()->getTemplatesPath() . '/' . self::$settings->templatePath;
+
+        if (is_dir($userTemplatePath) ?? false) {
+            $filesInDirectory = FileHelper::findFiles(Craft::$app->getView()->getTemplatesPath() . '/' . self::$settings->templatePath, ['only' => ['*.html', '*.md', '*.twig']]);
+
+            foreach ($filesInDirectory as $item) {
+                $template = str_replace($userTemplatePath . '/', '', $item);
+                $templates[$template] = $template;
+            }
+        }
+
+        Craft::$app->getView()->setTemplateMode($oldMode);
+
+        return $templates;
+    }
+
+    /**
+     * @return array
+     */
+    private function _getUserOperations():array
+    {
+        $operations = [];
+
+        if (Craft::$app->getUser()->getIdentity()) {
+            $user = Craft::$app->getUser()->getIdentity();
+
+            $operations['editGuides'] = $user->admin || $user->can('editGuides');
+            $operations['setAccessPermissions'] = $user->admin || $user->can('setAccessPermissions');
+            $operations['deleteGuides'] = $user->admin || $user->can('deleteGuides');
+            $operations['useOrganizer'] = $user->admin || $user->can('useOrganizer');
+        } else {
+            $operations['editGuides'] = false;
+            $operations['setAccessPermissions'] = false;
+            $operations['deleteGuides'] = false;
+            $operations['useOrganizer'] = false;
+        }
+
+        return $operations;
     }
 }

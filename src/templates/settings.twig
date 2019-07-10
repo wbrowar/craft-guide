@@ -1,245 +1,341 @@
+{# /**
+ * Guide plugin for Craft CMS
+ *
+ * Guide Widget Body
+ *
+ * @author    Will Browar
+ * @copyright Copyright (c) 2019 Will Browar
+ * @link      https://wbrowar.com
+ * @package   Guide
+ * @since     2.0.0
+ */ #}
+
+{% extends "_layouts/cp" %}
 {% import "_includes/forms" as forms %}
 
-{% do view.registerAssetBundle("wbrowar\\guide\\assetbundles\\guide\\GuideAsset") %}
-{% set iconUrl = view.getAssetManager().getPublishedPath('@wbrowar/guide/assetbundles/guide/dist', true) ~ '/icon/guide-mask.svg' %}
+{% if not craft.app.config.general.allowAdminChanges %}
+    {% redirect 'guide' %}
+{% endif %}
 
-<h2>Features</h2>
-<p>Enable or disable plugin features, altogether. More settings for each feature may be found below.</p>
+{# The title of this CP section #}
+{% set title = "Guide Settings" %}
 
-<br>
+{# The selected CP subnav item #}
+{% set selectedSubnavItem = 'settings' %}
 
-<div class="guide__settings__grid guide__settings__grid--4">
-    <div>
-        {{ forms.lightswitchField({
-            label: 'User Guides',
-            id: 'enableAllUserGuides',
-            name: 'enableAllUserGuides',
-            on: settings.enableAllUserGuides,
-        }) }}
-        <p>Guides that can be edited by users logged into the CP. User Guides appear on entry edit pages and in the Guide CP section.</p>
-    </div>
-    <div>
-        {{ forms.lightswitchField({
-            label: 'Email Support',
-            id: 'enableAllEmailSupport',
-            name: 'enableAllEmailSupport',
-            on: settings.enableAllEmailSupport,
-        }) }}
-        <p>A widget that provides a private contact form, letting content editors notify their support contact of issues they run into while updating their website.</p>
-    </div>
-    <div>
-        {{ forms.lightswitchField({
-            label: 'Website Updates',
-            id: 'enableAllWebsiteUpdates',
-            name: 'enableAllWebsiteUpdates',
-            on: settings.enableAllWebsiteUpdates,
-        }) }}
-        <p>A widget that allows admins to communicate major changes in how the CMS functions. It‘s like a changelog for content editors.</p>
-    </div>
-    <div>
-        {{ forms.lightswitchField({
-            label: 'Welcome Widget',
-            id: 'enableAllWelcomeWidget',
-            name: 'enableAllWelcomeWidget',
-            on: settings.enableAllWelcomeWidget,
-        }) }}
-        <p>Welcome content editors with a widget that shares the same content with any all users who have the widget installed.</p>
-    </div>
-</div>
+{#{% set selectedTab = 'ho' %}#}
+{% set tabs = {
+    'general': { label: 'General', url: 'general' },
+    'variables': { label: 'Variables', url: 'variables' },
+} %}
 
+{% if proEdition ?? false %}
+    {% set tabs = tabs|merge({ 'components': { label: 'Components', url: 'components' } }) %}
+    {% set tabs = tabs|merge({ 'rebrand': { label: 'Rebrand', url: 'rebrand' } }) %}
+{% endif %}
 
-<hr>
+{% set fullPageForm = true %}
 
+{% block actionButton %}
+    <input class="btn submit" type="submit" value="Save">
+{% endblock %}
 
-<h2 id="guide-section-guide-cp-section">Guide CP Section</h2>
-{{ forms.textField({
-    label: 'Template Path',
-    id: 'guideTemplatePath',
-    name: 'guideTemplatePath',
-    value: settings.guideTemplatePath,
-    instructions: 'Path to Guide Twig templates relative to your site\'s templates folder.'
-}) }}
+{% set content %}
+    {% import _self as self %}
 
-<h3>Navigation</h3>
-<p><i>Navigation settings have been moved to the <a href="{{ url('guide/navigation') }}">Guide CP section.</a></i></p>
+    <input type="hidden" name="action" value="guide/settings">
+    <input type="hidden" name="page" value="{{ selectedTab }}">
 
+    {% switch selectedTab %}
+        {% case 'general' %}
+            {{ forms.textField({
+                label: 'Template Path',
+                id: 'templatePath',
+                name: 'templatePath',
+                required: true,
+                value: settings.templatePath,
+                instructions: 'A path inside of the **templates** directory where Guide will look for templates.',
+            }) }}
 
-<hr>
+            {% set volumes = craft.app.volumes.allVolumes %}
+            {% set options = [{ label: 'Select One', value: 0 }] %}
+            {% for item in volumes %}
+                {% set options = options|merge([{ label: item.name, value: item.uid }]) %}
+            {% endfor %}
 
+            {{ forms.selectField({
+                label: 'Asset Volume',
+                id: 'assetVolume',
+                name: 'assetVolume',
+                options: options,
+                required: true,
+                value: settings.assetVolume,
+                instructions: 'An asset volume that stores all images and videos used in guides.',
+            }) }}
 
-<h2>Template Variables</h2>
-{{ forms.textField({
-    label: 'Client Name',
-    id: 'clientName',
-    name: 'clientName',
-    value: settings.clientName,
-    instructions: 'The name of the person or organization that the website is built for. This can be displayed in your templates by using Twig tag: `{{ guideVar("clientName") }}`',
-    placeholder: 'Acme Company, LLC'
-}) }}
-{{ forms.textField({
-    label: 'My Company Name',
-    id: 'myCompanyName',
-    name: 'myCompanyName',
-    value: settings.myCompanyName,
-    instructions: 'The name of the person or organization that built the website: `{{ guideVar("myCompanyName") }}`',
-    placeholder: 'Shelby Company Limited'
-}) }}
-{{ forms.editableTableField({
-    label: 'Custom Variables',
-    id: 'customVars',
-    name: 'customVars',
-    minRows: 0,
-    addRowLabel: 'Add a variable',
-    instructions: 'Store custom variables that can be accessed in Twig by using `{{ guideVar("REPLACE_WITH_KEY") }}`',
-    cols: {
-        varKey: {
-            heading: 'Key',
-            type: 'singleline',
-        },
-        varValue: {
-            heading: 'Value',
-            type: 'singleline',
-        },
-        varType: {
-            heading: 'Type',
-            type: 'select',
-            options: {
-                string: 'String',
-                password: 'String (Encrypted)',
-            }
-        },
-    },
-    rows: settings.customVars ?? ['','',''],
-}) }}
+            {% if settings.assetVolume == '0' %}
+                <p>An asset volume is required to view guides. Please create a new volume and return here when ready.</p>
+                <p><a class="btn icon add" href="{{ url('settings/assets/volumes/new') }}">Create a New Volume</a></p>
+            {% endif %}
 
+            {% if (settings.templatePath ?? false) and settings.assetVolume != '0' %}
+                <div id="guide_import" class="guide_import" data-guide-import>
+                    <hr>
+                    <div class="field">
+                        <div class="heading">
+                            <label>Import Guide Templates</label>
+                            <div class="instructions">
+                                <p>Download and import open source guides from <a href="https://github.com/wbrowar/craft-guide-templates">Craft Guide Templates</a></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="guide_import__importable" v-if="guides" v-cloak>
+                        <div class="guide_import__guides">
+                            <div class="guide_import__guide" v-for="item in guides">
+                                <h3 class="guide_import__guide__title">${ item.title }</h3>
+                                <p class="guide_import__guide__description" v-if="item.description">${ item.description }</p>
+                                <div class="guide_import__guide__options">
+                                    <div v-if="item.templatesPath">
+                                        <input type="checkbox" id="enableImportTemplates" v-model="item.enableImportTemplates">
+                                        <label for="enableImportTemplates">Import Templates</label>
+                                    </div>
+                                    <div v-if="item.assetsPath">
+                                        <input type="checkbox" id="enableImportAssets" v-model="item.enableImportAssets">
+                                        <label for="enableImportAssets">Import Assets</label>
+                                    </div>
+                                    <div v-if="item.guides">
+                                        <input type="checkbox" id="enableImportGuides" v-model="item.enableImportGuides">
+                                        <label for="enableImportGuides">Import Guides into Organizer</label>
+                                    </div>
+                                </div>
+                                <div class="btn submit" @click="importTemplates(item)">Import</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn submit" @click="downloadTemplates" v-text="status === 'downloading' ? 'Downloading from Github' : 'Download Templates'" v-else>Download Templates</div>
+                </div>
+            {% else %}
+                <hr>
+                <div class="field">
+                    <div class="heading">
+                        <label>Import Guide Templates</label>
+                        <div class="instructions">
+                            <p>Importing is available when Template Path and Asset Volume are set.</p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% case 'variables' %}
+            {% set classicCompanies = shuffle([
+                'Acme Company, LLC',
+                'Cyberdyne Systems',
+                'Genco Pura Olive Oil Company',
+                'Shelby Company Limited',
+                'Sterling Cooper Draper Price',
+                'Weyland Corporation',
+                'Wayne Enterprises',
+            ]) %}
 
-<hr>
+            {{ forms.textField({
+                label: 'Client Name',
+                id: 'clientName',
+                name: 'clientName',
+                value: settings.clientName,
+                instructions: 'The name of the person or organization that the website is built for. Markdown shortcode: **[CLIENT_NAME]**, Twig tag: **{{ craft.guide.var("clientName") }}**',
+                placeholder: classicCompanies|last
+            }) }}
 
+            {% set classicCompaniesLast = classicCompanies|last %}
+            {% set classicCompanies = classicCompanies|without(classicCompaniesLast) %}
+            {{ forms.textField({
+                label: 'My Company Name',
+                id: 'myCompanyName',
+                name: 'myCompanyName',
+                value: settings.myCompanyName,
+                instructions: 'The name of the person or organization that built the website. Markdown shortcode: **[MY_COMPANY_NAME]**, Twig tag: **{{ craft.guide.var("myCompanyName") }}**',
+                placeholder: classicCompanies|last
+            }) }}
+        {% case 'components' %}
+            <div class="guide_settings__components">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Enable</th>
+                            <th>Name</th>
+                            <th>Formats</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key, item in components %}
+                            <tr>
+                                <td>
+                                    {{ forms.lightswitch({
+                                        id: 'components[' ~ key ~ ']',
+                                        name: 'components[' ~ key ~ ']',
+                                        on: settings.components[key] ?? true,
+                                    }) }}
+                                </td>
+                                <td><span class="guide_settings__components__name">{{ item.name }}</span></td>
+                                <td>
+                                    {% set formats = [] %}
+                                    {% if item.code.markdown ?? false %}
+                                        {% set formats = formats|merge(['Markdown']) %}
+                                    {% endif %}
+                                    {% if item.code.twig ?? false %}
+                                        {% set formats = formats|merge(['Twig']) %}
+                                    {% endif %}
+                                    <span class="guide_settings__components__format">{{ formats|join(', ') }}</span>
+                                </td>
+                                <td>{{ item.description }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% case 'rebrand' %}
+            <div class="guide_settings__rebrand">
+                <div id="guide_rebrand" class="guide_settings__rebrand__options">
+                    <p>Use the fields below to override Guide’s default styles.</p>
 
-<h2>User Guides</h2>
-{{ forms.selectField({
-    label: 'Who can edit guides?',
-    id: 'userGuidesEditableBy',
-    name: 'userGuidesEditableBy',
-    value: settings.userGuidesEditableBy,
-    options: [
-        { label: 'Admins', value: 'admin' },
-        { label: 'Users with Guide permissions + Admins', value: 'permission' },
-        { label: 'Anyone who can access CP', value: 'all' },
-    ]
-}) }}
+                    <hr>
 
+                    <h2>Layout</h2>
+                    {% set fields = [
+                        { name: 'maxWidthText', label: 'Text max width', type: 'text', placeholder: '700px' },
+                        { name: 'gridGap', label: 'Grid gap', type: 'text', placeholder: '1.6rem 5rem' },
+                    ] %}
+                    {% for field in fields %}
+                        {{ self.rebrandField(field, settings) }}
+                    {% endfor %}
 
-<hr>
+                    <hr>
 
+                    <h2>Header</h2>
+                    {% set fields = [
+                        { name: 'headerIconFile', label: 'Header icon', type: 'asset' },
+                        { name: 'headerIconWidth', label: 'Header icon width', type: 'text', placeholder: '1.5em' },
+                        { name: 'headerIconHeight', label: 'Header icon height', type: 'text', placeholder: '1.5em' },
+                        { name: 'headerBg', label: 'Header background', type: 'color' },
+                        { name: 'headerText', label: 'Header text', type: 'color' },
+                    ] %}
+                    {% for field in fields %}
+                        {{ self.rebrandField(field, settings) }}
+                    {% endfor %}
 
-<h2>Email Support</h2>
-{{ forms.lightswitchField({
-    label: 'Email Support Form',
-    id: 'enableEmailSupportForm',
-    name: 'enableEmailSupportForm',
-    instructions: 'Enables display and functionality of the form in the Email Support widget',
-    on: settings.enableEmailSupportForm ?? false ? settings.enableEmailSupportForm : false,
-}) }}
-{{ forms.editableTableField({
-    label: 'Support Contacts',
-    id: 'emailSupportContacts',
-    name: 'emailSupportContacts',
-    minRows: 0,
-    addRowLabel: 'Add a contact',
-    instructions: 'Contact information used in the Email Support widget',
-    cols: {
-        email: {
-            heading: 'Email Address',
-            type: 'singleline',
-            placeholder: '(required)',
-        },
-        name: {
-            heading: 'Name',
-            type: 'singleline',
-            placeholder: '(required)',
-        },
-        jobTitle: {
-            heading: 'Job Title',
-            type: 'singleline',
-        },
-        phone: {
-            heading: 'Phone Number',
-            type: 'singleline',
-            placeholder: '(tel URL format: +15551234567)',
-        },
-    },
-    rows: settings.emailSupportContacts ?? ['','','', ''],
-}) }}
+                    <hr>
 
+                    <h2>Content</h2>
+                    {% set fields = [
+                        { name: 'contentBg', label: 'Content background', type: 'color' },
+                        { name: 'contentHeader', label: 'Content headers', type: 'color' },
+                        { name: 'contentText', label: 'Content text', type: 'color' },
+                        { name: 'anchor', label: 'Anchor links', type: 'color' },
+                        { name: 'anchorHover', label: 'Anchor links (hover)', type: 'color' },
+                        { name: 'border', label: 'Border', type: 'color' },
+                        { name: 'buttonBg', label: 'Button background', type: 'color' },
+                        { name: 'buttonText', label: 'Buttn text', type: 'color' },
+                        { name: 'codeBg', label: 'Code background', type: 'color' },
+                        { name: 'codeText', label: 'Code text', type: 'color' },
+                        { name: 'tableHeadBg', label: 'Table head background', type: 'color' },
+                        { name: 'tableHeadText', label: 'Table head text', type: 'color' },
+                        { name: 'tip', label: 'Tip callout', type: 'color' },
+                    ] %}
+                    {% for field in fields %}
+                        {{ self.rebrandField(field, settings) }}
+                    {% endfor %}
 
-<hr>
+                    <hr>
 
+                    <h2>Guide Page Sidebar</h2>
+                    {% set fields = [
+                        { name: 'pageSidebarBg', label: 'Sidebar background', type: 'color' },
+                        { name: 'pageSidebarButtonBg', label: 'Sidebar button background', type: 'color' },
+                        { name: 'pageSidebarButtonText', label: 'Sidebar button text', type: 'color' },
+                        { name: 'pageSidebarButtonTextHover', label: 'Sidebar button text (hover)', type: 'color' },
+                    ] %}
+                    {% for field in fields %}
+                        {{ self.rebrandField(field, settings) }}
+                    {% endfor %}
 
-<div id="guide__demo__css"></div>
-<div class="guide__demo">
-    <div class="guide__demo__header">
-        <div class="guide_logo_lockup guide_logo_lockup--35">
-            <div>{{ svg(iconUrl) }}</div>
-            <div>
-                <h1>Custom Styles</h1>
+                    <hr>
+
+                    <h2>Custom CSS</h2>
+                    {% set fields = [
+                        { name: 'customCss', type: 'textarea', instructions: 'CSS that will be added to all pages of the CP. To style guide content, prepend **.guide_content** to your selectors.' },
+                    ] %}
+                    {% for field in fields %}
+                        {{ self.rebrandField(field, settings) }}
+                    {% endfor %}
+                </div>
+                <div class="guide_settings__rebrand__demo guide_styles">
+                    {% include 'guide/_partials/rebrand_demo.twig' %}
+                </div>
+            </div>
+    {% endswitch %}
+
+    {% if not proEdition and currentUser.admin %}
+        <div class="guide_styles">
+            <div class="c_tip">
+                <div class="c_tip__header">Thanks for using the LITE edition of Guide!</div>
+                <div class="c_tip__content">
+                    <p>The PRO edition of Guide offers an easy to use, drag-and-drop editor letting you and your content authors collaborate by making guides in the CP. You can also embed external docs, customize the look and feel, and display guides on content edit pages and in dashboard widgets.</p>
+                    <p><a class="btn small submit" href="{{ url('plugin-store/guide') }}">Check out Guide PRO in the Plugin Store</a></p>
+                </div>
             </div>
         </div>
-        {#<a class="guide_button btn" href="https://github.com/wbrowar/craft-3-guide#css-variables">More info</a>#}
-    </div>
-    <div class="guide__demo__text guide_text">
-        <div class="guide_grid guide_grid--2_column">
-            <div>
-                <img src="http://via.placeholder.com/900x450" alt="Placeolder image">
-            </div>
-            <div>
-                <h2>Theme Demo</h2>
-                <p>Guide uses <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/--*">CSS Custom Properties</a> to help you rebrand and theme guides used throughout <i>Craft CMS's CP</i>. Change these <b>CSS Custom Properties</b> or write your own custom <span class="guide_code_inline">CSS</span> in the textarea below.</p>
-                <a class="guide_button btn" href="https://github.com/wbrowar/craft-3-guide#css-variables">More info</a>
-            </div>
-        </div>
-    </div>
-</div>
+    {% endif %}
+{% endset %}
 
-{{ forms.textareaField({
-    label: 'Custom CSS',
-    id: 'customCss',
-    name: 'customCss',
-    rows: 10,
-    value: settings.customCss,
-    placeholder: ':root {\n  --guide-color-code-bg: #ddd;\n  --guide-color-text: #c0c;\n}'
-}) }}
-
-{% set guideVariables = [
-    ['<b>--guide-bg</b>: var(--guide-color-bg);', 'Background for guide containers. This is used as shorthand for the CSS `background` property.'],
-    ['<b>--guide-border-radius</b>: 5px;', 'Rounds the corners of guide containers.'],
-    ['<b>--guide-border-radius-media</b>: 3px;', 'Rounds the corners of <i>canvas, img, picture,</i> and <i>video</i> tags.'],
-    ['<b>--guide-color-bg</b>: rgba(0, 0, 0, .8);', 'Background for guide containers.'],
-    ['<b>--guide-color-border</b>: rgb(200, 200, 200);', 'Color of border placed around <i>canvas, img, picture,</i> and <i>video</i> tags.'],
-    ['<b>--guide-color-button-bg</b>: var(--guide-color-bg);', 'Background color of <i>.guide_button</i> elements.'],
-    ['<b>--guide-color-code-bg</b>: rgba(60, 60, 60, .1);', 'Background color used to highlight code examples.'],
-    ['<b>--guide-color-h1</b>: var(--guide-color-text);', 'Color of h1 tags in Guide containers.'],
-    ['<b>--guide-color-link</b>: rgb(219, 81, 61);', 'Color of links in Guide containers.'],
-    ['<b>--guide-color-link-hover</b>: rgb(186, 78, 58);', 'Color of links and buttons when in the :hover state.'],
-    ['<b>--guide-color-link-active</b>: rgb(123, 51, 36);', 'Color of links and buttons when in the :active state.'],
-    ['<b>--guide-color-text</b>: rgb(255, 255, 255);', 'Color of text in Guide containers.'],
-    ['<b>--guide-max-width</b>: 1100px;', 'Max width of Guide CP sections pages.'],
-] %}
-<div style="display: grid; grid-template-columns: minmax(100px, 350px) auto; grid-template-rows: auto; grid-gap: 5px 30px;">
-    {% for item in guideVariables %}
-        <div>{{ item[0]|raw }}</div>
-        <div>{{ item[1]|raw }}</div>
-    {% endfor %}
-</div>
-
-
-<hr>
-
-
-{{ forms.lightswitchField({
-    label: 'Show Guide 2.0 Warnings',
-    id: 'guideTwoWarnings',
-    name: 'guideTwoWarnings',
-    instructions: 'These messages are only shown to Admin users, but they can be hidden with this setting.',
-    on: settings.guideTwoWarnings,
-}) }}
+{% macro rebrandField(config, settings) %}
+    {% switch config.type %}
+        {% case 'asset' %}
+            {% set volume = craft.app.volumes.volumeByUid(settings.assetVolume) %}
+        
+            {% if volume ?? false %}
+                {{ forms.elementSelectField({
+                    label: config.label ?? null,
+                    id: config.name,
+                    name: 'rebrand[' ~ config.name ~ ']',
+                    allowedKinds: 'images',
+                    defaultUploadLocationSource: 'folder:' ~ alias(volume.path),
+                    elementType: 'craft\\elements\\Asset',
+                    elements: (settings.rebrand[config.name] ?? false) ? craft.assets.id(settings.rebrand[config.name]).all() : [],
+                    limit: 1,
+                    selectionLabel: "Add an SVG",
+                    sources: 'volumeId:' ~ volume.id,
+                    useSingleFolder: true,
+                    instructions: config.instructions ?? null,
+                    placeholder: config.placeholder ?? null,
+                }) }}
+            {% endif %}
+        {% case 'color' %}
+            {{ forms.colorField({
+                label: config.label ?? null,
+                id: config.name,
+                name: 'rebrand[' ~ config.name ~ ']',
+                value: settings.rebrand[config.name] ?? '',
+                instructions: config.instructions ?? null,
+                placeholder: config.placeholder ?? null,
+            }) }}
+        {% case 'text' %}
+            {{ forms.textField({
+                label: config.label ?? null,
+                id: config.name,
+                name: 'rebrand[' ~ config.name ~ ']',
+                value: settings.rebrand[config.name] ?? '',
+                instructions: config.instructions ?? null,
+                placeholder: config.placeholder ?? null,
+            }) }}
+        {% case 'textarea' %}
+            {{ forms.textareaField({
+                label: config.label ?? null,
+                id: config.name,
+                name: 'rebrand[' ~ config.name ~ ']',
+                rows: 10,
+                value: settings.rebrand[config.name] ?? '',
+                instructions: config.instructions ?? null,
+                placeholder: config.placeholder ?? null,
+            }) }}
+    {% endswitch %}
+{% endmacro %}

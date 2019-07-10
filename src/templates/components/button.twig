@@ -1,0 +1,22 @@
+{% extends 'guide/_partials/render_component.twig' %}
+
+{# Variables #}
+{% set label = label ?? '' %}
+{% set target = target ?? '' %}
+{% set url = url ?? null %}
+
+{# Component element overrides #}
+{% set classes = (classes ?? false ) ? classes|merge(['btn']) : ['btn'] %}
+{% set element = (url ?? false) ? 'a' : 'button' %}
+
+{% if target ?? false %}
+    {% set attrs = attrs|merge({ target: target, rel: "noopener" }) %}
+{% endif %}
+
+{% if url ?? false %}
+    {% set attrs = attrs|merge({ href: url }) %}
+{% endif %}
+
+{% block content -%}
+    {{ label }}
+{%- endblock %}

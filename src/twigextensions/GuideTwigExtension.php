@@ -2,40 +2,33 @@
 /**
  * Guide plugin for Craft CMS 3.x
  *
- * Description
+ * A CMS Guide for Craft CMS.
  *
  * @link      https://wbrowar.com
- * @copyright Copyright (c) 2017 Will Browar
+ * @copyright Copyright (c) 2019 Will Browar
  */
 
 namespace wbrowar\guide\twigextensions;
 
-use craft\elements\Asset;
-use craft\helpers\Db;
-use wbrowar\guide\Guide;
+use craft\helpers\Template;
 
 use Craft;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
+use wbrowar\guide\Guide;
 
 /**
- * Twig can be extended in many ways; you can add extra tags, filters, tests, operators,
- * global variables, and functions. You can even extend the parser itself with
- * node visitors.
- *
- * http://twig.sensiolabs.org/doc/advanced.html
- *
  * @author    Will Browar
  * @package   Guide
- * @since     1.0.0
+ * @since     2.0.0
  */
-class GuideTwigExtension extends \Twig_Extension
+class GuideTwigExtension extends AbstractExtension
 {
     // Public Methods
     // =========================================================================
 
     /**
-     * Returns the name of the extension.
-     *
-     * @return string The extension name
+     * @inheritdoc
      */
     public function getName()
     {
@@ -43,123 +36,113 @@ class GuideTwigExtension extends \Twig_Extension
     }
 
     /**
-     * Returns an array of Twig filters, used in Twig templates via:
-     *
-     *      {{ 'something' | someFilter }}
-     *
-     * @return array
+     * @inheritdoc
      */
     public function getFilters()
     {
         return [
-            //new \Twig_SimpleFilter('someFilter', [$this, 'someInternalFunction']),
+            new TwigFilter('guidehtmlattr', [$this, 'renderHtmlAttributes']),
+            new TwigFilter('guideshortcodes', [$this, 'replaceShortcodes']),
         ];
     }
 
     /**
-     * Returns an array of Twig functions, used in Twig templates via:
-     *
-     *      {% set this = someFunction('something') %}
-     *
-    * @return array
+     * @inheritdoc
      */
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('guideAsset', [$this, 'guideAsset'], ['is_safe' => array('html')]),
-            new \Twig_SimpleFunction('guideQuery', [$this, 'guideQuery']),
-            new \Twig_SimpleFunction('guideVar', [$this, 'guideVar'], ['is_safe' => array('html')]),
-            new \Twig_SimpleFunction('renderUserGuideBody', [$this, 'renderUserGuideBody']),
-            new \Twig_SimpleFunction('pluginEnabled', [$this, 'pluginEnabled']),
-            new \Twig_SimpleFunction('updateGuideCpNav', [$this, 'updateGuideCpNav']),
         ];
     }
 
     /**
-     * Our function called via Twig; it can do anything you want
+     * Formats HTML attributes and makes it easy to override and add classes and other attributes
      *
-     * @param null $text
+     * @param array $attrs
      *
      * @return string
      */
-    public function guideAsset($fileName, $type = 'image'):string
+    public function renderHtmlAttributes(array $attrs)
     {
-        $output = '';
+        // @TODO replace this with Craft 3.2 attr() twig function
 
-        switch ($type) {
-            case 'image':
-                $file = Asset::find()
-                            ->filename(Db::escapeParam($fileName))
-                            ->one();
+        // Re-order attributes so ones with colons (used for vue shorthand) are last
+        ksort($attrs);
 
-                if ($file) {
-                    $output = '<img src="' . $file->getUrl() . '" alt="' . $file->title . '">';
+        // Ported from https://github.com/timkelty/htmlattributes-craft
+        $str = trim(implode(' ', array_map(function($attrName) use ($attrs) {
+            $attrVal = $attrs[$attrName];
+            $quote = '"';
+
+            if (is_null($attrVal) || $attrVal === true) {
+                return $attrName;
+            } elseif($attrVal === false) {
+                return '';
+            } elseif(is_array($attrVal)) {
+                switch ($attrName) {
+                    case 'class':
+                        $attrVal = implode(' ', array_filter($attrVal));
+                        break;
+
+                    case 'style':
+                        array_walk($attrVal, function(&$val, $key) {
+                            $val = $key . ': ' . $val;
+                        });
+                        $attrVal = implode('; ', $attrVal) . ';';
+                        break;
+
+                    // Default to json, for data-* attributes
+                    default:
+                        $quote = '\'';
+                        $attrVal = json_encode($attrVal);
+                        break;
                 }
-                break;
+            } else {
+                return $attrName . '="' . $attrVal . '"';
+            }
+
+            return $attrName . '=' . $quote . $attrVal . $quote;
+        }, array_keys($attrs))));
+
+        return Template::raw($str);
+    }
+
+    /**
+     * Processes and replaces Guide-specific shortcodes
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    public function replaceShortcodes(string $string)
+    {
+        $newString = $string;
+
+        $guideVolumeUid = Guide::$settings->assetVolume;
+
+        if ($guideVolumeUid) {
+            $guideVolume = Craft::$app->getVolumes()->getVolumeByUid($guideVolumeUid);
+
+            $guideVolumePath = Craft::getAlias($guideVolume->url);
         }
 
-        return $output;
-    }
+        $shortcodes = [
+            ['[CLIENT_NAME]', !empty(Guide::$settings->clientName) ? Guide::$settings->clientName : '<span class="fpo">Client Name</span>'],
+            ['[MY_COMPANY_NAME]', !empty(Guide::$settings->myCompanyName) ? Guide::$settings->myCompanyName : '<span class="fpo">My Company Name</span>'],
+            ['[GUIDE_VOLUME_PATH]', $guideVolumePath ?? ''],
+        ];
 
-    /**
-     * Our function called via Twig; it can do anything you want
-     *
-     * @param null $text
-     *
-     * @return string
-     */
-    public function guideQuery($params = [], $queryType = 'all')
-    {
-        return Guide::$plugin->guide->getUserGuides($params, $queryType);
-    }
+        $find = [];
+        $replace = [];
+        foreach ($shortcodes as $shortcode) {
+            $find[] = $shortcode[0];
+            $replace[] = $shortcode[1];
+        }
 
-    /**
-     * Our function called via Twig; it can do anything you want
-     *
-     * @param null $text
-     *
-     * @return string
-     */
-    public function guideVar($name)
-    {
-        return Guide::$plugin->guide->getGuideVariableValue($name);
-    }
+        if (count($find) > 0 && count($replace) > 0) {
+            $newString = str_replace($find, $replace, $string);
+        }
 
-    /**
-     * Our function called via Twig; it can do anything you want
-     *
-     * @param null $text
-     *
-     * @return string
-     */
-    public function pluginEnabled($pluginHandle)
-    {
-        return Craft::$app->plugins->isPluginInstalled($pluginHandle) && Craft::$app->plugins->isPluginEnabled($pluginHandle);
-    }
-
-    /**
-     * Our function called via Twig; it can do anything you want
-     *
-     * @param null $text
-     *
-     * @return string
-     */
-    public function renderUserGuideBody($params = [])
-    {
-        return Guide::$plugin->guide->renderUserGuideBody($params);
-    }
-
-    /**
-     * Creates the Guide CP subnav
-     *
-     * @param null $array
-     *
-     * @return string
-     */
-    public function updateGuideCpNav($array = [])
-    {
-        Guide::$plugin->guide->updateGuideCpNav($array);
-
-        return '';
+        return $newString;
     }
 }

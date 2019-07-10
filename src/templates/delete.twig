@@ -1,51 +1,50 @@
-{# @var craft \craft\web\twig\variables\CraftVariable #}
-
-{#
-/**
- * Guide plugin for Craft CMS 3.x
+{# /**
+ * Guide plugin for Craft CMS
  *
- * Guide index.twig
+ * Guide Widget Body
  *
  * @author    Will Browar
- * @copyright Copyright (c) 2017 Will Browar
+ * @copyright Copyright (c) 2019 Will Browar
  * @link      https://wbrowar.com
  * @package   Guide
- * @since     1.0.0
- */
-#}
+ * @since     2.0.0
+ */ #}
 
 {% extends "_layouts/cp" %}
 {% import "_includes/forms" as forms %}
 
-{% if not (userCanEdit and userCanDelete) %}
-    {% redirect url('guide/home') %}
+{# The selected CP subnav item #}
+{% set selectedSubnavItem = 'organizer' %}
+
+{% if (guideId ?? false) %}
+    {% set guide = craft.guide.getOne({ id: guideId }) %}
+
+    {% if guide ?? false %}
+        {% set title = "Delete " ~ guide.title %}
+    {% else %}
+        {% redirect 'guide/organizer' %}
+    {% endif %}
+{% else %}
+    {% redirect 'guide/organizer' %}
 {% endif %}
 
-{% do view.registerAssetBundle("wbrowar\\guide\\assetbundles\\guide\\GuideAsset") %}
-{% do view.registerAssetBundle("wbrowar\\guide\\assetbundles\\guide\\GuideAsset") %}
-
-{# Link for the ? icon at the bottom of the page #}
-{% set docsUrl = "https://github.com/wbrowar/guide/blob/master/README.md" %}
-
-{# The title of this CP section #}
-{% set title = "Delete User Guide" %}
-
-{# Get a URL to an image in our AssetBundle #}
-{% set iconUrl = view.getAssetManager().getPublishedPath('@wbrowar/guide/assetbundles/guide/dist', true) ~ '/icon/guide-mask.svg' %}
-
-{% set fullPageForm = true %}
-
-{% block actionButton %}
-    <input class="btn submit" type="submit" value="Delete">
-{% endblock %}
-
 {% set content %}
-    <input type="hidden" name="action" value="guide/user-guide/delete-cp-user-guide">
-    <input type="hidden" name="id" value="{{ guideId }}">
+    <form method="post">
+        {{ csrfInput() }}
+        <input type="hidden" name="action" value="guide/guide/delete-guide">
+        <input type="hidden" name="id" value="{{ guideId }}">
 
-    <p><b>Are you sure you want to delete this User Guide?</b></p>
+        {% if craft.app.request.param('return') ?? false %}
+            <input type="hidden" name="redirect" value="{{ craft.app.request.param('return') }}">
+        {% endif %}
 
-    <p>The page will be removed from Guide Navigation. Content stored in the database will be deleted. No template files will be deleted.</p>
+        <p><b>Are you sure you want to delete this guide?</b></p>
 
-    <p><a class="btn" href="{{ url('guide/home') }}">Back to Guide Home</a></p>
+        <p>The guide content stored in the database will be deleted. No template files will be deleted.</p>
+
+        <div class="buttons">
+            <input class="btn submit" type="submit" value="Delete">
+            <a class="btn" href="{{ url('guide/organizer') }}">Back to Organizer</a>
+        </div>
+    </form>
 {% endset %}

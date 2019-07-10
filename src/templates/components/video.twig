@@ -1,0 +1,26 @@
+{% extends 'guide/_partials/render_component.twig' %}
+
+{# Variables #}
+{% set autoplay = autoplay ?? false %}
+{% set controls = controls ?? true %}
+{% set lazyLoad = lazyLoad ?? true %}
+{% set loop = loop ?? false %}
+{% set muted = muted ?? false %}
+{% set playsinline = playsinline ?? false %}
+{% set poster = poster ?? null %}
+{% set source = source ?? 'file' %}
+{% set url = url ?? '' %}
+{% set videoId = videoId ?? '' %}
+
+{% block content -%}
+    {% if source == 'youtube' %}
+        <iframe {% if lazyLoad %}data-lazy-load data-{% endif %}src="https://www.youtube.com/embed/{{ videoId }}?rel=0&amp;controls={{ controls ? '1' : '0' }}&amp;showinfo=0" width="853" height="480" frameborder="0" allowfullscreen></iframe>
+        <noscript><iframe src="https://www.youtube.com/embed/{{ videoId }}?rel=0&amp;controls={{ controls ? '1' : '0' }}&amp;showinfo=0" width="853" height="480"  frameborder="0" allowfullscreen></iframe></noscript>
+    {% elseif source == 'vimeo' %}
+        <iframe {% if lazyLoad %}data-lazy-load data-{% endif %}src="https://player.vimeo.com/video/{{ videoId }}?title=0&byline=0&portrait=0" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+        <noscript><iframe src="https://player.vimeo.com/video/{{ videoId }}?title=0&byline=0&portrait=0" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></noscript>
+    {% else %}
+        <video {% if lazyLoad %}data-lazy-load data-{% endif %}src="{{ url }}"{% if poster ?? false %} poster="{{ poster }}"{% endif %}{{ autoplay ? ' autoplay' : '' }}{{ controls ? ' controls' : '' }}{{ loop ? ' loop' : '' }}{{ muted ? ' muted' : '' }}{{ playsinline ? ' playsinline' : '' }}></video>
+        <noscript><video src="{{ url }}"{% if poster ?? false %} poster="{{ poster }}"{% endif %}{{ autoplay ? ' autoplay' : '' }}{{ controls ? ' controls' : '' }}{{ loop ? ' loop' : '' }}{{ muted ? ' muted' : '' }}></video></noscript>
+    {% endif %}
+{%- endblock %}

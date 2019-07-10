@@ -1,0 +1,30 @@
+{# /**
+ * Guide plugin for Craft CMS
+ *
+ * Guide Widget Body
+ *
+ * @author    Will Browar
+ * @copyright Copyright (c) 2019 Will Browar
+ * @link      https://wbrowar.com
+ * @package   Guide
+ * @since     2.0.0
+ */ #}
+
+{% if guide ?? false %}
+    <div class="guide_styles guide_widget">
+        {% if guide[0].contentSource != 'iframe' %}
+            <div class="guide_widget__header">
+                {% include 'guide/_partials/guide_header.twig' with {
+                    settings: settings,
+                    title: guide[0].title,
+                } only %}
+            </div>
+        {% endif %}
+
+        <div class="guide_widget__content guide_widget__content--{{ guide[0].contentSource }}">
+            {{ include('guide/_partials/render_content', { guide: guide[0] }) }}
+        </div>
+    </div>
+{% else %}
+    <div style="padding: 20px;">The guide that was displayed here is no longer available. Select another guide in this widget’s settings.</div>
+{% endif %}

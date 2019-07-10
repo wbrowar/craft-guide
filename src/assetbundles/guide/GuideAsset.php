@@ -2,10 +2,10 @@
 /**
  * Guide plugin for Craft CMS 3.x
  *
- * Description
+ * A CMS Guide for Craft CMS.
  *
  * @link      https://wbrowar.com
- * @copyright Copyright (c) 2017 Will Browar
+ * @copyright Copyright (c) 2019 Will Browar
  */
 
 namespace wbrowar\guide\assetbundles\Guide;
@@ -15,22 +15,9 @@ use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
 
 /**
- * GuideAsset AssetBundle
- *
- * AssetBundle represents a collection of asset files, such as CSS, JS, images.
- *
- * Each asset bundle has a unique name that globally identifies it among all asset bundles used in an application.
- * The name is the [fully qualified class name](http://php.net/manual/en/language.namespaces.rules.php)
- * of the class representing it.
- *
- * An asset bundle can depend on other asset bundles. When registering an asset bundle
- * with a view, all its dependent asset bundles will be automatically registered.
- *
- * http://www.yiiframework.com/doc-2.0/guide-structure-assets.html
- *
  * @author    Will Browar
  * @package   Guide
- * @since     1.0.0
+ * @since     2.0.0
  */
 class GuideAsset extends AssetBundle
 {
@@ -38,26 +25,22 @@ class GuideAsset extends AssetBundle
     // =========================================================================
 
     /**
-     * Initializes the bundle.
+     * @inheritdoc
      */
     public function init()
     {
-        // define the path that your publishable resources live
         $this->sourcePath = "@wbrowar/guide/assetbundles/guide/dist";
 
-        // define the dependencies
         $this->depends = [
             CpAsset::class,
         ];
 
-        // define the relative path to CSS/JS files that should be registered with the page
-        // when this asset bundle is registered
         $this->js = [
-            'js/guide.js',
+            'js/guide.2.0.0.js',
         ];
 
         $this->css = [
-            'css/guide.css',
+            'css/guide.2.0.0.css',
         ];
 
         parent::init();

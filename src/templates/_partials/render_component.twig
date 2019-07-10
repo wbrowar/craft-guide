@@ -1,0 +1,34 @@
+{% set newAttrs = {
+    class: [classPrefix ~ '_' ~ class],
+} %}
+
+{% set attrs = (attrs ?? false) ? attrs|merge(newAttrs) : newAttrs %}
+
+{% if classes ?? false %}
+    {% set newClasses = attrs.class|merge(classes) %}
+    {% set attrs = attrs|merge({ class: newClasses }) %}
+{% endif %}
+
+{% if id ?? false %}
+    {% set attrs = attrs|merge({ id: id }) %}
+{% endif %}
+
+{% if modifiers ?? false %}
+    {% set modifierClasses = [] %}
+
+    {% for item in modifiers %}
+        {% set modifierClasses = modifierClasses|merge([rootClass ~ '--' ~ item]) %}
+    {% endfor %}
+
+    {% set newClasses = attrs.class|merge(modifierClasses) %}
+    {% set attrs = attrs|merge({ class: newClasses }) %}
+{% endif %}
+
+{% if styles ?? false %}
+    {% set newStyles = (attrs.style ?? false) ? attrs.style|merge(styles) : styles %}
+    {% set attrs = attrs|merge({ style: newStyles }) %}
+{% endif %}
+
+{% block before %}{{ before ?? null }}{% endblock %}
+<{{ element }} {{ attrs|guidehtmlattr }}>{% block content %}{{ content ?? null }}{% endblock %}</{{ element }}>
+{% block after %}{{ after ?? null }}{% endblock %}

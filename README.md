@@ -1,23 +1,23 @@
-# Guide for Craft CMS 3
+# Guide 2 for Craft CMS 3
 
 A CMS Guide for Craft CMS.
 
 ![Screenshot](resources/img/guide-cp.png)
 
 Guide is made up of two parts:
-- [The commercial plugin for Craft 3](https://github.com/wbrowar/craft-3-guide)
+- [The commercial plugin for Craft 3](https://github.com/wbrowar/craft-guide)
 - [The open source user guide template](https://github.com/wbrowar/craft-guide-templates)
 
-*Note: The license fee for this plugin is $39.00 via the [Craft Plugin Store](https://plugins.craftcms.com/guide).*
+*Note: The license fee for the PRO edition this plugin is $49.00 via the [Craft Plugin Store](https://plugins.craftcms.com/guide). A LITE edition is offered for free.*
 
 ## Requirements
 
-- This plugin requires Craft CMS 3.1.20.1 or later.
+- This plugin requires Craft CMS 3.2 or later.
 - A browser that support CSS Grid Layout and CSS Custom Properties.
 
 ## Installation
 
-To install the plugin, you can find it in the Craft Plugin Store, or follow these instructions.
+To install the plugin, you can find it in the [Craft Plugin Store](https://plugins.craftcms.com/guide), or follow these instructions.
 
 1. Open your terminal and go to your Craft project:
 
@@ -29,187 +29,174 @@ To install the plugin, you can find it in the Craft Plugin Store, or follow thes
 
 3. In the Control Panel, go to Settings → Plugins and click the “Install” button for Guide.
 
-4. Use the following instructions to add guides to the Control Panel:
-   - [Guide CP Section](https://github.com/wbrowar/craft-3-guide#guide-cp-section)
-   - [Content Guides](https://github.com/wbrowar/craft-3-guide#content-guides)
-   - [Guide Widget](https://github.com/wbrowar/craft-3-guide#guide-widget)
-   
-5. Checkout [Craft Guide Templates](https://github.com/wbrowar/craft-guide-templates) for ideas or to use a starter template to work from.
+## Setup
+
+1. Visit the Guide settings page to configure a couple of setup options. The new `Template Path` and `Asset Path` settings are required for guides to be displayed.
+2. Create your CMS guide using the built-in editor, by importing guides from [Craft Guide Templates](https://github.com/wbrowar/craft-guide-templates), or by selecting templates added to your Guide Template Path.
+3. Use the Organizer to place your guides in the Guide CP section, on content edit pages, and on dashboard widgets.
+4. Use Guide’s Rebrand settings page to style the look and feel of guides throughout the CMS.
+
+---
 
 ## Guide Overview
 
 Craft CMS is intuitive. Marketing plans and organizational workflows—not so much. Guide lets you create a user manual within Craft CMS so clients don‘t need to go far to get the answers they need.
 
-## Guide CP Section
+## Guide Editor
 
-![Screenshot](resources/img/guide-cp-custom.png)
+A guide can be written by hand, imported as a template, or embedded as an iframe. All guides are created and configured in the Guide editor.
 
-### Guide Template
+To create a new guide, go to the Organizer tab in the Guide CP section and click on the `+ New Guide` button.
 
-Use templates to create your CMS guide in a way that's easily portable from one site to another. Follow these instructions to create your guide within the Guide CP Section:
+When setting up a guide, you’ll set the following options:
 
-1. Create an index template in your site's `templates` directory. It can be named whatever you want, but the default is `_guide/index`. So if you create an `index.twig` file and place it in the `./templates/_guide/` directory, it will show up in the Guide CP Section. 
-2. If you want to change your Guide index template's location, edit the path to your new location on the Guide plugin settings page.
-3. You can create multiple pages and link to them through a navigation set in the Navigation tab in the Guide CP section.    
-4. Edit your templates as needed. You can use these [style components](https://github.com/wbrowar/craft-3-guide#components) to change the layout.
-5. If you have several sections of content on one page, add the `data-guide-section` attribute to any `h1, h2, h3`, or `h4` to add a drop down navigation that scrolls up and down the page to each section.
-6. Most of Guide's CSS relies on Craft's default Control Panel CSS, but if you need to override styles or add your own CSS, use the [Custom CSS](https://github.com/wbrowar/craft-3-guide#css-variables) field in Guide's plugin settings.
-
-#### Re-usable Guide Templates
-
-Once you've written your first CMS guide, you can re-use the template files for another site—swapping out specific information using [Guide Variables](https://github.com/wbrowar/craft-3-guide#guide-variables)
-
-You can also let your template generate the navigation by placing this code anywhere within your Home template. *NOTE: this code does not need to be located on any other template.*
-
-    ```$twig
-    {{ updateGuideCpNav({
-        'Editing Content': '_guide/edit-entries',
-        'Menus': '_guide/menus',
-        'Forms': { admin: true, template: '_guide/forms' },
-    }) }}
-    ```
-
-*NOTE: The Guide CP Nav gets created on the first time you load a template that contains the `updateGuideCpNav` Twig tag in it. You may then edit the navigation—or create it from scratch—on the Navigation CP page.*
-
-### Guide CP User Guides
-
-User Guides (Guides that are editable via the CMS) can be added to the Guide CP Section by clicking on the "+ New Guide" button. User Guides can be created in Markdown or Twig formats.
-
-If you are using the Twig format, many of Craft's Twig extensions and tags will be available, but certain tags, such as `extend`, will not work.
-
-You can also start from an existing Guide CP template by clicking on the "Convert to User Guide" button when you're on a page that loads a Guide CP template. This makes a copy of the template file's Twig code and stores it into the database as a User Guide.
-
-### Twig Extensions
-
-Guide comes with a few helper tags that make it easier to do template logic and to bring content into your Guide CP Section guides, Content Guides, and Guide Widgets.
-
-| Variable Key | Description |
+| Options | Description |
 | --- | --- |
-| `{{ guideAsset('FILENAME') }}` | Does a simple query for an image asset based on file name. |
-| `{{ guideQuery(OBJECT) }}` | Find User Guides based on the given criteria. For example, `{{ guideQuery({ sectionId: 1, typeId: 1 }) }}` might return the Content Guide for the Homepage section. |
-| `{{ guideVar('VAR_KEY') }}` | Pull in content set in Guide plugin settings, see [Guide Variables](https://github.com/wbrowar/craft-3-guide#guide-variables) for more information. |
-| `{{ pluginEnabled('PLUGIN_HANDLE') }}` | A boolean that checks to see if a plugin is currently installed. |
+| Title | The title of the guide as it appears throughout the CMS. |
+| Slug | The slug of the guide used in its URI. The slug can be manually set or it can be automatically set based on the Title. |
+| Content Source | Determine if the guide’s content should come from the editor field, a template, or an external URL. Changing this changes the fields in the Editor tab. |
+| Format | For guides created using the editor field, changing the Format determines what language is used to render the guide content later. |
+| Access | Determines who may access a guide. Setting this to "Restrict to permissions" requires permissions to be set in the Permissions tab. Setting this to "Everyone" or "Admins only" ignores the permissions set in the permissions tab. |
+| Summary | A short summary of the guide displayed on the guide in the Organizer. |
 
-### Guide Variables
+### Components
 
-Guide provides a set of variables that can be placed in your Twig templates to make it easy to swap out project-specific information.
+When using the editor field to create a guide, you’ll see a column of components to the left. Each component can be dragged from the list onto the editor field and the component will be added at the place where the cursor is set.
 
-To display a Guide Variable in your Twig templates, you can set the value of each variable in the Guide plugin settings page, then use the `{{ guideVar() }}` Twig extension to display that value in your page templates.
+Components are made up of either plain HTML, Markdown, Twig, or Vue components. HTML and Markdown-based components are meant to be simpler components where only content needs to be changed. Styles may change over time, but the markup will remain the same.
 
-For example, if you enter "Acme Co." in the **Client Name** field, you could write this into your Guide template:
+Twig and Vue components are meant to make it easy to create more complicated components that can be optimized and added to in the future.
+
+### Twig Components
+
+For example, the Markdown image component needs a URL and alt attribute to be set, and the markup for this component is a simple HTML `img` tag. You may manually change it as needed.
+
+The Twig image component is based on a Guide variable and it looks like this: `{{ craft.guide.component('image', { url: 'REPLACE_URL' }) }}`
+
+The first thing passed into the `component` variable is the handle for the component. In this case, it’s `image`. The second argument is an object of configuration options. This is an example of an image component that pulls an image file in from an external URL, so the `url` attribute is used to set the image source.
+
+Under the hood, the Twig component is transforming the image to optimize its filesize at both 1x and 2x resolutions and lazy loading is added so the image doesn’t load until the reader scrolls down to it.
+
+The above example is based on the "Image" Twig component, however, when you drag an asset component into the editor field you'll notice that the same `image` handle is used but different attributes are passed in:
 
 ```twig
-<h1>Hello, {{ guideVar("clientName") }}</h1>
+{{ craft.guide.component('image', { asset: craft.assets.filename('assets-image-optimize.png').one() }) }}
 ```
 
-And it would output this:
+A full list of available arguments will be added to this README in a future update.
 
-```html
-<h1>Hello, Acme Co.</h1>
-```
+### Guide Templates
 
-Guide templates are available in all of your Twig templates, so anywhere you can write Twig code, you can access the values of Guide Variables.
+You may use templates to create your CMS guide in a way that's easily portable from one Craft site to another. To add a template to your CMS guide, follow these instructions:
 
-Here are all of the available Guide Variables;
+1. Create your guide template and save it using `.md`, `.twig`, or `.html` as its file extension.
+1. Place your file into the directory set as the Template Path setting in the Guide setting page. The default is set to `_guide`, so in that case your file would need to go into `./templates/_guide/`.
+1. Go to the Organizer tab in the Guide CP section and click on the `+ New Guide` button to create a new guide.
+1. Set Content Source to `Page Template`.
+1. Select your new template in the Template field in the Editor tab.
+1. Click the `Save` button.
+1. Use the Organizer to drag your new guide to the desired location.
 
-| Variable Key | Type |
+Guides in your Template Path can be included and imported by using the path `guide_template_path` in your Twig tags.
+
+For example, a Twig file at the location `./templates/_guide/header.twig` would be can be included using: `{% include 'guide_template_path/header.twig' %}`.
+
+This will allow you to move the Template Path to a different location without breaking your includes and imports.
+
+#### Markdown Templates
+
+Templates saved as `.md` files will be parsed as [Github Flavored Markdown](https://guides.github.com/features/mastering-markdown/). 
+
+### External Documentation
+
+Selecting `External Page` from the Content Source guide option will let you display an external page in an iframe.
+
+The iframe replaces the guide content and all styling is ignored.
+
+---
+
+## Guide Organizer
+
+When a guide is first created, it will appear in the "Unused Guides" section of the Organizer. To the right of that column you’ll see columns for the Guide CP, Edit Pages and the Dashboard. Use drag and drop to move a guide to one of these locations.
+
+When hovering over a guide in the Organizer, you'll see a gear appear to the right. Click on that to access quick actions for the guide:
+
+| Action | Description |
 | --- | --- |
-| `clientName` | string |
-| `myCompanyName` | string |
+| View | Preview the guide on a guide page as it would appear in the Guide CP. |
+| Edit | Edit brings you to the guide edit page for that guide. Clicking save will return you back to the Organizer |
+| Delete | Brings you to a delete confirmation page. Clicking the `Delete` button on this page will completely remove the guide from the CMS. |
 
-## Content Guides
+### Guide CP Section
 
-Say your client is already editing an entry and they want to look something up. Instead of sending them off to the Guide CP Section, you can leave instructions right on the Entry Edit page. Using action buttons in the sidebar—under Publish Options—you can create a Guide that appears on all Entry Edit pages of that entry type. The guide will appear in a modal—in front of the entry fields—so your content editor won't lose their place by loading a new page.
+Guides dragged into the Guide CP area of the Organizer will appear in the Guide CP Section’s Guide tab. When a user clicks on the Guide CP section, it will bring them to the first guide in the list. The order of the guides in the Organizer determines the order of the guides in the sidebar navigation.
 
-![Screenshot](resources/img/guide-content.png)
+When viewing a guide in the CP section, all of the header tags (`h1, h2, h3, etc...`) will be used to generate a subnav in the sidebar of the page. Clicking on a subnav item will scroll the guide content down to that header.
 
-You can create the guide using Markdown, Twig, or by pointing to a template in your site's `templates` folder.
+### Content Edit Pages
 
-![Screenshot](resources/img/guide-content-edit.png)
+Different guides can be displayed on any of the site’s entry sections or category groups. Using the Organizer to drag a guide onto a section area will add a guide menu to the sidebar on that section’s entry edit pages.
 
-Content Guides can be collaborative, too. By changing the "Who can edit guides?" field in Guide plugin settings, clients will be able to update existing guides and create their own guides. 
+When a user is editing an entry in that section, they can click on a guide in the menu to pop up the guide in a modal. This allows the user to view the guide without leaving the edit page.
 
-## Guide Widgets
+*NOTE: More than one guide can be added to each edit page.*
 
-![Screenshot](resources/img/guide-widgets.png)
+### Dashboard Widgets
 
-### Welcome Widget
+Dragging a guide to the Dashboard area of the Organizer allows that guide to be added to a Guide widget. From there, a user can add a Guide widget to their dashboard and select this guide from the list of all guides in the Dashboard area.
 
-A welcome message can be a good starting point for your content editors. Let them know where to begin once they've logged into the CMS by creating a Guide Widget.
+---
 
-Users can add a Welcome Widget to their dashboard and see the same content as all other users who have added the Welcome Widget. Welcome Widget's content is created using the Welcome Widget link in the Guide CP Section.
+## Styling Guides
 
-![Screenshot](resources/img/guide-widget-welcome-widget-settings.png)
+Guide content is styled using many of Craft CP’s default CSS, but many of the colors and elements unique to Guide can be overridden using the Rebrand section of the Guide settings page. Here you’ll find fields that let you override specific colors and layout styles.
 
-### Email Support
+These fields are converted to [CSS custom properties](https://developer.mozilla.org/en-US/docs/Web/CSS/--*) and are loaded on all pages of the Craft CP.
 
-The Email Support widget lets your clients get in touch with you—or a dedicated support person set in Guide plugin settings—when they have an issue that isn‘t explained though Guide or Craft, itself.
+The Rebrand section includes a text area that can be used to add your own custom CSS. To make sure the CSS doesn’t affect other parts of the CMS, be sure to start all selectors with `.guide_content`.
 
-The client may enter in a custom message and/or choose to send along basic system details that may help you diagnose their issues.
-
-![Screenshot](resources/img/guide-email-support-email.png)
-
-### Website Updates
-
-Website Updates is a changelog for your website. Let clients and collaborators know what has changed as features are added to the website and to the CP.
-
-Log entries can be added to Website Updates via the Website Updates link in the Guide CP Section. Here you can view all the past log entries, create a new log entry, and delete unwanted log entries.
-
-![Screenshot](resources/img/guide-widget-website-updates-settings.png)
-
-### Guide Widget
-
-This can include just a simple note written in markdown or you can use dynamic content via Twig. You can create and customize as many Guide Widgets as you'd like. Each Guide Widget is specific to the user who's Dashboard it is crated on.
-
-![Screenshot](resources/img/guide-widget-settings.png)
-
-## Components
-
-Components are slightly-styled, reusable snippets that can help you change the layout within Guide sections.
-
-Here's a list of available components:
-
-| Classes | Description |
-| --- | --- |
-| `.guide_button btn` | Style CP buttons with Guide's theme. |
-| `.guide_code_block` | Call out code or other text in `div` or block element. |
-| `.guide_code_inline` | Highlight code or other text. |
-| `.guide_grid` | Grid only enables CSS Grid Layout on it's own. If you add a modifier, you can create multiple column layouts. |
-| `.guide_grid .guide_grid--2_column` | Creates a 2-column grid. |
-| `.guide_grid .guide_grid--3_column` | Creates a 3-column grid. |
-| `.guide_grid .guide_grid--image` | Feature an image (or content) with a large area on the left and text on the right. |
-| `.guide_grid .guide_grid--image--right` | The same as `.guide_grid--image` but switched, with the large area on the right. |
-| `.guide_logo_lockup` | Use icons or logos to spruce up your headers. |
-
-![Screenshot](resources/img/guide-components.png)
-
-## CSS Variables
-
-Guide is color neutral by default, but some simple CSS changes can help you rebrand Guide to your liking. To make it easier than hunting down CSS selectors, you can change [CSS Custom Properties](https://developer.mozilla.org/en-US/docs/Web/CSS/--*) that drive Guide's theme.
-
-![Screenshot](resources/img/guide-setting-colors-example.png)
-
-For example, if you want to match Craft's sidebar, enter this into the Custom CSS field in Guide's plugin settings. Anywhere these properties are set they will be updated.
+All CSS custom properties generated by the fields in the Rebrand section are applied to a `.guide_styles` selector. So if you need to manually set a property, your custom css might look something like this:
 
 ```css
-:root {
-  --guide-color-bg: rgb(51, 63, 77);
-  --guide-color-link: rgb(255, 255, 255);
-  --guide-color-text: rgb(187, 187, 187);
-  --guide-color-h1: rgb(236, 236, 236);
+.guide_styles {
+  --grid-gap: 30px;
 }
 ```
 
-Regular CSS can be used, as well. Custom CSS entered in Guide's plugin settings will appear on all pages within the CP.
- 
-*Another idea could be to re-brand Guide to your own company's brand colors.*
+---
+
+## Upgrading from Guide 1
+
+When upgrading from Guide 1 to Guide 2 a migration will attempt to convert your old guides to Guide 2’s new format. All of your converted guides will be moved to the Organizer so they can be dragged to their desired location in the CP.
+
+Templates built for Guide 1 will mostly be compatible, however, Guide 2 introduces some breaking changes. Here are some things that need to be updated to convert a Guide 1 template for Guide 2:
+
+| Guide 1 | Guide 2 | Notes |
+| --- | --- | --- |
+| `updateGuideCpNav()` | No replacement | Use the Organizer to manage Guide CP Navigation |
+| `{{ guideAsset('FILENAME') }}` | `{{ craft.guide.component('image', { asset: craft.assets.filename('FILENAME').one() }) }}` |  |
+| `{{ guideQuery(OBJECT) }}` | `{{ craft.guide.getAll(OBJECT) }}` | `getAll` gets all guides for the given object. `{{ craft.guide.getAllForUser(OBJECT) }}` can be used to get guides that can be viewed by the logged in user. `{{ craft.guide.getOne(OBJECT) }}` is the same as `getAll` but `getAll` returns an array of guide objects, where `getOne` returns one guide object. |
+| `{{ guideVar('VAR_KEY') }}` | `{{ craft.guide.var('VAR_KEY') }}` |  |
+| `{% if pluginEnabled('PLUGIN_HANDLE') %}{% endif %}` | No replacement | Use Craft’s built-in `plugin()` Twig function: `{% if plugin('PLUGIN_HANDLE') %}{% endif %}` |
+
+---
+
+## Lite Edition
+
+The PRO edition of Guide allows developers and clients to collaborate by creating guides within the CMS and by placing them throughout the CP.
+
+The LITE edition is offered for developers who prefer to write their own guide templates and to display them in the Guide CP section.
+
+Guide’s edition can be upgraded to PRO at any time.
+
+---
 
 ## Guide Roadmap
 
 Some things to do, and ideas for potential features:
 
-- Add a default template to Guide widgets for easy portability
-- Expand Content Guides into Users and Categories
-- A few more ideas are in the works
+- [ ] Convert guides from a template into the editor field so they can be updated within the CMS
+- [ ] Export guide templates from guides created in the editor field
+- [ ] Explore more guide components (please send your suggestions here)
 
 Brought to you by [Will Browar](https://twitter.com/wbrowar)

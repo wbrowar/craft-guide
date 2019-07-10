@@ -1,6 +1,0 @@
-{% if (craft.app.config.general.cpTrigger ~ '/guide/home') in craft.app.request.url %}
-    {% set newUrl = craft.app.request.url|replace(craft.app.config.general.cpTrigger ~ '/guide/home', craft.app.config.general.cpTrigger ~ '/guide') %}
-    {% redirect newUrl %}
-{% else %}
-    {% redirect url('guide') %}
-{% endif %}

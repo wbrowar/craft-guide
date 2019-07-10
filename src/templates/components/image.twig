@@ -1,0 +1,47 @@
+{% extends 'guide/_partials/render_component.twig' %}
+
+{# Component element overrides #}
+{% set element = 'figure' %}
+
+{# Variables #}
+{% set asset = asset ?? null %}
+{% set caption = caption ?? null %}
+{% set lazyLoad = lazyLoad ?? true %}
+{% set placeholder = placeholder ?? 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==' %}
+{% set sizes = sizes ?? '100vw' %}
+{% set url = url ?? null %}
+
+{% set alt = alt ?? image.title ?? '' %}
+{% set transforms = transforms ?? [
+    { mode: 'fit', format: 'jpg', quality: 90, width: 700 },
+    { mode: 'fit', format: 'jpg', quality: 90, width: 1400 },
+] %}
+
+{% block content -%}
+    {% import _self as self %}
+
+    <picture>
+        {% if asset ?? false %}
+            {% if transforms|length %}
+                <img {% if lazyLoad %}data-lazy-load data-{% endif %}srcset="{{ self.getSrcSetFromObject({ image: asset, transforms: transforms }) }}" src="{{ placeholder }}" sizes="{{ sizes }}" alt="{{ alt }}" />
+            {% else %}
+                <img {% if lazyLoad %}data-lazy-load data-{% endif %}src="{{ asset.url }}" alt="{{ alt }}" />
+            {% endif %}
+        {% elseif url ?? false %}
+            <img {% if lazyLoad %}data-lazy-load data-{% endif %}src="{{ url }}" alt="{{ alt }}" />
+        {% endif %}
+    </picture>
+    {% if caption ?? false -%}
+        <figcaption class="{{ rootClass }}__caption">{{ caption }}</figcaption>
+    {%- endif %}
+{%- endblock %}
+
+{% macro getSrcSetFromObject(options) %}{% spaceless %}
+    {% set image = options.image ?? null %}
+    {% set transforms = options.transforms ?? {} %}
+    {% set suffix = options.suffix ?? null %}
+
+    {% if (image ?? false) and (transforms|length) %}
+        {% for transform in transforms %}{% if not loop.first %}, {% endif %}{{ image.getUrl(transform) }}{{ suffix }}{{ (transform.width ?? false) ? ' ' ~ transform.width ~ 'w' : '' }}{% endfor %}
+    {% endif %}
+{% endspaceless %}{% endmacro %}

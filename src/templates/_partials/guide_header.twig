@@ -1,0 +1,10 @@
+<div class="guide_header">
+    {% if settings.rebrand is defined and (settings.rebrand.headerIconFile ?? false) %}
+        {% set iconAsset = craft.assets.id(settings.rebrand.headerIconFile).one() %}
+        {% set iconUrl = iconAsset.url|replace(siteUrl, '') %}
+    {% else %}
+        {% set iconUrl = view.getAssetManager().getPublishedPath('@wbrowar/guide/assetbundles/guide/dist', true) ~ '/icon/icon.svg' %}
+    {% endif %}
+    <div class="guide_header__icon">{{ svg(iconUrl) }}</div>
+    <div class="guide_header__title">{{ title }}</div>
+</div>
