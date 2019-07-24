@@ -49,10 +49,6 @@
 {% endif %}
 
 {% set content %}
-    {% if guide.errors %}
-        <pre style="white-space: pre;">{{ dump(guide.errors) }}</pre>
-    {% endif %}
-
     <input type="hidden" name="action" value="guide/guide/save-guide">
     <input type="hidden" name="authorId" value="{{ guide.authorId ?? currentUser.id }}">
     <input type="hidden" name="parentType" value="{{ guide.parentType }}">
