@@ -56,13 +56,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## 1.3.2 - 2018-09-18
 ### Fixed
-- Fixed an issue that occurred when converting template guides to User Guides on some servers ([#10](https://github.com/wbrowar/craft-3-guide/issues/10))
+- Fixed an issue that occurred when converting template guides to User Guides on some servers ([#10](https://github.com/wbrowar/craft-guide/issues/10))
 
 
 ## 1.3.1 - 2018-08-21
 ### Fixed
-- Fixed an issue that caused subnav to disappear when in Guide CP section pages ([#2](https://github.com/wbrowar/craft-3-guide/issues/2))
-- Fixed a bug that occurred when all Guide Nav items are removed ([#9](https://github.com/wbrowar/craft-3-guide/issues/9))
+- Fixed an issue that caused subnav to disappear when in Guide CP section pages ([#2](https://github.com/wbrowar/craft-guide/issues/2))
+- Fixed a bug that occurred when all Guide Nav items are removed ([#9](https://github.com/wbrowar/craft-guide/issues/9))
 
 
 ## 1.3.0 - 2018-07-09

@@ -11,8 +11,8 @@
         "guide"
     ],
     "support": {
-        "docs": "https://github.com/wbrowar/guide/blob/master/README.md",
-        "issues": "https://github.com/wbrowar/guide/issues"
+        "docs": "https://github.com/wbrowar/craft-guide/blob/master/README.md",
+        "issues": "https://github.com/wbrowar/craft-guide/issues"
     },
     "license": "proprietary",
     "authors": [
@@ -34,7 +34,7 @@
         "handle": "guide",
         "hasCpSettings": true,
         "hasCpSection": true,
-        "changelogUrl": "https://raw.githubusercontent.com/wbrowar/guide/master/CHANGELOG.md",
+        "changelogUrl": "https://raw.githubusercontent.com/wbrowar/craft-guide/master/CHANGELOG.md",
         "class": "wbrowar\\guide\\Guide"
     }
 }
