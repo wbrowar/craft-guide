@@ -59,7 +59,7 @@ class ImportExportController extends Controller
      */
     public function actionDownloadTemplates()
     {
-        $selectedBranch = 'dev';
+        $selectedBranch = 'master';
         $branch = [
             'dev' => [
                 'unzippedDir' => '/craft-guide-templates-dev',
@@ -241,10 +241,10 @@ class ImportExportController extends Controller
                 $guide = new GuideModel([
                     'access' => $data['access'] ?? 'all',
                     'authorId' => Craft::$app->getUser()->getIdentity()->id ?? null,
+                    'contentSource' => $data['contentSource'] ?? 'template',
                     'contentUrl' => $data['contentUrl'] ?? '',
                     'format' => $data['format'] ?? 'markdown',
                     'slug' => $data['slug'],
-                    'contentSource' => $data['contentSource'] ?? 'template',
                     'template' => $data['template'] ?? '',
                     'title' => $data['title'],
                 ]);

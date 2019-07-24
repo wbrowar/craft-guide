@@ -140,11 +140,4 @@ class Guide extends Model
             ['permissions', 'default', 'value' => []],
         ];
     }
-
-//    public function validateTitle($attribute, $params)
-//    {
-//        if (empty($this->title)) {
-//            $this->addError('title', 'Your salary is not enough for children.');
-//        }
-//    }
 }

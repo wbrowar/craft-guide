@@ -137,18 +137,6 @@
                             <p>No template exist in your Guide Template Path. Add a template to your <b>{{ settings.templatePath }}</b> directory then return here to continue.</p>
                         </div>
                     {% endif %}
-
-                    {% if not proEdition and currentUser.admin %}
-                        <div class="guide_styles" style="padding: 24px;">
-                            <div class="c_tip">
-                                <div class="c_tip__header">Thanks for using the LITE edition of Guide!</div>
-                                <div class="c_tip__content">
-                                    <p>The PRO edition of Guide offers an easy to use, drag-and-drop editor letting you and your content authors collaborate by making guides in the CP. You can also embed external docs, customize the look and feel, and display guides on content edit pages and in dashboard widgets.</p>
-                                    <p><a class="btn small submit" href="{{ url('plugin-store/guide') }}">Check out Guide PRO in the Plugin Store</a></p>
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
                 </div>
             </div>
         </div>
@@ -176,7 +164,6 @@
             id: 'title',
             name: 'title',
             placeholder: 'Title',
-            required: true,
             value: guide.title,
         }) }}
 
@@ -194,11 +181,11 @@
                 id: 'contentSource',
                 name: 'contentSource',
                 value: guide.contentSource,
-                options: [
-                    { label: 'Content Field', value: 'field' },
-                    { label: 'Page Template', value: 'template' },
-                    { label: 'External Page (iframe)', value: 'iframe' },
-                ],
+                options: {
+                    field: 'Content Field',
+                    template: 'Page Template',
+                    iframe: 'External Page (iframe)',
+                }
             }) }}
         {% else %}
             <input type="hidden" id="contentSource" name="contentSource" value="template">

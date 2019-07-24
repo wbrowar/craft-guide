@@ -10,6 +10,7 @@
 
 namespace wbrowar\guide\controllers;
 
+use craft\helpers\DateTimeHelper;
 use craft\helpers\StringHelper;
 use craft\helpers\UrlHelper;
 use wbrowar\guide\Guide;
@@ -80,7 +81,9 @@ class GuideController extends Controller
     {
         $params = Craft::$app->getRequest()->getBodyParams();
 
-        $slug = ($params['slug'] ?? false) ? $params['slug'] : $this->_generateSlugFromTitle($params['title']);
+        $title = !empty($params['title']) ? $params['title'] : 'Guide saved on ' . Date('F jS \a\t g:ia');
+
+        $slug = ($params['slug'] ?? false) ? $params['slug'] : $this->_generateSlugFromTitle($title);
 
         $guide = new GuideModel([
             'access' => $params['access'],
@@ -95,7 +98,7 @@ class GuideController extends Controller
             'slug' => $slug,
             'summary' => $params['summary'],
             'template' => $params['template'],
-            'title' => $params['title'],
+            'title' => $title,
         ]);
 
         if ($guide->validate()) {
@@ -103,7 +106,8 @@ class GuideController extends Controller
 
             return $this->redirect(UrlHelper::url($params['redirect'] ?? 'guide/organizer'));
         } else {
-            Craft::dd('Error');
+            // @TODO handle error correctly
+//            Craft::dd('Error');
         }
     }
 

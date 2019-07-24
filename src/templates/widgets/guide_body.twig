@@ -10,7 +10,7 @@
  * @since     2.0.0
  */ #}
 
-{% if guide ?? false %}
+{% if (guide ?? false) and proEdition %}
     <div class="guide_styles guide_widget">
         {% if guide[0].contentSource != 'iframe' %}
             <div class="guide_widget__header">

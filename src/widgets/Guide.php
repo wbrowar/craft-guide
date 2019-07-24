@@ -103,6 +103,7 @@ class Guide extends Widget
             'guide/widgets/guide_body',
             [
                 'guide' => GuidePlugin::$plugin->guide->getGuidesForUser(['id' => $this->guideId, 'parentType' => 'widget']),
+                'proEdition' => GuidePlugin::$pro,
                 'settings' => GuidePlugin::$settings,
             ]
         );

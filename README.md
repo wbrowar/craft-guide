@@ -1,3 +1,5 @@
+![Guide 2](resources/img/guide-header.png)
+
 # Guide 2 for Craft CMS 3
 
 A CMS Guide for Craft CMS.
@@ -5,7 +7,7 @@ A CMS Guide for Craft CMS.
 ![Guide in the Control Panel](resources/img/guide-overview.png)
 
 Guide is made up of two parts:
-- [The commercial plugin for Craft 3](https://github.com/wbrowar/craft-guide)
+- [The commercial plugin for Craft 3](https://plugins.craftcms.com/guide)
 - [The open source user guide template](https://github.com/wbrowar/craft-guide-templates)
 
 *Note: The license fee for the PRO edition this plugin is $49.00 via the [Craft Plugin Store](https://plugins.craftcms.com/guide). A LITE edition is offered for free.*

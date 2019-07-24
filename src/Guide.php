@@ -138,11 +138,15 @@ class Guide extends Plugin
 
             // Insert JS into CP
             Event::on(View::class, View::EVENT_BEFORE_RENDER_TEMPLATE, function() {
+                // Add path to assets for use in JS files
                 $assetDist = self::$view->getAssetManager()->getPublishedUrl('@wbrowar/guide/assetbundles/guide/dist');
                 $js = 'window.WBGuideAssets = "' . $assetDist . '";';
+
+                // Enable logs into the browser console for easier JS debugging
                 $js .= 'window.WBJsDevMode = window.WBJsDevMode || ' . (Craft::$app->getConfig()->getGeneral()->devMode ? 'true' : 'false') . ';';
                 self::$view->registerJs($js, 1);
 
+                // Include user CSS
                 if (self::$pro && (self::$settings['rebrand'] ?? false)) {
                     self::$view->registerCss($this->_generateCustomCssFromRebrand(self::$settings['rebrand']));
                 }
@@ -154,6 +158,7 @@ class Guide extends Plugin
                 View::EVENT_REGISTER_CP_TEMPLATE_ROOTS,
                 function(RegisterTemplateRootsEvent $event) {
                     if ($this->getSettings()->templatePath ?? false) {
+                        // Set the path set in the Template Path setting to a template root that can be referenced later
                         $oldMode = self::$view->getTemplateMode();
                         self::$view->setTemplateMode(self::$view::TEMPLATE_MODE_SITE);
                         $templatePath = self::$view->getTemplatesPath() . '/' . $this->getSettings()->templatePath . '/';
@@ -196,7 +201,6 @@ class Guide extends Plugin
                     if (self::$userOperations['useOrganizer']) {
                         $event->rules['guide/organizer'] = ['template' => 'guide/organizer', 'variables' => ['organizerConfig' => self::$plugin->organizer->getOrganizerConfig(), 'settings' => self::$settings, 'userOperations' => self::$userOperations]];
                     }
-
                     if (self::$pro) {
                         $event->rules['guide/settings/components'] = ['template' => 'guide/settings', 'variables' => ['components' => self::$plugin->guideComponents->getComponentsList(), 'proEdition' => self::$pro, 'selectedTab' => 'components', 'settings' => self::$settings]];
                         $event->rules['guide/settings/rebrand'] = ['template' => 'guide/settings', 'variables' => ['proEdition' => self::$pro, 'selectedTab' => 'rebrand', 'settings' => self::$settings]];
@@ -205,9 +209,7 @@ class Guide extends Plugin
             );
         }
 
-        // Default events
-
-        // Pro events
+        // Register Pro features
         if (self::$pro) {
             // Add custom permissions
             if (Craft::$app->getEdition() > 0) {
@@ -259,9 +261,8 @@ class Guide extends Plugin
                 return false;
             });
 
-            // add modal template to footer
+            // Add modal template to footer
             Event::on(View::class, View::EVENT_END_BODY, function(Event $event) {
-//                Craft::dd(Craft::$app->controller->actionParams);
                 if (Craft::$app->controller->actionParams['entryId'] ?? false) {
                     $element = Craft::$app->getSections()->getSectionByHandle(Craft::$app->controller->actionParams['section']);
 
@@ -292,13 +293,14 @@ class Guide extends Plugin
             });
 
             // Add our utilities
-            Event::on(
-                Utilities::class,
-                Utilities::EVENT_REGISTER_UTILITY_TYPES,
-                function (RegisterComponentTypesEvent $event) {
-                    $event->types[] = ExportGuideTemplateUtility::class;
-                }
-            );
+            // @TODO Utilities
+//            Event::on(
+//                Utilities::class,
+//                Utilities::EVENT_REGISTER_UTILITY_TYPES,
+//                function (RegisterComponentTypesEvent $event) {
+//                    $event->types[] = ExportGuideTemplateUtility::class;
+//                }
+//            );
 
             // Add our widgets
             Event::on(
@@ -315,7 +317,7 @@ class Guide extends Plugin
             Plugins::EVENT_AFTER_INSTALL_PLUGIN,
             function (PluginEvent $event) {
                 if ($event->plugin === $this) {
-                    // Send them to our welcome screen
+                    // Send users to our welcome screen
                     $request = Craft::$app->getRequest();
                     if ($request->isCpRequest) {
                         Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('guide/welcome'))->send();
@@ -334,6 +336,9 @@ class Guide extends Plugin
         );
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getCpNavItem()
     {
         $navItem = parent::getCpNavItem();
@@ -357,9 +362,8 @@ class Guide extends Plugin
     }
 
     /**
-     * Set plugin editions
+     * @inheritdoc
      */
-
     public static function editions(): array
     {
         return [

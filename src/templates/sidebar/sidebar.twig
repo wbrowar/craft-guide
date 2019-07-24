@@ -21,7 +21,7 @@
 
         {% for item in guides %}
             <div class="guide_sidebar__toggle">
-                <div class="guide_sidebar__toggle__title" data-modal-id="{{ item.slug }}">{{ item.title }}</div>
+                <div class="guide_sidebar__toggle__title" data-modal-id="{{ item.slug }}"{% if item.summary %} title="{{ item.summary }}"{% endif %}>{{ item.title }}</div>
                 {% if userOperations.editGuides %}
                     <div><a class="guide_sidebar__toggle__button btn small" href="{{ url('guide/edit/' ~ item.id, 'return=' ~ craft.app.request.url) }}">Edit</a></div>
                 {% endif %}
