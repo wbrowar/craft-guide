@@ -8,7 +8,7 @@ Guide is made up of two parts:
 - [The commercial plugin for Craft 3](https://plugins.craftcms.com/guide)
 - [The open source user guide template](https://github.com/wbrowar/craft-guide-templates)
 
-*Note: The license fee for the PRO edition this plugin is $49.00 via the [Craft Plugin Store](https://plugins.craftcms.com/guide). A LITE edition is offered for free.*
+*Note: The license fee for the PRO edition this plugin is $49 via the [Craft Plugin Store](https://plugins.craftcms.com/guide). A LITE edition is offered for free.*
 
 ![Guide in the Control Panel](resources/img/guide-overview.png)
 
@@ -217,6 +217,68 @@ The `craft.guide.include()` variable makes it easy to reuse guide content in sev
 1. For each of your entry types, create a new guide with the Twig format, paste this into it: `{{ craft.guide.include({ slug: 'publishing-content' }) }}`, then use the Guide Organizer to add the guide to its respective content type.
 
 Now when an author goes to edit an entry, they will have the option to view the content of the `publishing-content` guide from the list of guides in the edit page’s sidebar. What’s even better is that when the content of the `publishing-content` guide gets updated, it will get propagated to all of the places where the guide is included.
+
+### Markdown in Twig and Twig in Markdown
+
+Craft includes a Twig filter to allow content to be parsed into GitHub flavor markdown (it’s the `md` filter, with `'gfm'` passed into it). To make this easy to remember, Guide includes the "Markdown" component for Twig-based guides. Any content written within the `{% filter md('gfm') %}{% endfilter %}` blocks are rendered as Markdown.
+
+This could be useful if you prefer to switch from verbose HTML to Markdown’s simplified format. It can also be handy if you started a Guide using Markdown, but you find yourself needing to change its format to Twig to include some dynamic content. To do this, follow these instructions:
+
+1. On the guide’s edit page, change the format from Markdown to Twig.
+1. Select all of the content in the guide and copy or cut it.
+1. Drag the "Markdown" component into the editor. You should see something like this:
+
+       {% filter md('gfm') %}
+       
+       Content
+       
+       {% endfilter %}
+
+1. Delete the word, 'Content', and paste your old content in its place.
+1. You may now add Twig markup above or below the {% filter %} block.
+
+When using the "Markdown" component, please note that white space does make a difference and that there should be no tabs or spaces before any markdown content.
+
+For example, you should do this:
+
+```twig
+{% if showMarkdownContent %}
+{% filter md('gfm') %}
+
+## Markdown Content
+
+This is my content in Markdown now
+
+{% endfilter %}
+{% endif %}
+```
+
+Even if it looks more readable to do this:
+
+```twig
+{% if showMarkdownContent %}
+  {% filter md('gfm') %}
+    ## Markdown Content
+    
+    This is my content in Markdown now
+  {% endfilter %}
+{% endif %}
+```
+
+On great thing about using Markdown filters within Twig is that Twig tags can still get rendered. For example, if you would like to place a "Button" component inside of a block of markdown, this would be valid:
+
+```twig
+{% set docsUrl = 'https://docs.craftcms.com/' %}
+{% filter md('gfm') %}
+
+The Craft CMS docs can be found here:
+
+{{ craft.guide.component('button', { label: 'Go to the Docs', url: docsUrl }) }}
+
+{% endfilter %}
+```
+
+_NOTE: The newline rules of Markdown apply in Markdown blocks. In The example above, the rendered button would appear within a `<p>` tag._
 
 ### To-Do List
 

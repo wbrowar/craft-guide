@@ -4,17 +4,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## 2.0.1 - 2019-07-28
+## 2.0.1 - 2019-07-27
 
 ### Added
-- A new variable, `craft.guide.include()`, lets you include the content of one guide within another guide.
-  - Using this variable renders the guide into a Twig-based guide regardless of whether the format of the imported guide is Twig or Markdown.
-  - 
+- A new variable, `craft.guide.include()`, lets you include the content of one guide into another guide.
+  - Using this variable renders the guide content in a Twig-based guide regardless of whether the format of the imported guide is Twig or Markdown.
+- An "Include Guide" component has been added for Twig-based guides
+  - If you do not see the "Include Guide" component, try visiting the Components settings page in Guide Settings, make sure "Include Guide" is enabled, then re-save the Component settings page.
+- Added a [Recipes, Tips, and Tricks](https://github.com/wbrowar/craft-guide/blob/master/README.md#recipes-tips-and-tricks) section to the README.
+
+### Changed
+- The "Markdown" component now defaults to GitHub Flavored Markdown to match Guide’s default Markdown flavor.
 
 ### Fixed
-- Made the CSS selector of Guide `iframe` content more specific to avoid affecting Live Preview iframes.
-- Fixed a bug that did’t allow the editor to work when `devMode` was turned `false`.
+- Fixed a bug that did’t allow the editor to work when `devMode` was set to `false`.
+- Made the CSS selector of Guide iframe content more specific to avoid affecting Live Preview iframes.
 - Gave import options unique IDs to avoid multiple selects when clicking on a checkbox label.
+
 
 ## 2.0.0 - 2019-07-24
 

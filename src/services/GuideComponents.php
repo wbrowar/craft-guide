@@ -138,7 +138,7 @@ class GuideComponents extends Component
                 'name' => 'Markdown',
                 'description' => 'Insert an area of markdown to allow for less HTML formatting.',
                 'code' => [
-                    'twig' => "{% filter md %}\n\nContent\n\n{% endfilter %}",
+                    'twig' => "{% filter md('gfm') %}\n\nContent\n\n{% endfilter %}",
                 ],
             ],
             'my_company_name' => [
