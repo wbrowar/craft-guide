@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.0.1 - 2019-07-28
+
+### Added
+- A new variable, `craft.guide.include()`, lets you include the content of one guide within another guide.
+  - Using this variable renders the guide into a Twig-based guide regardless of whether the format of the imported guide is Twig or Markdown.
+  - 
+
+### Fixed
+- Made the CSS selector of Guide `iframe` content more specific to avoid affecting Live Preview iframes.
+- Fixed a bug that did’t allow the editor to work when `devMode` was turned `false`.
+- Gave import options unique IDs to avoid multiple selects when clicking on a checkbox label.
+
 ## 2.0.0 - 2019-07-24
 
 > {warning} Please upgrade to Guide 1.4.0 before upgrading to 2.0.0. [Tips for upgrading from Guide 1 can be found here.](https://github.com/wbrowar/craft-guide/blob/master/README.md#upgrading-from-guide-1)

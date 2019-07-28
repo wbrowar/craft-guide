@@ -127,6 +127,13 @@ class GuideComponents extends Component
                     'twig' => "{{ craft.guide.component('image', { url: 'REPLACE_URL' }) }}",
                 ],
             ],
+            'include_guide' => [
+                'name' => 'Include Guide',
+                'description' => 'Display the content of another guide based on the supplied criteria.',
+                'code' => [
+                    'twig' => "{{ craft.guide.include({ slug: 'REPLACE_SLUG' }) }}",
+                ],
+            ],
             'markdown' => [
                 'name' => 'Markdown',
                 'description' => 'Insert an area of markdown to allow for less HTML formatting.',
@@ -199,6 +206,7 @@ class GuideComponents extends Component
                 'grid_text_sidebar',
                 'grid_sidebar_text',
                 'image',
+                'include_guide',
                 'markdown',
                 'my_company_name',
                 'table',

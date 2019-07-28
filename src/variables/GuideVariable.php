@@ -58,6 +58,20 @@ class GuideVariable
     }
 
     /**
+     * @return string
+     */
+    public function include($params = [])
+    {
+        $guide = Guide::$plugin->guide->getGuides($params, 'one');
+
+        if ($guide && in_array($guide->contentSource, ['field', 'template'])) {
+            return Template::raw(Guide::$view->renderTemplate('guide/_partials/render_content.twig', ['guide' => $guide]));
+        }
+
+        return 'Included guide has been moved or deleted.';
+    }
+
+    /**
      * @return string|null
      */
     public function var($variable)

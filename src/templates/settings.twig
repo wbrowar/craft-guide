@@ -92,21 +92,21 @@
                     </div>
                     <div class="guide_import__importable" v-if="guides" v-cloak>
                         <div class="guide_import__guides">
-                            <div class="guide_import__guide" v-for="item in guides">
+                            <div class="guide_import__guide" v-for="(item, index) in guides">
                                 <h3 class="guide_import__guide__title">${ item.title }</h3>
                                 <p class="guide_import__guide__description" v-if="item.description">${ item.description }</p>
                                 <div class="guide_import__guide__options">
                                     <div v-if="item.templatesPath">
-                                        <input type="checkbox" id="enableImportTemplates" v-model="item.enableImportTemplates">
-                                        <label for="enableImportTemplates">Import Templates</label>
+                                        <input type="checkbox" :id="'enableImportTemplates-' + index" v-model="item.enableImportTemplates">
+                                        <label :for="'enableImportTemplates-' + index">Import Templates</label>
                                     </div>
                                     <div v-if="item.assetsPath">
-                                        <input type="checkbox" id="enableImportAssets" v-model="item.enableImportAssets">
-                                        <label for="enableImportAssets">Import Assets</label>
+                                        <input type="checkbox" :id="'enableImportAssets-' + index" v-model="item.enableImportAssets">
+                                        <label :for="'enableImportAssets-' + index">Import Assets</label>
                                     </div>
                                     <div v-if="item.guides">
-                                        <input type="checkbox" id="enableImportGuides" v-model="item.enableImportGuides">
-                                        <label for="enableImportGuides">Import Guides into Organizer</label>
+                                        <input type="checkbox" :id="'enableImportGuides-' + index" v-model="item.enableImportGuides">
+                                        <label :for="'enableImportGuides-' + index">Import Guides into Organizer</label>
                                     </div>
                                 </div>
                                 <div class="btn submit" @click="importTemplates(item)">Import</div>
