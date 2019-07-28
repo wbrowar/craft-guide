@@ -97,12 +97,12 @@ When a guide is written in Twig format, Guide provides a set of Twig variables:
 
 | Variable Example | Description |
 | --- | --- |
-| `{{ craft.guide.component('audio', { url: 'my-song.mp3' }) }}` | (Available in Guide PRO) Renders a Guide Component based on the handle set in the first argument and a configuration object in the second argument. |
-| `{{ craft.guide.getAll({ format: 'twig' }) }}` | Performs a search of all guides that fit the criteria passed in. This will return an array of guide objects. |
-| `{{ craft.guide.getAllForUser({ format: 'twig' }) }}` | Performs the same search as `craft.guide.getAll`, but returns only guides that the currently logged in user has permission to view. |
-| `{{ craft.guide.getOne({ id: 10 }) }}` | Returns a single guide object based on the criteria passed in. |
-| `{{ craft.guide.include({ slug: 'assets' }) }}` | Finds a matching guide and renders its content in place. |
-| `{{ craft.guide.var('clientName') }}` | Returns variables set in Guide Settings. |
+| `craft.guide.component('audio', { url: 'my-song.mp3' })` | (Available in Guide PRO) Renders a Guide Component based on the handle set in the first argument and a configuration object in the second argument. |
+| `craft.guide.getAll({ format: 'twig' })` | Performs a search of all guides that fit the criteria passed in. This will return an array of guide objects. |
+| `craft.guide.getAllForUser({ format: 'twig' })` | Performs the same search as `craft.guide.getAll`, but returns only guides that the currently logged in user has permission to view. |
+| `craft.guide.getOne({ id: 10 })` | Returns a single guide object based on the criteria passed in. |
+| `craft.guide.include({ slug: 'assets' })` | Finds a matching guide and renders its content in place. |
+| `craft.guide.var('clientName')` | Returns variables set in Guide Settings. |
 
 ### Guide Templates
 
@@ -290,28 +290,28 @@ Create a list of entries that need to updated by content authors:
 
 {# Display a list of the selected entries and provide the URL to their edit pages #}
 {% if entries|length %}
-<table>
-  <thead>
-    <tr>
-      <th>Entry</th>
-      <th>Edit URL</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for entry in entries %}
+  <table>
+    <thead>
       <tr>
-        <td>{{ entry.title }}</td>
-        <td>{{ craft.guide.component('button', { label: 'Edit', url: entry.cpEditUrl }) }}</td>
+        <th>Entry</th>
+        <th>Edit URL</th>
       </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {% for entry in entries %}
+        <tr>
+          <td>{{ entry.title }}</td>
+          <td>{{ craft.guide.component('button', { label: 'Edit', url: entry.cpEditUrl }) }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% else %}
-<p>There’s nothing to update!</p>
+  <p>There’s nothing to update!</p>
 {% endif %}
 ```
 
-This might be added to a guide in a spot that explains the publishing rules for this type of entry or maybe as the content of a Guide Dashboard widget.
+This might be added to a guide in a section that explains the publishing rules for this type of entry or maybe as the content of a Guide Dashboard widget.
 
 To-do lists can also be handy for one-time migrations or to keep an eye on entries that lose required assets or relations as things get moved around or deleted.
 
@@ -326,9 +326,9 @@ Templates built for Guide 1 will mostly be compatible, however, Guide 2 introduc
 | Guide 1 | Guide 2 | Notes |
 | --- | --- | --- |
 | `updateGuideCpNav()` | No replacement | Use the Organizer to manage Guide CP Navigation |
-| `{{ guideAsset('FILENAME') }}` | `{{ craft.guide.component('image', { asset: craft.assets.filename('FILENAME').one() }) }}` |  |
-| `{{ guideQuery(OBJECT) }}` | `{{ craft.guide.getAll(OBJECT) }}` | `getAll` gets all guides for the given object. `{{ craft.guide.getAllForUser(OBJECT) }}` can be used to get guides that can be viewed by the logged in user. `{{ craft.guide.getOne(OBJECT) }}` is the same as `getAll` but `getAll` returns an array of guide objects, where `getOne` returns one guide object. |
-| `{{ guideVar('VAR_KEY') }}` | `{{ craft.guide.var('VAR_KEY') }}` |  |
+| `guideAsset('FILENAME')` | `craft.guide.component('image', { asset: craft.assets.filename('FILENAME').one() })` |  |
+| `guideQuery(OBJECT)` | `craft.guide.getAll(OBJECT)` | `getAll` gets all guides for the given object. `craft.guide.getAllForUser(OBJECT)` can be used to get guides that can be viewed by the logged in user. `craft.guide.getOne(OBJECT)` is the same as `getAll` but `getAll` returns an array of guide objects, where `getOne` returns one guide object. |
+| `guideVar('VAR_KEY')` | `craft.guide.var('VAR_KEY')` |  |
 | `{% if pluginEnabled('PLUGIN_HANDLE') %}{% endif %}` | No replacement | Use Craft’s built-in `plugin()` Twig function: `{% if plugin('PLUGIN_HANDLE') %}{% endif %}` |
 
 ---
