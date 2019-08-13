@@ -4,8 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## 2.0.1 - 2019-07-27
+## 2.1.0 - 2019-08-13
+### Added
+- File contents in guide templates can be moved to the Content Field in one click—making it easier to go from importing templates to editing their content in the Guide Editor.
+- A Guide utility has been added to the Utilities CP section.
+  - Guides can be imported from [Craft Guide Templates](https://github.com/wbrowar/craft-guide-templates)
+  - Guide data stored in the database can be exported from one environment (dev, staging, etc...) then imported into another development.
+  - The layout of guides in the Organizer are exported and imported, too.
+- Guides can now be duplicated from the Guide Organizer via a new action button found on each guide (click on the gear to see guide actions).
 
+### Changed
+- Importing guides from [Craft Guide Templates](https://github.com/wbrowar/craft-guide-templates) has been moved from Settings to the Guide Utility.
+  - This makes it possible to import guides on a server where `allowAdminChanges` is set to false.
+- When saving a guide, `-1` will be appended to the slug if the slug is not unique.
+
+
+## 2.0.1 - 2019-07-27
 ### Added
 - A new variable, `craft.guide.include()`, lets you include the content of one guide into another guide.
   - Using this variable renders the guide content in a Twig-based guide regardless of whether the format of the imported guide is Twig or Markdown.

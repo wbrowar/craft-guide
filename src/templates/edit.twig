@@ -32,7 +32,11 @@
 {% set guideEditorConfig = {
     content: guide.content ?? '',
     format: guide.format,
+    templates: {},
 } %}
+{% if templates ?? false and templates.contents ?? false %}
+    {% set guideEditorConfig = guideEditorConfig|merge({ templates: templates.contents }) %}
+{% endif %}
 {% js %}var guideEditorConfig = {{ guideEditorConfig|json_encode|raw }}{% endjs %}
 
 {% set fullPageForm = true %}
@@ -124,13 +128,26 @@
                                 id: 'template',
                                 name: 'template',
                                 value: guide.template,
-                                options: templates,
+                                options: templates.filenames,
                                 instructions: 'Load a template found in your *' ~ settings.templatePath ~ '* directory.',
                             }) }}
+
+                            {% if proEdition %}
+                                <hr>
+                                <div class="field">
+                                    <div class="heading">
+                                        <label id="content-label" for="content">Copy Template Content to Content Field</label>
+                                        <div class="instructions">
+                                            <p>Copy the code from the selected template and place it into the Content field. The field content will be stored in the database and the template file will not be modified.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="btn submit" @click="convertTemplateToFieldContent">Update Content</div>
+                            {% endif %}
                         </div>
                     {% else %}
                         <div class="guide_editor__main__section">
-                            <p>No template exist in your Guide Template Path. Add a template to your <b>{{ settings.templatePath }}</b> directory then return here to continue.</p>
+                            <p>No templates exist in your Guide Template Path. Add a template to your <b>{{ settings.templatePath }}</b> directory then return here to continue.</p>
                         </div>
                     {% endif %}
                 </div>

@@ -19,6 +19,7 @@ use wbrowar\guide\models\Guide as GuideModel;
 
 use Craft;
 use craft\web\Controller;
+use wbrowar\guide\models\Organizer;
 use wbrowar\guide\models\Organizer as OrganizerModel;
 
 /**
@@ -59,7 +60,9 @@ class ImportExportController extends Controller
      */
     public function actionDownloadTemplates()
     {
-        $selectedBranch = 'master';
+        $params = Craft::$app->getRequest()->getBodyParams();
+
+        $selectedBranch = $params['branch'] ?? 'master';
         $branch = [
             'dev' => [
                 'unzippedDir' => '/craft-guide-templates-dev',
@@ -137,7 +140,61 @@ class ImportExportController extends Controller
     /**
      * Installs a downloaded template by importing its templates and navigation info into Guide.
      *
-     * actions/guide/import-export/download-templates
+     * actions/guide/import-export/import-json
+     *
+     * @return mixed
+     */
+    public function actionImportJson()
+    {
+        $params = Craft::$app->getRequest()->getBodyParams();
+        $results = [
+            'completed' => [],
+            'status' => 'error',
+            'error' => '',
+        ];
+
+        if ($params['guideData'] ?? false) {
+            $guideData = Json::decodeIfJson($params['guideData']);
+
+            // Import guides
+            if ($guideData['guides'] ?? false) {
+                foreach ($guideData['guides'] as $item) {
+                    Guide::$plugin->importExport->importGuideData($item);
+                }
+
+                $results['status'] = 'success';
+            }
+
+            // Import Guide CP navigation
+            if ($guideData['cpNav'] ?? false) {
+                $guideSlugs = [];
+                $organizer = Guide::$plugin->organizer->getOrganizer()->toArray();
+                $organizerId = $organizer['id'];
+                $guides = Guide::$plugin->guide->getGuides();
+
+                foreach ($guides as $guide) {
+                    $guideSlugs[$guide['slug']] = $guide['id'];
+                }
+
+                $cpNav = [];
+                foreach ($guideData['cpNav'] as $item) {
+                    $cpNav[] = strval($guideSlugs[$item]);
+                }
+                $newOrganizer = new Organizer([
+                    'cpNav' => Json::encode($cpNav)
+                ]);
+
+                Guide::$plugin->organizer->saveOrganizer($newOrganizer, $organizerId);
+            }
+        }
+
+        return $this->asJson($results);
+    }
+
+    /**
+     * Installs a downloaded template by importing its templates and navigation info into Guide.
+     *
+     * actions/guide/import-export/import-template
      *
      * @return mixed
      */
@@ -211,7 +268,7 @@ class ImportExportController extends Controller
             // Add to guide navigation
             if ($params['enableImportGuides'] == 'true' && $template['guides'] ?? false) {
                 foreach ($template['guides'] as $item) {
-                    $this->_importGuide($item);
+                    Guide::$plugin->importExport->importGuideData($item);
                 }
                 $results['completed'][] = 'Imported guides into Organizer.';
             }
@@ -222,43 +279,5 @@ class ImportExportController extends Controller
         }
 
         return $this->asJson($results);
-    }
-
-    // Private Methods
-    // =========================================================================
-
-    /**
-     * @return int|bool
-     */
-    public function _importGuide($data)
-    {
-        if ($data['slug'] ?? false
-            && $data['title'] ?? false) {
-            // Check to see if a guide with this slug already exists
-            if(!Guide::$plugin->guide->getGuides([
-                'slug' => $data['slug'],
-            ], 'count')) {
-                $guide = new GuideModel([
-                    'access' => $data['access'] ?? 'all',
-                    'authorId' => Craft::$app->getUser()->getIdentity()->id ?? null,
-                    'contentSource' => $data['contentSource'] ?? 'template',
-                    'contentUrl' => $data['contentUrl'] ?? '',
-                    'format' => $data['format'] ?? 'markdown',
-                    'slug' => $data['slug'],
-                    'template' => $data['template'] ?? '',
-                    'title' => $data['title'],
-                ]);
-
-                if ($guide->validate()) {
-                    $saved = Guide::$plugin->guide->saveGuide($guide, null);
-
-                    if ($saved) {
-                        return $saved;
-                    }
-                }
-            }
-        }
-
-        return false;
     }
 }

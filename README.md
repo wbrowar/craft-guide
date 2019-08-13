@@ -148,6 +148,7 @@ When hovering over a guide in the Organizer, you'll see a gear appear to the rig
 | --- | --- |
 | View | Preview the guide on a guide page as it would appear in the Guide CP. |
 | Edit | Edit brings you to the guide edit page for that guide. Clicking save will return you back to the Organizer |
+| Clone | Creates a copy of the guide. |
 | Delete | Brings you to a delete confirmation page. Clicking the `Delete` button on this page will completely remove the guide from the CMS. |
 
 ### Guide CP Section
@@ -173,6 +174,24 @@ When a user is editing an entry in that section, they can click on a guide in th
 ![Guide widget](resources/img/guide-dashboard.png)
 
 Dragging a guide to the Dashboard area of the Organizer allows that guide to be added to a Guide widget. From there, a user can add a Guide widget to their dashboard and select this guide from the list of all guides in the Dashboard area.
+
+---
+
+## Importing Guides
+
+Guides can be imported using the Guide utility found in the Utilities CP section.
+
+### Import Guide Templates
+Guide templates, assets, and guide data that are hosted in the [Craft Guide Templates](https://github.com/wbrowar/craft-guide-templates) repo can be downloaded and imported using this utility.
+
+When you click on the "Download Templates" button the repo will be downloaded into your site’s `storage` folder and get unzipped, then you will be presented with a list of guides templates that are available for import. You may decide which parts you would like to import by using the checkboxes found on each guide template.
+
+### Import Guide JSON
+You may export and import the guide data stored in the database using the Import Guide JSON utility.
+
+All of the guides in the Guide Organizer will be exported into JSON format that appears in the first textarea field. To move this data to another environment, follow the instructions on the page.
+
+_NOTE: Regardless of the import method, Guide will only add new guides into the database. When importing, Guide will ignore guide data with a `slug` that matches an existing guide’s slug._
 
 ---
 
@@ -278,7 +297,7 @@ The Craft CMS docs can be found here:
 {% endfilter %}
 ```
 
-_NOTE: The newline rules of Markdown apply in Markdown blocks. In The example above, the rendered button would appear within a `<p>` tag._
+_NOTE: The newline rules of Markdown apply in Markdown blocks. In the example above, the rendered button would appear within a `<p>` tag._
 
 ### To-Do List
 

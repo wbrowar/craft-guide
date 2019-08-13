@@ -78,53 +78,10 @@
                 <p><a class="btn icon add" href="{{ url('settings/assets/volumes/new') }}">Create a New Volume</a></p>
             {% endif %}
 
-            {% if (settings.templatePath ?? false) and settings.assetVolume != '0' %}
-                <div id="guide_import" class="guide_import" data-guide-import>
-                    <hr>
-                    <div class="field">
-                        <div class="heading">
-                            <label>Import Guide Templates</label>
-                            <div class="instructions">
-                                <p>Download and import open source starter templates from <a href="https://github.com/wbrowar/craft-guide-templates">Craft Guide Templates</a>.</p>
-                                <p>See the <a href="https://github.com/wbrowar/craft-guide-templates/blob/master/README.md#contributing">Contributing</a> section to learn how you can help improve these templates.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="guide_import__importable" v-if="guides" v-cloak>
-                        <div class="guide_import__guides">
-                            <div class="guide_import__guide" v-for="(item, index) in guides">
-                                <h3 class="guide_import__guide__title">${ item.title }</h3>
-                                <p class="guide_import__guide__description" v-if="item.description">${ item.description }</p>
-                                <div class="guide_import__guide__options">
-                                    <div v-if="item.templatesPath">
-                                        <input type="checkbox" :id="'enableImportTemplates-' + index" v-model="item.enableImportTemplates">
-                                        <label :for="'enableImportTemplates-' + index">Import Templates</label>
-                                    </div>
-                                    <div v-if="item.assetsPath">
-                                        <input type="checkbox" :id="'enableImportAssets-' + index" v-model="item.enableImportAssets">
-                                        <label :for="'enableImportAssets-' + index">Import Assets</label>
-                                    </div>
-                                    <div v-if="item.guides">
-                                        <input type="checkbox" :id="'enableImportGuides-' + index" v-model="item.enableImportGuides">
-                                        <label :for="'enableImportGuides-' + index">Import Guides into Organizer</label>
-                                    </div>
-                                </div>
-                                <div class="btn submit" @click="importTemplates(item)">Import</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="btn submit" @click="downloadTemplates" v-text="status === 'downloading' ? 'Downloading from Github' : 'Download Templates'" v-else>Download Templates</div>
-                </div>
-            {% else %}
+            {% if (settings.templatePath ?? false) and settings.assetVolume != '0' and currentUser.can('utility:guide-export-import') %}
                 <hr>
-                <div class="field">
-                    <div class="heading">
-                        <label>Import Guide Templates</label>
-                        <div class="instructions">
-                            <p>Importing is available when Template Path and Asset Volume are set.</p>
-                        </div>
-                    </div>
-                </div>
+                <p>You may import and export guides now that you have set a Template Path and Asset Volume.</p>
+                <a class="btn submit" href="{{ url('utilities/guide-export-import') }}">Go to the Guide Utilities page</a>
             {% endif %}
         {% case 'variables' %}
             {% set classicCompanies = shuffle([

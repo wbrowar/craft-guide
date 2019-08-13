@@ -11,7 +11,6 @@
 namespace wbrowar\guide\services;
 
 use craft\elements\Asset;
-use craft\helpers\Template;
 use wbrowar\guide\Guide;
 
 use Craft;

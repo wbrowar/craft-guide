@@ -71,7 +71,6 @@ class Guide extends Component
         return $userGuides ?? null;
     }
 
-
     /**
      * Finds Guides based on the supplied parameters that the current user has permission to view.
      *
@@ -139,12 +138,40 @@ class Guide extends Component
         $record->parentUid = $model->parentUid;
         $record->permissions = $model->permissions;
         $record->summary = $model->summary;
-        $record->slug = $model->slug;
+        $record->slug = $this->_getUniqueSlug($model->slug, $id ?? 0);
         $record->template = $model->template;
         $record->title = $model->title;
 
         $record->save();
 
         return $record->id;
+    }
+
+    // Private Methods
+    // =========================================================================
+
+    /**
+     * Update a slug if it is not unique.
+     *
+     * @param $slug string The original slug
+     * @param $id int The ID of a guide that is being saved
+     * @return string
+     */
+    private function _getUniqueSlug(string $slug, int $id):string
+    {
+        // Get all current slugs
+        $allGuideSlugs = Guides::find()->select(['slug', 'id'])->all();
+        $slugs = [];
+        foreach ($allGuideSlugs as $item) {
+            if ($item->id != $id) {
+                $slugs[] = $item->slug;
+            }
+        }
+
+        while (in_array($slug, $slugs)) {
+            $slug .= '-1';
+        }
+
+        return $slug;
     }
 }

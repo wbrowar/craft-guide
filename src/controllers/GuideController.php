@@ -49,7 +49,7 @@ class GuideController extends Controller
     }
 
     /**
-     * Deletes a single guide based on ID and Site ID.
+     * Deletes a single guide based on ID.
      *
      * actions/guide/guide/delete-guide
      *
@@ -66,6 +66,38 @@ class GuideController extends Controller
         if ($guide) {
             $guide->delete();
         }
+
+        return $this->redirect(UrlHelper::url($params['redirect'] ?? 'guide/organizer'));
+    }
+
+    /**
+     * Duplicates a single guide based on ID.
+     *
+     * actions/guide/guide/duplicate-guide
+     *
+     * @return mixed
+     */
+    public function actionDuplicateGuide()
+    {
+        // Get guide ID from URL
+        $id = Craft::$app->getRequest()->getSegment(3);
+
+        // Get Guide from ID
+        $guide = Guide::$plugin->guide->getGuides([
+            'id' => $id,
+        ], 'one')->toArray();
+
+        // Remove items specific to original Guide
+        unset($guide['id']);
+        unset($guide['dateCreated']);
+        unset($guide['dateUpdated']);
+        unset($guide['uid']);
+        $guide['parentUid'] = '';
+        $guide['parentType'] = '__none__';
+
+        $guideModel = new GuideModel($guide);
+
+        Guide::$plugin->guide->saveGuide($guideModel);
 
         return $this->redirect(UrlHelper::url($params['redirect'] ?? 'guide/organizer'));
     }

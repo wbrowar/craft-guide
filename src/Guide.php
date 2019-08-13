@@ -21,10 +21,11 @@ use wbrowar\guide\assetbundles\Guide\GuideAsset;
 use wbrowar\guide\services\Guide as GuideService;
 use wbrowar\guide\services\GuideComponents as GuideComponentsService;
 use wbrowar\guide\services\Organizer as OrganizerService;
+use wbrowar\guide\utilities\ImportExport;
 use wbrowar\guide\variables\GuideVariable;
 use wbrowar\guide\twigextensions\GuideTwigExtension;
 use wbrowar\guide\models\Settings;
-use wbrowar\guide\utilities\ExportGuideTemplate as ExportGuideTemplateUtility;
+use wbrowar\guide\utilities\ImportExport as ExportGuideTemplateUtility;
 use wbrowar\guide\widgets\Guide as GuideWidget;
 
 use Craft;
@@ -112,6 +113,7 @@ class Guide extends Plugin
         // Add our services
         $this->setComponents([
             'guide' => 'wbrowar\guide\services\Guide',
+            'importExport' => 'wbrowar\guide\services\ImportExport',
             'guideComponents' => 'wbrowar\guide\services\GuideComponents',
             'organizer' => 'wbrowar\guide\services\Organizer',
         ]);
@@ -173,6 +175,10 @@ class Guide extends Plugin
                 UrlManager::class,
                 UrlManager::EVENT_REGISTER_CP_URL_RULES,
                 function (RegisterUrlRulesEvent $event) {
+                    // Actions
+                    $event->rules['guide/duplicate/<guideId:\d{1,}>'] = 'guide/guide/duplicate-guide';
+
+                    // Templates
                     $event->rules['guide'] = ['template' => 'guide/index', 'variables' => ['organizer' => self::$plugin->organizer->getOrganizer(), 'settings' => self::$settings, 'userOperations' => self::$userOperations]];
                     $event->rules['guide/welcome'] = ['template' => 'guide/welcome', 'variables' => ['settings' => self::$settings]];
                     $event->rules['guide/page/<slug:(.*)>'] = ['template' => 'guide/page', 'variables' => ['organizer' => self::$plugin->organizer->getOrganizer(), 'settings' => self::$settings, 'userOperations' => self::$userOperations]];
@@ -294,13 +300,13 @@ class Guide extends Plugin
 
             // Add our utilities
             // @TODO Utilities
-//            Event::on(
-//                Utilities::class,
-//                Utilities::EVENT_REGISTER_UTILITY_TYPES,
-//                function (RegisterComponentTypesEvent $event) {
-//                    $event->types[] = ExportGuideTemplateUtility::class;
-//                }
-//            );
+            Event::on(
+                Utilities::class,
+                Utilities::EVENT_REGISTER_UTILITY_TYPES,
+                function (RegisterComponentTypesEvent $event) {
+                    $event->types[] = ImportExport::class;
+                }
+            );
 
             // Add our widgets
             Event::on(
@@ -469,7 +475,8 @@ class Guide extends Plugin
 
             foreach ($filesInDirectory as $item) {
                 $template = str_replace($userTemplatePath . '/', '', $item);
-                $templates[$template] = $template;
+                $templates['filenames'][$template] = $template;
+                $templates['contents'][$template] = file_get_contents($item);
             }
         }
 

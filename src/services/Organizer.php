@@ -68,6 +68,7 @@ class Organizer extends Component
         foreach ($guides as $guide) {
             $config['guides'][] = [
                 'deleteUrl' => UrlHelper::url('guide/delete/' . $guide->id),
+                'duplicateUrl' => UrlHelper::url('guide/duplicate/' . $guide->id),
                 'editUrl' => UrlHelper::url('guide/edit/' . $guide->id),
                 'id' => $guide->id,
                 'title' => $guide->title,

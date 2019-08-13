@@ -11,7 +11,6 @@
 namespace wbrowar\guide\utilities;
 
 use wbrowar\guide\Guide;
-use wbrowar\guide\assetbundles\exportguidetemplateutility\ExportGuideTemplateUtilityAsset;
 
 use Craft;
 use craft\base\Utility;
@@ -23,7 +22,7 @@ use craft\base\Utility;
  * @package   Guide
  * @since     2.0.0
  */
-class ExportGuideTemplate extends Utility
+class ImportExport extends Utility
 {
     // Static
     // =========================================================================
@@ -33,7 +32,7 @@ class ExportGuideTemplate extends Utility
      */
     public static function displayName(): string
     {
-        return Craft::t('guide', 'ExportGuideTemplate');
+        return Craft::t('guide', 'Guide');
     }
 
     /**
@@ -41,7 +40,7 @@ class ExportGuideTemplate extends Utility
      */
     public static function id(): string
     {
-        return 'guide-export-guide-template';
+        return 'guide-export-import';
     }
 
     /**
@@ -49,7 +48,7 @@ class ExportGuideTemplate extends Utility
      */
     public static function iconPath()
     {
-        return Craft::getAlias("@wbrowar/guide/assetbundles/exportguidetemplateutility/dist/img/ExportGuideTemplate-icon.svg");
+        return Craft::getAlias("@wbrowar/guide/assetbundles/guide/dist/icon/icon-mask.svg");
     }
 
     /**
@@ -65,13 +64,14 @@ class ExportGuideTemplate extends Utility
      */
     public static function contentHtml(): string
     {
-        Craft::$app->getView()->registerAssetBundle(ExportGuideTemplateUtilityAsset::class);
+//        Craft::$app->getView()->registerAssetBundle(ExportGuideTemplateUtilityAsset::class);
 
-        $someVar = 'Have a nice day!';
         return Craft::$app->getView()->renderTemplate(
-            'guide/_components/utilities/ExportGuideTemplate_content',
+            'guide/utilities/export-import',
             [
-                'someVar' => $someVar
+                'guidesJson' => Guide::$plugin->importExport->getGuidesAsJson(),
+                'proEdition' => Guide::$pro,
+                'settings' => Guide::$settings,
             ]
         );
     }

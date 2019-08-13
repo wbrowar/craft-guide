@@ -1,0 +1,95 @@
+{# /**
+ * Guide plugin for Craft CMS
+ *
+ * Guide Utility Body
+ *
+ * @author    Will Browar
+ * @copyright Copyright (c) 2019 Will Browar
+ * @link      https://wbrowar.com
+ * @package   Guide
+ * @since     2.0.0
+ */ #}
+
+{# The title of this CP section #}
+{% set title = "Import and Export Guides" %}
+
+{% if (settings.templatePath ?? false) and settings.assetVolume != '0' %}
+    <div id="guide_import" class="guide_import" data-guide-import>
+        <div class="field">
+            <div class="heading">
+                <label>Import Guide Templates</label>
+                <div class="instructions">
+                    <p>Download and import open source starter templates from <a href="https://github.com/wbrowar/craft-guide-templates">Craft Guide Templates</a>.</p>
+                    <p>See the <a href="https://github.com/wbrowar/craft-guide-templates/blob/master/README.md#contributing">Contributing</a> section to learn how you can help improve these templates<span @click="showDev = true">.</span></p>
+                </div>
+            </div>
+        </div>
+        <div class="guide_import__importable" v-if="guides" v-cloak>
+            <div class="guide_import__guides">
+                <div class="guide_import__guide" v-for="(item, index) in guides">
+                    <h3 class="guide_import__guide__title">${ item.title }</h3>
+                    <p class="guide_import__guide__description" v-if="item.description">${ item.description }</p>
+                    <div class="guide_import__guide__options">
+                        <div v-if="item.templatesPath">
+                            <input type="checkbox" :id="'enableImportTemplates-' + index" v-model="item.enableImportTemplates">
+                            <label :for="'enableImportTemplates-' + index">Import Templates</label>
+                        </div>
+                        <div v-if="item.assetsPath">
+                            <input type="checkbox" :id="'enableImportAssets-' + index" v-model="item.enableImportAssets">
+                            <label :for="'enableImportAssets-' + index">Import Assets</label>
+                        </div>
+                        <div v-if="item.guides">
+                            <input type="checkbox" :id="'enableImportGuides-' + index" v-model="item.enableImportGuides">
+                            <label :for="'enableImportGuides-' + index">Import Guides into Organizer</label>
+                        </div>
+                    </div>
+                    <div class="btn submit" @click="importTemplates(item)">Import</div>
+                </div>
+            </div>
+        </div>
+        <div v-else>
+            <div v-if="status === 'downloading'" v-cloak>
+                <h3 class="guide_import__download_status">Downloading from Github</h3>
+            </div>
+            <div v-else>
+                <div class="btn submit" @click="downloadTemplates('master')">Download Templates</div>
+                {% if currentUser.admin %}
+                    <div class="btn submit" @click="downloadTemplates('dev')" v-if="showDev" v-cloak>Download (dev) Templates</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="field">
+        <div class="heading">
+            <label>Import Guide Templates</label>
+            <div class="instructions">
+                <p>Importing is available when Template Path and Asset Volume are set.</p>
+                <a class="btn submit" href="{{ url('guide/settings/general') }}">Go to the Guide Settings page</a>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+<hr>
+<div class="field">
+    <div class="heading">
+        <label>Import Guide JSON</label>
+        <div class="instructions">
+            <p>Guides can be moved from one environment to another using the fields below.</p>
+        </div>
+    </div>
+</div>
+
+<p><b>Step 1.</b> Copy the JSON from this textfield</p>
+<textarea style="width: 100%; max-width: 500px; font-size: .84em;" rows="10">{{ guidesJson }}</textarea>
+
+<p><b>Step 2.</b> Log into another environment and visit this Utilities page</p>
+
+<p><b>Step 3.</b> In that environment, paste the JSON into this field and click "Import"</p>
+<div id="guide_import_json" v-cloak>
+    <textarea style="width: 100%; max-width: 500px; font-size: .84em;" rows="10" v-model="guideData">{{ guidesJson }}</textarea>
+    <div>
+        <div class="btn submit" @click="importJson" v-if="guideData">Import</div>
+    </div>
+</div>
