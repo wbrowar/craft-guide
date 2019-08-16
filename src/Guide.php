@@ -25,7 +25,6 @@ use wbrowar\guide\utilities\ImportExport;
 use wbrowar\guide\variables\GuideVariable;
 use wbrowar\guide\twigextensions\GuideTwigExtension;
 use wbrowar\guide\models\Settings;
-use wbrowar\guide\utilities\ImportExport as ExportGuideTemplateUtility;
 use wbrowar\guide\widgets\Guide as GuideWidget;
 
 use Craft;
@@ -215,6 +214,16 @@ class Guide extends Plugin
             );
         }
 
+
+        // Add our utilities
+        Event::on(
+            Utilities::class,
+            Utilities::EVENT_REGISTER_UTILITY_TYPES,
+            function (RegisterComponentTypesEvent $event) {
+                $event->types[] = ImportExport::class;
+            }
+        );
+
         // Register Pro features
         if (self::$pro) {
             // Add custom permissions
@@ -297,16 +306,6 @@ class Guide extends Plugin
                     echo self::$view->renderTemplate('guide/_partials/render_guide_modals', ['guides' => $guides]);
                 }
             });
-
-            // Add our utilities
-            // @TODO Utilities
-            Event::on(
-                Utilities::class,
-                Utilities::EVENT_REGISTER_UTILITY_TYPES,
-                function (RegisterComponentTypesEvent $event) {
-                    $event->types[] = ImportExport::class;
-                }
-            );
 
             // Add our widgets
             Event::on(
