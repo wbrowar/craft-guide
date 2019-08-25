@@ -463,7 +463,10 @@ class Guide extends Plugin
      */
     private function _getTemplatesFromUserTemplatePath():array
     {
-        $templates = ['__none__' => 'Select a Template'];
+        $templates = [
+            'filenames' => ['__none__' => 'Select a Template'],
+            'contents' => ['__none__' => ''],
+        ];
 
         $oldMode = Craft::$app->getView()->getTemplateMode();
         Craft::$app->getView()->setTemplateMode(View::TEMPLATE_MODE_SITE);

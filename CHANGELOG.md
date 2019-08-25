@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## 2.1.2 - 2019-08-25
+### Fixed
+- Fixed a bug that occurred when templates were removed from the Templates Path directory.
+
 ## 2.1.1 - 2019-08-16
 ### Fixed
 - Fixed a bug where the Guide utility wasn’t available in the FREE edition.

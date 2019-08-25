@@ -133,16 +133,18 @@
                             }) }}
 
                             {% if proEdition %}
-                                <hr>
-                                <div class="field">
-                                    <div class="heading">
-                                        <label id="content-label" for="content">Copy Template Content to Content Field</label>
-                                        <div class="instructions">
-                                            <p>Copy the code from the selected template and place it into the Content field. The field content will be stored in the database and the template file will not be modified.</p>
+                                <div v-if="template != '__none__'">
+                                    <hr>
+                                    <div class="field">
+                                        <div class="heading">
+                                            <label id="content-label" for="content">Copy Template Content to Content Field</label>
+                                            <div class="instructions">
+                                                <p>Copy the code from the selected template and place it into the Content field. The field content will be stored in the database and the template file will not be modified.</p>
+                                            </div>
                                         </div>
                                     </div>
+                                    <div class="btn submit" @click="convertTemplateToFieldContent">Update Content with ${ template }</div>
                                 </div>
-                                <div class="btn submit" @click="convertTemplateToFieldContent">Update Content</div>
                             {% endif %}
                         </div>
                     {% else %}
