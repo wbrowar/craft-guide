@@ -11,7 +11,7 @@
 namespace wbrowar\guide\widgets;
 
 use wbrowar\guide\Guide as GuidePlugin;
-use wbrowar\guide\assetbundles\guidewidget\GuideWidgetAsset;
+use wbrowar\guide\assetbundles\guide\GuideAsset;
 
 use Craft;
 use craft\base\Widget;
@@ -48,8 +48,9 @@ class Guide extends Widget
     /**
      * @inheritdoc
      */
-    public static function iconPath()
+    public static function icon()
     {
+
         return Craft::getAlias("@wbrowar/guide/assetbundles/guide/dist/icon/icon-mask.svg");
     }
 

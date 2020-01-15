@@ -5,13 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## 2.1.3 - 2020-01-15
+### Added
+- Added drop targets to make it easier to drag-and-drop guides in the Organizer [#25](https://github.com/wbrowar/craft-guide/issues/25).
+
+### Changed
+- Bumped minimum Craft version to `^3.4.0-RC1`.
+- Updated styles for Craft 3.4.
+  - _NOTE: This involved making some changes to Guide’s default styles and custom styles may need to be adjusted._
+- Changed the label of "Unused Guides" to "Available Guides" in the Organizer [#23](https://github.com/wbrowar/craft-guide/issues/23).
+- Images loaded through the Twig component are now lazy loaded via the native lazy attribute.
+
+### Fixed
+- Fixed a bug that didn't display guides when creating a new category.
+- Fixed path to Widget icon.
+
+
 ## 2.1.2 - 2019-08-25
 ### Fixed
 - Fixed a bug that occurred when templates were removed from the Templates Path directory.
 
+
 ## 2.1.1 - 2019-08-16
 ### Fixed
 - Fixed a bug where the Guide utility wasn’t available in the FREE edition.
+
 
 ## 2.1.0 - 2019-08-13
 ### Added

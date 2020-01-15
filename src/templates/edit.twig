@@ -247,7 +247,7 @@
         {% endif %}
 
         {% if (guide.id ?? false) and userOperations.deleteGuides %}
-            <div class="buttons">
+            <div class="guide_editor__details__buttons">
                 <a class="btn delete icon" href="{{ url('guide/delete/' ~ guide.id) }}">Delete</a>
             </div>
         {% endif %}

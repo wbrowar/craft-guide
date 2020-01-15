@@ -278,7 +278,9 @@ class Guide extends Plugin
 
             // Add modal template to footer
             Event::on(View::class, View::EVENT_END_BODY, function(Event $event) {
-                if (Craft::$app->controller->actionParams['entryId'] ?? false) {
+//                Craft::dd(Craft::$app->requestedAction->id);
+//                Craft::dd(Craft::$app->controller->actionParams);
+                if (Craft::$app->requestedAction->id == 'edit-entry') {
                     $element = Craft::$app->getSections()->getSectionByHandle(Craft::$app->controller->actionParams['section']);
 
                     if ($element ?? false) {
@@ -287,16 +289,16 @@ class Guide extends Plugin
                             'parentUid' => $element->uid,
                         ]);
                     }
-                } else if (Craft::$app->controller->actionParams['categoryId'] ?? false) {
+                } else if (Craft::$app->requestedAction->id == 'edit-category') {
                     $element = Craft::$app->getCategories()->getGroupByHandle(Craft::$app->controller->actionParams['groupHandle']);
-                    
+
                     if ($element ?? false) {
                         $guides = self::$plugin->guide->getGuides([
                             'parentType' => 'sidebar',
                             'parentUid' => $element->uid,
                         ]);
                     }
-                } else if (Craft::$app->controller->actionParams['userId'] ?? false) {
+                } else if (Craft::$app->requestedAction->id == 'edit-user') {
                     $guides = self::$plugin->guide->getGuides([
                         'parentType' => 'user',
                     ]);
