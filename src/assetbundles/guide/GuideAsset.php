@@ -36,11 +36,11 @@ class GuideAsset extends AssetBundle
         ];
 
         $this->js = [
-            'js/guide.2.0.0.js',
+            'js/guide.2.1.3.js',
         ];
 
         $this->css = [
-            'css/guide.2.0.0.css',
+            'css/guide.2.1.3.css',
         ];
 
         parent::init();
