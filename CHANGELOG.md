@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.1.3.2 - 2020-01-16
+- Fixed style bug on Guide Dashboard widgets
+
 ## 2.1.3.1 - 2020-01-15
 ### Fixed
 - Fixed issue preventing plugin Javascript from loading
