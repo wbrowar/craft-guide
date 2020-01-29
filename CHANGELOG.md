@@ -4,7 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.1.3.3 - 2020-01-29
+### Changed
+- Bumped required version of Craft to 3.4.0
+
+### Fixed
+- Fixed style bug on Guide Dashboard widgets based on a change from Craft 3.4 RC to 3.4 release
+
 ## 2.1.3.2 - 2020-01-16
+### Fixed
 - Fixed style bug on Guide Dashboard widgets
 
 ## 2.1.3.1 - 2020-01-15
