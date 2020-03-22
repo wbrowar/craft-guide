@@ -413,6 +413,7 @@ class Guide extends Plugin
             'gridGap' => 'grid-gap',
             'headerIconWidth' => 'header-icon-width',
             'headerIconHeight' => 'header-icon-height',
+            'maxWidthWrapper' => 'max-width-wrapper',
             'maxWidthText' => 'max-width-text',
         ];
 

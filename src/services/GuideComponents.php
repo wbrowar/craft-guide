@@ -122,7 +122,7 @@ class GuideComponents extends Component
                 'name' => 'Image',
                 'description' => 'Display an image that is not found in your Asset volume.',
                 'code' => [
-                    'markdown' => "<img data-lazy-load data-src=\"REPLACE_URL\" alt=\"REPLACE_ALT_TEXT\" />",
+                    'markdown' => "<img src=\"REPLACE_URL\" loading=\"lazy\" alt=\"REPLACE_ALT_TEXT\" />",
                     'twig' => "{{ craft.guide.component('image', { url: 'REPLACE_URL' }) }}",
                 ],
             ],
@@ -276,7 +276,7 @@ class GuideComponents extends Component
                                 'thumbnail1x' => $thumbnailUrl1x ?? false,
                                 'thumbnail2x' => $thumbnailUrl2x ?? false,
                                 'code' => [
-                                    'markdown' => "<img data-lazy-load data-src='[GUIDE_VOLUME_PATH]/" . $asset->filename . "' alt='" . $asset->title . "'>",
+                                    'markdown' => "<img src='[GUIDE_VOLUME_PATH]/" . $asset->filename . "' loading='lazy' alt='" . $asset->title . "'>",
                                     'twig' => "{{ craft.guide.component('image', { asset: craft.assets.filename('" . $asset->filename . "').one() }) }}",
                                 ],
                                 'options' => [

@@ -4,20 +4,28 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.1.4 - 2020-03-22
+### Added
+- A new max-width setting has been added to the main wrapper of all guide content.
+
+### Changed
+- Twig image components now use the native `loading` attribute to lazy load images. All existing Twig image components will use native lazy loading, and the `lazyLoad` argument will be ignored.
+- New Markdown image components will have the `loading` attribute added to them by default.
+
 ## 2.1.3.3 - 2020-01-29
 ### Changed
-- Bumped required version of Craft to 3.4.0
+- Bumped required version of Craft to 3.4.0.
 
 ### Fixed
-- Fixed style bug on Guide Dashboard widgets based on a change from Craft 3.4 RC to 3.4 release
+- Fixed style bug on Guide Dashboard widgets based on a change from Craft 3.4 RC to 3.4 release.
 
 ## 2.1.3.2 - 2020-01-16
 ### Fixed
-- Fixed style bug on Guide Dashboard widgets
+- Fixed style bug on Guide Dashboard widgets.
 
 ## 2.1.3.1 - 2020-01-15
 ### Fixed
-- Fixed issue preventing plugin Javascript from loading
+- Fixed issue preventing plugin Javascript from loading.
 
 ## 2.1.3 - 2020-01-15
 ### Added

@@ -6,7 +6,7 @@
 {# Variables #}
 {% set asset = asset ?? null %}
 {% set caption = caption ?? null %}
-{% set lazyLoad = lazyLoad ?? false %}
+{% set lazyLoad = false %} {# DEPRECATED – JS-based Lazy loading is no longer used. `loading` attibute is always set to "lazy" #}
 {% set placeholder = placeholder ?? 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==' %}
 {% set sizes = sizes ?? '100vw' %}
 {% set url = url ?? null %}
@@ -23,12 +23,12 @@
     <picture>
         {% if asset ?? false %}
             {% if transforms|length %}
-                <img {% if lazyLoad %}data-lazy-load data-{% endif %}srcset="{{ self.getSrcSetFromObject({ image: asset, transforms: transforms }) }}" src="{{ placeholder }}" loading="lazy" sizes="{{ sizes }}" alt="{{ alt ?? asset.title }}" />
+                <img srcset="{{ self.getSrcSetFromObject({ image: asset, transforms: transforms }) }}" src="{{ placeholder }}" loading="lazy" width="{{ asset.width }}" height="{{ asset.height }}" sizes="{{ sizes }}" alt="{{ alt ?? asset.title }}" />
             {% else %}
-                <img {% if lazyLoad %}data-lazy-load data-{% endif %}src="{{ asset.url }}" loading="lazy" alt="{{ alt ?? asset.title }}" />
+                <img src="{{ asset.url }}" loading="lazy" width="{{ asset.width }}" height="{{ asset.height }}" alt="{{ alt ?? asset.title }}" />
             {% endif %}
         {% elseif url ?? false %}
-            <img {% if lazyLoad %}data-lazy-load data-{% endif %}src="{{ url }}" loading="lazy" alt="{{ alt }}" />
+            <img src="{{ url }}" loading="lazy" alt="{{ alt }}" />
         {% endif %}
     </picture>
     {% if caption ?? false -%}
