@@ -278,30 +278,30 @@ class Guide extends Plugin
 
             // Add modal template to footer
             Event::on(View::class, View::EVENT_END_BODY, function(Event $event) {
-//                Craft::dd(Craft::$app->requestedAction->id);
-//                Craft::dd(Craft::$app->controller->actionParams);
-                if (Craft::$app->requestedAction->id == 'edit-entry') {
-                    $element = Craft::$app->getSections()->getSectionByHandle(Craft::$app->controller->actionParams['section']);
+                if ((Craft::$app ?? false) && (Craft::$app->requestedAction ?? false) && (Craft::$app->requestedAction->id ?? false)) {
+                    if (Craft::$app->requestedAction->id == 'edit-entry' && Craft::$app->controller->actionParams['section'] ?? false) {
+                        $element = Craft::$app->getSections()->getSectionByHandle(Craft::$app->controller->actionParams['section']);
 
-                    if ($element ?? false) {
+                        if ($element ?? false) {
+                            $guides = self::$plugin->guide->getGuides([
+                                'parentType' => 'sidebar',
+                                'parentUid' => $element->uid,
+                            ]);
+                        }
+                    } else if (Craft::$app->requestedAction->id == 'edit-category' && Craft::$app->controller->actionParams['groupHandle'] ?? false) {
+                        $element = Craft::$app->getCategories()->getGroupByHandle(Craft::$app->controller->actionParams['groupHandle']);
+
+                        if ($element ?? false) {
+                            $guides = self::$plugin->guide->getGuides([
+                                'parentType' => 'sidebar',
+                                'parentUid' => $element->uid,
+                            ]);
+                        }
+                    } else if (Craft::$app->requestedAction->id == 'edit-user') {
                         $guides = self::$plugin->guide->getGuides([
-                            'parentType' => 'sidebar',
-                            'parentUid' => $element->uid,
+                            'parentType' => 'user',
                         ]);
                     }
-                } else if (Craft::$app->requestedAction->id == 'edit-category') {
-                    $element = Craft::$app->getCategories()->getGroupByHandle(Craft::$app->controller->actionParams['groupHandle']);
-
-                    if ($element ?? false) {
-                        $guides = self::$plugin->guide->getGuides([
-                            'parentType' => 'sidebar',
-                            'parentUid' => $element->uid,
-                        ]);
-                    }
-                } else if (Craft::$app->requestedAction->id == 'edit-user') {
-                    $guides = self::$plugin->guide->getGuides([
-                        'parentType' => 'user',
-                    ]);
                 }
 
                 if ($guides ?? false) {

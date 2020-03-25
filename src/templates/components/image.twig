@@ -7,7 +7,7 @@
 {% set asset = asset ?? null %}
 {% set caption = caption ?? null %}
 {% set lazyLoad = false %} {# DEPRECATED – JS-based Lazy loading is no longer used. `loading` attibute is always set to "lazy" #}
-{% set placeholder = placeholder ?? 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==' %}
+{% set placeholder = placeholder ?? (asset ?? false ? asset.url : '') %}
 {% set sizes = sizes ?? '100vw' %}
 {% set url = url ?? null %}
 
