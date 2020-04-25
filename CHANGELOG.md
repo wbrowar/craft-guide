@@ -4,13 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## 2.1.4 - 2020-03-22
+## 2.1.4 - 2020-04-25
 ### Added
 - A new max-width setting has been added to the main wrapper of all guide content.
+- A warning is displayed when the `{ craft.guide.component() }` Twig variable is used in the LITE edition of Guide.
 
 ### Changed
+- Twig image components now display a message when a valid asset or image URL has not been passed in.
 - Twig image components now use the native `loading` attribute to lazy load images. All existing Twig image components will use native lazy loading, and the `lazyLoad` argument will be ignored.
 - New Markdown image components will have the `loading` attribute added to them by default.
+
+### Fixed
+- Fixed an error that occurs on some pages in the CP [#27](https://github.com/wbrowar/craft-guide/issues/27#issue-587394637).
+- Fixed an error when adding template guides in a Windows environment [#29](https://github.com/wbrowar/craft-guide/issues/29).
+- Fixed an error that prevented guides templates from being imported when an Organizer hadn’t been created yet [#30](https://github.com/wbrowar/craft-guide/issues/30).
 
 ## 2.1.3.3 - 2020-01-29
 ### Changed

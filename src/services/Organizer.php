@@ -37,6 +37,17 @@ class Organizer extends Component
         $organizer = Organizers::find()
             ->one();
 
+        // If an organizer exists, use that
+        if ($organizer) {
+            return $organizer;
+        }
+
+        // If no organizer exists, create a new one and return that
+        $newOrganizer = new OrganizerModel();
+        $this->saveOrganizer($newOrganizer);
+        $organizer = Organizers::find()
+            ->one();
+
         return $organizer;
     }
 

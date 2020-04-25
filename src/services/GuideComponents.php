@@ -326,8 +326,10 @@ class GuideComponents extends Component
             if (Craft::$app->getView()->doesTemplateExist('guide/components/' . $handle . '.twig')) {
                 return Craft::$app->getView()->renderTemplate('guide/components/' . $handle . '.twig', $options);
             }
+
+            return '<p class="fpo">A component couldn’t be found for this component handle.</p>';
         }
 
-        return '';
+        return '<p class="fpo">Guide Components are available in the PRO edition Guide. Upgrading to PRO will render this component.</p>';
     }
 }

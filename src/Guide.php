@@ -473,13 +473,13 @@ class Guide extends Plugin
 
         $oldMode = Craft::$app->getView()->getTemplateMode();
         Craft::$app->getView()->setTemplateMode(View::TEMPLATE_MODE_SITE);
-        $userTemplatePath = Craft::$app->getView()->getTemplatesPath() . '/' . self::$settings->templatePath;
+        $userTemplatePath = Craft::$app->getView()->getTemplatesPath() . DIRECTORY_SEPARATOR . self::$settings->templatePath;
 
         if (is_dir($userTemplatePath) ?? false) {
-            $filesInDirectory = FileHelper::findFiles(Craft::$app->getView()->getTemplatesPath() . '/' . self::$settings->templatePath, ['only' => ['*.html', '*.md', '*.twig']]);
+            $filesInDirectory = FileHelper::findFiles(Craft::$app->getView()->getTemplatesPath() . DIRECTORY_SEPARATOR . self::$settings->templatePath, ['only' => ['*.html', '*.md', '*.twig']]);
 
             foreach ($filesInDirectory as $item) {
-                $template = str_replace($userTemplatePath . '/', '', $item);
+                $template = str_replace($userTemplatePath . DIRECTORY_SEPARATOR, '', $item);
                 $templates['filenames'][$template] = $template;
                 $templates['contents'][$template] = file_get_contents($item);
             }
