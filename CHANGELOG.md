@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.1.5 - 2020-07-26
+### Fixed
+- Fixed an issue saving guides when using Postgres [#31](https://github.com/wbrowar/craft-guide/issues/31)
+
+
 ## 2.1.4 - 2020-04-25
 ### Added
 - A new max-width setting has been added to the main wrapper of all guide content.
@@ -19,6 +24,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Fixed an error when adding template guides in a Windows environment [#29](https://github.com/wbrowar/craft-guide/issues/29).
 - Fixed an error that prevented guides templates from being imported when an Organizer hadn’t been created yet [#30](https://github.com/wbrowar/craft-guide/issues/30).
 
+
 ## 2.1.3.3 - 2020-01-29
 ### Changed
 - Bumped required version of Craft to 3.4.0.
@@ -26,13 +32,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Fixed
 - Fixed style bug on Guide Dashboard widgets based on a change from Craft 3.4 RC to 3.4 release.
 
+
 ## 2.1.3.2 - 2020-01-16
 ### Fixed
 - Fixed style bug on Guide Dashboard widgets.
 
+
 ## 2.1.3.1 - 2020-01-15
 ### Fixed
 - Fixed issue preventing plugin Javascript from loading.
+
 
 ## 2.1.3 - 2020-01-15
 ### Added
