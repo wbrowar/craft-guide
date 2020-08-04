@@ -73,6 +73,7 @@ class Organizer extends Component
             'showDashboard' => Guide::$pro,
             'showEditPages' => Guide::$pro,
             'showUsers' => Craft::$app->getEdition() == Craft::Pro,
+            'volumes' => [],
         ];
 
         $guides = Guide::$plugin->guide->getGuides([]);
@@ -104,6 +105,14 @@ class Organizer extends Component
             $config['sections'][] = [
                  'name' => $section->name,
                  'uid' => $section->uid,
+            ];
+        }
+
+        $volumes = Craft::$app->getVolumes()->getAllVolumes();
+        foreach ($volumes as $volume) {
+            $config['volumes'][] = [
+                'name' => $volume->name,
+                'uid' => $volume->uid,
             ];
         }
 

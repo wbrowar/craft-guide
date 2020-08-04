@@ -15,6 +15,8 @@ use wbrowar\guide\Guide;
 use Craft;
 use craft\web\Controller;
 use wbrowar\guide\models\Organizer as OrganizerModel;
+use wbrowar\guide\records\Guides;
+use wbrowar\guide\records\Organizers;
 
 /**
  * @author    Will Browar
@@ -43,6 +45,22 @@ class OrganizerController extends Controller
     public function actionIndex()
     {
         return null;
+    }
+
+    /**
+     * Move all guides to the Available Guides column in the Guide Organizer.
+     *
+     */
+    public function actionRecoverGuides()
+    {
+        Guides::updateAll([
+            'parentType' => '__none__',
+            'parentUid' => '',
+        ]);
+        Organizers::updateAll(['cpNav' => '[]']);
+
+        Craft::$app->getSession()->setNotice('Guides recovered.');
+        return $this->redirectToPostedUrl();
     }
 
     /**

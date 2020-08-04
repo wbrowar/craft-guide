@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.2.0 - 2020-08-04
+### Added
+- Add guides to element edit pages using a Guide IU element in the Craft 3.5 field layout designer.
+- Add guides to asset edit pages.
+- In situations where guides can get lost due to project config changes, a new Guide Recovery button in the Guide Utility can reset all guides to the Available Guides column of the Guide Organizer.
+
+### Changed
+- Guide now requires Craft 3.5+
+- Deprecated Header icon asset field and added a header icon text input in Guide Settings.
+- Minor CSS changes.
+- Documentation has been moved to a [separate URL](https://guide.wbrowar.com).
+
+### Fixed
+- Fixed some style issues after upgrading to Craft 3.5.
+
+
 ## 2.1.5 - 2020-07-26
 ### Fixed
 - Fixed an issue saving guides when using Postgres [#31](https://github.com/wbrowar/craft-guide/issues/31)

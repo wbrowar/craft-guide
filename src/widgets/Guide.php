@@ -11,7 +11,6 @@
 namespace wbrowar\guide\widgets;
 
 use wbrowar\guide\Guide as GuidePlugin;
-use wbrowar\guide\assetbundles\guide\GuideAsset;
 
 use Craft;
 use craft\base\Widget;
@@ -88,8 +87,8 @@ class Guide extends Widget
         return Craft::$app->getView()->renderTemplate(
             'guide/widgets/guide_settings',
             [
-                'userOperations' => GuidePlugin::$userOperations,
                 'selectableGuides' => GuidePlugin::$plugin->guide->getGuidesForUser(['parentType' => 'widget']),
+                'userOperations' => GuidePlugin::$userOperations,
                 'widget' => $this,
             ]
         );

@@ -93,3 +93,18 @@
         <div class="btn submit" @click="importJson" v-if="guideData">Import</div>
     </div>
 </div>
+
+<hr>
+<div class="field">
+    <div class="heading">
+        <label>Guide Recovery</label>
+        <div class="instructions">
+            <p>If a situation occurs where a guide has gone missing, all guides can be collected to the Available Guides column in the Guide Organizer.</p>
+            <form action="" method="post">
+                {{ csrfInput() }}
+                <input type="hidden" name="action" value="guide/organizer/recover-guides">
+                <input class="btn submit" type="submit" value="Recover all guides">
+            </form>
+        </div>
+    </div>
+</div>
