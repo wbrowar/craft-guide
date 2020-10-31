@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2019 Will Browar
  */
 
-namespace wbrowar\guide\assetbundles\Guide;
+namespace wbrowar\guide\assetbundles\guide;
 
 use Craft;
 use craft\web\AssetBundle;

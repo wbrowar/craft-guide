@@ -19,7 +19,7 @@ use craft\helpers\UrlHelper;
 use craft\models\FieldLayout;
 use craft\services\UserPermissions;
 use craft\web\View;
-use wbrowar\guide\assetbundles\Guide\GuideAsset;
+use wbrowar\guide\assetbundles\guide\GuideAsset;
 use wbrowar\guide\fieldlayoutelements\GuideInclude;
 use wbrowar\guide\models\Settings;
 use wbrowar\guide\services\Guide as GuideService;
