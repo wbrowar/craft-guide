@@ -1,0 +1,8 @@
+baseUrl: $DEFAULT_SITE_URL
+handle: default
+hasUrls: true
+language: en
+name: 'Craft Plugin'
+primary: true
+siteGroup: ea53e183-8d1b-490e-b7c7-b8cadac7fe2f
+sortOrder: 1

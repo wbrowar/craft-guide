@@ -1,0 +1,17 @@
+{
+    "buttons": [
+        "bold",
+        "italic",
+        "lists",
+        "link",
+        "file",
+        "horizontalrule",
+        "html"
+    ],
+    "plugins": [
+        "fullscreen"
+    ],
+    "formatting": null,
+    "linkNewTab": true,
+    "toolbarFixed": true
+}

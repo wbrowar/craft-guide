@@ -1,0 +1,22 @@
+{
+    "require": {
+        "craftcms/cms": "^3.5.16",
+        "vlucas/phpdotenv": "^3.4.0",
+        "wbrowar/guide": "@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "modules\\": "modules/"
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "optimize-autoloader": true,
+        "platform": {
+            "php": "7.4"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
+
