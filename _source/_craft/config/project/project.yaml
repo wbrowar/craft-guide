@@ -1,4 +1,4 @@
-dateModified: 1606587644
+dateModified: 1606589952
 email:
   fromEmail: $ADMIN_EMAIL
   fromName: 'Craft Plugin'
@@ -13,7 +13,7 @@ plugins:
     enabled: true
     schemaVersion: 2.0.0
     settings:
-      assetVolume: '0'
+      assetVolume: dcbcd17d-9ee9-4cc0-b429-3976dd5f5e4a
       clientName: ''
       myCompanyName: ''
       templatePath: _guide

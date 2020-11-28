@@ -67,7 +67,7 @@ else
 fi
 
 echo "Installing Craft"
-./craft install --interactive=0 --email="\$ADMIN_EMAIL" --username="admin" --password="password" --siteName="Craft Plugin" --siteUrl="\$DEFAULT_SITE_URL" --language="en"
+./craft install --interactive=0 --email="email@example.com" --username="admin" --password="password" --siteName="Craft Plugin" --siteUrl="\$DEFAULT_SITE_URL" --language="en"
 echo "Craft installed with"
 echo "  User: admin"
 echo "  Password: password"

@@ -28,9 +28,9 @@ return [
         'useProjectConfigFile' => true,
 
         'aliases' => [
-            '@basePath' => realpath(dirname(__DIR__)) . getenv('BASE_PATH'),
+            '@basePath' => realpath(getenv('BASE_PATH')),
             '@baseUrl' => getenv('DEFAULT_SITE_URL'),
-            '@baseAssetPath' => realpath(dirname(__DIR__)) . getenv('BASE_ASSET_PATH'),
+            '@baseAssetPath' => realpath(getenv('BASE_ASSET_PATH')),
             '@baseAssetUrl' => getenv('BASE_ASSET_URL'),
         ],
     ],
