@@ -1,5 +1,5 @@
 fieldLayouts:
-  e87bcdad-48da-4fac-b424-c8bd0c846c46:
+  410c5ad3-b3b0-4c18-a41c-ac33fad1b692:
     tabs:
       -
         elements:
@@ -23,7 +23,7 @@ fieldLayouts:
             step: null
             tip: null
             title: null
-            type: craft\fieldlayoutelements\TitleField
+            type: craft\fieldlayoutelements\AssetTitleField
             warning: null
             width: 100
         name: Content
@@ -34,5 +34,7 @@ name: Guide
 settings:
   path: '@baseAssetPath/guide'
 sortOrder: 1
+titleTranslationKeyFormat: null
+titleTranslationMethod: null
 type: craft\volumes\Local
 url: '@baseAssetUrl/guide'

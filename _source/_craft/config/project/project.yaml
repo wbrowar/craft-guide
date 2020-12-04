@@ -1,11 +1,7 @@
-dateModified: 1606589952
+dateModified: 1606591638
 email:
-  fromEmail: $ADMIN_EMAIL
+  fromEmail: email@example.com
   fromName: 'Craft Plugin'
-  replyToEmail: null
-  template: null
-  transportSettings:
-    command: ''
   transportType: craft\mail\transportadapters\Sendmail
 plugins:
   guide:
@@ -13,7 +9,7 @@ plugins:
     enabled: true
     schemaVersion: 2.0.0
     settings:
-      assetVolume: dcbcd17d-9ee9-4cc0-b429-3976dd5f5e4a
+      assetVolume: 79a91cb5-c93a-4cb4-b0f7-456e7bc9d7ec
       clientName: ''
       myCompanyName: ''
       templatePath: _guide
@@ -21,7 +17,7 @@ system:
   edition: solo
   live: true
   name: 'Craft Plugin'
-  schemaVersion: 3.5.13
+  schemaVersion: 3.6.0
   timeZone: America/Los_Angeles
 users:
   allowPublicRegistration: false
