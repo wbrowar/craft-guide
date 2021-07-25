@@ -1,15 +1,16 @@
-dateModified: 1606591638
+dateModified: 1627225577
 email:
   fromEmail: email@example.com
   fromName: 'Craft Plugin'
   transportType: craft\mail\transportadapters\Sendmail
 plugins:
   guide:
-    edition: lite
+    edition: pro
     enabled: true
+    licenseKey: $PLUGIN_LICENSE_KEY
     schemaVersion: 2.0.0
     settings:
-      assetVolume: 79a91cb5-c93a-4cb4-b0f7-456e7bc9d7ec
+      assetVolume: 791d4dc9-0bae-4126-b9cb-7718b2df18b6
       clientName: ''
       myCompanyName: ''
       templatePath: _guide
@@ -17,7 +18,7 @@ system:
   edition: solo
   live: true
   name: 'Craft Plugin'
-  schemaVersion: 3.6.0
+  schemaVersion: 3.7.7
   timeZone: America/Los_Angeles
 users:
   allowPublicRegistration: false

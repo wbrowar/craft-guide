@@ -1,0 +1,18 @@
+contentColumnType: text
+fieldGroup: c8421b67-8b75-4524-a993-69af8adfe49f
+handle: beerDescription
+instructions: 'Describe the beer with tasting notes, color, or just list some random fruit names.'
+name: 'Beer Description'
+searchable: false
+settings:
+  byteLimit: null
+  charLimit: null
+  code: ''
+  columnType: null
+  initialRows: '4'
+  multiline: ''
+  placeholder: 'Notes of chocolate, raspberry, pretzel, and durian.'
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\PlainText

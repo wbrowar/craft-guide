@@ -1,0 +1,22 @@
+{
+  "name": "assembly-line",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite --host",
+    "prod": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.1.5"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.3.1",
+    "@tailwindcss/jit": "^0.1.18",
+    "tailwindcss": "^2.2.7",
+    "dotenv": "^8.2.0",
+    "@vitejs/plugin-vue": "^1.2.5",
+    "@vue/compiler-sfc": "^3.1.5",
+    "typescript": "^4.3.5",
+    "vite": "^2.4.3"
+  }
+}

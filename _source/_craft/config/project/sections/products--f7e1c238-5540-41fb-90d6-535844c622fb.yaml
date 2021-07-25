@@ -1,0 +1,14 @@
+enableVersioning: true
+handle: products
+name: Products
+propagationMethod: all
+siteSettings:
+  11ace5e4-2164-419f-aa8c-14a6ccb74727:
+    enabledByDefault: true
+    hasUrls: true
+    template: products/_entry
+    uriFormat: 'products/{slug}'
+structure:
+  maxLevels: null
+  uid: b8720682-1113-404b-aebe-39cc79d63264
+type: structure

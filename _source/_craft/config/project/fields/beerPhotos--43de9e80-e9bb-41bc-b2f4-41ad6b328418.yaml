@@ -1,0 +1,32 @@
+contentColumnType: string
+fieldGroup: c8421b67-8b75-4524-a993-69af8adfe49f
+handle: beerPhotos
+instructions: ''
+name: 'Beer Photos'
+searchable: false
+settings:
+  allowSelfRelations: false
+  allowUploads: true
+  allowedKinds: null
+  defaultUploadLocationSource: 'volume:eed46e7d-b369-4b50-841c-b785caf65b16'
+  defaultUploadLocationSubpath: ''
+  limit: ''
+  localizeRelations: false
+  previewMode: thumbs
+  restrictFiles: ''
+  selectionLabel: 'Add a JPG'
+  showSiteMenu: false
+  showUnpermittedFiles: false
+  showUnpermittedVolumes: false
+  singleUploadLocationSource: 'volume:eed46e7d-b369-4b50-841c-b785caf65b16'
+  singleUploadLocationSubpath: ''
+  source: null
+  sources:
+    - 'volume:eed46e7d-b369-4b50-841c-b785caf65b16'
+  targetSiteId: null
+  useSingleFolder: false
+  validateRelatedElements: false
+  viewMode: large
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Assets

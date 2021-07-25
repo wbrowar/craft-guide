@@ -1,0 +1,10 @@
+{
+  "guide.ts": {
+    "file": "assets/guide.f5852a07.js",
+    "src": "guide.ts",
+    "isEntry": true,
+    "css": [
+      "assets/guide.e86fb35b.css"
+    ]
+  }
+}

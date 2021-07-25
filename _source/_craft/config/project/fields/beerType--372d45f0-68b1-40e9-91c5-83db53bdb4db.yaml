@@ -1,0 +1,89 @@
+contentColumnType: string
+fieldGroup: c8421b67-8b75-4524-a993-69af8adfe49f
+handle: beerType
+instructions: ''
+name: 'Beer Type'
+searchable: false
+settings:
+  optgroups: true
+  options:
+    -
+      __assoc__:
+        -
+          - label
+          - 'Belgian Weat'
+        -
+          - value
+          - belgianWeat
+        -
+          - default
+          - ''
+    -
+      __assoc__:
+        -
+          - label
+          - 'Brown Ale'
+        -
+          - value
+          - brownAle
+        -
+          - default
+          - ''
+    -
+      __assoc__:
+        -
+          - label
+          - Hefeweizen
+        -
+          - value
+          - hefeweizen
+        -
+          - default
+          - ''
+    -
+      __assoc__:
+        -
+          - label
+          - IPA
+        -
+          - value
+          - ipa
+        -
+          - default
+          - ''
+    -
+      __assoc__:
+        -
+          - label
+          - Porter
+        -
+          - value
+          - porter
+        -
+          - default
+          - ''
+    -
+      __assoc__:
+        -
+          - label
+          - Saison
+        -
+          - value
+          - saison
+        -
+          - default
+          - ''
+    -
+      __assoc__:
+        -
+          - label
+          - Stoute
+        -
+          - value
+          - stoute
+        -
+          - default
+          - ''
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Dropdown

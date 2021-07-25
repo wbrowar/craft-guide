@@ -1,5 +1,5 @@
 fieldLayouts:
-  410c5ad3-b3b0-4c18-a41c-ac33fad1b692:
+  06bb5a16-14ba-43af-8069-522dc022016c:
     tabs:
       -
         elements:
@@ -33,7 +33,7 @@ hasUrls: true
 name: Guide
 settings:
   path: '@baseAssetPath/guide'
-sortOrder: 1
+sortOrder: 2
 titleTranslationKeyFormat: null
 titleTranslationMethod: null
 type: craft\volumes\Local
