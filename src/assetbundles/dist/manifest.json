@@ -1,10 +1,16 @@
 {
   "guide.ts": {
-    "file": "assets/guide.f5852a07.js",
+    "file": "assets/guide.a5e9462a.js",
     "src": "guide.ts",
     "isEntry": true,
+    "imports": [
+      "_vendor.b50c855a.js"
+    ],
     "css": [
-      "assets/guide.e86fb35b.css"
+      "assets/guide.469cd9b3.css"
     ]
+  },
+  "_vendor.b50c855a.js": {
+    "file": "assets/vendor.b50c855a.js"
   }
 }

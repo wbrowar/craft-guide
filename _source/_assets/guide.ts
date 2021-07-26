@@ -1,6 +1,8 @@
-import 'vite/dynamic-import-polyfill';
 import { createApp } from 'vue';
-import App from './App.vue';
+import GuideEditor from './components/GuideEditor.vue';
 import './global.css';
 
-createApp(App).mount('#app');
+const guideEditor = document.getElementById('guide-editor');
+if (guideEditor) {
+  createApp(GuideEditor, guideEditor.dataset).mount(guideEditor);
+}

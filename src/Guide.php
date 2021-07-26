@@ -520,7 +520,7 @@ class Guide extends Plugin
 
         if (Craft::parseEnv('$PLUGIN_HMR') == 'true') {
             return [
-                'css' => 'https://craft-guide.test:3000/_source/_css/app.css',
+//                'css' => 'https://craft-guide.test:3000/_source/_css/app.css',
                 'js' => 'https://craft-guide.test:3000/' . $filename,
             ];
         }
