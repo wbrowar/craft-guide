@@ -1,12 +1,35 @@
+export interface EditorComponent {
+  code: string;
+  documentation?: string;
+  group: EditorTabGroup;
+  title: string;
+}
+
+export type EditorTabGroup = 'components' | 'guides' | 'images' | 'publishing' | 'utility-classes';
+
+/*
+ * Guide data as stored as a GuideModel
+ */
 export interface Guide {
-  access: "all" | "admins" | "permissions";
+  access: 'all' | 'admins' | 'permissions';
   content: string;
-  contentSource: string;
+  contentSource: GuideContentSource;
   contentUrl: string;
-  format: "markdown" | "twig";
+  format: 'markdown' | 'twig';
   id: number;
   slug: string;
   summary: string | null;
   template: string;
   title: string;
+}
+
+export type GuideContentSource = 'field' | 'iframe' | 'template';
+
+export interface PluginSettings {
+  assetVolume: string;
+  components: any[];
+  clientName: string;
+  myCompanyName: string;
+  templatePath: string;
+  rebrand: any[];
 }

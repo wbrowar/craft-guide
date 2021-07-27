@@ -73,9 +73,21 @@
       title: guide.title,
     } %}
 
+    {% set settingsData = {
+      assetVolume: settings.assetVolume,
+      clientName: settings.clientName,
+      components: settings.components,
+      myCompanyName: settings.myCompanyName,
+      rebrand: settings.rebrand,
+      templatePath: settings.templatePath,
+    } %}
+
     <div
       id="guide-editor"
       data-guide-data="{{ guideData|json_encode }}"
+      data-is-new="false"
+      data-templates-data="{{ templates|json_encode }}"
+      data-settings-data="{{ settingsData|json_encode }}"
       {% if craft.app.request.param('return') %}data-redirect="{{ craft.app.request.param('return') }}"{% endif %}
       data-user-operations="{{ userOperations|json_encode }}"
     ></div>

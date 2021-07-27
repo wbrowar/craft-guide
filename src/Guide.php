@@ -141,13 +141,24 @@ class Guide extends Plugin
                 }
             );
 
-            $assets = self::$plugin->_getPathsToAssetFiles('guide.ts');
-
+            // Load our JavaScript
+            $assets = self::$plugin->_getPathsToAssetFiles('guide-display.ts');
             if ($assets['css'] ?? false) {
                 Craft::$app->getView()->registerCssFile($assets['css']);
             }
             if ($assets['js'] ?? false) {
                 Craft::$app->getView()->registerJsFile($assets['js'], ['position' => Craft::$app->getView()::POS_BEGIN, 'type' => 'module']);
+            }
+
+            // todo make this conditional
+            if (true) {
+                $assets = self::$plugin->_getPathsToAssetFiles('guide-admin.ts');
+                if ($assets['css'] ?? false) {
+                    Craft::$app->getView()->registerCssFile($assets['css']);
+                }
+                if ($assets['js'] ?? false) {
+                    Craft::$app->getView()->registerJsFile($assets['js'], ['position' => Craft::$app->getView()::POS_BEGIN, 'type' => 'module']);
+                }
             }
 
             // Insert JS into CP

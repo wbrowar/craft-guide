@@ -36,6 +36,7 @@ class Settings extends Model
     public $myCompanyName = '';
 
     // Components settings
+    // todo remove components setting
     public $components = [];
 
     // Rebrand settings

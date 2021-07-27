@@ -10,7 +10,8 @@ export default defineConfig({
     outDir: '../../src/assetbundles/dist',
     rollupOptions: {
       input: {
-        guide: './guide.ts',
+        'guide-admin': './guide-admin.ts',
+        'guide-display': './guide-display.ts',
       },
     },
   },

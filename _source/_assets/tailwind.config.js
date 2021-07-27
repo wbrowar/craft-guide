@@ -27,6 +27,11 @@ module.exports = {
         light: 'hsl(212, 30%, 85%)',
         dark: 'hsl(209, 14%, 37%)',
       },
+      matrix: {
+        block: 'hsl(213, 60%, 97%)',
+        border: 'rgba(51, 64, 77, 0.1)',
+        titlebar: 'hsl(212, 60%, 95%)',
+      },
       error: '#CF1124',
       warning: '#B44D12',
       success: '#27AB83',
