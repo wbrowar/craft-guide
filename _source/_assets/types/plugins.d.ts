@@ -34,3 +34,10 @@ export interface PluginSettings {
   templatePath: string;
   rebrand: any[];
 }
+
+export interface PluginUserOperations {
+  deleteGuides: boolean;
+  editGuides: boolean;
+  setAccessPermissions: boolean;
+  useOrganizer: boolean;
+}

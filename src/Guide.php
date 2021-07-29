@@ -150,15 +150,29 @@ class Guide extends Plugin
                 Craft::$app->getView()->registerJsFile($assets['js'], ['position' => Craft::$app->getView()::POS_BEGIN, 'type' => 'module']);
             }
 
-            // todo make this conditional
-            if (true) {
-                $assets = self::$plugin->_getPathsToAssetFiles('guide-admin.ts');
-                if ($assets['css'] ?? false) {
-                    Craft::$app->getView()->registerCssFile($assets['css']);
+            // Admin-specific JavaScript
+            if (Craft::$app->getRequest()->getSegment(1) == 'guide' && Craft::$app->getRequest()->getSegment(2) != 'page') {
+                if (true) {
+                    $assets = self::$plugin->_getPathsToAssetFiles('guide-admin.ts');
+                    if ($assets['css'] ?? false) {
+                        Craft::$app->getView()->registerCssFile($assets['css']);
+                    }
+                    if ($assets['js'] ?? false) {
+                        Craft::$app->getView()->registerJsFile($assets['js'], ['position' => Craft::$app->getView()::POS_BEGIN, 'type' => 'module']);
+                    }
                 }
-                if ($assets['js'] ?? false) {
-                    Craft::$app->getView()->registerJsFile($assets['js'], ['position' => Craft::$app->getView()::POS_BEGIN, 'type' => 'module']);
-                }
+
+                // Add global settings to end body
+                Event::on(View::class, View::EVENT_END_BODY, function(Event $event) {
+                    $adminGlobalsVariables = [
+                        'assetComponents' => self::$plugin->guideComponents->getAssetComponents(),
+                        'proEdition' => self::$pro,
+                        'settings' => self::$settings,
+                        'templates' => $this->_getTemplatesFromUserTemplatePath(),
+                        'userOperations' => self::$userOperations,
+                    ];
+                    echo self::$view->renderTemplate('guide/_partials/admin_globals', $adminGlobalsVariables);
+                });
             }
 
             // Insert JS into CP
@@ -228,7 +242,7 @@ class Guide extends Plugin
                         $event->rules['guide/delete/<guideId:\d{1,}>'] = ['template' => 'guide/delete', 'variables' => ['userOperations' => self::$userOperations]];
                     }
                     if (self::$userOperations['useOrganizer']) {
-                        $event->rules['guide/organizer'] = ['template' => 'guide/organizer', 'variables' => ['organizerConfig' => self::$plugin->organizer->getOrganizerConfig(), 'settings' => self::$settings, 'userOperations' => self::$userOperations]];
+                        $event->rules['guide/organizer'] = ['template' => 'guide/organizer', 'variables' => ['organizerConfig' => self::$plugin->organizer->getOrganizerConfig(), 'proEdition' => self::$pro, 'settings' => self::$settings, 'userOperations' => self::$userOperations]];
                     }
                     if (self::$pro) {
                         $event->rules['guide/settings/components'] = ['template' => 'guide/settings', 'variables' => ['components' => self::$plugin->guideComponents->getComponentsList(), 'proEdition' => self::$pro, 'selectedTab' => 'components', 'settings' => self::$settings]];
@@ -601,14 +615,14 @@ class Guide extends Plugin
         if (Craft::$app->getUser()->getIdentity()) {
             $user = Craft::$app->getUser()->getIdentity();
 
+            $operations['deleteGuides'] = $user->admin || $user->can('deleteGuides');
             $operations['editGuides'] = $user->admin || $user->can('editGuides');
             $operations['setAccessPermissions'] = $user->admin || $user->can('setAccessPermissions');
-            $operations['deleteGuides'] = $user->admin || $user->can('deleteGuides');
             $operations['useOrganizer'] = $user->admin || $user->can('useOrganizer');
         } else {
+            $operations['deleteGuides'] = false;
             $operations['editGuides'] = false;
             $operations['setAccessPermissions'] = false;
-            $operations['deleteGuides'] = false;
             $operations['useOrganizer'] = false;
         }
 

@@ -248,53 +248,28 @@ class GuideComponents extends Component
                 if (!empty($assets)) {
                     foreach ($assets as $asset) {
                         if ($asset->kind === 'image') {
-                            $previewUrl = $asset->getUrl([
-                                'mode' => 'fit',
-                                'width' => 350,
-                                'height' => 350,
-                                'quality' => 75,
-                                'position' => 'center-center',
-                            ]);
                             $thumbnailUrl1x = $asset->getUrl([
                                 'mode' => 'crop',
                                 'width' => 180,
                                 'quality' => 75,
-                                'position' => 'center-center',
                             ]);
                             $thumbnailUrl2x = $asset->getUrl([
                                 'mode' => 'crop',
                                 'width' => 360,
                                 'quality' => 75,
-                                'position' => 'center-center',
                             ]);
-                            
-                            // @TODO Add more asset types
+
                             $list[] = [
-                                'name' => $asset->title,
-                                'kind' => $asset->kind,
-                                'preview' => $previewUrl ?? false,
+                                'title' => $asset->title,
+                                'group' => 'images',
+                                'code' => "{{ craft.guide.component('image', { asset: craft.assets.filename('" . $asset->filename . "').volume('" . $assetVolume->handle . "').one() }) }}",
+                                'documentation' => '<p>Display an image.</p>',
+                                'props' => [
+                                    'asset' => 'An image asset.',
+                                    'url' => 'The URL of the image to be displayed.',
+                                ],
                                 'thumbnail1x' => $thumbnailUrl1x ?? false,
                                 'thumbnail2x' => $thumbnailUrl2x ?? false,
-                                'code' => [
-                                    'markdown' => "<img src='[GUIDE_VOLUME_PATH]/" . $asset->filename . "' loading='lazy' alt='" . $asset->title . "'>",
-                                    'twig' => "{{ craft.guide.component('image', { asset: craft.assets.filename('" . $asset->filename . "').one() }) }}",
-                                ],
-                                'options' => [
-                                    [
-                                        'handle' => 'label',
-                                        'required' => true,
-                                        'type' => 'string',
-                                        'default' => '',
-                                        'description' => 'The button label.',
-                                    ],
-                                    [
-                                        'handle' => 'url',
-                                        'required' => true,
-                                        'type' => 'string',
-                                        'default' => '',
-                                        'description' => 'The button url.',
-                                    ],
-                                ],
                             ];
                         }
                     }

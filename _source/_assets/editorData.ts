@@ -51,9 +51,9 @@ export const editorData: EditorComponent[] = [
     title: 'Image',
     group: 'components',
     code: `{{ craft.guide.component('image', { url: 'REPLACE_URL' }) }}`,
-    documentation: `<p>Play audio in the browser’s audio player.</p>`,
+    documentation: `<p>Display an image.</p>`,
     props: {
-      label: `The label text for the button.`,
+      asset: `An image asset.`,
       url: `The URL of the image to be displayed.`,
     },
   },
@@ -155,8 +155,15 @@ Content
     },
   },
   // Snippets
+  // todo add snippet: GraphQL Helper - Checklist to make sure sections are in graphql schema
+  // todo add snippet: User Role Helper - Table of sections and their user roles (flagging any that don't have a user role)
+  // todo add snippet: Entry search – Simple search field
+  // todo add snippet:
+  // todo add snippet:
+  // todo add snippet:
+  // todo add snippet:
   {
-    title: 'Find Small Images',
+    title: 'Low-Res Image Check',
     group: 'snippets',
     code: `{# Set the width to the smallest size that an image should be uploaded. #}
 {% set width = 300 %}

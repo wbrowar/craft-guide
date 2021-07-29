@@ -1,0 +1,17 @@
+{% set settingsData = {
+    assetVolume: settings.assetVolume,
+    clientName: settings.clientName,
+    components: settings.components,
+    myCompanyName: settings.myCompanyName,
+    rebrand: settings.rebrand,
+    templatePath: settings.templatePath,
+} %}
+
+<div
+  id="guide-admin-globals"
+  data-asset-components="{{ assetComponents|json_encode }}"
+  data-pro-edition="{{ proEdition ? 'true' : 'false' }}"
+  data-settings="{{ settingsData|json_encode }}"
+  data-templates="{{ templates|json_encode }}"
+  data-user-operations="{{ userOperations|json_encode }}"
+></div>

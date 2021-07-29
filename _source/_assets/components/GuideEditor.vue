@@ -202,14 +202,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
+import { defineComponent, PropType, reactive, toRefs } from 'vue';
 import { editorData } from '../editorData';
 import ComponentListItem from './ComponentListItem.vue';
 import CraftFieldSelect from './CraftFieldSelect.vue';
 import CraftFieldText from './CraftFieldText.vue';
 import UtilityClassesSearch from './UtilityClassesSearch.vue';
 import { VAceEditor } from 'vue3-ace-editor';
-import { EditorComponent, EditorTabGroup, Guide, GuideContentSource, PluginSettings } from '~/types/plugins';
+import {
+  EditorComponent,
+  EditorTabGroup,
+  Guide,
+  GuideContentSource,
+  PluginSettings,
+  PluginUserOperations,
+} from '~/types/plugins';
 
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/mode-markdown';
@@ -226,10 +233,19 @@ export default defineComponent({
     VAceEditor,
   },
   props: {
+    assetComponents: { type: Array as PropType<EditorComponent[]>, required: true },
     guideData: { type: String, required: true },
     isNew: { type: String, default: 'false' },
-    settingsData: { type: String, required: true },
-    templatesData: { type: Object, required: true },
+    proEdition: { type: Boolean, default: false },
+    settings: { type: Object as PropType<PluginSettings>, required: true },
+    templates: {
+      type: Object as PropType<{
+        filenames: Record<string, string>;
+        contents: Record<string, string>;
+      }>,
+      required: true,
+    },
+    userOperations: { type: Object as PropType<PluginUserOperations>, required: true },
   },
   setup: (props) => {
     const state = reactive<{
@@ -240,12 +256,7 @@ export default defineComponent({
       editorContent: string;
       guide: Guide;
       guideTemplate: string | '__none__';
-      settings: PluginSettings;
       slugValue: string;
-      templates: {
-        filenames: Record<string, string>;
-        contents: Record<string, string>;
-      };
       templatesFieldOptions: Record<string, string>[];
       titleValue: string;
     }>({
@@ -256,9 +267,7 @@ export default defineComponent({
       editorContent: '',
       guide: JSON.parse(props.guideData),
       guideTemplate: '__none__',
-      settings: JSON.parse(props.settingsData),
       slugValue: '',
-      templates: JSON.parse(props.templatesData),
       templatesFieldOptions: [],
       titleValue: '',
     });
@@ -269,8 +278,10 @@ export default defineComponent({
     state.slugValue = state.guide.slug;
     state.titleValue = state.guide.title;
 
-    state.templatesFieldOptions = Object.keys(state.templates.filenames).map((key) => {
-      return { label: state.templates.filenames[key], value: key };
+    state.editorComponents.push(...props.assetComponents);
+
+    state.templatesFieldOptions = Object.keys(props.templates.filenames).map((key) => {
+      return { label: props.templates.filenames[key], value: key };
     });
 
     return { ...toRefs(state) };
