@@ -3,9 +3,10 @@ export interface EditorComponent {
   documentation?: string;
   group: EditorTabGroup;
   title: string;
+  props?: Record<string, string>;
 }
 
-export type EditorTabGroup = 'components' | 'guides' | 'images' | 'publishing' | 'utility-classes';
+export type EditorTabGroup = 'components' | 'guides' | 'images' | 'publishing' | 'snippets' | 'utility-classes';
 
 /*
  * Guide data as stored as a GuideModel

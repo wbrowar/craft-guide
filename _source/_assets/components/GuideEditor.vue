@@ -1,22 +1,29 @@
 <template>
   <div class="g-grid g-grid-cols-[minmax(200px,400px),1fr]" v-if="guide">
-    <div class="g-bg-white g-rounded-l-lg">
-      <div>
+    <div
+      class="
+        g-grid g-grid-rows-[60px,1fr] g-relative g-bg-white g-rounded-l-lg g-min-h-[800px] g-h-[70vh] g-overflow-x-auto
+      "
+    >
+      <div class="g-sticky g-top-0 g-bg-white">
         <ul class="g-flex g-flex-nowrap">
           <li class="g-flex-grow">
-            <button class="g-w-full g-h-16" type="button" @click="currentTab = 'publishing'">publishing</button>
+            <button class="g-w-full g-h-[60px]" type="button" @click="currentTab = 'publishing'">publishing</button>
           </li>
           <li class="g-flex-grow" v-if="contentSource === 'field'">
-            <button class="g-w-full g-h-16" type="button" @click="currentTab = 'components'">components</button>
+            <button class="g-w-full g-h-[60px]" type="button" @click="currentTab = 'components'">components</button>
           </li>
           <li class="g-flex-grow" v-if="contentSource === 'field'">
-            <button class="g-w-full g-h-16" type="button" @click="currentTab = 'images'">images</button>
+            <button class="g-w-full g-h-[60px]" type="button" @click="currentTab = 'images'">images</button>
           </li>
           <li class="g-flex-grow" v-if="contentSource === 'field'">
-            <button class="g-w-full g-h-16" type="button" @click="currentTab = 'guides'">guides</button>
+            <button class="g-w-full g-h-[60px]" type="button" @click="currentTab = 'guides'">guides</button>
           </li>
           <li class="g-flex-grow" v-if="contentSource === 'field'">
-            <button class="g-w-full g-h-16" type="button" @click="currentTab = 'utility-classes'">
+            <button class="g-w-full g-h-[60px]" type="button" @click="currentTab = 'snippets'">snippets</button>
+          </li>
+          <li class="g-flex-grow" v-if="contentSource === 'field'">
+            <button class="g-w-full g-h-[60px]" type="button" @click="currentTab = 'utility-classes'">
               utility-classes
             </button>
           </li>
@@ -25,8 +32,22 @@
       <div>
         <div class="g-p-6" v-show="currentTab === 'publishing'">
           <h2>Settings</h2>
-          <CraftFieldText label="Title" name="title" placeholder="Guide Title" :starting-value="guide.title" />
-          <CraftFieldText label="Slug" name="slug" placeholder="guide-title" :starting-value="guide.slug" />
+          <CraftFieldText
+            required
+            label="Title"
+            name="title"
+            placeholder="Guide Title"
+            :starting-value="guide.title"
+            @value-changed="onTitleChanged"
+          />
+          <CraftFieldText
+            required
+            label="Slug"
+            name="slug"
+            placeholder="guide-title"
+            :starting-value="guide.slug"
+            @value-changed="onSlugChanged"
+          />
           <CraftFieldSelect
             ref="contentSourceField"
             label="Content Source"
@@ -66,10 +87,13 @@
             :starting-value="guide.summary"
           />
         </div>
-        <div class="g-p-3" v-show="currentTab === 'utility-classes'">
-          <p>Utility class search</p>
+        <div class="g-p-6" v-show="currentTab === 'utility-classes'">
+          <h2>Utility Classes</h2>
+          <p>You may use the classes below to style an lay out your guide content.</p>
+          <UtilityClassesSearch />
         </div>
         <ul v-show="tabComponents.length">
+          <h2>Components</h2>
           <li v-for="(component, index) in tabComponents" :key="index">
             <ComponentListItem
               class="g-p-3"
@@ -82,7 +106,7 @@
       </div>
     </div>
     <div
-      class="g-bg-matrix-block g-rounded-r-lg"
+      class="g-min-h-[800px] g-h-[70vh] g-bg-matrix-block g-rounded-r-lg"
       @drop="onDrop($event, 'landing')"
       @dragenter.prevent
       @dragover.prevent
@@ -171,15 +195,20 @@
       </div>
     </div>
   </div>
+  <Teleport to="#guide-action-buttons">
+    <button class="btn disabled" :title="formErrors.join(' ')" v-if="formErrors.length > 0">Save</button>
+    <input class="btn submit" type="button" value="Save" v-else />
+  </Teleport>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from 'vue';
 import { editorData } from '../editorData';
-import { VAceEditor } from 'vue3-ace-editor';
 import ComponentListItem from './ComponentListItem.vue';
 import CraftFieldSelect from './CraftFieldSelect.vue';
 import CraftFieldText from './CraftFieldText.vue';
+import UtilityClassesSearch from './UtilityClassesSearch.vue';
+import { VAceEditor } from 'vue3-ace-editor';
 import { EditorComponent, EditorTabGroup, Guide, GuideContentSource, PluginSettings } from '~/types/plugins';
 
 import 'ace-builds/src-noconflict/ext-language_tools';
@@ -193,6 +222,7 @@ export default defineComponent({
     ComponentListItem,
     CraftFieldSelect,
     CraftFieldText,
+    UtilityClassesSearch,
     VAceEditor,
   },
   props: {
@@ -209,13 +239,15 @@ export default defineComponent({
       editorComponents: EditorComponent[];
       editorContent: string;
       guide: Guide;
-      settings: PluginSettings;
       guideTemplate: string | '__none__';
+      settings: PluginSettings;
+      slugValue: string;
       templates: {
         filenames: Record<string, string>;
         contents: Record<string, string>;
       };
       templatesFieldOptions: Record<string, string>[];
+      titleValue: string;
     }>({
       contentSource: 'field',
       contentUrl: '',
@@ -223,15 +255,19 @@ export default defineComponent({
       editorComponents: editorData,
       editorContent: '',
       guide: JSON.parse(props.guideData),
-      settings: JSON.parse(props.settingsData),
       guideTemplate: '__none__',
+      settings: JSON.parse(props.settingsData),
+      slugValue: '',
       templates: JSON.parse(props.templatesData),
       templatesFieldOptions: [],
+      titleValue: '',
     });
 
     state.contentSource = state.guide.contentSource;
     state.editorContent = state.guide.content;
     state.guideTemplate = state.guide.template;
+    state.slugValue = state.guide.slug;
+    state.titleValue = state.guide.title;
 
     state.templatesFieldOptions = Object.keys(state.templates.filenames).map((key) => {
       return { label: state.templates.filenames[key], value: key };
@@ -240,6 +276,18 @@ export default defineComponent({
     return { ...toRefs(state) };
   },
   computed: {
+    formErrors() {
+      const errors = [];
+
+      if (this.titleValue === '') {
+        errors.push(`Title cannot be empty.`);
+      }
+      if (this.slugValue === '') {
+        errors.push(`Slug cannot be empty.`);
+      }
+
+      return errors;
+    },
     guideTemplateContent() {
       return this.templates.contents[this.guideTemplate];
     },
@@ -271,6 +319,12 @@ export default defineComponent({
     },
     onGuideTemplateChanged(newValue) {
       this.guideTemplate = newValue;
+    },
+    onSlugChanged(newValue) {
+      this.slugValue = newValue;
+    },
+    onTitleChanged(newValue) {
+      this.titleValue = newValue;
     },
     startDrag: (e: DragEvent, thing) => {
       e.dataTransfer.dropEffect = 'move';
