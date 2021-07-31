@@ -2,6 +2,8 @@ export interface EditorComponent {
   code: string;
   documentation?: string;
   group: EditorTabGroup;
+  thumbnail1x?: string;
+  thumbnail2x?: string;
   title: string;
   props?: Record<string, string>;
 }
@@ -16,7 +18,6 @@ export interface Guide {
   content: string;
   contentSource: GuideContentSource;
   contentUrl: string;
-  format: 'markdown' | 'twig';
   id: number;
   slug: string;
   summary: string | null;

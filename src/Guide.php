@@ -164,8 +164,23 @@ class Guide extends Plugin
 
                 // Add global settings to end body
                 Event::on(View::class, View::EVENT_END_BODY, function(Event $event) {
+                    $guidesData = [];
+                    $guides = self::$plugin->guide->getGuides([]);
+                    foreach ($guides as $guide) {
+                        $guidesData[] = [
+                            'deleteUrl' => UrlHelper::url('guide/delete/' . $guide->id),
+                            'editUrl' => UrlHelper::url('guide/edit/' . $guide->id),
+                            'id' => $guide->id,
+                            'title' => $guide->title,
+                            'slug' => $guide->slug,
+                            'summary' => $guide->summary,
+                            'viewUrl' => UrlHelper::url('guide/page/' . $guide->slug),
+                        ];
+                    }
+
                     $adminGlobalsVariables = [
                         'assetComponents' => self::$plugin->guideComponents->getAssetComponents(),
+                        'guides' => $guidesData,
                         'proEdition' => self::$pro,
                         'settings' => self::$settings,
                         'templates' => $this->_getTemplatesFromUserTemplatePath(),
@@ -177,13 +192,13 @@ class Guide extends Plugin
 
             // Insert JS into CP
             Event::on(View::class, View::EVENT_BEFORE_RENDER_TEMPLATE, function() {
-                // Add path to assets for use in JS files
-                $assetDist = self::$view->getAssetManager()->getPublishedUrl('@wbrowar/guide/assetbundles/guide/dist');
-                $js = 'window.WBGuideAssets = "' . $assetDist . '";';
-
-                // Enable logs into the browser console for easier JS debugging
-                $js .= 'window.WBJsDevMode = window.WBJsDevMode || ' . (Craft::$app->getConfig()->getGeneral()->devMode ? 'true' : 'false') . ';';
-                self::$view->registerJs($js, 1);
+//                // Add path to assets for use in JS files
+//                $assetDist = self::$view->getAssetManager()->getPublishedUrl('@wbrowar/guide/assetbundles/guide/dist');
+//                $js = 'window.WBGuideAssets = "' . $assetDist . '";';
+//
+//                // Enable logs into the browser console for easier JS debugging
+//                $js .= 'window.WBJsDevMode = window.WBJsDevMode || ' . (Craft::$app->getConfig()->getGeneral()->devMode ? 'true' : 'false') . ';';
+//                self::$view->registerJs($js, 1);
 
                 // Include user CSS
                 if (self::$pro && (self::$settings['rebrand'] ?? false)) {
@@ -223,14 +238,7 @@ class Guide extends Plugin
                     $event->rules['guide/settings/variables'] = ['template' => 'guide/settings', 'variables' => ['proEdition' => self::$pro, 'selectedTab' => 'variables', 'settings' => self::$settings]];
 
                     if (self::$userOperations['editGuides']) {
-                        $editVariables = [
-                            'assetComponents' => self::$plugin->guideComponents->getAssetComponents(),
-                            'components' => self::$plugin->guideComponents->getComponentsList('settings'),
-                            'proEdition' => self::$pro,
-                            'settings' => self::$settings,
-                            'templates' => $this->_getTemplatesFromUserTemplatePath(),
-                            'userOperations' => self::$userOperations,
-                        ];
+                        $editVariables = [];
 
                         $editVariables['title'] = 'New Guide';
                         $event->rules['guide/new'] = ['template' => 'guide/edit', 'variables' => $editVariables];

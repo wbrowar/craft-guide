@@ -61,10 +61,9 @@ export const editorData: EditorComponent[] = [
     title: 'Guide Include',
     group: 'components',
     code: `{{ craft.guide.include({ slug: 'REPLACE_SLUG' }) }}`,
-    documentation: `<p>Play audio in the browser’s audio player.</p>`,
+    documentation: `<p>Embed the contents of another guide.</p>`,
     props: {
-      label: `The label text for the button.`,
-      url: `The URL of the image to be displayed.`,
+      slug: `The slug of the guide, as set in the Guide Editor.`,
     },
   },
   {

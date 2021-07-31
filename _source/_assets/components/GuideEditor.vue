@@ -1,5 +1,5 @@
 <template>
-  <div class="g-grid g-grid-cols-[minmax(200px,400px),1fr]" v-if="guide">
+  <div class="g-grid g-grid-cols-[minmax(200px,400px),minmax(250px,1fr)] g-relative g-overflow-hidden" v-if="guide">
     <div
       class="
         g-grid g-grid-rows-[60px,1fr] g-relative g-bg-white g-rounded-l-lg g-min-h-[800px] g-h-[70vh] g-overflow-x-auto
@@ -96,9 +96,18 @@
           <h2>Components</h2>
           <li v-for="(component, index) in tabComponents" :key="index">
             <ComponentListItem
-              class="g-p-3"
               :code="component.code"
+              :docs="{
+                description: component.documentation,
+                props: component.props,
+              }"
+              :image-srcset="
+                component.thumbnail1x && component.thumbnail2x
+                  ? `${component.thumbnail1x} 1x, ${component.thumbnail2x} 2x`
+                  : null
+              "
               :title="component.title"
+              @documentation-clicked="showDocumentation"
               @insert-clicked="insertTextIntoEditor"
             />
           </li>
@@ -106,7 +115,7 @@
       </div>
     </div>
     <div
-      class="g-min-h-[800px] g-h-[70vh] g-bg-matrix-block g-rounded-r-lg"
+      class="g-min-h-[800px] g-h-[70vh] g-bg-matrix-block g-rounded-r-lg g-relative g-overflow-hidden"
       @drop="onDrop($event, 'landing')"
       @dragenter.prevent
       @dragover.prevent
@@ -194,6 +203,45 @@
         </div>
       </div>
     </div>
+    <transition name="slide-docs">
+      <div class="g-absolute g-inset-y-0 g-right-0 g-w-64 g-p-2 g-z-10 lg:g-w-96" v-if="currentDocs">
+        <div
+          class="
+            g-box-border g-p-5 g-pt-10 g-w-full g-h-full g-bg-matrix-block g-rounded-sm g-shadow-lg g-overflow-auto
+          "
+        >
+          <h1 v-html="currentDocs.title" v-if="currentDocs.title"></h1>
+          <div v-html="currentDocs.description" v-if="currentDocs.description"></div>
+          <img class="g-mt-6" :srcset="currentDocs.imageSrcset" alt="image preview" v-if="currentDocs.imageSrcset" />
+          <div class="g-mt-6" v-if="currentDocs.code">
+            <h2>Code</h2>
+            <div class="g-bg-matrix-titlebar g-rounded g-border-matrix-border g-overflow-x-scroll">
+              <pre class="g-p-3 g-select-all"><code>{{ currentDocs.code }}</code></pre>
+            </div>
+            <div class="g-space-x-1">
+              <button class="btn small g-mt-1" type="button" @click="insertTextIntoEditor(currentDocs.code)">
+                ➕ Add
+              </button>
+              <button class="btn small g-mt-1" type="button" @click="copyText(currentDocs.code)">🗂 Copy</button>
+            </div>
+          </div>
+          <div class="g-mt-6" v-if="currentDocs.props">
+            <h2>Arguments</h2>
+            <table>
+              <tbody>
+                <tr v-for="(prop, index) in currentDocs.props" :key="index">
+                  <td class="g-select-all">
+                    <strong>{{ index }}</strong>
+                  </td>
+                  <td>{{ prop }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <button class="g-absolute g-top-4 g-right-4" type="button" @click="currentDocs = null">Close</button>
+      </div>
+    </transition>
   </div>
   <Teleport to="#guide-action-buttons">
     <button class="btn disabled" :title="formErrors.join(' ')" v-if="formErrors.length > 0">Save</button>
@@ -203,12 +251,17 @@
 
 <script lang="ts">
 import { defineComponent, PropType, reactive, toRefs } from 'vue';
+import { log, table } from '../globals';
 import { editorData } from '../editorData';
 import ComponentListItem from './ComponentListItem.vue';
 import CraftFieldSelect from './CraftFieldSelect.vue';
 import CraftFieldText from './CraftFieldText.vue';
 import UtilityClassesSearch from './UtilityClassesSearch.vue';
 import { VAceEditor } from 'vue3-ace-editor';
+import 'ace-builds/src-noconflict/ext-language_tools';
+import 'ace-builds/src-noconflict/mode-markdown';
+import 'ace-builds/src-noconflict/mode-twig';
+import 'ace-builds/src-noconflict/theme-tomorrow_night_bright';
 import {
   EditorComponent,
   EditorTabGroup,
@@ -217,11 +270,6 @@ import {
   PluginSettings,
   PluginUserOperations,
 } from '~/types/plugins';
-
-import 'ace-builds/src-noconflict/ext-language_tools';
-import 'ace-builds/src-noconflict/mode-markdown';
-import 'ace-builds/src-noconflict/mode-twig';
-import 'ace-builds/src-noconflict/theme-tomorrow_night_bright';
 
 export default defineComponent({
   name: 'GuideEditor',
@@ -234,7 +282,9 @@ export default defineComponent({
   },
   props: {
     assetComponents: { type: Array as PropType<EditorComponent[]>, required: true },
+    devMode: { type: Boolean, default: false },
     guideData: { type: String, required: true },
+    guideComponents: { type: Array as PropType<EditorComponent[]>, required: true },
     isNew: { type: String, default: 'false' },
     proEdition: { type: Boolean, default: false },
     settings: { type: Object as PropType<PluginSettings>, required: true },
@@ -248,27 +298,17 @@ export default defineComponent({
     userOperations: { type: Object as PropType<PluginUserOperations>, required: true },
   },
   setup: (props) => {
-    const state = reactive<{
-      contentSource: GuideContentSource;
-      contentUrl: string;
-      currentTab: EditorTabGroup;
-      editorComponents: EditorComponent[];
-      editorContent: string;
-      guide: Guide;
-      guideTemplate: string | '__none__';
-      slugValue: string;
-      templatesFieldOptions: Record<string, string>[];
-      titleValue: string;
-    }>({
-      contentSource: 'field',
+    const state = reactive({
+      contentSource: 'field' as GuideContentSource,
       contentUrl: '',
-      currentTab: 'publishing',
-      editorComponents: editorData,
+      currentDocs: null,
+      currentTab: 'publishing' as EditorTabGroup,
+      editorComponents: editorData as EditorComponent[],
       editorContent: '',
-      guide: JSON.parse(props.guideData),
+      guide: JSON.parse(props.guideData) as Guide,
       guideTemplate: '__none__',
       slugValue: '',
-      templatesFieldOptions: [],
+      templatesFieldOptions: [] as Record<string, string>[],
       titleValue: '',
     });
 
@@ -279,6 +319,7 @@ export default defineComponent({
     state.titleValue = state.guide.title;
 
     state.editorComponents.push(...props.assetComponents);
+    state.editorComponents.push(...props.guideComponents);
 
     state.templatesFieldOptions = Object.keys(props.templates.filenames).map((key) => {
       return { label: props.templates.filenames[key], value: key };
@@ -309,6 +350,9 @@ export default defineComponent({
     },
   },
   methods: {
+    copyText(text) {
+      navigator.clipboard.writeText(text);
+    },
     insertGuideTemplateIntoEditor() {
       if (this.guideTemplateContent) {
         this.$refs.editor._editor.setValue(this.guideTemplateContent);
@@ -326,7 +370,7 @@ export default defineComponent({
       this.contentUrl = newValue;
     },
     onDrop(e: DragEvent, thing) {
-      console.log('drag', e, thing);
+      log('drag', e, thing);
     },
     onGuideTemplateChanged(newValue) {
       this.guideTemplate = newValue;
@@ -336,6 +380,9 @@ export default defineComponent({
     },
     onTitleChanged(newValue) {
       this.titleValue = newValue;
+    },
+    showDocumentation(payload) {
+      this.currentDocs = this.currentDocs?.code === payload.code ? null : payload;
     },
     startDrag: (e: DragEvent, thing) => {
       e.dataTransfer.dropEffect = 'move';
@@ -349,12 +396,20 @@ export default defineComponent({
       contentEl.style.padding = '0px';
     }
 
-    if (import.meta.env.DEV) {
-      console.log('Guide Editor: guide');
-      console.table(this.guide);
-    }
+    log('Guide Editor: guide');
+    table(this.guide);
   },
 });
 </script>
 
-<style scoped></style>
+<style>
+.slide-docs-enter-active,
+.slide-docs-leave-active {
+  transition: transform 0.4s cubic-bezier(0, 0.23, 0.55, 1.07);
+}
+
+.slide-docs-enter-from,
+.slide-docs-leave-to {
+  transform: translateX(100%);
+}
+</style>

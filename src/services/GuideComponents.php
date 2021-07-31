@@ -250,12 +250,12 @@ class GuideComponents extends Component
                         if ($asset->kind === 'image') {
                             $thumbnailUrl1x = $asset->getUrl([
                                 'mode' => 'crop',
-                                'width' => 180,
+                                'width' => 344,
                                 'quality' => 75,
                             ]);
                             $thumbnailUrl2x = $asset->getUrl([
                                 'mode' => 'crop',
-                                'width' => 360,
+                                'width' => 688,
                                 'quality' => 75,
                             ]);
 
@@ -263,7 +263,7 @@ class GuideComponents extends Component
                                 'title' => $asset->title,
                                 'group' => 'images',
                                 'code' => "{{ craft.guide.component('image', { asset: craft.assets.filename('" . $asset->filename . "').volume('" . $assetVolume->handle . "').one() }) }}",
-                                'documentation' => '<p>Display an image.</p>',
+//                                'documentation' => '<p>Display an image.</p>',
                                 'props' => [
                                     'asset' => 'An image asset.',
                                     'url' => 'The URL of the image to be displayed.',

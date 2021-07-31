@@ -25,24 +25,5 @@
 {% endblock %}
 
 {% set content %}
-
-    {% set settingsData = {
-        assetVolume: settings.assetVolume,
-        clientName: settings.clientName,
-        components: settings.components,
-        myCompanyName: settings.myCompanyName,
-        rebrand: settings.rebrand,
-        templatePath: settings.templatePath,
-    } %}
-
-    <div
-      id="guide-editor"
-      data-guides=""
-      data-settings-data="{{ settingsData|json_encode }}"
-      data-user-operations="{{ userOperations|json_encode }}"
-    ></div>
-
-    <div id="guide__organizer" class="guide__organizer">
-        <organizer organizer-config="{{ organizerConfig|json_encode }}"></organizer>
-    </div>
+    <div id="guide-editor"></div>
 {% endset %}
