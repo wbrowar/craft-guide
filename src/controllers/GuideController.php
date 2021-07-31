@@ -26,17 +26,6 @@ use craft\web\Controller;
  */
 class GuideController extends Controller
 {
-
-    // Protected Properties
-    // =========================================================================
-
-    /**
-     * @var    bool|array Allows anonymous access to this controller's actions.
-     *         The actions must be in 'kebab-case'
-     * @access protected
-     */
-//    protected $allowAnonymous = [];
-
     // Public Methods
     // =========================================================================
 
@@ -118,15 +107,10 @@ class GuideController extends Controller
         $slug = ($params['slug'] ?? false) ? $params['slug'] : $this->_generateSlugFromTitle($title);
 
         $guide = new GuideModel([
-            'access' => $params['access'],
             'authorId' => $params['authorId'],
             'content' => $params['content'],
             'contentSource' => $params['contentSource'] ?? 'field',
             'contentUrl' => $params['contentUrl'],
-            'format' => $params['format'],
-            'parentType' => $params['parentType'] ?? null,
-            'parentUid' => $params['parentUid'] ?? null,
-            'permissions' => $params['permissions'] ?? [],
             'slug' => $slug,
             'summary' => $params['summary'],
             'template' => $params['template'],

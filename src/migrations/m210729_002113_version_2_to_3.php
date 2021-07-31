@@ -16,8 +16,9 @@ class m210729_002113_version_2_to_3 extends Migration
     public function safeUp()
     {
         $this->driver = Craft::$app->getConfig()->getDb()->driver;
-        if ($this->createTables()) {
 
+        if ($this->createTables()) {
+            $this->removeTables();
         }
     }
 
@@ -31,9 +32,9 @@ class m210729_002113_version_2_to_3 extends Migration
     }
 
     /**
-     * @return void
+     * @return bool
      */
-    protected function createTables()
+    protected function createTables():bool
     {
         $tablesCreated = false;
 
@@ -47,7 +48,7 @@ class m210729_002113_version_2_to_3 extends Migration
                     'dateCreated' => $this->dateTime()->notNull(),
                     'dateUpdated' => $this->dateTime()->notNull(),
                     'uid' => $this->uid(),
-                    'cpNav' => $this->text(),
+                    // todo add placements schema
                 ]
             );
         }
@@ -58,9 +59,28 @@ class m210729_002113_version_2_to_3 extends Migration
     /**
      * @return void
      */
+    protected function removeColumns()
+    {
+        // Remove deprecated Guide columns
+        $this->dropColumn('{{%guide_guides}}', 'access');
+        $this->dropColumn('{{%guide_guides}}', 'format');
+        $this->dropColumn('{{%guide_guides}}', 'parentUid');
+        $this->dropColumn('{{%guide_guides}}', 'parentType');
+        $this->dropColumn('{{%guide_guides}}', 'permissions');
+        $this->dropColumn('{{%guide_guides}}', 'access');
+        $this->dropColumn('{{%guide_guides}}', 'access');
+        $this->dropColumn('{{%guide_guides}}', 'access');
+        $this->dropColumn('{{%guide_guides}}', 'access');
+        $this->dropColumn('{{%guide_guides}}', 'access');
+        $this->dropColumn('{{%guide_guides}}', 'access');
+    }
+
+    /**
+     * @return void
+     */
     protected function removeTables()
     {
-        // Remove Organizers
-//        $this->dropTableIfExists('{{%guide_organizers}}');
+        // Remove Organizer Table
+        $this->dropTableIfExists('{{%guide_organizers}}');
     }
 }

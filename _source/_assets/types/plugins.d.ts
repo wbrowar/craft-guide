@@ -14,7 +14,7 @@ export type EditorTabGroup = 'components' | 'guides' | 'images' | 'publishing' |
  * Guide data as stored as a GuideModel
  */
 export interface Guide {
-  access: 'all' | 'admins' | 'permissions';
+  authorId: number;
   content: string;
   contentSource: GuideContentSource;
   contentUrl: string;

@@ -10,7 +10,6 @@
 
 namespace wbrowar\guide\models;
 
-use Craft;
 use craft\base\Model;
 
 /**
@@ -22,14 +21,6 @@ class Guide extends Model
 {
     // Public Properties
     // =========================================================================
-
-    /**
-     * Determines who can access the guide.
-     * Options: 'all', 'admins', 'permissions'
-     *
-     * @var string
-     */
-    public $access = 'all';
 
     /**
      * The Craft user that initially created the guide.
@@ -59,34 +50,6 @@ class Guide extends Model
      * @var string
      */
     public $contentUrl;
-
-    /**
-     * The programming language of guides that use the `field` or `template` contentSource.
-     *
-     * @var string
-     */
-    public $format = 'markdown';
-
-    /**
-     * The context in which a guide is displayed within the Craft CP. The default `__none__` means the guide is not displayed anywhere within the CP.
-     *
-     * @var string
-     */
-    public $parentType = '__none__';
-
-    /**
-     * The UID of a section or category group where a guide will appear in the sidebar of its edit page.
-     *
-     * @var string
-     */
-    public $parentUid;
-
-    /**
-     * An array of permissions that a user must have to view the guide. The user must have at least one of the permissions in the array.
-     *
-     * @var string
-     */
-    public $permissions = [];
 
     /**
      * The unique slug used in the URL to the guide’s page in the CP.
@@ -126,18 +89,12 @@ class Guide extends Model
     public function rules()
     {
         return [
-            [['access', 'authorId', 'format', 'slug'], 'required'],
+            [['authorId', 'slug', 'title'], 'required'],
 
             ['authorId', 'integer'],
-            [['access', 'content', 'slug', 'summary', 'title'], 'string'],
+            [['content', 'slug', 'summary', 'title'], 'string'],
 
-            ['title', 'required', 'message' => 'Please choose a username.'],
-
-            ['access', 'default', 'value' => 'all'],
             ['authorId', 'default', 'value' => 1],
-            ['format', 'default', 'value' => 'markdown'],
-            ['parentType', 'default', 'value' => '__none__'],
-            ['permissions', 'default', 'value' => []],
         ];
     }
 }

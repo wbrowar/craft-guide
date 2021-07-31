@@ -1,16 +1,24 @@
 {
-  "guide.ts": {
-    "file": "assets/guide.a5e9462a.js",
-    "src": "guide.ts",
+  "guide-admin.ts": {
+    "file": "assets/guide-admin.6adccbda.js",
+    "src": "guide-admin.ts",
     "isEntry": true,
     "imports": [
-      "_vendor.b50c855a.js"
+      "_vendor.04c2ece6.js"
     ],
     "css": [
-      "assets/guide.469cd9b3.css"
+      "assets/guide-admin.380460bd.css"
     ]
   },
-  "_vendor.b50c855a.js": {
-    "file": "assets/vendor.b50c855a.js"
+  "guide-display.ts": {
+    "file": "assets/guide-display.52851fd5.js",
+    "src": "guide-display.ts",
+    "isEntry": true,
+    "css": [
+      "assets/guide-display.8530a434.css"
+    ]
+  },
+  "_vendor.04c2ece6.js": {
+    "file": "assets/vendor.04c2ece6.js"
   }
 }

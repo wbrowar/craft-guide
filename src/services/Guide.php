@@ -128,15 +128,10 @@ class Guide extends Component
             $record = new Guides();
         }
 
-        $record->access = $model->access;
         $record->authorId = $model->authorId;
         $record->content = $model->content;
         $record->contentSource = $model->contentSource;
         $record->contentUrl = $model->contentUrl;
-        $record->format = $model->format;
-        $record->parentType = $model->parentType;
-        $record->parentUid = $model->parentUid;
-        $record->permissions = $model->permissions;
         $record->summary = $model->summary;
         $record->slug = $this->_getUniqueSlug($model->slug, $id ?? 0);
         $record->template = $model->template;

@@ -18,6 +18,7 @@
         :placeholder="placeholder ? placeholder : null"
         :aria-describedby="instructions ? `${name}-instructions` : null"
         v-bind="fieldAttributes"
+        @focus="$emit('focused')"
       />
     </div>
   </div>
@@ -38,7 +39,7 @@ export default defineComponent({
     required: { type: Boolean, default: false },
     startingValue: { type: String, default: '' },
   },
-  emits: ['value-changed'],
+  emits: ['focused', 'value-changed'],
   setup: (props) => {
     const state = reactive({
       fieldValue: '',

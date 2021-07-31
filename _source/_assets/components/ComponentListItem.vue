@@ -1,8 +1,8 @@
 <template>
   <div class="g-flex g-flex-nowrap g-bg-matrix-block g-duration-150 hover:g-bg-matrix-titlebar">
-    <div v-if="imageSrcset">
+    <button type="button" @click="onDocumentation" v-if="imageSrcset">
       <img class="g-block g-w-24 g-h-24 g-object-cover" :srcset="imageSrcset" alt="image preview" />
-    </div>
+    </button>
     <div class="g-p-3 g-flex-grow g-border-t g-border-solid g-border-matrix-border">
       <h4>{{ title }}</h4>
       <p v-html="docs.description" v-if="docs?.description"></p>
