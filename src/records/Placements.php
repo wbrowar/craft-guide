@@ -5,14 +5,11 @@
  * A CMS Guide for Craft CMS.
  *
  * @link      https://wbrowar.com
- * @copyright Copyright (c) 2019 Will Browar
+ * @copyright Copyright (c) 2021 Will Browar
  */
 
 namespace wbrowar\guide\records;
 
-use wbrowar\guide\Guide;
-
-use Craft;
 use craft\db\ActiveRecord;
 
 /**
@@ -20,7 +17,7 @@ use craft\db\ActiveRecord;
  * @package   Guide
  * @since     2.0.0
  */
-class Organizers extends ActiveRecord
+class Placements extends ActiveRecord
 {
     // Public Static Methods
     // =========================================================================
@@ -30,6 +27,6 @@ class Organizers extends ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%guide_organizers}}';
+        return '{{%guide_placements}}';
     }
 }

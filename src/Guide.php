@@ -25,7 +25,6 @@ use wbrowar\guide\fieldlayoutelements\GuideInclude;
 use wbrowar\guide\models\Settings;
 use wbrowar\guide\services\Guide as GuideService;
 use wbrowar\guide\services\GuideComponents as GuideComponentsService;
-use wbrowar\guide\services\Organizer as OrganizerService;
 use wbrowar\guide\twigextensions\GuideTwigExtension;
 use wbrowar\guide\utilities\ImportExport;
 use wbrowar\guide\variables\GuideVariable;
@@ -96,7 +95,7 @@ class Guide extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '2.0.0';
+    public $schemaVersion = '3.0.0';
 
     // Public Methods
     // =========================================================================
@@ -123,9 +122,9 @@ class Guide extends Plugin
 
         if (self::$view->getTemplateMode() === View::TEMPLATE_MODE_CP) {
             // Add in our asset bundle
-            if (!Craft::$app->getRequest()->isConsoleRequest) {
-                self::$view->registerAssetBundle(GuideAsset::class);
-            }
+//            if (!Craft::$app->getRequest()->isConsoleRequest) {
+//                self::$view->registerAssetBundle(GuideAsset::class);
+//            }
 
             // Add in our Twig extensions
             self::$view->registerTwigExtension(new GuideTwigExtension());
@@ -141,53 +140,55 @@ class Guide extends Plugin
                 }
             );
 
-            // Load our JavaScript
-            $assets = self::$plugin->_getPathsToAssetFiles('guide-display.ts');
-            if ($assets['css'] ?? false) {
-                Craft::$app->getView()->registerCssFile($assets['css']);
-            }
-            if ($assets['js'] ?? false) {
-                Craft::$app->getView()->registerJsFile($assets['js'], ['position' => Craft::$app->getView()::POS_BEGIN, 'type' => 'module']);
-            }
-
-            // Admin-specific JavaScript
-            if (Craft::$app->getRequest()->getSegment(1) == 'guide' && Craft::$app->getRequest()->getSegment(2) != 'page') {
-                if (true) {
-                    $assets = self::$plugin->_getPathsToAssetFiles('guide-admin.ts');
-                    if ($assets['css'] ?? false) {
-                        Craft::$app->getView()->registerCssFile($assets['css']);
-                    }
-                    if ($assets['js'] ?? false) {
-                        Craft::$app->getView()->registerJsFile($assets['js'], ['position' => Craft::$app->getView()::POS_BEGIN, 'type' => 'module']);
-                    }
+            if (!Craft::$app->getRequest()->isConsoleRequest) {
+                // Load our JavaScript
+                $assets = self::$plugin->_getPathsToAssetFiles('guide-display.ts');
+                if ($assets['css'] ?? false) {
+                    Craft::$app->getView()->registerCssFile($assets['css']);
+                }
+                if ($assets['js'] ?? false) {
+                    Craft::$app->getView()->registerJsFile($assets['js'], ['position' => Craft::$app->getView()::POS_BEGIN, 'type' => 'module']);
                 }
 
-                // Add global settings to end body
-                Event::on(View::class, View::EVENT_END_BODY, function(Event $event) {
-                    $guidesData = [];
-                    $guides = self::$plugin->guide->getGuides([]);
-                    foreach ($guides as $guide) {
-                        $guidesData[] = [
-                            'deleteUrl' => UrlHelper::url('guide/delete/' . $guide->id),
-                            'editUrl' => UrlHelper::url('guide/edit/' . $guide->id),
-                            'id' => $guide->id,
-                            'title' => $guide->title,
-                            'slug' => $guide->slug,
-                            'summary' => $guide->summary,
-                            'viewUrl' => UrlHelper::url('guide/page/' . $guide->slug),
-                        ];
+                // Admin-specific JavaScript
+                if (Craft::$app->getRequest()->getSegment(1) == 'guide' && Craft::$app->getRequest()->getSegment(2) != 'page') {
+                    if (true) {
+                        $assets = self::$plugin->_getPathsToAssetFiles('guide-admin.ts');
+                        if ($assets['css'] ?? false) {
+                            Craft::$app->getView()->registerCssFile($assets['css']);
+                        }
+                        if ($assets['js'] ?? false) {
+                            Craft::$app->getView()->registerJsFile($assets['js'], ['position' => Craft::$app->getView()::POS_BEGIN, 'type' => 'module']);
+                        }
                     }
 
-                    $adminGlobalsVariables = [
-                        'assetComponents' => self::$plugin->guideComponents->getAssetComponents(),
-                        'guides' => $guidesData,
-                        'proEdition' => self::$pro,
-                        'settings' => self::$settings,
-                        'templates' => $this->_getTemplatesFromUserTemplatePath(),
-                        'userOperations' => self::$userOperations,
-                    ];
-                    echo self::$view->renderTemplate('guide/_partials/admin_globals', $adminGlobalsVariables);
-                });
+                    // Add global settings to end body
+                    Event::on(View::class, View::EVENT_END_BODY, function(Event $event) {
+                        $guidesData = [];
+                        $guides = self::$plugin->guide->getGuides([]);
+                        foreach ($guides as $guide) {
+                            $guidesData[] = [
+                                'deleteUrl' => UrlHelper::url('guide/delete/' . $guide->id),
+                                'editUrl' => UrlHelper::url('guide/edit/' . $guide->id),
+                                'id' => $guide->id,
+                                'title' => $guide->title,
+                                'slug' => $guide->slug,
+                                'summary' => $guide->summary,
+                                'viewUrl' => UrlHelper::url('guide/page/' . $guide->slug),
+                            ];
+                        }
+
+                        $adminGlobalsVariables = [
+                            'assetComponents' => self::$plugin->guideComponents->getAssetComponents(),
+                            'guides' => $guidesData,
+                            'proEdition' => self::$pro,
+                            'settings' => self::$settings,
+                            'templates' => $this->_getTemplatesFromUserTemplatePath(),
+                            'userOperations' => self::$userOperations,
+                        ];
+                        echo self::$view->renderTemplate('guide/_partials/admin_globals', $adminGlobalsVariables);
+                    });
+                }
             }
 
             // Insert JS into CP
@@ -231,9 +232,9 @@ class Guide extends Plugin
                     $event->rules['guide/duplicate/<guideId:\d{1,}>'] = 'guide/guide/duplicate-guide';
 
                     // Templates
-                    $event->rules['guide'] = ['template' => 'guide/index', 'variables' => ['organizer' => self::$plugin->organizer->getOrganizer(), 'settings' => self::$settings, 'userOperations' => self::$userOperations]];
+                    $event->rules['guide'] = ['template' => 'guide/index', 'variables' => ['settings' => self::$settings, 'userOperations' => self::$userOperations]];
                     $event->rules['guide/welcome'] = ['template' => 'guide/welcome', 'variables' => ['settings' => self::$settings]];
-                    $event->rules['guide/page/<slug:(.*)>'] = ['template' => 'guide/page', 'variables' => ['organizer' => self::$plugin->organizer->getOrganizer(), 'settings' => self::$settings, 'userOperations' => self::$userOperations]];
+                    $event->rules['guide/page/<slug:(.*)>'] = ['template' => 'guide/page', 'variables' => ['settings' => self::$settings, 'userOperations' => self::$userOperations]];
                     $event->rules['guide/settings/general'] = ['template' => 'guide/settings', 'variables' => ['proEdition' => self::$pro, 'selectedTab' => 'general', 'settings' => self::$settings]];
                     $event->rules['guide/settings/variables'] = ['template' => 'guide/settings', 'variables' => ['proEdition' => self::$pro, 'selectedTab' => 'variables', 'settings' => self::$settings]];
 
@@ -250,7 +251,7 @@ class Guide extends Plugin
                         $event->rules['guide/delete/<guideId:\d{1,}>'] = ['template' => 'guide/delete', 'variables' => ['userOperations' => self::$userOperations]];
                     }
                     if (self::$userOperations['useOrganizer']) {
-                        $event->rules['guide/organizer'] = ['template' => 'guide/organizer', 'variables' => ['organizerConfig' => self::$plugin->organizer->getOrganizerConfig(), 'proEdition' => self::$pro, 'settings' => self::$settings, 'userOperations' => self::$userOperations]];
+                        $event->rules['guide/organizer'] = ['template' => 'guide/organizer', 'variables' => ['proEdition' => self::$pro, 'settings' => self::$settings, 'userOperations' => self::$userOperations]];
                     }
                     if (self::$pro) {
                         $event->rules['guide/settings/components'] = ['template' => 'guide/settings', 'variables' => ['components' => self::$plugin->guideComponents->getComponentsList(), 'proEdition' => self::$pro, 'selectedTab' => 'components', 'settings' => self::$settings]];

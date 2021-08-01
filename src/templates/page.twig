@@ -18,7 +18,7 @@
     {% redirect 'guide' %}
 {% endif %}
 
-{% set organizer = organizer ?? {} %}
+{#{% set organizer = organizer ?? {} %}#}
 
 {# The title of this CP section #}
 {% set title = guide.title ?? "Guide" %}
@@ -46,39 +46,39 @@
     </div>
 {% endblock %}
 
-{% if (organizer.cpNav ?? false) %}
-    {% set cpNav = organizer.cpNav|json_decode %}
-    {% set navGuides = craft.guide.getAllForUser({ id: cpNav }) %}
+{#{% if (organizer.cpNav ?? false) %}#}
+{#    {% set cpNav = organizer.cpNav|json_decode %}#}
+{#    {% set navGuides = craft.guide.getAllForUser({ id: cpNav }) %}#}
 
-    {% set sidebar %}
-        {% if (navGuides ?? false) %}
-            <nav class="guide_page__sidebar__nav">
-                <ul>
-                    {% for id in cpNav %}
-                        {% for item in navGuides %}
-                            {% if item.id == id %}
-                                {% set currentPage = guide.slug == item.slug %}
+{#    {% set sidebar %}#}
+{#        {% if (navGuides ?? false) %}#}
+{#            <nav class="guide_page__sidebar__nav">#}
+{#                <ul>#}
+{#                    {% for id in cpNav %}#}
+{#                        {% for item in navGuides %}#}
+{#                            {% if item.id == id %}#}
+{#                                {% set currentPage = guide.slug == item.slug %}#}
 
-                                <li>
-                                    <a{% if currentPage %} class="sel"{% endif %} href="{{ url('guide/page/' ~ item.slug) }}"{% if item.summary %} title="{{ item.summary }}"{% endif %}>{{ item.title }}</a>
-                                    {% if currentPage %}
-                                        {% if guide.contentSource == 'iframe' and (guide.contentUrl) %}
-                                            <button class="guide_page__sidebar__button guide_page__sidebar__button--iframe" onclick="window.open('{{ guide.contentUrl }}', '_blank')">Open in New Tab</button>
-                                        {% else %}
-                                            <nav data-guide-page-nav v-cloak>
-                                                <button class="guide_page__sidebar__button" :class="'guide_page__sidebar__button--' + item.level" @click="navItemClicked(index === 0 ? 'first' : item.slug)" v-for="(item, index) in nav" v-if="nav.length > 0">${ item.title }</button>
-                                            </nav>
-                                        {% endif %}
-                                    {% endif %}
-                                </li>
-                            {% endif %}
-                        {% endfor %}
-                    {% endfor %}
-                </ul>
-            </nav>
-        {% endif %}
-    {% endset %}
-{% endif %}
+{#                                <li>#}
+{#                                    <a{% if currentPage %} class="sel"{% endif %} href="{{ url('guide/page/' ~ item.slug) }}"{% if item.summary %} title="{{ item.summary }}"{% endif %}>{{ item.title }}</a>#}
+{#                                    {% if currentPage %}#}
+{#                                        {% if guide.contentSource == 'iframe' and (guide.contentUrl) %}#}
+{#                                            <button class="guide_page__sidebar__button guide_page__sidebar__button--iframe" onclick="window.open('{{ guide.contentUrl }}', '_blank')">Open in New Tab</button>#}
+{#                                        {% else %}#}
+{#                                            <nav data-guide-page-nav v-cloak>#}
+{#                                                <button class="guide_page__sidebar__button" :class="'guide_page__sidebar__button--' + item.level" @click="navItemClicked(index === 0 ? 'first' : item.slug)" v-for="(item, index) in nav" v-if="nav.length > 0">${ item.title }</button>#}
+{#                                            </nav>#}
+{#                                        {% endif %}#}
+{#                                    {% endif %}#}
+{#                                </li>#}
+{#                            {% endif %}#}
+{#                        {% endfor %}#}
+{#                    {% endfor %}#}
+{#                </ul>#}
+{#            </nav>#}
+{#        {% endif %}#}
+{#    {% endset %}#}
+{#{% endif %}#}
 
 {% set content %}
     {{ include('guide/_partials/render_content.twig') }}

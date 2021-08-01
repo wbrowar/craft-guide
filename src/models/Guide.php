@@ -25,7 +25,7 @@ class Guide extends Model
     /**
      * The Craft user that initially created the guide.
      *
-     * @var string
+     * @var integer
      */
     public $authorId;
 

@@ -103,7 +103,14 @@ class Install extends Migration
                     'dateCreated' => $this->dateTime()->notNull(),
                     'dateUpdated' => $this->dateTime()->notNull(),
                     'uid' => $this->uid(),
-                    // todo add placements schema
+                    'guideId' => $this->integer()->notNull(),
+                    'access' => $this->string(255),
+                    'group' => $this->string(255),
+                    'groupId' => $this->integer(),
+                    'portalMethod' => $this->string(255),
+                    'selector' => $this->string(255),
+                    'type' => $this->string(255),
+                    'uri' => $this->string(255),
                 ]
             );
         }

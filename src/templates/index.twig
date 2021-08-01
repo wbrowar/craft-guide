@@ -12,20 +12,7 @@
 
 {% if not (settings.templatePath ?? false) or not (settings.assetVolume ?? false) %}
     {% redirect 'guide/settings/general' %}
-{% elseif organizer.cpNav ?? false %}
-    {% set cpNav = organizer.cpNav|json_decode %}
-
-    {% if cpNav|length %}
-        {% set firstNavGuide = craft.guide.getOne({ id: cpNav[0] }) %}
-    {% endif %}
-
-    {% if firstNavGuide ?? false %}
-        {% redirect 'guide/page/' ~ firstNavGuide.slug %}
-    {% elseif userOperations.useOrganizer %}
-        {% redirect 'guide/organizer' %}
-    {% else %}
-        {% redirect 'guide/settings/general' %}
-    {% endif %}
+{# todo redirect user to first guide in Guide CP #}
 {% elseif userOperations.useOrganizer %}
     {% redirect 'guide/organizer' %}
 {% else %}

@@ -1,4 +1,4 @@
-dateModified: 1627225577
+dateModified: 1627780280
 email:
   fromEmail: email@example.com
   fromName: 'Craft Plugin'
@@ -8,7 +8,7 @@ plugins:
     edition: pro
     enabled: true
     licenseKey: $PLUGIN_LICENSE_KEY
-    schemaVersion: 2.0.0
+    schemaVersion: 3.0.0
     settings:
       assetVolume: 791d4dc9-0bae-4126-b9cb-7718b2df18b6
       clientName: ''

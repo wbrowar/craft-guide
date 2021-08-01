@@ -14,11 +14,7 @@
                 <a class="btn submit" href="{{ url('guide/organizer') }}">Return to Organizer</a>
             {% endif %}
         {% elseif guide.content ?? false %}
-            {% if guide.format == 'markdown' %}
-                {{ guide.content|guideshortcodes|md('gfm') }}
-            {% elseif guide.format == 'twig' %}
-                {{ include(template_from_string(guide.content)) }}
-            {% endif %}
+            {{ include(template_from_string(guide.content)) }}
         {% else %}
             <p>This guide seems to have moved.</p>
             <a class="btn submit" href="{{ url('guide/organizer') }}">Return to Organizer</a>
