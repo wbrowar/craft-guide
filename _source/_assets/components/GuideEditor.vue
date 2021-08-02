@@ -462,7 +462,7 @@ export default defineComponent({
       this.$refs.summaryField.setFieldValue(this.guide.summary);
     }
 
-    log('Guide Editor: guide');
+    log('Guide Editor loaded for guide');
     table(this.guide);
   },
 });

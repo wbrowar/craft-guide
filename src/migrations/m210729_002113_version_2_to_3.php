@@ -66,7 +66,6 @@ class m210729_002113_version_2_to_3 extends Migration
                     'groupId' => $this->integer(),
                     'portalMethod' => $this->string(255),
                     'selector' => $this->string(255),
-                    'type' => $this->string(255),
                     'uri' => $this->string(255),
                 ]
             );
@@ -93,7 +92,7 @@ class m210729_002113_version_2_to_3 extends Migration
      */
     protected function removeTables()
     {
-        // Remove Organizer Table
+        // Remove Placement Table
         $this->dropTableIfExists('{{%guide_organizers}}');
     }
 }

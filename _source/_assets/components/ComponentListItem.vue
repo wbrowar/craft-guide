@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'ComponentListItem',
@@ -28,20 +28,6 @@ export default defineComponent({
     title: { type: String, required: true },
   },
   emits: ['documentation-clicked', 'insert-clicked'],
-  // setup: (props) => {
-  //   const state = reactive<{
-  //     currentTab: EditorTabGroup;
-  //     editorComponents: EditorComponent[];
-  //     editorContent: string;
-  //     guide: Guide;
-  //   }>({
-  //     title
-  //   });
-  //
-  //   state.editorContent = state.guide.content;
-  //
-  //   return { ...toRefs(state) };
-  // },
   computed: {},
   methods: {
     onCopy() {

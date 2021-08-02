@@ -5,7 +5,7 @@
  * A CMS Guide for Craft CMS.
  *
  * @link      https://wbrowar.com
- * @copyright Copyright (c) 2019 Will Browar
+ * @copyright Copyright (c) 2021 Will Browar
  */
 
 namespace wbrowar\guide\services;
@@ -16,25 +16,32 @@ use wbrowar\guide\Guide;
 
 use Craft;
 use craft\base\Component;
-use wbrowar\guide\models\Organizer as OrganizerModel;
-use wbrowar\guide\records\Organizers;
+use wbrowar\guide\models\Placement as PlacementModel;
+use wbrowar\guide\records\Placements;
 
 /**
  * @author    Will Browar
  * @package   Guide
- * @since     2.0.0
+ * @since     3.0.0
  */
-class Organizer extends Component
+class Placement extends Component
 {
     // Public Methods
     // =========================================================================
+
+    // todo Add functions:
+    // todo deletePlacement
+    // todo getGuidesForPlacement - after getting placement data, query guides
+    // todo getPlacementsForGroup - get all placements for a group, like nav, section, etc ...
+    // todo getPlacementsForUri - get all placements for a specific URI
+    // todo savePlacement
 
     /*
      * @return mixed
      */
     public function getOrganizer()
     {
-        $organizer = Organizers::find()
+        $organizer = Placements::find()
             ->one();
 
         // If an organizer exists, use that
@@ -43,9 +50,9 @@ class Organizer extends Component
         }
 
         // If no organizer exists, create a new one and return that
-        $newOrganizer = new OrganizerModel();
+        $newOrganizer = new PlacementModel();
         $this->saveOrganizer($newOrganizer);
-        $organizer = Organizers::find()
+        $organizer = Placements::find()
             ->one();
 
         return $organizer;
@@ -59,7 +66,7 @@ class Organizer extends Component
         $organizer = $this->getOrganizer();
 
         if (!$organizer) {
-            $organizer = new Organizers();
+            $organizer = new Placements();
         }
 
         $config = [
@@ -122,12 +129,12 @@ class Organizer extends Component
     /*
      * @return mixed
      */
-    public function saveOrganizer(OrganizerModel $model, int $id = null):int
+    public function saveOrganizer(PlacementModel $model, int $id = null):int
     {
         if ($id ?? false) {
-            $record = Organizers::findOne(['id' => $id]);
+            $record = Placements::findOne(['id' => $id]);
         } else {
-            $record = new Organizers();
+            $record = new Placements();
         }
 
         $record->cpNav = $model->cpNav;

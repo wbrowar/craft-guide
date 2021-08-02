@@ -1,5 +1,6 @@
 import { createApp } from 'vue';
 import GuideEditor from './components/GuideEditor.vue';
+import Organizer from './components/Organizer.vue';
 import { EditorComponent, Guide } from './types/plugins';
 
 let devMode = false;
@@ -38,5 +39,17 @@ if (globals) {
       userOperations,
       ...guideEditor.dataset,
     }).mount(guideEditor);
+  }
+
+  const organizer = document.getElementById('guide-organizer');
+  if (organizer) {
+    createApp(Organizer, {
+      devMode,
+      guides,
+      proEdition,
+      settings,
+      userOperations,
+      ...organizer.dataset,
+    }).mount(organizer);
   }
 }

@@ -62,19 +62,20 @@ class ImportExport extends Component
             // Record slugs for later
             $guideSlugs[$guide['id']] = $guide['slug'];
         }
-        
+
+        // todo change this to placements
         // Add CP section navigation from organizer data
-        $organizer = Guide::$plugin->organizer->getOrganizer();
-        if ($organizer['cpNav'] ?? false) {
-            // Convert IDs to slugs
-            // Get CP nav as IDs
-            $cpNavIds = Json::decodeIfJson($organizer['cpNav']);
-            foreach ($cpNavIds as $id) {
-                if ($guideSlugs[intval($id)] ?? false) {
-                    $data['cpNav'][] = $guideSlugs[intval($id)];
-                }
-            }
-        }
+//        $organizer = Guide::$plugin->organizer->getOrganizer();
+//        if ($organizer['cpNav'] ?? false) {
+//            // Convert IDs to slugs
+//            // Get CP nav as IDs
+//            $cpNavIds = Json::decodeIfJson($organizer['cpNav']);
+//            foreach ($cpNavIds as $id) {
+//                if ($guideSlugs[intval($id)] ?? false) {
+//                    $data['cpNav'][] = $guideSlugs[intval($id)];
+//                }
+//            }
+//        }
 
         return Json::encode($data);
     }

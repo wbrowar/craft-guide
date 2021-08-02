@@ -27,6 +27,28 @@ export interface Guide {
 
 export type GuideContentSource = 'field' | 'iframe' | 'template';
 
+export interface Placement {
+  access: 'all' | 'admins' | 'author';
+  group:
+    | 'nav'
+    | 'assets'
+    | 'assetVolume'
+    | 'categories'
+    | 'categoryGroup'
+    | 'entryType'
+    | 'section'
+    | 'uiElement'
+    | 'uri'
+    | 'users'
+    | 'widget';
+  groupId: number | null;
+  guideId: number;
+  id: number;
+  portalMethod: 'append' | 'prepend';
+  selector: string | null;
+  uri: string | null;
+}
+
 export interface PluginSettings {
   assetVolume: string;
   components: any[];

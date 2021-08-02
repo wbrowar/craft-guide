@@ -19,8 +19,7 @@ use wbrowar\guide\models\Guide as GuideModel;
 
 use Craft;
 use craft\web\Controller;
-use wbrowar\guide\models\Organizer;
-use wbrowar\guide\models\Organizer as OrganizerModel;
+use wbrowar\guide\models\Placement as PlacementModel;
 
 /**
  * @author    Will Browar
@@ -58,6 +57,7 @@ class ImportExportController extends Controller
      *
      * @return mixed
      */
+    // todo delete this
     public function actionDownloadTemplates()
     {
         $params = Craft::$app->getRequest()->getBodyParams();
@@ -165,27 +165,28 @@ class ImportExportController extends Controller
                 $results['status'] = 'success';
             }
 
+            // todo change this to placements
             // Import Guide CP navigation
-            if ($guideData['cpNav'] ?? false) {
-                $guideSlugs = [];
-                $organizer = Guide::$plugin->organizer->getOrganizer()->toArray();
-                $organizerId = $organizer['id'];
-                $guides = Guide::$plugin->guide->getGuides();
-
-                foreach ($guides as $guide) {
-                    $guideSlugs[$guide['slug']] = $guide['id'];
-                }
-
-                $cpNav = [];
-                foreach ($guideData['cpNav'] as $item) {
-                    $cpNav[] = strval($guideSlugs[$item]);
-                }
-                $newOrganizer = new Organizer([
-                    'cpNav' => Json::encode($cpNav)
-                ]);
-
-                Guide::$plugin->organizer->saveOrganizer($newOrganizer, $organizerId);
-            }
+//            if ($guideData['cpNav'] ?? false) {
+//                $guideSlugs = [];
+//                $organizer = Guide::$plugin->organizer->getOrganizer()->toArray();
+//                $organizerId = $organizer['id'];
+//                $guides = Guide::$plugin->guide->getGuides();
+//
+//                foreach ($guides as $guide) {
+//                    $guideSlugs[$guide['slug']] = $guide['id'];
+//                }
+//
+//                $cpNav = [];
+//                foreach ($guideData['cpNav'] as $item) {
+//                    $cpNav[] = strval($guideSlugs[$item]);
+//                }
+//                $newOrganizer = new Placement([
+//                    'cpNav' => Json::encode($cpNav)
+//                ]);
+//
+//                Guide::$plugin->organizer->saveOrganizer($newOrganizer, $organizerId);
+//            }
         }
 
         return $this->asJson($results);
@@ -270,7 +271,7 @@ class ImportExportController extends Controller
                 foreach ($template['guides'] as $item) {
                     Guide::$plugin->importExport->importGuideData($item);
                 }
-                $results['completed'][] = 'Imported guides into Organizer.';
+                $results['completed'][] = 'Imported guides into Placement.';
             }
         }
 

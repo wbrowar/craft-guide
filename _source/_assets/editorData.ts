@@ -158,8 +158,8 @@ Content
   // todo add snippet: User Role Helper - Table of sections and their user roles (flagging any that don't have a user role).
   // todo add snippet: Entry Search – Basic search of all of your entries.
   // todo add snippet: Logged in users – List of currently logged in users.
-  // todo add snippet:
-  // todo add snippet:
+  // todo add snippet: Content Stats
+  // todo add snippet: Changelog
   // todo add snippet:
   {
     title: 'Low-Res Image Check',

@@ -20,10 +20,47 @@
 {% set selectedSubnavItem = 'organizer' %}
 
 {% block actionButton %}
-    <a class="btn add icon submit" href="{{ url('guide/new') }}">New Guide</a>
     <div id="guide-action-buttons"></div>
 {% endblock %}
 
 {% set content %}
-    <div id="guide-organizer"></div>
+    {% set groupsData = [
+        {
+            header: 'Guide CP Section',
+            name: 'nav',
+            groupId: null,
+        },
+        {
+            description: 'All asset pages',
+            header: 'Assets',
+            name: 'assets',
+            groupId: null,
+        },
+        {
+            description: 'Assets in the Guide volume',
+            header: 'Guiide Assets',
+            name: 'assetVolume',
+            groupId: 1,
+        }
+    ] %}
+
+    {% set placementsData = [
+        {
+            access: 'all',
+            group: 'nav',
+            groupId: null,
+            guideId: 1,
+            id: 1,
+            portalMethod: 'append',
+            selector: null,
+            uri: null,
+        }
+    ] %}
+
+    <div
+      id="guide-organizer"
+      data-cp-trigger="{{ craft.app.config.general.cpTrigger }}"
+      data-groups-data="{{ groupsData|json_encode }}"
+      data-placements-data="{{ placementsData|json_encode }}"
+    ></div>
 {% endset %}

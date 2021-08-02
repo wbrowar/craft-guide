@@ -23,13 +23,6 @@ class Placement extends Model
     // =========================================================================
 
     /**
-     * The ID of the guide being placed.
-     *
-     * @var integer
-     */
-    public $guideId;
-
-    /**
      * Determine who can view the guide.
      * Options: 'all', 'admins', 'author'
      *
@@ -51,6 +44,13 @@ class Placement extends Model
      * @var integer
      */
     public $groupId;
+
+    /**
+     * The ID of the guide being placed.
+     *
+     * @var integer
+     */
+    public $guideId;
 
     /**
      * Determine if a guide should be appended or prepended to the selector element.

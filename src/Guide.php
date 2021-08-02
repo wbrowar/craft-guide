@@ -51,7 +51,7 @@ use yii\base\Event;
  * @since     2.0.0
  *
  * @property  GuideService $guide
- * @property  OrganizerService $organizer
+ * @property  PlacementService $placement
  * @property  GuideComponentsService $guideComponents
  */
 class Guide extends Plugin
@@ -117,7 +117,7 @@ class Guide extends Plugin
             'guide' => 'wbrowar\guide\services\Guide',
             'importExport' => 'wbrowar\guide\services\ImportExport',
             'guideComponents' => 'wbrowar\guide\services\GuideComponents',
-            'organizer' => 'wbrowar\guide\services\Organizer',
+            'placement' => 'wbrowar\guide\services\Placement',
         ]);
 
         if (self::$view->getTemplateMode() === View::TEMPLATE_MODE_CP) {
@@ -165,7 +165,9 @@ class Guide extends Plugin
                     // Add global settings to end body
                     Event::on(View::class, View::EVENT_END_BODY, function(Event $event) {
                         $guidesData = [];
-                        $guides = self::$plugin->guide->getGuides([]);
+                        $guides = self::$plugin->guide->getGuides([
+                            'orderBy' => 'title asc',
+                        ]);
                         foreach ($guides as $guide) {
                             $guidesData[] = [
                                 'deleteUrl' => UrlHelper::url('guide/delete/' . $guide->id),
@@ -279,7 +281,7 @@ class Guide extends Plugin
                         'editGuides' => ['label' => Craft::t('guide', 'Edit Guides')],
                         'setAccessPermissions' => ['label' => Craft::t('guide', 'Set Guide Access Permissions')],
                         'deleteGuides' => ['label' => Craft::t('guide', 'Delete Guides')],
-                        'useOrganizer' => ['label' => Craft::t('guide', 'Use Organizer')],
+                        'useOrganizer' => ['label' => Craft::t('guide', 'Use Placement')],
                     ];
                 });
             }
