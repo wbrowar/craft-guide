@@ -10,13 +10,12 @@
 
 namespace wbrowar\guide\controllers;
 
+use craft\helpers\Json;
 use wbrowar\guide\Guide;
 
 use Craft;
 use craft\web\Controller;
 use wbrowar\guide\models\Placement as PlacementModel;
-use wbrowar\guide\records\Guides;
-use wbrowar\guide\records\Placements;
 
 /**
  * @author    Will Browar
@@ -34,7 +33,7 @@ class PlacementController extends Controller
      *         The actions must be in 'kebab-case'
      * @access protected
      */
-//    protected $allowAnonymous = ['index', 'do-something'];
+//    protected $allowAnonymous = ['get-all-placements'];
 
     // Public Methods
     // =========================================================================
@@ -54,38 +53,51 @@ class PlacementController extends Controller
     /**
      * Saves Guide CP navigation for site.
      *
+     * actions/guide/placement/get-all-placements
+     *
+     * @return mixed
+     */
+    public function actionGetAllPlacements()
+    {
+        $placements = Guide::$plugin->placement->getPlacements();
+
+        return $this->asJson($placements);
+    }
+
+    /**
+     * Saves Guide CP navigation for site.
+     *
      * @return mixed
      */
     public function actionSavePlacement()
     {
-        $params = Craft::$app->getRequest()->getBodyParams();
+        $params = Json::decodeIfJson(Craft::$app->getRequest()->getBodyParams()['data']);
         $results = [
             'status' => 'error',
             'error' => '',
         ];
 
-//        $loadedOrganizer = Guide::$plugin->organizer->getOrganizer();
-//
-//        $organizer = new OrganizerModel([
-//            'cpNav' => $params['cpNav'] ?? [],
-//        ]);
-//
-//        if ($organizer->validate()) {
-//            if ($loadedOrganizer ?? false) {
-//                $id = $loadedOrganizer->id;
-//            } else {
-//                $id = ($params['id'] ?? false) ? $params['id'] : null;
-//            }
-//            $saved = Guide::$plugin->organizer->saveOrganizer($organizer, $id);
-//
-//            if ($saved) {
-//                $results['status'] = 'success';
-//            } else {
-//                $results['error'] = 'Couldn’t save Placement.';
-//            }
-//        } else {
-//            $results['error'] = 'Couldn’t save Placement. Invalid data.';
-//        }
+        $placement = new PlacementModel([
+            'access' => $params['access'],
+            'group' => $params['group'],
+            'groupId' => $params['groupId'],
+            'guideId' => $params['guideId'],
+            'portalMethod' => $params['portalMethod'],
+            'selector' => $params['selector'],
+            'uri' => $params['uri'],
+        ]);
+
+        if ($placement->validate()) {
+            $saved = Guide::$plugin->placement->savePlacement($placement, $params['id'] ?? null);
+
+            if ($saved) {
+                $results['status'] = 'success';
+            } else {
+                $results['error'] = 'Couldn’t save Placement.';
+            }
+        } else {
+            $results['error'] = 'Couldn’t save Placement. Invalid data.';
+        }
 
         return $this->asJson($results);
     }

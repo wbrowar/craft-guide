@@ -112,7 +112,6 @@
             :field-attributes="{
               maxlength: 255,
             }"
-            :starting-value="guide.contentUrl"
             @value-changed="onContentUrlChanged"
             v-show="contentSource === 'iframe'"
           />
@@ -121,7 +120,6 @@
             instructions="Describes the guide in the Organizer."
             label="Summary"
             name="summary"
-            :starting-value="guide.summary"
           />
         </div>
         <div class="g-p-6" v-show="currentTab === 'utility-classes'">
@@ -448,6 +446,9 @@ export default defineComponent({
     }
     if (this.guide?.content) {
       this.editorContent = this.guide.content;
+    }
+    if (this.guide?.contentUrl) {
+      this.$refs.contentUrlField.setFieldValue(this.guide.contentUrl);
     }
     if (this.guide?.template) {
       this.$refs.templateField.setFieldValue(this.guide.template);

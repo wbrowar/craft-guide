@@ -7,7 +7,10 @@
     <ul>
       <li v-for="placement in placements" :key="placement.id">
         <div
-          class="g-group g-flex g-flex-nowrap g-items-center g-justify-between g-p-3 g-cursor-move"
+          class="
+            g-group g-flex g-flex-nowrap g-items-center g-justify-between g-p-3 g-duration-150 g-cursor-move
+            hover:g-bg-select-light
+          "
           draggable="true"
           @dragstart="onPlacementDragStart($event, placement.id, placement.guideId)"
         >
@@ -15,7 +18,7 @@
           <button
             class="btn small g-opacity-0 group-hover:g-opacity-100"
             type="button"
-            @click="onEditPlacementClicked(placement.id)"
+            @click="onEditPlacementClicked(placement)"
           >
             Edit
           </button>
@@ -53,8 +56,8 @@ export default defineComponent({
       e.dataTransfer.setData('placementId', placementId);
       e.dataTransfer.setData('guideId', guideId);
     },
-    onEditPlacementClicked(placementId) {
-      this.$emit('edit-placement-clicked', placementId);
+    onEditPlacementClicked(placement) {
+      this.$emit('edit-placement-clicked', placement);
     },
   },
   // mounted() {},

@@ -10,10 +10,6 @@
 
 namespace wbrowar\guide\services;
 
-use craft\helpers\Json;
-use craft\helpers\UrlHelper;
-use wbrowar\guide\Guide;
-
 use Craft;
 use craft\base\Component;
 use wbrowar\guide\models\Placement as PlacementModel;
@@ -31,6 +27,8 @@ class Placement extends Component
 
     // todo Add functions:
     // todo deletePlacement
+    // todo getAllPlacements - for organizer
+    // todo getPlacementGroups - for organizer
     // todo getGuidesForPlacement - after getting placement data, query guides
     // todo getPlacementsForGroup - get all placements for a group, like nav, section, etc ...
     // todo getPlacementsForUri - get all placements for a specific URI
@@ -39,23 +37,38 @@ class Placement extends Component
     /*
      * @return mixed
      */
-    public function getOrganizer()
+    public function getPlacements(array $params = [], string $queryType = 'all')
     {
-        $organizer = Placements::find()
-            ->one();
-
-        // If an organizer exists, use that
-        if ($organizer) {
-            return $organizer;
+        if ($params['limit'] ?? false) {
+            $limit = $params['limit'];
+            unset($params['limit']);
+        } else {
+            $limit = null;
         }
 
-        // If no organizer exists, create a new one and return that
-        $newOrganizer = new PlacementModel();
-        $this->saveOrganizer($newOrganizer);
-        $organizer = Placements::find()
-            ->one();
+        if ($params['orderBy'] ?? false) {
+            $orderBy = $params['orderBy'];
+            unset($params['orderBy']);
+        } else {
+            $orderBy = 'id';
+        }
 
-        return $organizer;
+        switch ($queryType) {
+            case 'all':
+                $placements = Placements::find()->where($params)->limit($limit)->orderBy($orderBy)->all();
+                break;
+            case 'new':
+                $placements = new Placements([]);
+                break;
+            case 'one':
+                $placements = Placements::find()->where($params)->orderBy($orderBy)->one();
+                break;
+            case 'count':
+                $placements = Placements::find()->where($params)->count();
+                break;
+        }
+
+        return $placements ?? null;
     }
 
     /*
@@ -63,73 +76,73 @@ class Placement extends Component
      */
     public function getOrganizerConfig()
     {
-        $organizer = $this->getOrganizer();
-
-        if (!$organizer) {
-            $organizer = new Placements();
-        }
-
-        $config = [
-            'categories' => [],
-            'guides' => [],
-            'organizer' => [
-                'cpNav' => ($organizer->cpNav ?? false) ? Json::decodeIfJson($organizer->cpNav) : [],
-                'id' => $organizer->id ?? null,
-            ],
-            'sections' => [],
-            'showDashboard' => Guide::$pro,
-            'showEditPages' => Guide::$pro,
-            'showUsers' => Craft::$app->getEdition() == Craft::Pro,
-            'volumes' => [],
-        ];
-
-        $guides = Guide::$plugin->guide->getGuides([]);
-        foreach ($guides as $guide) {
-            $config['guides'][] = [
-                'deleteUrl' => UrlHelper::url('guide/delete/' . $guide->id),
-                'duplicateUrl' => UrlHelper::url('guide/duplicate/' . $guide->id),
-                'editUrl' => UrlHelper::url('guide/edit/' . $guide->id),
-                'id' => $guide->id,
-                'title' => $guide->title,
-                'parentType' => $guide->parentType,
-                'parentUid' => $guide->parentUid,
-                'showSettings' => false,
-                'summary' => $guide->summary,
-                'viewUrl' => UrlHelper::url('guide/page/' . $guide->slug),
-            ];
-        }
-
-        $categories = Craft::$app->getCategories()->getAllGroups();
-        foreach ($categories as $category) {
-            $config['categories'][] = [
-                'name' => $category->name,
-                'uid' => $category->uid,
-            ];
-        }
-
-        $sections = Craft::$app->getSections()->getAllSections();
-        foreach ($sections as $section) {
-            $config['sections'][] = [
-                 'name' => $section->name,
-                 'uid' => $section->uid,
-            ];
-        }
-
-        $volumes = Craft::$app->getVolumes()->getAllVolumes();
-        foreach ($volumes as $volume) {
-            $config['volumes'][] = [
-                'name' => $volume->name,
-                'uid' => $volume->uid,
-            ];
-        }
-
-        return $config;
+//        $organizer = $this->getOrganizer();
+//
+//        if (!$organizer) {
+//            $organizer = new Placements();
+//        }
+//
+//        $config = [
+//            'categories' => [],
+//            'guides' => [],
+//            'organizer' => [
+//                'cpNav' => ($organizer->cpNav ?? false) ? Json::decodeIfJson($organizer->cpNav) : [],
+//                'id' => $organizer->id ?? null,
+//            ],
+//            'sections' => [],
+//            'showDashboard' => Guide::$pro,
+//            'showEditPages' => Guide::$pro,
+//            'showUsers' => Craft::$app->getEdition() == Craft::Pro,
+//            'volumes' => [],
+//        ];
+//
+//        $guides = Guide::$plugin->guide->getGuides([]);
+//        foreach ($guides as $guide) {
+//            $config['guides'][] = [
+//                'deleteUrl' => UrlHelper::url('guide/delete/' . $guide->id),
+//                'duplicateUrl' => UrlHelper::url('guide/duplicate/' . $guide->id),
+//                'editUrl' => UrlHelper::url('guide/edit/' . $guide->id),
+//                'id' => $guide->id,
+//                'title' => $guide->title,
+//                'parentType' => $guide->parentType,
+//                'parentUid' => $guide->parentUid,
+//                'showSettings' => false,
+//                'summary' => $guide->summary,
+//                'viewUrl' => UrlHelper::url('guide/page/' . $guide->slug),
+//            ];
+//        }
+//
+//        $categories = Craft::$app->getCategories()->getAllGroups();
+//        foreach ($categories as $category) {
+//            $config['categories'][] = [
+//                'name' => $category->name,
+//                'uid' => $category->uid,
+//            ];
+//        }
+//
+//        $sections = Craft::$app->getSections()->getAllSections();
+//        foreach ($sections as $section) {
+//            $config['sections'][] = [
+//                 'name' => $section->name,
+//                 'uid' => $section->uid,
+//            ];
+//        }
+//
+//        $volumes = Craft::$app->getVolumes()->getAllVolumes();
+//        foreach ($volumes as $volume) {
+//            $config['volumes'][] = [
+//                'name' => $volume->name,
+//                'uid' => $volume->uid,
+//            ];
+//        }
+//
+//        return $config;
     }
 
     /*
      * @return mixed
      */
-    public function saveOrganizer(PlacementModel $model, int $id = null):int
+    public function savePlacement(PlacementModel $model, int $id = null):int
     {
         if ($id ?? false) {
             $record = Placements::findOne(['id' => $id]);
@@ -137,7 +150,13 @@ class Placement extends Component
             $record = new Placements();
         }
 
-        $record->cpNav = $model->cpNav;
+        $record->access = $model->access;
+        $record->group = $model->group;
+        $record->groupId = $model->groupId;
+        $record->guideId = $model->guideId;
+        $record->portalMethod = $model->portalMethod;
+        $record->selector = $model->selector;
+        $record->uri = $model->uri;
 
         $record->save();
 

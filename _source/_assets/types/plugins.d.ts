@@ -28,19 +28,8 @@ export interface Guide {
 export type GuideContentSource = 'field' | 'iframe' | 'template';
 
 export interface Placement {
-  access: 'all' | 'admins' | 'author';
-  group:
-    | 'nav'
-    | 'assets'
-    | 'assetVolume'
-    | 'categories'
-    | 'categoryGroup'
-    | 'entryType'
-    | 'section'
-    | 'uiElement'
-    | 'uri'
-    | 'users'
-    | 'widget';
+  access: PlacementAccess;
+  group: PlacementGroup;
   groupId: number | null;
   guideId: number;
   id: number;
@@ -48,6 +37,21 @@ export interface Placement {
   selector: string | null;
   uri: string | null;
 }
+
+export type PlacementAccess = 'all' | 'admins' | 'author';
+
+export type PlacementGroup =
+  | 'nav'
+  | 'assets'
+  | 'assetVolume'
+  | 'categories'
+  | 'categoryGroup'
+  | 'entryType'
+  | 'section'
+  | 'uiElement'
+  | 'uri'
+  | 'users'
+  | 'widget';
 
 export interface PluginSettings {
   assetVolume: string;
