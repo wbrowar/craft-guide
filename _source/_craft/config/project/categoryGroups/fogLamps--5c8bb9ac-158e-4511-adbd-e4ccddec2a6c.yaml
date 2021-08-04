@@ -1,0 +1,41 @@
+defaultPlacement: end
+fieldLayouts:
+  d8eae594-e177-4bb2-a121-bc3df4ae8e5d:
+    tabs:
+      -
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\TitleField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+handle: fogLamps
+name: 'Fog Lamps'
+siteSettings:
+  11ace5e4-2164-419f-aa8c-14a6ccb74727:
+    hasUrls: true
+    template: null
+    uriFormat: 'fog-lamps/{slug}'
+structure:
+  maxLevels: null
+  uid: f5d12a21-8d2a-4bd1-9001-b30bc0f75450

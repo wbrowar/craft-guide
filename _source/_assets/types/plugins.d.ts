@@ -42,15 +42,17 @@ export type PlacementAccess = 'all' | 'admins' | 'author';
 
 export type PlacementGroup =
   | 'nav'
-  | 'assets'
+  | 'asset'
   | 'assetVolume'
-  | 'categories'
+  | 'category'
   | 'categoryGroup'
+  | 'entry'
   | 'entryType'
   | 'section'
   | 'uiElement'
   | 'uri'
-  | 'users'
+  | 'user'
+  | 'userGroup'
   | 'widget';
 
 export interface PluginSettings {

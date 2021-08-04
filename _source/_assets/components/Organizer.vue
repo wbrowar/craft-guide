@@ -54,32 +54,47 @@
         <a class="btn add icon submit" :href="cpUrl('guide/new')">New Guide</a>
       </div>
     </div>
-    <div class="g-min-h-[850px] g-h-[70vh] g-bg-select-dark g-rounded-r-lg g-relative">
+    <div class="g-min-h-[850px] g-h-[70vh] g-bg-select-dark g-rounded-r-lg g-relative g-overflow-auto">
       <div class="g-p-6">
         <div class="g-text-select-light">
           <h2>Craft CP</h2>
           <p>Drag guides to different areas around the Craft CP. Click "Edit" for more detailed settings.</p>
         </div>
-        <div class="g-grid g-grid-cols-[1fr,150px] g-gap-6 g-mt-6">
-          <div class="g-grid g-grid-cols-1 g-gap-5 md:g-grid-cols-2">
+        <div class="g-grid g-grid-cols-[1fr,150px] g-gap-4 g-mt-6">
+          <div class="g-grid g-grid-cols-2 g-gap-5 md:g-grid-cols-4">
             <OrganizerDropZone
               v-for="group in filteredDropZones"
               :key="group.name"
+              :class="{
+                'g-col-start-1 g-col-span-3': group.columns === 3,
+                'g-col-start-1 g-col-span-2': group.columns === 2 && group.name !== 'uiElement',
+                'g-col-span-2': group.name === 'uiElement',
+                '': group.columns === 1,
+              }"
+              :header-class="{
+                'g-text-lg': group.columns === 3,
+                'g-text-base': group.columns === 2,
+                'g-text-sm': group.columns === 1,
+              }"
               :description="group.description || null"
               :header="group.header || null"
               :group="group.name"
               :guides="guides"
-              :placements="placementsForGroup(group.name)"
-              @drop="onDropOnDropZone($event, group.name, group.groupId ? parseInt(group.groupId) : null)"
+              :placements="placementsForGroup(group.name, group.groupId)"
+              @drop="onDropOnDropZone($event, group.name, group.groupId || null)"
               @dragover.prevent
               @dragenter.prevent
               @edit-placement-clicked="editPlacement"
               @placement-dropped="updatePlacement"
             />
           </div>
-          <div class="g-text-select-light">
-            <ul class="g-space-y-2">
-              <li v-for="filter in groupFilters" :key="filter.value" class="g-flex g-flex-nowrap g-items-start g-gap-1">
+          <div class="g-relative g-text-select-light" v-if="proEdition">
+            <ul class="g--mt-2 g-pt-2 g-space-y-2 g-sticky g-top-0">
+              <li
+                v-for="filter in groupFilters"
+                :key="filter.value"
+                class="g-group g-flex g-flex-nowrap g-items-start g-gap-1"
+              >
                 <input
                   :id="`group-filter-${filter.value}`"
                   class="g-mt-0.5 g-w-4 g-h-4"
@@ -87,7 +102,7 @@
                   type="checkbox"
                   @change="toggleSelectedGroupFilter(filter.value)"
                 />
-                <label :for="`group-filter-${filter.value}`">{{ filter.label }}</label>
+                <label class="group-hover:g-text-white" :for="`group-filter-${filter.value}`">{{ filter.label }}</label>
               </li>
             </ul>
           </div>
@@ -97,10 +112,10 @@
   </div>
 
   <Teleport to="#guide-action-buttons">
-    <a class="btn add icon submit" :href="cpUrl('guide/new')">New Guide</a>
+    <a class="btn add icon submit" :href="cpUrl('guide/new')" v-if="userOperations.editGuides">New Guide</a>
   </Teleport>
 
-  <Modal ref="editModal">
+  <Modal ref="editModal" v-if="proEdition">
     <template #header>
       <h2 class="g-mb-0">Edit</h2>
       <div class="g-inline-block g-space-x-1">
@@ -148,6 +163,7 @@ export default defineComponent({
       selectedGroupFilters: [] as PlacementGroup[],
     });
 
+    // Use group data to set filters
     const selectedGroupFilters: PlacementGroup[] = [];
     state.groups.forEach((group) => {
       const filter = { label: group.label, value: group.name };
@@ -157,9 +173,14 @@ export default defineComponent({
       }
     });
 
-    state.selectedGroupFilters = selectedGroupFilters.filter((name) => {
-      return !(['assetVolume', 'categoryGroup', 'entryType'] as PlacementGroup).includes(name);
-    });
+    // Set default filters based on user localstorage
+    if (localStorage.getItem('guide:organizer:selectedGroupFilters')) {
+      state.selectedGroupFilters = JSON.parse(localStorage.getItem('guide:organizer:selectedGroupFilters'));
+    } else {
+      state.selectedGroupFilters = selectedGroupFilters.filter((name) => {
+        return !(['assetVolume', 'categoryGroup', 'entryType', 'userGroup'] as PlacementGroup).includes(name);
+      });
+    }
 
     return { ...toRefs(state) };
   },
@@ -199,7 +220,8 @@ export default defineComponent({
         this.placements = response;
       });
     },
-    onDropOnDropZone(e, group, groupId) {
+    onDropOnDropZone(e, group, groupId = null) {
+      log('Dropping onto zone', group, groupId);
       if (e.dataTransfer.getData('placementId') === 'new') {
         const guide = this.guides.find((item) => {
           return item.id === parseInt(e.dataTransfer.getData('guideId'));
@@ -216,9 +238,9 @@ export default defineComponent({
       e.dataTransfer.setData('placementId', 'new');
       e.dataTransfer.setData('guideId', guideId);
     },
-    placementsForGroup(group: string) {
+    placementsForGroup(group: string, groupId: number | null = null) {
       return this.placements.filter((placement) => {
-        return placement.group === group;
+        return placement.group === group && (groupId ? placement.groupId === groupId : true);
       });
     },
     toggleSelectedGroupFilter(value) {
@@ -229,6 +251,8 @@ export default defineComponent({
       } else {
         this.selectedGroupFilters.splice(index, 1);
       }
+
+      localStorage.setItem('guide:organizer:selectedGroupFilters', JSON.stringify(this.selectedGroupFilters));
     },
     savePlacement(placement) {
       window.Craft?.postActionRequest(
@@ -243,9 +267,19 @@ export default defineComponent({
     updatePlacement(placementId, group, groupId = null) {
       log(`Updating placement: ${placementId} group to: ${group}`);
       this.placements.forEach((placement) => {
-        if (placement.id === placementId && placement.group !== group) {
-          // this.$set(placement, 'group', group);
-          // this.$forceUpdate();
+        log(
+          'Updating placement?',
+          placement.groupId !== groupId,
+          placement.groupId,
+          typeof placement.groupId,
+          groupId,
+          typeof groupId
+        );
+        if (
+          placement.id === placementId &&
+          (!groupId ? placement.group !== group : true) &&
+          (groupId ? parseInt(placement.groupId) !== groupId : true)
+        ) {
           placement.group = group;
           placement.groupId = groupId || null;
           this.savePlacement(placement);

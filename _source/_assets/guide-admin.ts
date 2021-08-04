@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 import GuideEditor from './components/GuideEditor.vue';
 import Organizer from './components/Organizer.vue';
-import { EditorComponent, Guide } from './types/plugins';
+import { EditorComponent, Guide, PluginUserOperations } from './types/plugins';
 
 let devMode = false;
 const globals = document.getElementById('guide-admin-globals');
@@ -11,9 +11,16 @@ if (globals) {
   devMode = globals.dataset.devMode === 'true';
   const guides = JSON.parse(globals.dataset.guides);
   const proEdition = globals.dataset.proEdition === 'true';
+  // const proEdition = false;
   const settings = JSON.parse(globals.dataset.settings);
   const templates = JSON.parse(globals.dataset.templates);
   const userOperations = JSON.parse(globals.dataset.userOperations);
+  // const userOperations: PluginUserOperations = {
+  //   editGuides: false,
+  //   deleteGuides: false,
+  //   setAccessPermissions: true,
+  //   useOrganizer: true,
+  // };
 
   const guideEditor = document.getElementById('guide-editor');
   if (guideEditor) {

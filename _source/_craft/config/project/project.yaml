@@ -1,8 +1,17 @@
-dateModified: 1627780280
+dateModified: 1628031013
 email:
   fromEmail: email@example.com
   fromName: 'Craft Plugin'
   transportType: craft\mail\transportadapters\Sendmail
+meta:
+  __names__:
+    4ceb2b2e-b080-410c-b994-4b6ac1e42c48: 'Main Nav' # Main Nav
+    5c8bb9ac-158e-4511-adbd-e4ccddec2a6c: 'Fog Lamps' # Fog Lamps
+    5d8c8721-d79f-4d33-a13f-89f1b65cff29: Wheels # Wheels
+    22fb86f7-b3fe-4f11-b624-25c67fb9c682: 'Content Authors' # Content Authors
+    535ddbac-f2c5-4e1f-8a30-051e3e68f19d: 'Product Admins' # Product Admins
+    553c6b66-d999-458b-9b4d-d941cc28b6dd: 'Site Settings' # Site Settings
+    95304dab-45c1-409c-8633-fd625996c8d7: Headlights # Headlights
 plugins:
   guide:
     edition: pro
@@ -15,14 +24,8 @@ plugins:
       myCompanyName: ''
       templatePath: _guide
 system:
-  edition: solo
+  edition: pro
   live: true
   name: 'Craft Plugin'
   schemaVersion: 3.7.7
   timeZone: America/Los_Angeles
-users:
-  allowPublicRegistration: false
-  defaultGroup: null
-  photoSubpath: null
-  photoVolumeUid: null
-  requireEmailVerification: true

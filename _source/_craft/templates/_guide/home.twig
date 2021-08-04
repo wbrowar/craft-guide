@@ -1,14 +1,25 @@
-<!DOCTYPE html>
+{# Set the width to the smallest size that an image should be uploaded. #}
+{% set width = 300 %}
 
-<html lang="en">
-<head>
-  <title>{{ entry ? entry.title ~ ' | ' : '' }}Craft Plugin</title>
-  <meta  charset="utf-8">
-  <meta  name="viewport" content="width=device-width,initial-scale=1">
-</head>
-<body>
-{% block content %}
-  <p>Hello, World!</p>
-{% endblock %}
-</body>
-</html>
+{# Find all images within the targeted asset volume that are not wider than the `width` value. #}
+{% set assets = craft.assets.volume('REPLACE_VOLUME').width('< ' ~ width).kind('image').all() %}
+
+{# Display a list of offending images and instruct authors on what size is recommended. #}
+{% if assets|length %}
+  <h2>Images that are too small (less than {{ width }}px wide)</h2>
+  <p>These images should be replaced with a .jpg that is at least REPLACE_WIDTH wide.</p>
+
+  <div class="g-space-y-2">
+    {% for asset in assets %}
+      <div class="g-grid g-grid-cols-[var(--grid-cols)] g-gap-2" style="--grid-cols: 300px 1fr;">
+        <img loading="lazy" src="{{ asset.url }}" width="300" />
+        <div>
+          <a class="btn submit" href="{{ asset.cpEditUrl }}">Edit</a>
+          <p><strong>Title</strong><br>{{ asset.title }}</p>
+          <p><strong>File name</strong><br>{{ asset.filename }}</p>
+          <p><strong>Width</strong><br>{{ asset.width }}px</p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}

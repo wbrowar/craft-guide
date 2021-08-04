@@ -234,7 +234,7 @@ class Guide extends Plugin
                     $event->rules['guide/duplicate/<guideId:\d{1,}>'] = 'guide/guide/duplicate-guide';
 
                     // Templates
-                    $event->rules['guide'] = ['template' => 'guide/index', 'variables' => ['settings' => self::$settings, 'userOperations' => self::$userOperations]];
+                    $event->rules['guide'] = ['template' => 'guide/index', 'variables' => ['cpNavPlacement' => self::$plugin->placement->getPlacements(['group' => 'nav'], 'one'), 'settings' => self::$settings, 'userOperations' => self::$userOperations]];
                     $event->rules['guide/welcome'] = ['template' => 'guide/welcome', 'variables' => ['settings' => self::$settings]];
                     $event->rules['guide/page/<slug:(.*)>'] = ['template' => 'guide/page', 'variables' => ['settings' => self::$settings, 'userOperations' => self::$userOperations]];
                     $event->rules['guide/settings/general'] = ['template' => 'guide/settings', 'variables' => ['proEdition' => self::$pro, 'selectedTab' => 'general', 'settings' => self::$settings]];
@@ -253,7 +253,7 @@ class Guide extends Plugin
                         $event->rules['guide/delete/<guideId:\d{1,}>'] = ['template' => 'guide/delete', 'variables' => ['userOperations' => self::$userOperations]];
                     }
                     if (self::$userOperations['useOrganizer']) {
-                        $event->rules['guide/organizer'] = ['template' => 'guide/organizer', 'variables' => ['proEdition' => self::$pro, 'settings' => self::$settings, 'userOperations' => self::$userOperations]];
+                        $event->rules['guide/organizer'] = ['template' => 'guide/organizer', 'variables' => ['groupsData' => self::$plugin->placement->getPlacementGroups()]];
                     }
                     if (self::$pro) {
                         $event->rules['guide/settings/components'] = ['template' => 'guide/settings', 'variables' => ['components' => self::$plugin->guideComponents->getComponentsList(), 'proEdition' => self::$pro, 'selectedTab' => 'components', 'settings' => self::$settings]];
@@ -384,6 +384,7 @@ class Guide extends Plugin
                 }
 
                 if ($guides ?? false) {
+                    // todo change this to guide displays
                     echo self::$view->renderTemplate('guide/_partials/render_guide_modals', ['guides' => $guides]);
                 }
             });

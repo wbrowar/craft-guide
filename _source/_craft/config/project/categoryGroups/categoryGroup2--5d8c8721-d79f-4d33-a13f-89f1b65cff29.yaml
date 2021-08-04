@@ -1,0 +1,41 @@
+defaultPlacement: end
+fieldLayouts:
+  4ec66396-6808-4302-875c-b7d19be42ac3:
+    tabs:
+      -
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\TitleField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+handle: categoryGroup2
+name: Wheels
+siteSettings:
+  11ace5e4-2164-419f-aa8c-14a6ccb74727:
+    hasUrls: true
+    template: null
+    uriFormat: 'category-group-2/{slug}'
+structure:
+  maxLevels: null
+  uid: c6629143-8441-4618-aa45-1bce7920d683

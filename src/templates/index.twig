@@ -10,9 +10,14 @@
  * @since     2.0.0
  */ #}
 
+{% if cpNavPlacement %}
+    {% set cpNavGuide = craft.guide.getOne({ id: cpNavPlacement.guideId }) %}
+{% endif %}
+
 {% if not (settings.templatePath ?? false) or not (settings.assetVolume ?? false) %}
     {% redirect 'guide/settings/general' %}
-{# todo redirect user to first guide in Guide CP #}
+{% elseif cpNavGuide %}
+    {% redirect url('guide/page/' ~ cpNavGuide.slug) %}
 {% elseif userOperations.useOrganizer %}
     {% redirect 'guide/organizer' %}
 {% else %}

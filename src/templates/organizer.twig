@@ -24,55 +24,10 @@
 {% endblock %}
 
 {% set content %}
-    {% set groupsData = [
-        {
-            description: 'The Guide CP Section',
-            header: 'Guide',
-            label: 'Guide',
-            name: 'nav',
-            groupId: null,
-        },
-        {
-            description: 'All asset pages',
-            header: 'Assets',
-            label: 'Assets',
-            name: 'assets',
-            groupId: null,
-        },
-        {
-            description: 'Assets in the Guide volume',
-            header: 'Guiide Assets',
-            label: 'Asset Volumes',
-            name: 'assetVolume',
-            groupId: 1,
-        },
-        {
-            description: 'Assets in the Other volume',
-            header: 'Other Assets',
-            label: 'Asset Volumes',
-            name: 'assetVolume',
-            groupId: 2,
-        }
-    ] %}
-
-{#    {% set placementsData = [#}
-{#        {#}
-{#            access: 'all',#}
-{#            group: 'nav',#}
-{#            groupId: null,#}
-{#            guideId: 1,#}
-{#            id: 1,#}
-{#            portalMethod: 'append',#}
-{#            selector: null,#}
-{#            uri: null,#}
-{#        }#}
-{#    ] %}#}
-
     <div
       id="guide-organizer"
       data-action-url-get-all-placements="{{ actionUrl('guide/placement/get-all-placements') }}"
       data-cp-trigger="{{ craft.app.config.general.cpTrigger }}"
       data-groups-data="{{ groupsData|json_encode }}"
-{#      data-placements-data="{{ placementsData|json_encode }}"#}
     ></div>
 {% endset %}

@@ -1,0 +1,41 @@
+defaultPlacement: end
+fieldLayouts:
+  44ed8487-d260-460b-b090-913a1f06b851:
+    tabs:
+      -
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\TitleField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+handle: group1
+name: Headlights
+siteSettings:
+  11ace5e4-2164-419f-aa8c-14a6ccb74727:
+    hasUrls: true
+    template: null
+    uriFormat: 'group-1/{slug}'
+structure:
+  maxLevels: null
+  uid: ae103143-2a92-419b-8e7f-d5fc657987c7
