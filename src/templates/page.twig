@@ -18,8 +18,6 @@
     {% redirect 'guide' %}
 {% endif %}
 
-{#{% set organizer = organizer ?? {} %}#}
-
 {# The title of this CP section #}
 {% set title = guide.title ?? "Guide" %}
 
@@ -28,12 +26,12 @@
 
 {% set bodyClass = 'guide_page guide_page--' ~ (guide.contentSource ?? 'field') ~ ' guide_styles' %}
 
-{% block pageTitle %}
-    {% include 'guide/_partials/guide_header.twig' with {
-        settings: settings,
-        title: title,
-    } only %}
-{% endblock %}
+{#{% block pageTitle %}#}
+{#    {% include 'guide/_partials/guide_header.twig' with {#}
+{#        settings: settings,#}
+{#        title: title,#}
+{#    } only %}#}
+{#{% endblock %}#}
 
 {% block actionButton %}
     <div class="buttons">
@@ -81,5 +79,5 @@
 {#{% endif %}#}
 
 {% set content %}
-    {{ include('guide/_partials/render_content.twig') }}
+  {{ include('guide/_partials/display_guide.twig', { displayId: 'page', guides: [guide] }) }}
 {% endset %}

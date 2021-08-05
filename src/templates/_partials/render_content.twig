@@ -1,23 +1,21 @@
 {% if guide.contentSource == 'iframe' and (guide.contentUrl ?? false) %}
     <iframe class="guide_content__iframe" src="{{ guide.contentUrl }}" frameborder="0"></iframe>
 {% else %}
-    <div class="guide_content" data-guide-content>
-        {% if guide.contentSource == 'template' and (guide.template ?? false) %}
-            {% if craft.app.view.resolveTemplate('guide_template_path/' ~ guide.template) %}
-                {% if (guide.template|lower ends with '.md') or (guide.template|lower ends with '.txt') %}
-                    {{ include('guide_template_path/' ~ guide.template)|guideshortcodes|md('gfm') }}
-                {% else %}
-                    {{ include('guide_template_path/' ~ guide.template) }}
-                {% endif %}
+    {% if guide.contentSource == 'template' and (guide.template ?? false) %}
+        {% if craft.app.view.resolveTemplate('guide_template_path/' ~ guide.template) %}
+            {% if (guide.template|lower ends with '.md') or (guide.template|lower ends with '.txt') %}
+                {{ include('guide_template_path/' ~ guide.template)|guideshortcodes|md('gfm') }}
             {% else %}
-                <p>This guide seems to have moved.</p>
-                <a class="btn submit" href="{{ url('guide/organizer') }}">Return to Organizer</a>
+                {{ include('guide_template_path/' ~ guide.template) }}
             {% endif %}
-        {% elseif guide.content ?? false %}
-            {{ include(template_from_string(guide.content)) }}
         {% else %}
             <p>This guide seems to have moved.</p>
             <a class="btn submit" href="{{ url('guide/organizer') }}">Return to Organizer</a>
         {% endif %}
-    </div>
+    {% elseif guide.content ?? false %}
+        {{ include(template_from_string(guide.content)) }}
+    {% else %}
+        <p>This guide seems to have moved.</p>
+        <a class="btn submit" href="{{ url('guide/organizer') }}">Return to Organizer</a>
+    {% endif %}
 {% endif %}

@@ -74,36 +74,37 @@ class Guide extends Component
     /**
      * Finds Guides based on the supplied parameters that the current user has permission to view.
      *
-     *     Guide::$plugin->guide->getGuidesForUser()
+     *     Guide::$plugin->guide->getGuidesForUserFromPlacements()
      *
-     * @param $params array Parameters passed into query builder to filter down records
-     * @param $queryType string Change the expected query results
+     * @param $placements Placement
      * @param $user User The user to check access against
-     * @return Guides|array|null
+     *                   
+     * @return Guides | array | null
      */
-    public function getGuidesForUser(array $params = [], string $queryType = 'all', User $user = null)
+    public function getGuidesForUserFromPlacements(array $placements, User $user = null)
     {
-        $guides = $this->getGuides($params, $queryType);
         $user = $user ?? Craft::$app->getUser()->getIdentity();
 
+        $guidesIds = [];
+        $authorOnlyIds = [];
+        foreach ($placements as $placement) {
+            if (
+                $placement->access == 'all'
+                || $placement->access == 'admins' && $user->admin
+                || $placement->access == 'author'
+            ) {
+                $guidesIds[] = $placement->guideId;
+            }
+        }
+        
+        $guides = $this->getGuides(['id' => $guidesIds]);
         $guidesForUser = [];
         foreach ($guides as $guide) {
-            $addGuide = false;
-
-            if ($guide->access == 'all') {
-                $addGuide = true;
-            } else if ($guide->access == 'admins' && $user->admin) {
-                $addGuide = true;
-            } else if ($guide->access == 'permissions' && $guide->permissions ?? false) {
-                $permissions = Json::decodeIfJson($guide->permissions);
-                foreach ($permissions as $permission) {
-                    if ($user->can($permission)) {
-                        $addGuide = true;
-                    }
+            if (in_array($guide->id, $authorOnlyIds)) {
+                if ($guide->authorId == $user->id) {
+                    $guidesForUser[] = $guide;
                 }
-            }
-
-            if ($addGuide) {
+            } else {
                 $guidesForUser[] = $guide;
             }
         }

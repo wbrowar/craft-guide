@@ -29,11 +29,6 @@
     'variables': { label: 'Variables', url: 'variables' },
 } %}
 
-{% if proEdition ?? false %}
-    {% set tabs = tabs|merge({ 'components': { label: 'Components', url: 'components' } }) %}
-    {% set tabs = tabs|merge({ 'rebrand': { label: 'Rebrand', url: 'rebrand' } }) %}
-{% endif %}
-
 {% set fullPageForm = true %}
 
 {% block actionButton %}
@@ -77,12 +72,6 @@
                 <p>An asset volume is required to view guides. Please create a new volume and select it here.</p>
                 <p><a class="btn icon add" href="{{ url('settings/assets/volumes/new') }}">Create a New Volume</a></p>
             {% endif %}
-
-            {% if (settings.templatePath ?? false) and settings.assetVolume != '0' and currentUser.can('utility:guide-export-import') %}
-                <hr>
-                <p>You may import and export guides now that you have set a Template Path and Asset Volume.</p>
-                <a class="btn submit" href="{{ url('utilities/guide-export-import') }}">Go to the Guide Utilities page</a>
-            {% endif %}
         {% case 'variables' %}
             {% set classicCompanies = shuffle([
                 'Acme Company, LLC',
@@ -113,123 +102,6 @@
                 instructions: 'The name of the person or organization that built the website. Markdown shortcode: **[MY_COMPANY_NAME]**, Twig tag: **{{ craft.guide.var("myCompanyName") }}**',
                 placeholder: classicCompanies|last
             }) }}
-        {% case 'components' %}
-            <div class="guide_settings__components">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Enable</th>
-                            <th>Name</th>
-                            <th>Formats</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for key, item in components %}
-                            <tr>
-                                <td>
-                                    {{ forms.lightswitch({
-                                        id: 'components[' ~ key ~ ']',
-                                        name: 'components[' ~ key ~ ']',
-                                        on: settings.components[key] ?? true,
-                                    }) }}
-                                </td>
-                                <td><span class="guide_settings__components__name">{{ item.name }}</span></td>
-                                <td>
-                                    {% set formats = [] %}
-                                    {% if item.code.markdown ?? false %}
-                                        {% set formats = formats|merge(['Markdown']) %}
-                                    {% endif %}
-                                    {% if item.code.twig ?? false %}
-                                        {% set formats = formats|merge(['Twig']) %}
-                                    {% endif %}
-                                    <span class="guide_settings__components__format">{{ formats|join(', ') }}</span>
-                                </td>
-                                <td>{{ item.description }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        {% case 'rebrand' %}
-            <div class="guide_settings__rebrand">
-                <div id="guide_rebrand" class="guide_settings__rebrand__options">
-                    <p>Use the fields below to override Guide’s default styles.</p>
-
-                    <hr>
-
-                    <h2>Layout</h2>
-                    {% set fields = [
-                        { name: 'maxWidthText', label: 'Text max width', type: 'text', placeholder: '700px' },
-                        { name: 'gridGap', label: 'Grid gap', type: 'text', placeholder: '1.6rem 5rem' },
-                    ] %}
-                    {% for field in fields %}
-                        {{ self.rebrandField(field, settings) }}
-                    {% endfor %}
-
-                    <hr>
-
-                    <h2>Header</h2>
-                    {% set fields = [
-                        { name: 'headerIconUrl', label: 'Header icon URL (SVG)', type: 'text', placeholder: 'https://url.to/icon.svg' },
-                        { name: 'headerIconWidth', label: 'Header icon width', type: 'text', placeholder: '1.5em' },
-                        { name: 'headerIconHeight', label: 'Header icon height', type: 'text', placeholder: '2em' },
-                        { name: 'headerBg', label: 'Header background', type: 'color' },
-                        { name: 'headerText', label: 'Header text', type: 'color' },
-                    ] %}
-                    {% for field in fields %}
-                        {{ self.rebrandField(field, settings) }}
-                    {% endfor %}
-
-                    <hr>
-
-                    <h2>Content</h2>
-                    {% set fields = [
-                        { name: 'contentBg', label: 'Content background', type: 'color' },
-                        { name: 'contentHeader', label: 'Content headers', type: 'color' },
-                        { name: 'contentText', label: 'Content text', type: 'color' },
-                        { name: 'anchor', label: 'Anchor links', type: 'color' },
-                        { name: 'anchorHover', label: 'Anchor links (hover)', type: 'color' },
-                        { name: 'border', label: 'Border', type: 'color' },
-                        { name: 'buttonBg', label: 'Button background', type: 'color' },
-                        { name: 'buttonText', label: 'Buttn text', type: 'color' },
-                        { name: 'codeBg', label: 'Code background', type: 'color' },
-                        { name: 'codeText', label: 'Code text', type: 'color' },
-                        { name: 'tableHeadBg', label: 'Table head background', type: 'color' },
-                        { name: 'tableHeadText', label: 'Table head text', type: 'color' },
-                        { name: 'tip', label: 'Tip callout', type: 'color' },
-                    ] %}
-                    {% for field in fields %}
-                        {{ self.rebrandField(field, settings) }}
-                    {% endfor %}
-
-                    <hr>
-
-                    <h2>Guide Page Sidebar</h2>
-                    {% set fields = [
-                        { name: 'pageSidebarBg', label: 'Sidebar background', type: 'color' },
-                        { name: 'pageSidebarButtonBg', label: 'Sidebar button background', type: 'color' },
-                        { name: 'pageSidebarButtonText', label: 'Sidebar button text', type: 'color' },
-                        { name: 'pageSidebarButtonTextHover', label: 'Sidebar button text (hover)', type: 'color' },
-                    ] %}
-                    {% for field in fields %}
-                        {{ self.rebrandField(field, settings) }}
-                    {% endfor %}
-
-                    <hr>
-
-                    <h2>Custom CSS</h2>
-                    {% set fields = [
-                        { name: 'customCss', type: 'textarea', instructions: 'CSS that will be added to all pages of the CP. To style guide content, prepend **.guide_content** to your selectors.' },
-                    ] %}
-                    {% for field in fields %}
-                        {{ self.rebrandField(field, settings) }}
-                    {% endfor %}
-                </div>
-                <div class="guide_settings__rebrand__demo guide_styles">
-                    {% include 'guide/_partials/rebrand_demo.twig' %}
-                </div>
-            </div>
     {% endswitch %}
 
     {% if not proEdition and currentUser.admin %}
@@ -244,56 +116,3 @@
         </div>
     {% endif %}
 {% endset %}
-
-{% macro rebrandField(config, settings) %}
-    {% switch config.type %}
-        {% case 'asset' %}
-            {% set volume = craft.app.volumes.volumeByUid(settings.assetVolume) %}
-        
-            {% if volume ?? false %}
-                {{ forms.elementSelectField({
-                    label: config.label ?? null,
-                    id: config.name,
-                    name: 'rebrand[' ~ config.name ~ ']',
-                    allowedKinds: 'images',
-                    defaultUploadLocationSource: 'folder:' ~ alias(volume.path),
-                    elementType: 'craft\\elements\\Asset',
-                    elements: (settings.rebrand[config.name] ?? false) ? craft.assets.id(settings.rebrand[config.name]).all() : [],
-                    limit: 1,
-                    selectionLabel: "Add an SVG",
-                    sources: 'volumeId:' ~ volume.id,
-                    useSingleFolder: true,
-                    instructions: config.instructions ?? null,
-                    placeholder: config.placeholder ?? null,
-                }) }}
-            {% endif %}
-        {% case 'color' %}
-            {{ forms.colorField({
-                label: config.label ?? null,
-                id: config.name,
-                name: 'rebrand[' ~ config.name ~ ']',
-                value: settings.rebrand[config.name] ?? '',
-                instructions: config.instructions ?? null,
-                placeholder: config.placeholder ?? null,
-            }) }}
-        {% case 'text' %}
-            {{ forms.textField({
-                label: config.label ?? null,
-                id: config.name,
-                name: 'rebrand[' ~ config.name ~ ']',
-                value: settings.rebrand[config.name] ?? '',
-                instructions: config.instructions ?? null,
-                placeholder: config.placeholder ?? null,
-            }) }}
-        {% case 'textarea' %}
-            {{ forms.textareaField({
-                label: config.label ?? null,
-                id: config.name,
-                name: 'rebrand[' ~ config.name ~ ']',
-                rows: 10,
-                value: settings.rebrand[config.name] ?? '',
-                instructions: config.instructions ?? null,
-                placeholder: config.placeholder ?? null,
-            }) }}
-    {% endswitch %}
-{% endmacro %}

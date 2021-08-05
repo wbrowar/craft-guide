@@ -292,7 +292,7 @@
 
   <Teleport to="#guide-action-buttons">
     <button class="btn disabled" :title="formErrors.join(' ')" v-if="formErrors.length > 0">Save</button>
-    <button class="btn submit" type="button" @click="$refs.form.submit()" v-else>Save</button>
+    <button class="btn submit" type="button" @click="submitForm" v-else>Save</button>
   </Teleport>
 </template>
 
@@ -434,6 +434,11 @@ export default defineComponent({
     showDocumentation(payload) {
       this.currentDocs = this.currentDocs?.code === payload.code ? null : payload;
     },
+    submitForm() {
+      if (!this.formErrors.length) {
+        this.$refs.form.submit();
+      }
+    },
   },
   mounted() {
     const contentEl = document.getElementById('content');
@@ -462,6 +467,14 @@ export default defineComponent({
     if (this.guide?.summary) {
       this.$refs.summaryField.setFieldValue(this.guide.summary);
     }
+
+    this.$refs.editor._editor.commands.addCommand({
+      name: 'saveGuide',
+      bindKey: { win: 'Ctrl-S', mac: 'Command-S' },
+      exec: () => {
+        this.submitForm();
+      },
+    });
 
     log('Guide Editor loaded for guide');
     table(this.guide);

@@ -66,16 +66,11 @@
               v-for="group in filteredDropZones"
               :key="group.name"
               :class="{
-                'g-col-start-1 g-col-span-3': group.columns === 3,
-                'g-col-start-1 g-col-span-2': group.columns === 2 && group.name !== 'uiElement',
-                'g-col-span-2': group.name === 'uiElement',
-                '': group.columns === 1,
+                'g-col-span-3': group.columns === 3 && gridView === 'grid',
+                'g-col-span-2': group.columns === 2 && gridView === 'grid',
+                'g-col-start-1 g-col-span-2': gridView === 'list',
               }"
-              :header-class="{
-                'g-text-lg': group.columns === 3,
-                'g-text-base': group.columns === 2,
-                'g-text-sm': group.columns === 1,
-              }"
+              :header-size="group.headerSize"
               :description="group.description || null"
               :header="group.header || null"
               :group="group.name"
@@ -89,22 +84,30 @@
             />
           </div>
           <div class="g-relative g-text-select-light" v-if="proEdition">
-            <ul class="g--mt-2 g-pt-2 g-space-y-2 g-sticky g-top-0">
-              <li
-                v-for="filter in groupFilters"
-                :key="filter.value"
-                class="g-group g-flex g-flex-nowrap g-items-start g-gap-1"
-              >
-                <input
-                  :id="`group-filter-${filter.value}`"
-                  class="g-mt-0.5 g-w-4 g-h-4"
-                  :checked="selectedGroupFilters.includes(filter.value)"
-                  type="checkbox"
-                  @change="toggleSelectedGroupFilter(filter.value)"
-                />
-                <label class="group-hover:g-text-white" :for="`group-filter-${filter.value}`">{{ filter.label }}</label>
-              </li>
-            </ul>
+            <div class="g--mt-2 g-pt-2 g-sticky g-top-0">
+              <div class="g-space-x-1">
+                <button class="g-text-white" type="button" @click="setGridView('list')">List</button>
+                <button class="g-text-white" type="button" @click="setGridView('grid')">Grid</button>
+              </div>
+              <ul class="g-space-y-2">
+                <li
+                  v-for="filter in groupFilters"
+                  :key="filter.value"
+                  class="g-group g-flex g-flex-nowrap g-items-start g-gap-1"
+                >
+                  <input
+                    :id="`group-filter-${filter.value}`"
+                    class="g-mt-0.5 g-w-4 g-h-4"
+                    :checked="selectedGroupFilters.includes(filter.value)"
+                    type="checkbox"
+                    @change="toggleSelectedGroupFilter(filter.value)"
+                  />
+                  <label class="group-hover:g-text-white" :for="`group-filter-${filter.value}`">{{
+                    filter.label
+                  }}</label>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -157,6 +160,7 @@ export default defineComponent({
   setup: (props) => {
     const state = reactive({
       currentEditPlacement: null as Placement | null,
+      gridView: 'grid' as 'list' | 'grid',
       groups: JSON.parse(props.groupsData),
       placements: [] as Placement[],
       groupFilters: [],
@@ -180,6 +184,13 @@ export default defineComponent({
       state.selectedGroupFilters = selectedGroupFilters.filter((name) => {
         return !(['assetVolume', 'categoryGroup', 'entryType', 'userGroup'] as PlacementGroup).includes(name);
       });
+    }
+
+    if (
+      localStorage.getItem('guide:organizer:gridView') === 'list' ||
+      localStorage.getItem('guide:organizer:gridView') === 'grid'
+    ) {
+      state.gridView = localStorage.getItem('guide:organizer:gridView') as 'list' | 'grid';
     }
 
     return { ...toRefs(state) };
@@ -263,6 +274,10 @@ export default defineComponent({
           this.getPlacementList();
         }
       );
+    },
+    setGridView(view) {
+      this.gridView = view;
+      localStorage.setItem('guide:organizer:gridView', view);
     },
     updatePlacement(placementId, group, groupId = null) {
       log(`Updating placement: ${placementId} group to: ${group}`);

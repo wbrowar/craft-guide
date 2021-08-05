@@ -1,9 +1,0 @@
-{# todo remove this template #}
-
-{% for guide in guides %}
-    <div data-guide-modal="{{ guide.slug }}">
-        <div class="guide_modal guide_styles modal globalmodal" style="display: none;">
-            {{ include('guide/_partials/render_content.twig') }}
-        </div>
-    </div>
-{% endfor %}

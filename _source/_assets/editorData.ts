@@ -22,6 +22,16 @@ export const editorData: EditorComponent[] = [
     },
   },
   {
+    title: 'CSS',
+    group: 'components',
+    code: `{% css %}
+.guide REPLACE_SELECTOR {
+  
+}
+{% endcss %}`,
+    documentation: `<p>Write custom CSS for this guide. A ".guide" class wraps around all guide content for specificity.</p>`,
+  },
+  {
     title: 'Grid',
     group: 'components',
     code: `<grid :columns="2">

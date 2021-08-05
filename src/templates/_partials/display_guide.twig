@@ -1,0 +1,23 @@
+{# /**
+ * Guide plugin for Craft CMS
+ *
+ * Guide Widget Body
+ *
+ * @author    Will Browar
+ * @copyright Copyright (c) 2021 Will Browar
+ * @link      https://wbrowar.com
+ * @package   Guide
+ * @since     3.0.0
+ */ #}
+
+{% if guides|length %}
+  {% set displaySlug = 'guide-' ~ (displayId ?? false ? displayId ~ '-' : '')  ~ guide.slug %}
+  <div data-guide-display="{{ displaySlug }}"></div>
+  <template id="{{ displaySlug }}">
+    {% if teleportTo ?? false %}<teleport to="{{ teleportTo }}">{% endif %}
+    <div class="guide">
+      {{ include('guide/_partials/render_content', { guide: guide }) }}
+    </div>
+    {% if teleportTo ?? false %}</teleport>{% endif %}
+  </template>
+{% endif %}

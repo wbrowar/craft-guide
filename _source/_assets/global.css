@@ -3,5 +3,21 @@
  */
 
 @tailwind base;
+
+.guide img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  line-height: 0;
+}
+
+.guide .g-video {
+  display: block;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  height: auto;
+  line-height: 0;
+}
+
 @tailwind components;
 @tailwind utilities;

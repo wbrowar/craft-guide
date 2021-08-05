@@ -1,8 +1,11 @@
-// import { createApp } from 'vue';
-// import GuideEditor from './components/GuideEditor.vue';
+import { createApp } from 'vue';
+import GuideDisplay from './components/GuideDisplay.vue';
 import './global.css';
 
-// const guideEditor = document.getElementById('guide-editor');
-// if (guideEditor) {
-//   createApp(GuideEditor, guideEditor.dataset).mount(guideEditor);
-// }
+const guideDisplays = document.querySelectorAll('[data-guide-display]');
+if (guideDisplays) {
+  guideDisplays.forEach((display) => {
+    GuideDisplay.template = `#${display.dataset?.guideDisplay}`;
+    createApp(GuideDisplay, display.dataset).mount(display);
+  });
+}

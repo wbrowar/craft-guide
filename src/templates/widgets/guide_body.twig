@@ -11,20 +11,7 @@
  */ #}
 
 {% if (guide ?? false) and proEdition %}
-    <div class="guide_styles guide_widget">
-        {% if guide[0].contentSource != 'iframe' %}
-            <div class="guide_widget__header">
-                {% include 'guide/_partials/guide_header.twig' with {
-                    settings: settings,
-                    title: guide[0].title,
-                } only %}
-            </div>
-        {% endif %}
-
-        <div class="guide_widget__content guide_widget__content--{{ guide[0].contentSource }}">
-            {{ include('guide/_partials/render_content', { guide: guide[0] }) }}
-        </div>
-    </div>
+    {{ include('guide/_partials/display_guide.twig', { displayId: 'widget', guides: [guide] }) }}
 {% else %}
     <div style="padding: 20px;">The guide that was displayed here is no longer available. Select another guide in this widget’s settings.</div>
 {% endif %}

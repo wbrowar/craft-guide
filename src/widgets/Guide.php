@@ -84,10 +84,12 @@ class Guide extends Widget
      */
     public function getSettingsHtml()
     {
+        $placements = GuidePlugin::$plugin->placement->getPlacements(['group' => 'widget']);
+
         return Craft::$app->getView()->renderTemplate(
             'guide/widgets/guide_settings',
             [
-                'selectableGuides' => GuidePlugin::$plugin->guide->getGuidesForUser(['parentType' => 'widget']),
+                'selectableGuides' => GuidePlugin::$plugin->guide->getGuidesForUserFromPlacements($placements),
                 'userOperations' => GuidePlugin::$userOperations,
                 'widget' => $this,
             ]
@@ -102,7 +104,7 @@ class Guide extends Widget
         return Craft::$app->getView()->renderTemplate(
             'guide/widgets/guide_body',
             [
-                'guide' => GuidePlugin::$plugin->guide->getGuidesForUser(['id' => $this->guideId, 'parentType' => 'widget']),
+                'guide' => GuidePlugin::$plugin->guide->getGuides(['id' => $this->guideId], 'one'),
                 'proEdition' => GuidePlugin::$pro,
                 'settings' => GuidePlugin::$settings,
             ]

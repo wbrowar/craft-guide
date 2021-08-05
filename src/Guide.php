@@ -121,11 +121,6 @@ class Guide extends Plugin
         ]);
 
         if (self::$view->getTemplateMode() === View::TEMPLATE_MODE_CP) {
-            // Add in our asset bundle
-//            if (!Craft::$app->getRequest()->isConsoleRequest) {
-//                self::$view->registerAssetBundle(GuideAsset::class);
-//            }
-
             // Add in our Twig extensions
             self::$view->registerTwigExtension(new GuideTwigExtension());
 
@@ -287,54 +282,54 @@ class Guide extends Plugin
             }
 
             // Add CP Buttons
-            Craft::$app->view->hook('cp.assets.edit.details', function(&$context) {
-                if ($context['element']->volumeId ?? false) {
-                    // Render sidebar template
-                    return self::$view->renderTemplate('guide/sidebar/sidebar', [
-                        'guides' => self::$plugin->guide->getGuidesForUser(['parentUid' => $context['element']->volume->uid, 'parentType' => 'sidebar']),
-                        'settings' => self::$settings,
-                        'userOperations' => self::$userOperations,
-                    ]);
-                }
-
-                return false;
-            });
-            Craft::$app->view->hook('cp.categories.edit.details', function(&$context) {
-                if ($context['category'] ?? false) {
-                    // Render sidebar template
-                    return self::$view->renderTemplate('guide/sidebar/sidebar', [
-                        'guides' => self::$plugin->guide->getGuidesForUser(['parentUid' => $context['category']->group->uid, 'parentType' => 'sidebar']),
-                        'settings' => self::$settings,
-                        'userOperations' => self::$userOperations,
-                    ]);
-                }
-
-                return false;
-            });
-            Craft::$app->view->hook('cp.entries.edit.details', function(&$context) {
-                if ($context['entry'] ?? false) {
-                    // Render sidebar template
-                    return self::$view->renderTemplate('guide/sidebar/sidebar', [
-                        'guides' => self::$plugin->guide->getGuidesForUser(['parentUid' => $context['entry']->section->uid, 'parentType' => 'sidebar']),
-                        'settings' => self::$settings,
-                        'userOperations' => self::$userOperations,
-                    ]);
-                }
-
-                return false;
-            });
-            Craft::$app->view->hook('cp.users.edit.details', function(&$context) {
-                if ($context['user'] ?? false) {
-                    // Render sidebar template
-                    return self::$view->renderTemplate('guide/sidebar/sidebar', [
-                        'guides' => self::$plugin->guide->getGuidesForUser(['parentType' => 'user']),
-                        'settings' => self::$settings,
-                        'userOperations' => self::$userOperations,
-                    ]);
-                }
-
-                return false;
-            });
+//            Craft::$app->view->hook('cp.assets.edit.details', function(&$context) {
+//                if ($context['element']->volumeId ?? false) {
+//                    // Render sidebar template
+//                    return self::$view->renderTemplate('guide/sidebar/sidebar', [
+//                        'guides' => self::$plugin->guide->getGuidesForUser(['parentUid' => $context['element']->volume->uid, 'parentType' => 'sidebar']),
+//                        'settings' => self::$settings,
+//                        'userOperations' => self::$userOperations,
+//                    ]);
+//                }
+//
+//                return false;
+//            });
+//            Craft::$app->view->hook('cp.categories.edit.details', function(&$context) {
+//                if ($context['category'] ?? false) {
+//                    // Render sidebar template
+//                    return self::$view->renderTemplate('guide/sidebar/sidebar', [
+//                        'guides' => self::$plugin->guide->getGuidesForUser(['parentUid' => $context['category']->group->uid, 'parentType' => 'sidebar']),
+//                        'settings' => self::$settings,
+//                        'userOperations' => self::$userOperations,
+//                    ]);
+//                }
+//
+//                return false;
+//            });
+//            Craft::$app->view->hook('cp.entries.edit.details', function(&$context) {
+//                if ($context['entry'] ?? false) {
+//                    // Render sidebar template
+//                    return self::$view->renderTemplate('guide/sidebar/sidebar', [
+//                        'guides' => self::$plugin->guide->getGuidesForUser(['parentUid' => $context['entry']->section->uid, 'parentType' => 'sidebar']),
+//                        'settings' => self::$settings,
+//                        'userOperations' => self::$userOperations,
+//                    ]);
+//                }
+//
+//                return false;
+//            });
+//            Craft::$app->view->hook('cp.users.edit.details', function(&$context) {
+//                if ($context['user'] ?? false) {
+//                    // Render sidebar template
+//                    return self::$view->renderTemplate('guide/sidebar/sidebar', [
+//                        'guides' => self::$plugin->guide->getGuidesForUser(['parentType' => 'user']),
+//                        'settings' => self::$settings,
+//                        'userOperations' => self::$userOperations,
+//                    ]);
+//                }
+//
+//                return false;
+//            });
 
             // Add custom field UI elements
             Event::on(
@@ -348,39 +343,39 @@ class Guide extends Plugin
             // Add modal template to footer
             Event::on(View::class, View::EVENT_END_BODY, function(Event $event) {
                 if ((Craft::$app ?? false) && (Craft::$app->requestedAction ?? false) && (Craft::$app->requestedAction->id ?? false)) {
-                    if (Craft::$app->requestedAction->id == 'edit-asset' && Craft::$app->controller->actionParams['assetId'] ?? false) {
-                        $element = Craft::$app->getAssets()->getAssetById(Craft::$app->controller->actionParams['assetId']);
-                        $volume = Craft::$app->getVolumes()->getVolumeById($element->volumeId);
-
-                        if ($element ?? false) {
-                            $guides = self::$plugin->guide->getGuides([
-                                'parentType' => 'sidebar',
-                                'parentUid' => $volume->uid,
-                            ]);
-                        }
-                    } else if (Craft::$app->requestedAction->id == 'edit-category' && Craft::$app->controller->actionParams['groupHandle'] ?? false) {
-                        $element = Craft::$app->getCategories()->getGroupByHandle(Craft::$app->controller->actionParams['groupHandle']);
-
-                        if ($element ?? false) {
-                            $guides = self::$plugin->guide->getGuides([
-                                'parentType' => 'sidebar',
-                                'parentUid' => $element->uid,
-                            ]);
-                        }
-                    } else if (Craft::$app->requestedAction->id == 'edit-entry' && Craft::$app->controller->actionParams['section'] ?? false) {
-                        $element = Craft::$app->getSections()->getSectionByHandle(Craft::$app->controller->actionParams['section']);
-
-                        if ($element ?? false) {
-                            $guides = self::$plugin->guide->getGuides([
-                                'parentType' => 'sidebar',
-                                'parentUid' => $element->uid,
-                            ]);
-                        }
-                    } else if (Craft::$app->requestedAction->id == 'edit-user') {
-                        $guides = self::$plugin->guide->getGuides([
-                            'parentType' => 'user',
-                        ]);
-                    }
+//                    if (Craft::$app->requestedAction->id == 'edit-asset' && Craft::$app->controller->actionParams['assetId'] ?? false) {
+//                        $element = Craft::$app->getAssets()->getAssetById(Craft::$app->controller->actionParams['assetId']);
+//                        $volume = Craft::$app->getVolumes()->getVolumeById($element->volumeId);
+//
+//                        if ($element ?? false) {
+//                            $guides = self::$plugin->guide->getGuides([
+//                                'parentType' => 'sidebar',
+//                                'parentUid' => $volume->uid,
+//                            ]);
+//                        }
+//                    } else if (Craft::$app->requestedAction->id == 'edit-category' && Craft::$app->controller->actionParams['groupHandle'] ?? false) {
+//                        $element = Craft::$app->getCategories()->getGroupByHandle(Craft::$app->controller->actionParams['groupHandle']);
+//
+//                        if ($element ?? false) {
+//                            $guides = self::$plugin->guide->getGuides([
+//                                'parentType' => 'sidebar',
+//                                'parentUid' => $element->uid,
+//                            ]);
+//                        }
+//                    } else if (Craft::$app->requestedAction->id == 'edit-entry' && Craft::$app->controller->actionParams['section'] ?? false) {
+//                        $element = Craft::$app->getSections()->getSectionByHandle(Craft::$app->controller->actionParams['section']);
+//
+//                        if ($element ?? false) {
+//                            $guides = self::$plugin->guide->getGuides([
+//                                'parentType' => 'sidebar',
+//                                'parentUid' => $element->uid,
+//                            ]);
+//                        }
+//                    } else if (Craft::$app->requestedAction->id == 'edit-user') {
+//                        $guides = self::$plugin->guide->getGuides([
+//                            'parentType' => 'user',
+//                        ]);
+//                    }
                 }
 
                 if ($guides ?? false) {

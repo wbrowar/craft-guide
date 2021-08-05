@@ -292,11 +292,12 @@ class GuideComponents extends Component
     public function renderComponent(string $handle, array $options):string
     {
         if (Guide::$pro) {
+            $class = $options['attrs']['class'] ?? [];
+            $class[] = 'g-' . $handle;
+
             $options['attrs'] = $options['attrs'] ?? [];
-            $options['class'] = $options['class'] ?? $handle;
-            $options['classPrefix'] = $options['classPrefix'] ?? 'guide_c';
+            $options['attrs']['class'] = $class;
             $options['element'] = $options['element'] ?? 'div';
-            $options['rootClass'] = $options['classPrefix'] . '_' . $options['class'];
 
             if (Craft::$app->getView()->doesTemplateExist('guide/components/' . $handle . '.twig')) {
                 return Craft::$app->getView()->renderTemplate('guide/components/' . $handle . '.twig', $options);
