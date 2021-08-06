@@ -11,41 +11,41 @@
 
 {% set alt = alt ?? image.title ?? '' %}
 {% set transforms = transforms ?? [
-    { mode: 'fit', quality: 90, width: 700 },
-    { mode: 'fit', quality: 90, width: 1400 },
+  { mode: 'fit', quality: 90, width: 700 },
+  { mode: 'fit', quality: 90, width: 1400 },
 ] %}
 
 {% block content -%}
-    {% import _self as self %}
+  {% import _self as self %}
 
-    {% if asset ?? false or url ?? false %}
-        <picture>
-            {% if asset ?? false %}
-                {% if transforms|length %}
-                    <img srcset="{{ self.getSrcSetFromObject({ image: asset, transforms: transforms }) }}" src="{{ placeholder }}" loading="lazy" width="{{ asset.width }}" height="{{ asset.height }}" sizes="{{ sizes }}" alt="{{ alt ?? asset.title }}" />
-                {% else %}
-                    <img src="{{ asset.url }}" loading="lazy" width="{{ asset.width }}" height="{{ asset.height }}" alt="{{ alt ?? asset.title }}" />
-                {% endif %}
-            {% elseif url ?? false %}
-                <img src="{{ url }}" loading="lazy" alt="{{ alt }}" />
-            {% endif %}
-        </picture>
-        {% if caption ?? false -%}
-            <figcaption class="{{ rootClass }}__caption">{{ caption }}</figcaption>
-        {%- endif %}
-    {% else %}
-        <div class="fpo" style="padding: 30% 0;">
-            <p class="fpo" style="text-align: center;">An asset is missing. Update your guide template with a valid asset or image URL.</p>
-        </div>
+  {% if asset ?? false or url ?? false %}
+    <picture>
+      {% if asset ?? false %}
+        {% if transforms|length %}
+          <img srcset="{{ self.getSrcSetFromObject({ image: asset, transforms: transforms }) }}" src="{{ placeholder }}" loading="lazy" width="{{ asset.width }}" height="{{ asset.height }}" sizes="{{ sizes }}" alt="{{ alt ?? asset.title }}" />
+        {% else %}
+          <img src="{{ asset.url }}" loading="lazy" width="{{ asset.width }}" height="{{ asset.height }}" alt="{{ alt ?? asset.title }}" />
+        {% endif %}
+      {% elseif url ?? false %}
+        <img src="{{ url }}" loading="lazy" alt="{{ alt }}" />
+      {% endif %}
+    </picture>
+    {% if caption ?? false -%}
+      <figcaption class="{{ rootClass }}__caption">{{ caption }}</figcaption>
     {%- endif %}
+  {% else %}
+    <div class="fpo" style="padding: 30% 0;">
+      <p class="fpo" style="text-align: center;">An asset is missing. Update your guide template with a valid asset or image URL.</p>
+    </div>
+  {%- endif %}
 {%- endblock %}
 
 {% macro getSrcSetFromObject(options) %}{% spaceless %}
-    {% set image = options.image ?? null %}
-    {% set transforms = options.transforms ?? {} %}
-    {% set suffix = options.suffix ?? null %}
+  {% set image = options.image ?? null %}
+  {% set transforms = options.transforms ?? {} %}
+  {% set suffix = options.suffix ?? null %}
 
-    {% if (image ?? false) and (transforms|length) %}
-        {% for transform in transforms %}{% if not loop.first %}, {% endif %}{{ image.getUrl(transform) }}{{ suffix }}{{ (transform.width ?? false) ? ' ' ~ transform.width ~ 'w' : '' }}{% endfor %}
-    {% endif %}
+  {% if (image ?? false) and (transforms|length) %}
+    {% for transform in transforms %}{% if not loop.first %}, {% endif %}{{ image.getUrl(transform) }}{{ suffix }}{{ (transform.width ?? false) ? ' ' ~ transform.width ~ 'w' : '' }}{% endfor %}
+  {% endif %}
 {% endspaceless %}{% endmacro %}

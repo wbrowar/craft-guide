@@ -11,13 +11,45 @@
  */ #}
 
 {% if guides|length %}
-  {% set displaySlug = 'guide-' ~ (displayId ?? false ? displayId ~ '-' : '')  ~ guide.slug %}
-  <div data-guide-display="{{ displaySlug }}"></div>
+  {% set displaySlug = 'guide-' ~ (displayId ?? 'display') %}
+
+  {% if guides|length > 1 %}
+    {% set guideNav = [] %}
+    {% set guideNav = guides|map((guide) => { slug: guide.slug, title: guide.title }) %}
+  {% endif %}
+
+  <div
+    data-guide-display="{{ displaySlug }}"
+    {% if guideNav ?? false %}data-guide-nav-data="{{ guideNav|json_encode }}"{% endif %}
+    {% if teleportContainerClass ?? false %}data-teleport-container-class="{{ teleportContainerClass }}"{% endif %}
+    {% if teleportMethod ?? false %}data-teleport-method="{{ teleportMethod }}"{% endif %}
+    {% if teleportSelector ?? false %}data-teleport-selector="{{ teleportSelector }}"{% endif %}
+  ></div>
   <template id="{{ displaySlug }}">
-    {% if teleportTo ?? false %}<teleport to="{{ teleportTo }}">{% endif %}
-    <div class="guide">
-      {{ include('guide/_partials/render_content', { guide: guide }) }}
-    </div>
-    {% if teleportTo ?? false %}</teleport>{% endif %}
+    <teleport :to="teleportTarget" :disabled="!teleportTarget">
+      <div{% if guideNav ?? false %} class="g-grid g-grid-cols-[var(--grid-cols)] g-gap-6 g-relative" style="--grid-cols: 1fr 200px;"{% endif %}>
+        <div>
+          {% for guide in guides %}
+            {% if teleportMap['id-' ~ guide.id] ?? false %}<teleport to="{{ teleportMap['id-' ~ guide.id] }}">{% endif %}
+            <div class="guide"{% if guideNav ?? false %} v-if="currentGuide === '{{ guide.slug }}'"{% endif %}>
+              {{ include('guide/_partials/render_content', { guide: guide }) }}
+            </div>
+            {% if teleportMap['id-' ~ guide.id] ?? false %}</teleport>{% endif %}
+          {% endfor %}
+        </div>
+        {% if guideNav ?? false %}
+          <div>
+            <div class="g-sticky g-top-16">
+              <h2>Guides</h2>
+              <div class="g-space-y-2">
+                {% for link in guideNav %}
+                  <button class="g-block g-text-left g-text-sm g-cursor-pointer g-duration-150" :class="{ 'g-font-bold g-text-primary': currentGuide === '{{ link.slug }}' }" type="button" @click="currentGuide = '{{ link.slug }}'">{{ link.title }}</button>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </teleport>
   </template>
 {% endif %}

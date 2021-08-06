@@ -10,24 +10,12 @@
  * @since     2.0.0
  */ #}
 
-{# todo remove this template #}
-
 {% if guides|length %}
-    <div class="guide_sidebar guide_styles" data-guide-sidebar>
-        <div class="guide_sidebar__header">
-            {% include 'guide/_partials/guide_header.twig' with {
-                settings: settings,
-                title: guides|length > 1 ? 'Guides' : 'Guide',
-            } only %}
-        </div>
-
-        {% for item in guides %}
-            <div class="guide_sidebar__toggle">
-                <div class="guide_sidebar__toggle__title" data-modal-id="{{ item.slug }}"{% if item.summary %} title="{{ item.summary }}"{% endif %}>{{ item.title }}</div>
-                {% if userOperations.editGuides %}
-                    <div><a class="guide_sidebar__toggle__button btn small" href="{{ url('guide/edit/' ~ item.id, 'return=' ~ craft.app.request.url) }}">Edit</a></div>
-                {% endif %}
-            </div>
-        {% endfor %}
-    </div>
+  {% include 'guide/_partials/display_guide.twig' with {
+    displayId: 'page',
+    guides: guides,
+    teleportContainerClass: 'content-pane g-mb-3',
+    teleportMethod: 'prepend',
+    teleportSelector: '#content-container'
+  } only %}
 {% endif %}

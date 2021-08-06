@@ -1,4 +1,4 @@
-dateModified: 1628121154
+dateModified: 1628258766
 email:
   fromEmail: email@example.com
   fromName: 'Craft Plugin'
@@ -11,7 +11,10 @@ meta:
     22fb86f7-b3fe-4f11-b624-25c67fb9c682: 'Content Authors' # Content Authors
     535ddbac-f2c5-4e1f-8a30-051e3e68f19d: 'Product Admins' # Product Admins
     553c6b66-d999-458b-9b4d-d941cc28b6dd: 'Site Settings' # Site Settings
+    791d4dc9-0bae-4126-b9cb-7718b2df18b6: Guide # Guide
     95304dab-45c1-409c-8633-fd625996c8d7: Headlights # Headlights
+    e377ed68-cba4-4d8c-9ea4-44634bc5c8eb: 'Public Schema' # Public Schema
+    eed46e7d-b369-4b50-841c-b785caf65b16: 'Drink Photos' # Drink Photos
 plugins:
   guide:
     edition: pro
@@ -19,7 +22,7 @@ plugins:
     licenseKey: $PLUGIN_LICENSE_KEY
     schemaVersion: 3.0.0
     settings:
-      assetVolume: 791d4dc9-0bae-4126-b9cb-7718b2df18b6
+      assetVolume: 791d4dc9-0bae-4126-b9cb-7718b2df18b6 # Guide
       clientName: ''
       myCompanyName: ''
       templatePath: _guide

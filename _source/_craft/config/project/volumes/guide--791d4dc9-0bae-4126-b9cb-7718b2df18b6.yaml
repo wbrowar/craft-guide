@@ -28,6 +28,19 @@ fieldLayouts:
             width: 100
         name: Content
         sortOrder: 1
+      -
+        elements:
+          -
+            fieldUid: 00d24b9b-4fb2-48de-aae0-1fd8aef75302
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Settings
+        sortOrder: 2
 handle: guide
 hasUrls: true
 name: Guide

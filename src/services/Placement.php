@@ -253,6 +253,12 @@ class Placement extends Component
                 case 'count':
                     $placements = Placements::find()->where($params)->count();
                     break;
+                case 'ids':
+                    $placements = Placements::find()->where($params)->ids();
+                    break;
+                case 'guideId':
+                    $placements = Placements::find()->where($params)->select(['guideId'])->all();
+                    break;
             }
         }
 

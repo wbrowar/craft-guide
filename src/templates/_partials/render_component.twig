@@ -1,20 +1,20 @@
 {% set containerAttributes = {} %}
 
 {% if attributes ?? false %}
-    {% set containerAttributes = containerAttributes|merge(attributes) %}
+  {% set containerAttributes = containerAttributes|merge(attributes) %}
 {% endif %}
 
 {% if attrs ?? false %}
-    {% set containerAttributes = containerAttributes|merge(attrs) %}
+  {% set containerAttributes = containerAttributes|merge(attrs) %}
 {% endif %}
 
 {% if classes ?? false %}
-    {% if containerAttributes.class %}
-        {% set newClasses = classes|merge(containerAttributes.class) %}
-        {% set containerAttributes = containerAttributes|merge({class: newClasses}) %}
-    {% else %}
-        {% set containerAttributes = containerAttributes|merge({class: classes}) %}
-    {% endif %}
+  {% if containerAttributes.class %}
+    {% set newClasses = classes|merge(containerAttributes.class) %}
+    {% set containerAttributes = containerAttributes|merge({class: newClasses}) %}
+  {% else %}
+    {% set containerAttributes = containerAttributes|merge({class: classes}) %}
+  {% endif %}
 {% endif %}
 
 {% block before %}{{ before ?? null }}{% endblock %}

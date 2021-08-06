@@ -20,14 +20,14 @@
 {% set selectedSubnavItem = 'organizer' %}
 
 {% block actionButton %}
-    <div id="guide-action-buttons"></div>
+  <div id="guide-action-buttons"></div>
 {% endblock %}
 
 {% set content %}
-    <div
-      id="guide-organizer"
-      data-action-url-get-all-placements="{{ actionUrl('guide/placement/get-all-placements') }}"
-      data-cp-trigger="{{ craft.app.config.general.cpTrigger }}"
-      data-groups-data="{{ groupsData|json_encode }}"
-    ></div>
+  <div
+    id="guide-organizer"
+    data-action-url-get-all-placements="{{ actionUrl('guide/placement/get-all-placements') }}"
+    data-cp-trigger="{{ craft.app.config.general.cpTrigger }}"
+    data-groups-data="{{ groupsData|json_encode }}"
+  ></div>
 {% endset %}

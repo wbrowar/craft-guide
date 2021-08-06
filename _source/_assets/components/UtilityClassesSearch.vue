@@ -21,7 +21,32 @@ export default defineComponent({
       searchValue: '',
     });
 
-    state.classes = ['g-flex', 'g-items-center', 'g-justify-center', 'g-grid-cols-[var(--grid-cols)]'];
+    state.classes = [
+      'g-flex',
+      'g-items-center',
+      'g-justify-center',
+      'g-grid-cols-[var(--grid-cols)]',
+      'g-mb-3',
+      'g-absolute',
+      'g-relative',
+      'g-sticky',
+      'g-top-0',
+      'g-top-16',
+      'g-right-0',
+      'g-bottom-0',
+      'g-left-0',
+      'g-space-y-1',
+      'g-space-y-2',
+      'g-space-y-3',
+      'g-text-left',
+      'g-text-center',
+      'g-text-right',
+      'g-text-primary',
+      'g-text-sm',
+      'g-font-bold',
+      'g-cursor-pointer',
+      'g-duration-150',
+    ];
 
     return { ...toRefs(state) };
   },

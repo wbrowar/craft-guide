@@ -10,16 +10,26 @@
  * @since     2.0.0
  */ #}
 
-{% if cpNavPlacement %}
-    {% set cpNavGuide = craft.guide.getOne({ id: cpNavPlacement.guideId }) %}
+{% extends "_layouts/cp" %}
+
+{# The title of this CP section #}
+{% set title = "Guide" %}
+
+{# The URL to this plugin's base CP section #}
+{% set pluginCpUrl = url('guide') %}
+
+{% if cpNavPlacements ?? false %}
+  {% set guides = craft.guide.getAll({ id: cpNavPlacements|map((item) => item.guideId) }) %}
 {% endif %}
 
-{% if not (settings.templatePath ?? false) or not (settings.assetVolume ?? false) %}
+{% set content %}
+  {% if not (settings.templatePath ?? false) or not (settings.assetVolume ?? false) %}
     {% redirect 'guide/settings/general' %}
-{% elseif cpNavGuide %}
-    {% redirect url('guide/page/' ~ cpNavGuide.slug) %}
-{% elseif userOperations.useOrganizer %}
+  {% elseif guides ?? false %}
+    {% include 'guide/_partials/display_guide.twig' with { displayId: 'nav', guides: guides } only %}
+  {% elseif userOperations.useOrganizer %}
     {% redirect 'guide/organizer' %}
-{% else %}
+  {% else %}
     {% redirect 'guide/settings/general' %}
-{% endif %}
+  {% endif %}
+{% endset %}

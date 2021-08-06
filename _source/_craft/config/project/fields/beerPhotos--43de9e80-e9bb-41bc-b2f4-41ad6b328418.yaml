@@ -8,7 +8,7 @@ settings:
   allowSelfRelations: false
   allowUploads: true
   allowedKinds: null
-  defaultUploadLocationSource: 'volume:eed46e7d-b369-4b50-841c-b785caf65b16'
+  defaultUploadLocationSource: 'volume:eed46e7d-b369-4b50-841c-b785caf65b16' # Drink Photos
   defaultUploadLocationSubpath: ''
   limit: ''
   localizeRelations: false
@@ -18,11 +18,11 @@ settings:
   showSiteMenu: false
   showUnpermittedFiles: false
   showUnpermittedVolumes: false
-  singleUploadLocationSource: 'volume:eed46e7d-b369-4b50-841c-b785caf65b16'
+  singleUploadLocationSource: 'volume:eed46e7d-b369-4b50-841c-b785caf65b16' # Drink Photos
   singleUploadLocationSubpath: ''
   source: null
   sources:
-    - 'volume:eed46e7d-b369-4b50-841c-b785caf65b16'
+    - 'volume:eed46e7d-b369-4b50-841c-b785caf65b16' # Drink Photos
   targetSiteId: null
   useSingleFolder: false
   validateRelatedElements: false

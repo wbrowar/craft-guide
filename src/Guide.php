@@ -188,22 +188,6 @@ class Guide extends Plugin
                 }
             }
 
-            // Insert JS into CP
-            Event::on(View::class, View::EVENT_BEFORE_RENDER_TEMPLATE, function() {
-//                // Add path to assets for use in JS files
-//                $assetDist = self::$view->getAssetManager()->getPublishedUrl('@wbrowar/guide/assetbundles/guide/dist');
-//                $js = 'window.WBGuideAssets = "' . $assetDist . '";';
-//
-//                // Enable logs into the browser console for easier JS debugging
-//                $js .= 'window.WBJsDevMode = window.WBJsDevMode || ' . (Craft::$app->getConfig()->getGeneral()->devMode ? 'true' : 'false') . ';';
-//                self::$view->registerJs($js, 1);
-
-                // Include user CSS
-                if (self::$pro && (self::$settings['rebrand'] ?? false)) {
-                    self::$view->registerCss($this->_generateCustomCssFromRebrand(self::$settings['rebrand']));
-                }
-            });
-
             // Add template routes
             Event::on(
                 View::class,
@@ -229,7 +213,7 @@ class Guide extends Plugin
                     $event->rules['guide/duplicate/<guideId:\d{1,}>'] = 'guide/guide/duplicate-guide';
 
                     // Templates
-                    $event->rules['guide'] = ['template' => 'guide/index', 'variables' => ['cpNavPlacement' => self::$plugin->placement->getPlacements(['group' => 'nav'], 'one'), 'settings' => self::$settings, 'userOperations' => self::$userOperations]];
+                    $event->rules['guide'] = ['template' => 'guide/index', 'variables' => ['cpNavPlacements' => self::$plugin->placement->getPlacements([ 'group' => 'nav' ], 'guideId'), 'settings' => self::$settings, 'userOperations' => self::$userOperations]];
                     $event->rules['guide/welcome'] = ['template' => 'guide/welcome', 'variables' => ['settings' => self::$settings]];
                     $event->rules['guide/page/<slug:(.*)>'] = ['template' => 'guide/page', 'variables' => ['settings' => self::$settings, 'userOperations' => self::$userOperations]];
                     $event->rules['guide/settings/general'] = ['template' => 'guide/settings', 'variables' => ['proEdition' => self::$pro, 'selectedTab' => 'general', 'settings' => self::$settings]];
@@ -281,19 +265,37 @@ class Guide extends Plugin
                 });
             }
 
-            // Add CP Buttons
-//            Craft::$app->view->hook('cp.assets.edit.details', function(&$context) {
-//                if ($context['element']->volumeId ?? false) {
-//                    // Render sidebar template
-//                    return self::$view->renderTemplate('guide/sidebar/sidebar', [
-//                        'guides' => self::$plugin->guide->getGuidesForUser(['parentUid' => $context['element']->volume->uid, 'parentType' => 'sidebar']),
-//                        'settings' => self::$settings,
-//                        'userOperations' => self::$userOperations,
-//                    ]);
-//                }
-//
-//                return false;
-//            });
+            // Add Guides to CP Groups
+            Craft::$app->view->hook('cp.assets.edit.details', function(&$context) {
+                $placements = self::$plugin->placement->getPlacements([
+                    'group' => 'asset',
+                    'groupId' => null,
+                ]);
+
+                $guideIds = [];
+                $teleportMap = [];
+                foreach ($placements as $placement) {
+                    $guideIds[] = $placement->guideId;
+
+                    if ($placement->selector) {
+                        $teleportMap['id-' . $placement->guideId] = $placement->selector;
+                    }
+                }
+
+                if (!empty($guideIds)) {
+                    $guides = self::$plugin->guide->getGuides(['id' => $guideIds]);
+                }
+
+                if ($context['element']->volumeId ?? false) {
+                    // Render sidebar template
+                    return self::$view->renderTemplate('guide/sidebar/sidebar', [
+                        'guides' => $guides,
+                        'teleportMap' => $teleportMap ?? null,
+                    ]);
+                }
+
+                return false;
+            });
 //            Craft::$app->view->hook('cp.categories.edit.details', function(&$context) {
 //                if ($context['category'] ?? false) {
 //                    // Render sidebar template
@@ -339,50 +341,6 @@ class Guide extends Plugin
                     $event->elements[] = GuideInclude::class;
                 }
             );
-
-            // Add modal template to footer
-            Event::on(View::class, View::EVENT_END_BODY, function(Event $event) {
-                if ((Craft::$app ?? false) && (Craft::$app->requestedAction ?? false) && (Craft::$app->requestedAction->id ?? false)) {
-//                    if (Craft::$app->requestedAction->id == 'edit-asset' && Craft::$app->controller->actionParams['assetId'] ?? false) {
-//                        $element = Craft::$app->getAssets()->getAssetById(Craft::$app->controller->actionParams['assetId']);
-//                        $volume = Craft::$app->getVolumes()->getVolumeById($element->volumeId);
-//
-//                        if ($element ?? false) {
-//                            $guides = self::$plugin->guide->getGuides([
-//                                'parentType' => 'sidebar',
-//                                'parentUid' => $volume->uid,
-//                            ]);
-//                        }
-//                    } else if (Craft::$app->requestedAction->id == 'edit-category' && Craft::$app->controller->actionParams['groupHandle'] ?? false) {
-//                        $element = Craft::$app->getCategories()->getGroupByHandle(Craft::$app->controller->actionParams['groupHandle']);
-//
-//                        if ($element ?? false) {
-//                            $guides = self::$plugin->guide->getGuides([
-//                                'parentType' => 'sidebar',
-//                                'parentUid' => $element->uid,
-//                            ]);
-//                        }
-//                    } else if (Craft::$app->requestedAction->id == 'edit-entry' && Craft::$app->controller->actionParams['section'] ?? false) {
-//                        $element = Craft::$app->getSections()->getSectionByHandle(Craft::$app->controller->actionParams['section']);
-//
-//                        if ($element ?? false) {
-//                            $guides = self::$plugin->guide->getGuides([
-//                                'parentType' => 'sidebar',
-//                                'parentUid' => $element->uid,
-//                            ]);
-//                        }
-//                    } else if (Craft::$app->requestedAction->id == 'edit-user') {
-//                        $guides = self::$plugin->guide->getGuides([
-//                            'parentType' => 'user',
-//                        ]);
-//                    }
-                }
-
-                if ($guides ?? false) {
-                    // todo change this to guide displays
-                    echo self::$view->renderTemplate('guide/_partials/render_guide_modals', ['guides' => $guides]);
-                }
-            });
 
             // Add our widgets
             Event::on(

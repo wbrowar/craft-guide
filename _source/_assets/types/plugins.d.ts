@@ -25,6 +25,11 @@ export interface Guide {
   title: string;
 }
 
+export interface GuideNavItem {
+  title: string;
+  slug: string;
+}
+
 export type GuideContentSource = 'field' | 'iframe' | 'template';
 
 export interface Placement {
