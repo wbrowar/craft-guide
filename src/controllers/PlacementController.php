@@ -39,6 +39,36 @@ class PlacementController extends Controller
     }
 
     /**
+     * Deletes a single guide based on ID.
+     *
+     * actions/guide/placement/delete-placement
+     *
+     * @return mixed
+     */
+    public function actionDeletePlacement()
+    {
+        $params = Json::decodeIfJson(Craft::$app->getRequest()->getBodyParams()['data']);
+        $results = [
+            'status' => 'error',
+            'error' => '',
+        ];
+
+        $placement = Guide::$plugin->placement->getPlacements([
+            'id' => $params['id'],
+        ], 'one');
+
+        if ($placement) {
+            $delete = $placement->delete();
+
+            if ($delete) {
+                $results['status'] = 'success';
+            }
+        }
+
+        return $this->asJson($results);
+    }
+
+    /**
      * Get all placements for the Organizer
      *
      * actions/guide/placement/get-all-placements
@@ -68,6 +98,8 @@ class PlacementController extends Controller
 
     /**
      * Save Placement
+     *
+     * actions/guide/placement/save-placement
      *
      * @return mixed
      */

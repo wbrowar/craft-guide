@@ -186,16 +186,7 @@ class Guide extends Plugin
 
                 // Add guides to the bottom of the page
                 Event::on(View::class, View::EVENT_END_BODY, function(Event $event) {
-                    $cpTrigger = Craft::$app->getConfig()->getGeneral()->cpTrigger ?? '';
-                    $uri = Craft::$app->getRequest()->getFullUri();
-                    
-                    if (substr($uri, 0, strlen($cpTrigger)) == $cpTrigger) {
-                        $uri = substr($uri, strlen($cpTrigger));
-                    }
-
-                    if (substr($uri, 0, 1) == '/') {
-                        $uri = substr($uri, 1);
-                    }
+                    $uri = self::$plugin->placement->formatUri(Craft::$app->getRequest()->getFullUri());
                     
                     $placements = self::$plugin->placement->getPlacements(['uri' => $uri]);
                     
@@ -311,7 +302,7 @@ class Guide extends Plugin
                         'groupId' => $context['element']->volumeId,
                     ];
                 }
-                return $this->_renderGuidesForTemplateHook('guide/sidebar/sidebar', $queries);
+                return $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['element'] ?? null);
             });
             Craft::$app->view->hook('cp.categories.edit.content', function(&$context) {
                 $queries = [[
@@ -325,7 +316,7 @@ class Guide extends Plugin
                         'groupId' => $context['group']->id,
                     ];
                 }
-                return $this->_renderGuidesForTemplateHook('guide/sidebar/sidebar', $queries);
+                return $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['element'] ?? null);
             });
             Craft::$app->view->hook('cp.entries.edit.content', function(&$context) {
                 $queries = [[
@@ -339,7 +330,7 @@ class Guide extends Plugin
                         'groupId' => $context['entry']->section->id,
                     ];
                 }
-                return $this->_renderGuidesForTemplateHook('guide/sidebar/sidebar', $queries);
+                return $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['element'] ?? null);
             });
             Craft::$app->view->hook('cp.globals.edit.content', function(&$context) {
                 $queries = [[
@@ -354,7 +345,7 @@ class Guide extends Plugin
                     ];
                 }
 
-                return $this->_renderGuidesForTemplateHook('guide/sidebar/sidebar', $queries);
+                return $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries);
             });
             Craft::$app->view->hook('cp.users.edit.content', function(&$context) {
                 $queries = [[
@@ -362,7 +353,7 @@ class Guide extends Plugin
                     'groupId' => null,
                 ]];
 
-                return $this->_renderGuidesForTemplateHook('guide/sidebar/sidebar', $queries);
+                return $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['user'] ?? null);
             });
 
             // Add custom field UI elements
@@ -521,7 +512,7 @@ class Guide extends Plugin
      * @param mixed $queries An array of Placement query parameters
      * @return string
      */
-    private function _renderGuidesForTemplateHook($template, $queries) {
+    private function _renderGuidesForTemplateHook($template, $queries, $element = null) {
         $guideIds = [];
         $teleportMap = [];
 
@@ -541,7 +532,8 @@ class Guide extends Plugin
             $guides = self::$plugin->guide->getGuides(['id' => $guideIds]);
 
             // Render sidebar template
-            return self::$view->renderTemplate('guide/sidebar/sidebar', [
+            return self::$view->renderTemplate($template, [
+                'element' => $element,
                 'guides' => $guides,
                 'teleportMap' => $teleportMap ?? null,
             ]);

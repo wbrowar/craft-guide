@@ -13,6 +13,7 @@
 {% if guides|length %}
   {% include 'guide/_partials/guide_display.twig' with {
     displayId: 'page',
+    element: element ?? null,
     guides: guides,
     teleportContainerClass: 'content-pane g-mb-3',
     teleportMethod: 'prepend',

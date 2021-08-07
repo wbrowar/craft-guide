@@ -12,8 +12,6 @@ namespace wbrowar\guide\services;
 
 use Craft;
 use craft\base\Component;
-use craft\elements\User;
-use craft\helpers\Json;
 use wbrowar\guide\Guide;
 use wbrowar\guide\models\Placement as PlacementModel;
 use wbrowar\guide\records\Placements;
@@ -28,10 +26,39 @@ class Placement extends Component
     // Public Methods
     // =========================================================================
 
-    // todo Add functions:
-    // todo getGuidesForPlacement - after getting placement data, query guides
-    // todo getPlacementsForGroup - get all placements for a group, like nav, section, etc ...
-    // todo getPlacementsForUri - get all placements for a specific URI
+
+    /**
+     * Format URI to be stored as a Placement URI
+     *
+     * @return mixed
+     */
+    public function formatUri($uri): mixed
+    {
+        $cpTrigger = Craft::$app->getConfig()->getGeneral()->cpTrigger ?? '';
+
+        // Remove leading slash
+        if (substr($uri, 0, 1) == '/') {
+            $uri = substr($uri, 1);
+        }
+
+        // Remove CP trigger
+        if (substr($uri, 0, strlen($cpTrigger)) == $cpTrigger) {
+            $uri = substr($uri, strlen($cpTrigger));
+        }
+
+        // Remove leading slash (if cpTrigger was included)
+        if (substr($uri, 0, 1) == '/') {
+            $uri = substr($uri, 1);
+        }
+
+        // Remove trailing slash
+        if (substr($uri, strlen($uri) - 1, 1) == '/') {
+            $uri = substr($uri, 1);
+        }
+
+        return $uri;
+    }
+
 
     /**
      * Get all group information for the Organizer
@@ -272,15 +299,13 @@ class Placement extends Component
             $record = new Placements();
         }
 
-        // todo remove beginning / and cpTrigger from URI
-
         $record->access = $model->access;
         $record->group = $model->group;
         $record->groupId = $model->groupId;
         $record->guideId = $model->guideId;
         $record->portalMethod = $model->portalMethod;
         $record->selector = $model->selector;
-        $record->uri = $model->uri;
+        $record->uri = $this->formatUri($model->uri);
 
         $record->save();
 

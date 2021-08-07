@@ -1,7 +1,7 @@
 <template>
   <Teleport :disabled="!teleportTo" :to="teleportTo">
     <div
-      class="guide-modal g-flex g-justify-center g-p-20 g-inset-0 g-z-[10]"
+      class="guide-modal g-flex g-items-center g-justify-center g-p-20 g-inset-0 g-z-[10]"
       :class="[teleportTo ? 'g-fixed' : 'g-absolute']"
       v-show="isOpen"
     >

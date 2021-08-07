@@ -25,6 +25,7 @@
             last:g-border-b
           "
           draggable="true"
+          title="Drag guide to an area of the Craft Control Panel"
           @dragstart="onGuideDragStart($event, guide.id)"
         >
           <h3>{{ guide.title }}</h3>
@@ -35,6 +36,7 @@
           >
             <a
               class="btn small"
+              title="Edit guide"
               type="button"
               :href="cpUrl(`guide/edit/${guide.id}?return=${cpUrl('guide/organizer')}`)"
               v-if="userOperations.editGuides"
@@ -42,13 +44,27 @@
             >
             <a
               class="btn small"
+              title="Delete guide"
               type="button"
               :href="cpUrl(`guide/delete/${guide.id}`)"
               v-if="userOperations.deleteGuides"
               >Delete</a
             >
-            <a class="btn small" type="button" :href="cpUrl(`guide/page/${guide.slug}`)">View</a>
-            <button class="btn small" type="button" @click="addPlacementForGuide(guide)">➕ Add</button>
+            <a
+              class="btn small"
+              title="View guide on a seperate page"
+              type="button"
+              :href="cpUrl(`guide/page/${guide.slug}`)"
+              >View</a
+            >
+            <button
+              class="btn small icon add"
+              title="Add guide to the Craft Control Panel"
+              type="button"
+              @click="addPlacementForGuide(guide)"
+            >
+              Add
+            </button>
           </div>
           <div class="g-mt-3" v-if="currentPreparingGuideId === guide.id">Edit this!</div>
         </li>
@@ -80,6 +96,7 @@
               @drop="onDropOnDropZone($event, 'nav', null)"
               @dragover.prevent
               @dragenter.prevent
+              @delete-placement-clicked="deletePlacement"
               @edit-placement-clicked="editPlacement"
               @placement-dropped="updatePlacement"
             />
@@ -100,6 +117,7 @@
               @drop="onDropOnDropZone($event, group.name, group.groupId || null)"
               @dragover.prevent
               @dragenter.prevent
+              @delete-placement-clicked="deletePlacement"
               @edit-placement-clicked="editPlacement"
               @placement-dropped="updatePlacement"
             />
@@ -117,6 +135,7 @@
               @drop="onDropOnDropZone($event, 'uri', null)"
               @dragover.prevent
               @dragenter.prevent
+              @delete-placement-clicked="deletePlacement"
               @edit-placement-clicked="editPlacement"
               @placement-dropped="updatePlacement"
               v-if="proEdition"
@@ -132,6 +151,11 @@
                 v-for="filter in groupFilters"
                 :key="filter.value"
                 class="g-group g-flex g-flex-nowrap g-items-start g-gap-1"
+                :title="
+                  selectedGroupFilters.includes(filter.value)
+                    ? 'Hide group and guides from Organizer'
+                    : 'Show group in Organizer'
+                "
               >
                 <input
                   :id="`group-filter-${filter.value}`"
@@ -170,6 +194,7 @@ import { log } from '../globals';
 import Modal from './Modal.vue';
 import OrganizerDropZone from './OrganizerDropZone.vue';
 import PlacementEditor from './PlacementEditor.vue';
+import SvgPlus from './SvgPlus.vue';
 import { Guide, Placement, PlacementGroup, PluginSettings, PluginUserOperations } from '~/types/plugins';
 
 export default defineComponent({
@@ -178,6 +203,7 @@ export default defineComponent({
     Modal,
     OrganizerDropZone,
     PlacementEditor,
+    SvgPlus,
   },
   props: {
     actionUrlGetAllPlacements: { type: String, required: true },
@@ -263,6 +289,16 @@ export default defineComponent({
         placement.groupId = null;
         this.savePlacement(placement);
       }
+    },
+    async deletePlacement(placement) {
+      await window.Craft?.postActionRequest(
+        'guide/placement/delete-placement',
+        { data: JSON.stringify(placement) },
+        (response, textStatus, request) => {
+          log('Deleting placement', response, textStatus, request);
+          this.getPlacementList();
+        }
+      );
     },
     editPlacement(placement) {
       this.$refs.editModal.open();
