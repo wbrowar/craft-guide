@@ -11,7 +11,7 @@
  */ #}
 
 {% if guides|length %}
-  {% include 'guide/_partials/display_guide.twig' with {
+  {% include 'guide/_partials/guide_display.twig' with {
     displayId: 'page',
     guides: guides,
     teleportContainerClass: 'content-pane g-mb-3',

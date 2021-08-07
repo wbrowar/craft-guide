@@ -1,5 +1,5 @@
 {% if guide.contentSource == 'iframe' and (guide.contentUrl ?? false) %}
-  <iframe class="guide_content__iframe" src="{{ guide.contentUrl }}" frameborder="0"></iframe>
+  <iframe class="g-iframe" src="{{ guide.contentUrl }}" frameborder="0"></iframe>
 {% else %}
   {% if guide.contentSource == 'template' and (guide.template ?? false) %}
     {% if craft.app.view.resolveTemplate('guide_template_path/' ~ guide.template) %}

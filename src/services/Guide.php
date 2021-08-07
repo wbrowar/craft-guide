@@ -50,7 +50,7 @@ class Guide extends Component
             $orderBy = $params['orderBy'];
             unset($params['orderBy']);
         } else {
-            $orderBy = 'dateCreated';
+            $orderBy = 'title';
         }
 
         switch ($queryType) {

@@ -13,7 +13,6 @@ namespace wbrowar\guide;
 use craft\events\DefineFieldLayoutElementsEvent;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\events\RegisterUserPermissionsEvent;
-use craft\fields\data\ColorData;
 use craft\helpers\FileHelper;
 use craft\helpers\Json;
 use craft\helpers\UrlHelper;
@@ -234,10 +233,6 @@ class Guide extends Plugin
                     if (self::$userOperations['useOrganizer']) {
                         $event->rules['guide/organizer'] = ['template' => 'guide/organizer', 'variables' => ['groupsData' => self::$plugin->placement->getPlacementGroups()]];
                     }
-                    if (self::$pro) {
-                        $event->rules['guide/settings/components'] = ['template' => 'guide/settings', 'variables' => ['components' => self::$plugin->guideComponents->getComponentsList(), 'proEdition' => self::$pro, 'selectedTab' => 'components', 'settings' => self::$settings]];
-                        $event->rules['guide/settings/rebrand'] = ['template' => 'guide/settings', 'variables' => ['proEdition' => self::$pro, 'selectedTab' => 'rebrand', 'settings' => self::$settings]];
-                    }
                 }
             );
         }
@@ -266,72 +261,71 @@ class Guide extends Plugin
             }
 
             // Add Guides to CP Groups
-            Craft::$app->view->hook('cp.assets.edit.details', function(&$context) {
-                $placements = self::$plugin->placement->getPlacements([
+            Craft::$app->view->hook('cp.assets.edit.content', function(&$context) {
+                $queries = [[
                     'group' => 'asset',
                     'groupId' => null,
-                ]);
-
-                $guideIds = [];
-                $teleportMap = [];
-                foreach ($placements as $placement) {
-                    $guideIds[] = $placement->guideId;
-
-                    if ($placement->selector) {
-                        $teleportMap['id-' . $placement->guideId] = $placement->selector;
-                    }
-                }
-
-                if (!empty($guideIds)) {
-                    $guides = self::$plugin->guide->getGuides(['id' => $guideIds]);
-                }
+                ]];
 
                 if ($context['element']->volumeId ?? false) {
-                    // Render sidebar template
-                    return self::$view->renderTemplate('guide/sidebar/sidebar', [
-                        'guides' => $guides,
-                        'teleportMap' => $teleportMap ?? null,
-                    ]);
+                    $queries[] = [
+                        'group' => 'assetVolume',
+                        'groupId' => $context['element']->volumeId,
+                    ];
+                }
+                return $this->_renderGuidesForTemplateHook('guide/sidebar/sidebar', $queries);
+            });
+            Craft::$app->view->hook('cp.categories.edit.content', function(&$context) {
+                $queries = [[
+                    'group' => 'category',
+                    'groupId' => null,
+                ]];
+
+                if ($context['group']->id ?? false) {
+                    $queries[] = [
+                        'group' => 'categoryGroup',
+                        'groupId' => $context['group']->id,
+                    ];
+                }
+                return $this->_renderGuidesForTemplateHook('guide/sidebar/sidebar', $queries);
+            });
+            Craft::$app->view->hook('cp.entries.edit.content', function(&$context) {
+                $queries = [[
+                    'group' => 'entry',
+                    'groupId' => null,
+                ]];
+
+                if ($context['entry']->section->id ?? false) {
+                    $queries[] = [
+                        'group' => 'section',
+                        'groupId' => $context['entry']->section->id,
+                    ];
+                }
+                return $this->_renderGuidesForTemplateHook('guide/sidebar/sidebar', $queries);
+            });
+            Craft::$app->view->hook('cp.globals.edit.content', function(&$context) {
+                $queries = [[
+                    'group' => 'global',
+                    'groupId' => null,
+                ]];
+
+                if ($context['globalSet']->id ?? false) {
+                    $queries[] = [
+                        'group' => 'globalSet',
+                        'groupId' => $context['globalSet']->id,
+                    ];
                 }
 
-                return false;
+                return $this->_renderGuidesForTemplateHook('guide/sidebar/sidebar', $queries);
             });
-//            Craft::$app->view->hook('cp.categories.edit.details', function(&$context) {
-//                if ($context['category'] ?? false) {
-//                    // Render sidebar template
-//                    return self::$view->renderTemplate('guide/sidebar/sidebar', [
-//                        'guides' => self::$plugin->guide->getGuidesForUser(['parentUid' => $context['category']->group->uid, 'parentType' => 'sidebar']),
-//                        'settings' => self::$settings,
-//                        'userOperations' => self::$userOperations,
-//                    ]);
-//                }
-//
-//                return false;
-//            });
-//            Craft::$app->view->hook('cp.entries.edit.details', function(&$context) {
-//                if ($context['entry'] ?? false) {
-//                    // Render sidebar template
-//                    return self::$view->renderTemplate('guide/sidebar/sidebar', [
-//                        'guides' => self::$plugin->guide->getGuidesForUser(['parentUid' => $context['entry']->section->uid, 'parentType' => 'sidebar']),
-//                        'settings' => self::$settings,
-//                        'userOperations' => self::$userOperations,
-//                    ]);
-//                }
-//
-//                return false;
-//            });
-//            Craft::$app->view->hook('cp.users.edit.details', function(&$context) {
-//                if ($context['user'] ?? false) {
-//                    // Render sidebar template
-//                    return self::$view->renderTemplate('guide/sidebar/sidebar', [
-//                        'guides' => self::$plugin->guide->getGuidesForUser(['parentType' => 'user']),
-//                        'settings' => self::$settings,
-//                        'userOperations' => self::$userOperations,
-//                    ]);
-//                }
-//
-//                return false;
-//            });
+            Craft::$app->view->hook('cp.users.edit.content', function(&$context) {
+                $queries = [[
+                    'group' => 'user',
+                    'groupId' => null,
+                ]];
+
+                return $this->_renderGuidesForTemplateHook('guide/sidebar/sidebar', $queries);
+            });
 
             // Add custom field UI elements
             Event::on(
@@ -437,65 +431,6 @@ class Guide extends Plugin
     // =========================================================================
 
     /**
-     * @return string
-     */
-    private function _generateCustomCssFromRebrand($rebrand):string
-    {
-        $css = '';
-
-        $properties = [
-            'gridGap' => 'grid-gap',
-            'headerIconWidth' => 'header-icon-width',
-            'headerIconHeight' => 'header-icon-height',
-            'maxWidthWrapper' => 'max-width-wrapper',
-            'maxWidthText' => 'max-width-text',
-        ];
-
-        foreach ($properties as $key => $property) {
-            if ($rebrand[$key] ?? false) {
-                $css .= '--' . $property . ':' . $rebrand[$key] . ';';
-            }
-        }
-
-        $colors = [
-            'anchor' => 'anchor',
-            'anchorHover' => 'anchor_hover',
-            'border' => 'border',
-            'buttonBg' => 'button_bg',
-            'buttonText' => 'button_text',
-            'codeBg' => 'code_bg',
-            'codeText' => 'code_text',
-            'contentBg' => 'content_bg',
-            'contentHeader' => 'content_header',
-            'contentText' => 'content_text',
-            'headerBg' => 'header_bg',
-            'headerText' => 'header_text',
-            'pageSidebarBg' => 'page_sidebar_bg',
-            'pageSidebarButtonBg' => 'page_sidebar_button_bg',
-            'pageSidebarButtonText' => 'page_sidebar_button_text',
-            'pageSidebarButtonTextHover' => 'page_sidebar_button_text_hover',
-            'tableHeadBg' => 'table_head_bg',
-            'tableHeadText' => 'table_head_text',
-            'tip' => 'tip',
-        ];
-
-        foreach ($colors as $key => $color) {
-            if ($rebrand[$key] ?? false) {
-                $colorData = new ColorData($rebrand[$key]);
-                $css .= '--color-' . $color . '-rgb:' . $colorData->getRed() . ',' . $colorData->getGreen() . ',' . $colorData->getBlue() . ';';
-            }
-        }
-
-        $css = '.guide_styles{' . $css . '}';
-
-        if ($rebrand['customCss']) {
-            $css .= $rebrand['customCss'];
-        }
-
-        return $css;
-    }
-
-    /**
      * Get paths of all JS and CSS files generated by Vite
      *
      * @param string $filename the name of the Vite entry file, usually 'main.ts'
@@ -539,6 +474,42 @@ class Guide extends Plugin
         }
 
         return $assetPaths;
+    }
+
+    /**
+     * Render guides
+     *
+     * @param string $template The template to be rendered
+     * @param mixed $queries An array of Placement query parameters
+     * @return string
+     */
+    private function _renderGuidesForTemplateHook($template, $queries) {
+        $guideIds = [];
+        $teleportMap = [];
+
+        foreach ($queries as $query) {
+            $placements = self::$plugin->placement->getPlacements($query);
+
+            foreach ($placements as $placement) {
+                $guideIds[] = $placement->guideId;
+
+                if ($placement->selector) {
+                    $teleportMap['id-' . $placement->guideId] = $placement->selector;
+                }
+            }
+        }
+
+        if (!empty($guideIds)) {
+            $guides = self::$plugin->guide->getGuides(['id' => $guideIds]);
+
+            // Render sidebar template
+            return self::$view->renderTemplate('guide/sidebar/sidebar', [
+                'guides' => $guides,
+                'teleportMap' => $teleportMap ?? null,
+            ]);
+        }
+
+        return '';
     }
 
     /**

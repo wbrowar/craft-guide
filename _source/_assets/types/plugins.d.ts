@@ -52,12 +52,12 @@ export type PlacementGroup =
   | 'category'
   | 'categoryGroup'
   | 'entry'
-  | 'entryType'
+  | 'global'
+  | 'globalSet'
   | 'section'
   | 'uiElement'
   | 'uri'
   | 'user'
-  | 'userGroup'
   | 'widget';
 
 export interface PluginSettings {

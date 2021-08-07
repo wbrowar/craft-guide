@@ -29,8 +29,10 @@
         >
           <h3>{{ guide.title }}</h3>
           <p class="g-text-text" v-if="guide.summary">{{ guide.summary }}</p>
-          <div class="g-hidden g-mt-1 g-space-x-1 group-focus:g-block group-hover:g-block">
-            <button class="btn small" type="button" @click="addPlacementForGuide(guide)">➕ Add</button>
+          <div
+            class="g-mt-1 g-space-x-1 group-focus:g-block group-hover:g-block"
+            :class="[currentPreparingGuideId === guide.id ? 'g-block' : 'g-hidden']"
+          >
             <a
               class="btn small"
               type="button"
@@ -46,7 +48,9 @@
               >Delete</a
             >
             <a class="btn small" type="button" :href="cpUrl(`guide/page/${guide.slug}`)">View</a>
+            <button class="btn small" type="button" @click="addPlacementForGuide(guide)">➕ Add</button>
           </div>
+          <div class="g-mt-3" v-if="currentPreparingGuideId === guide.id">Edit this!</div>
         </li>
       </ul>
 
@@ -54,21 +58,38 @@
         <a class="btn add icon submit" :href="cpUrl('guide/new')">New Guide</a>
       </div>
     </div>
-    <div class="g-min-h-[850px] g-h-[70vh] g-bg-select-dark g-rounded-r-lg g-relative g-overflow-auto">
+    <div class="g-min-h-[850px] g-bg-select-dark g-rounded-r-lg g-relative">
       <div class="g-p-6">
         <div class="g-text-select-light">
           <h2>Craft CP</h2>
-          <p>Drag guides to different areas around the Craft CP. Click "Edit" for more detailed settings.</p>
+          <p>Drag guides to different areas around the Craft CP or add a guide to a specific Control Panel page.</p>
         </div>
         <div class="g-grid g-grid-cols-[1fr,150px] g-gap-4 g-mt-6">
           <div class="g-grid g-grid-cols-2 g-gap-5 md:g-grid-cols-4">
+            <OrganizerDropZone
+              :class="{
+                'g-col-span-3': gridView === 'grid',
+                'g-col-start-1 g-col-span-3': gridView === 'list',
+              }"
+              :header-size="3"
+              description="The Guide CP Section"
+              header="Guide"
+              group="nav"
+              :guides="guides"
+              :placements="placementsForGroup('nav', null)"
+              @drop="onDropOnDropZone($event, 'nav', null)"
+              @dragover.prevent
+              @dragenter.prevent
+              @edit-placement-clicked="editPlacement"
+              @placement-dropped="updatePlacement"
+            />
             <OrganizerDropZone
               v-for="group in filteredDropZones"
               :key="group.name"
               :class="{
                 'g-col-span-3': group.columns === 3 && gridView === 'grid',
                 'g-col-span-2': group.columns === 2 && gridView === 'grid',
-                'g-col-start-1 g-col-span-2': gridView === 'list',
+                'g-col-start-1 g-col-span-3': gridView === 'list',
               }"
               :header-size="group.headerSize"
               :description="group.description || null"
@@ -82,55 +103,65 @@
               @edit-placement-clicked="editPlacement"
               @placement-dropped="updatePlacement"
             />
+            <OrganizerDropZone
+              :class="{
+                'g-col-span-3': gridView === 'grid',
+                'g-col-start-1 g-col-span-3': gridView === 'list',
+              }"
+              :header-size="3"
+              description="Individual pages in the CP"
+              header="Control Panel Pages"
+              group="uri"
+              :guides="guides"
+              :placements="placementsForGroup('uri', null)"
+              @drop="onDropOnDropZone($event, 'uri', null)"
+              @dragover.prevent
+              @dragenter.prevent
+              @edit-placement-clicked="editPlacement"
+              @placement-dropped="updatePlacement"
+              v-if="proEdition"
+            />
           </div>
           <div class="g-relative g-text-select-light" v-if="proEdition">
-            <div class="g--mt-2 g-pt-2 g-sticky g-top-0">
-              <div class="g-space-x-1">
-                <button class="g-text-white" type="button" @click="setGridView('list')">List</button>
-                <button class="g-text-white" type="button" @click="setGridView('grid')">Grid</button>
-              </div>
-              <ul class="g-space-y-2">
-                <li
-                  v-for="filter in groupFilters"
-                  :key="filter.value"
-                  class="g-group g-flex g-flex-nowrap g-items-start g-gap-1"
-                >
-                  <input
-                    :id="`group-filter-${filter.value}`"
-                    class="g-mt-0.5 g-w-4 g-h-4"
-                    :checked="selectedGroupFilters.includes(filter.value)"
-                    type="checkbox"
-                    @change="toggleSelectedGroupFilter(filter.value)"
-                  />
-                  <label class="group-hover:g-text-white" :for="`group-filter-${filter.value}`">{{
-                    filter.label
-                  }}</label>
-                </li>
-              </ul>
+            <div class="g-space-x-1">
+              <button class="g-text-white" type="button" @click="setGridView('list')">List</button>
+              <button class="g-text-white" type="button" @click="setGridView('grid')">Grid</button>
             </div>
+            <ul class="g-space-y-2">
+              <li
+                v-for="filter in groupFilters"
+                :key="filter.value"
+                class="g-group g-flex g-flex-nowrap g-items-start g-gap-1"
+              >
+                <input
+                  :id="`group-filter-${filter.value}`"
+                  class="g-mt-0.5 g-w-4 g-h-4"
+                  :checked="selectedGroupFilters.includes(filter.value)"
+                  type="checkbox"
+                  @change="toggleSelectedGroupFilter(filter.value)"
+                />
+                <label class="group-hover:g-text-white" :for="`group-filter-${filter.value}`">{{ filter.label }}</label>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
     </div>
+
+    <Modal ref="editModal">
+      <PlacementEditor
+        ref="placementEditor"
+        :groups="groups"
+        :placement="currentEditPlacement"
+        @canceled="editPlacementClose"
+        @saved="editPlacementClose"
+      />
+    </Modal>
   </div>
 
   <Teleport to="#guide-action-buttons">
     <a class="btn add icon submit" :href="cpUrl('guide/new')" v-if="userOperations.editGuides">New Guide</a>
   </Teleport>
-
-  <Modal ref="editModal" v-if="proEdition">
-    <template #header>
-      <h2 class="g-mb-0">Edit</h2>
-      <div class="g-inline-block g-space-x-1">
-        <button class="btn submit" type="button" @click="editPlacementClose">Save</button>
-        <button class="btn" type="button" @click="editPlacementClose">Cancel</button>
-      </div>
-    </template>
-
-    <div class="g-p-6">
-      <p>Hello! {{ currentEditPlacement.group }}</p>
-    </div>
-  </Modal>
 </template>
 
 <script lang="ts">
@@ -138,6 +169,7 @@ import { defineComponent, PropType, reactive, toRefs } from 'vue';
 import { log } from '../globals';
 import Modal from './Modal.vue';
 import OrganizerDropZone from './OrganizerDropZone.vue';
+import PlacementEditor from './PlacementEditor.vue';
 import { Guide, Placement, PlacementGroup, PluginSettings, PluginUserOperations } from '~/types/plugins';
 
 export default defineComponent({
@@ -145,6 +177,7 @@ export default defineComponent({
   components: {
     Modal,
     OrganizerDropZone,
+    PlacementEditor,
   },
   props: {
     actionUrlGetAllPlacements: { type: String, required: true },
@@ -160,6 +193,7 @@ export default defineComponent({
   setup: (props) => {
     const state = reactive({
       currentEditPlacement: null as Placement | null,
+      currentPreparingGuideId: null as Placement | null,
       gridView: 'grid' as 'list' | 'grid',
       groups: JSON.parse(props.groupsData),
       placements: [] as Placement[],
@@ -182,7 +216,7 @@ export default defineComponent({
       state.selectedGroupFilters = JSON.parse(localStorage.getItem('guide:organizer:selectedGroupFilters'));
     } else {
       state.selectedGroupFilters = selectedGroupFilters.filter((name) => {
-        return !(['assetVolume', 'categoryGroup', 'entryType', 'userGroup'] as PlacementGroup).includes(name);
+        return !(['assetVolume', 'categoryGroup', 'globalSet', 'user'] as PlacementGroup).includes(name);
       });
     }
 
@@ -197,9 +231,11 @@ export default defineComponent({
   },
   computed: {
     filteredDropZones() {
-      return this.groups.filter((group) => {
-        return this.selectedGroupFilters.includes(group.name);
-      });
+      return this.proEdition
+        ? this.groups.filter((group) => {
+            return this.selectedGroupFilters.includes(group.name);
+          })
+        : [];
     },
   },
   methods: {
@@ -214,22 +250,41 @@ export default defineComponent({
         selector: null,
         uri: null,
       };
-      this.savePlacement(placement);
-      log('Adding placement for guide', guide, group, groupId);
+
+      if (this.proEdition) {
+        if (group) {
+          log('Adding placement for guide', guide, group, groupId);
+          this.savePlacement(placement);
+        } else {
+          this.editPlacement(placement);
+        }
+      } else {
+        placement.group = 'nav';
+        placement.groupId = null;
+        this.savePlacement(placement);
+      }
     },
     editPlacement(placement) {
       this.$refs.editModal.open();
       this.currentEditPlacement = { ...placement };
+      this.$refs.placementEditor.resetFields();
     },
-    editPlacementClose() {
+    editPlacementClose(placement = null) {
+      if (placement) {
+        this.savePlacement(placement);
+      }
       this.$refs.editModal.close();
       this.currentEditPlacement = null;
     },
     async getPlacementList() {
-      window.Craft?.postActionRequest('guide/placement/get-all-placements', null, (response, textStatus, request) => {
-        log('Getting placements', response, textStatus, request);
-        this.placements = response;
-      });
+      await window.Craft?.postActionRequest(
+        'guide/placement/get-all-placements',
+        null,
+        (response, textStatus, request) => {
+          log('Getting placements', response, textStatus, request);
+          this.placements = response;
+        }
+      );
     },
     onDropOnDropZone(e, group, groupId = null) {
       log('Dropping onto zone', group, groupId);
@@ -254,19 +309,8 @@ export default defineComponent({
         return placement.group === group && (groupId ? placement.groupId === groupId : true);
       });
     },
-    toggleSelectedGroupFilter(value) {
-      const index = this.selectedGroupFilters.indexOf(value);
-
-      if (index === -1) {
-        this.selectedGroupFilters.push(value);
-      } else {
-        this.selectedGroupFilters.splice(index, 1);
-      }
-
-      localStorage.setItem('guide:organizer:selectedGroupFilters', JSON.stringify(this.selectedGroupFilters));
-    },
-    savePlacement(placement) {
-      window.Craft?.postActionRequest(
+    async savePlacement(placement) {
+      await window.Craft?.postActionRequest(
         'guide/placement/save-placement',
         { data: JSON.stringify(placement) },
         (response, textStatus, request) => {
@@ -278,6 +322,17 @@ export default defineComponent({
     setGridView(view) {
       this.gridView = view;
       localStorage.setItem('guide:organizer:gridView', view);
+    },
+    toggleSelectedGroupFilter(value) {
+      const index = this.selectedGroupFilters.indexOf(value);
+
+      if (index === -1) {
+        this.selectedGroupFilters.push(value);
+      } else {
+        this.selectedGroupFilters.splice(index, 1);
+      }
+
+      localStorage.setItem('guide:organizer:selectedGroupFilters', JSON.stringify(this.selectedGroupFilters));
     },
     updatePlacement(placementId, group, groupId = null) {
       log(`Updating placement: ${placementId} group to: ${group}`);

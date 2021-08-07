@@ -11,7 +11,7 @@
  */ #}
 
 {% if (guide ?? false) and proEdition %}
-  {% include 'guide/_partials/display_guide.twig' with { displayId: 'widget', guides: [guide] } only %}
+  {% include 'guide/_partials/guide_display.twig' with { displayId: 'widget', guides: [guide] } only %}
 {% else %}
   <div style="padding: 20px;">The guide that was displayed here is no longer available. Select another guide in this widget’s settings.</div>
 {% endif %}

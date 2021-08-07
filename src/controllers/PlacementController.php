@@ -24,23 +24,11 @@ use wbrowar\guide\models\Placement as PlacementModel;
  */
 class PlacementController extends Controller
 {
-
-    // Protected Properties
-    // =========================================================================
-
-    /**
-     * @var    bool|array Allows anonymous access to this controller's actions.
-     *         The actions must be in 'kebab-case'
-     * @access protected
-     */
-//    protected $allowAnonymous = ['get-all-placements'];
-
     // Public Methods
     // =========================================================================
 
     // todo Add functions:
     // todo actionDeletePlacement
-    // todo actionSavePlacement
 
     /**
      * @return mixed
@@ -51,7 +39,7 @@ class PlacementController extends Controller
     }
 
     /**
-     * Saves Guide CP navigation for site.
+     * Get all placements for the Organizer
      *
      * actions/guide/placement/get-all-placements
      *
@@ -61,11 +49,25 @@ class PlacementController extends Controller
     {
         $placements = Guide::$plugin->placement->getPlacements();
 
-        return $this->asJson($placements);
+        $placementsCleaned = [];
+        foreach ($placements as $placement) {
+            if ($placement['dateCreated'] ?? false) {
+                unset($placement['dateCreated']);
+            }
+            if ($placement['dateUpdated'] ?? false) {
+                unset($placement['dateUpdated']);
+            }
+            if ($placement['uid'] ?? false) {
+                unset($placement['uid']);
+            }
+            $placementsCleaned[] = $placement;
+        }
+
+        return $this->asJson($placementsCleaned);
     }
 
     /**
-     * Saves Guide CP navigation for site.
+     * Save Placement
      *
      * @return mixed
      */

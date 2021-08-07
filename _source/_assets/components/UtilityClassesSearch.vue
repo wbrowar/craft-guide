@@ -38,6 +38,7 @@ export default defineComponent({
       'g-space-y-1',
       'g-space-y-2',
       'g-space-y-3',
+      'g-space-y-6',
       'g-text-left',
       'g-text-center',
       'g-text-right',
@@ -45,6 +46,7 @@ export default defineComponent({
       'g-text-sm',
       'g-font-bold',
       'g-cursor-pointer',
+      'g-shadow-lg',
       'g-duration-150',
     ];
 

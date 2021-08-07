@@ -47,15 +47,15 @@ class Placement extends Component
         $headerMd = 2;
         $headerSm = 1;
 
-        $groups = [[
-            'columns' => $colLg,
-            'description' => 'The Guide CP Section',
-            'header' => 'Guide',
-            'headerSize' => $headerLg,
-            'label' => 'Guide',
-            'name' => 'nav',
-            'groupId' => null,
-        ]];
+//        $groups = [[
+//            'columns' => $colLg,
+//            'description' => 'The Guide CP Section',
+//            'header' => 'Guide',
+//            'headerSize' => $headerLg,
+//            'label' => 'Guide',
+//            'name' => 'nav',
+//            'groupId' => null,
+//        ]];
         
         if (Guide::$pro) {
             // Assets and asset volumes - if any
@@ -112,7 +112,6 @@ class Placement extends Component
                 }
             }
 
-
             // Entries and sections - if any
             $sections = Craft::$app->getSections()->getAllSections();
 
@@ -137,22 +136,33 @@ class Placement extends Component
                         'name' => 'section',
                         'groupId' => intval($section->id),
                     ];
+                }
+            }
 
-                    if ($section->type != $section::TYPE_SINGLE) {
-                        $entryTypesForSection = $section->getEntryTypes();
+            // Entries and sections - if any
+            $globalSets = Craft::$app->getGlobals()->getAllSets();
 
-                        foreach ($entryTypesForSection as $entryType) {
-                            $groups[] = [
-                                'columns' => $colSm,
-                                'description' => 'Entries in the ' . $entryType->name . ' type',
-                                'header' => $entryType->name,
-                                'headerSize' => $headerSm,
-                                'label' => 'Entry Type',
-                                'name' => 'entryType',
-                                'groupId' => intval($entryType->id),
-                            ];
-                        }
-                    }
+            if ($globalSets ?? false) {
+                $groups[] = [
+                    'columns' => $colSm,
+                    'description' => 'All globals edit pages',
+                    'header' => 'Globals',
+                    'headerSize' => $headerMd,
+                    'label' => 'Globals',
+                    'name' => 'global',
+                    'groupId' => null,
+                ];
+
+                foreach ($globalSets as $globalSet) {
+                    $groups[] = [
+                        'columns' => $colSm,
+                        'description' => $globalSet->name . 'global edit pages',
+                        'header' => $globalSet->name,
+                        'headerSize' => $headerSm,
+                        'label' => 'Global Sets',
+                        'name' => 'globalSet',
+                        'groupId' => intval($globalSet->id),
+                    ];
                 }
             }
 
@@ -167,20 +177,6 @@ class Placement extends Component
                 'groupId' => null,
             ];
 
-            $userGroups = Craft::$app->getUserGroups()->getAllGroups();
-
-            foreach ($userGroups as $userGroup) {
-                $groups[] = [
-                    'columns' => $colSm,
-                    'description' => 'Entries in the ' . $userGroup->name . ' type',
-                    'header' => $userGroup->name,
-                    'headerSize' => $headerMd,
-                    'label' => 'User Groups',
-                    'name' => 'userGroup',
-                    'groupId' => intval($userGroup->id),
-                ];
-            }
-
             // Widgets
             $groups[] = [
                 'columns' => $colMd,
@@ -193,26 +189,26 @@ class Placement extends Component
             ];
 
             // UI Elements
-            $groups[] = [
-                'columns' => $colMd,
-                'description' => 'Guides added to UI Elements',
-                'header' => 'UI Elements',
-                'headerSize' => $headerMd,
-                'label' => 'UI Elements',
-                'name' => 'uiElement',
-                'groupId' => null,
-            ];
+//            $groups[] = [
+//                'columns' => $colMd,
+//                'description' => 'Guides added to UI Elements',
+//                'header' => 'UI Elements',
+//                'headerSize' => $headerMd,
+//                'label' => 'UI Elements',
+//                'name' => 'uiElement',
+//                'groupId' => null,
+//            ];
 
             // URIs
-            $groups[] = [
-                'columns' => $colLg,
-                'description' => 'Individual pages in the CP',
-                'header' => 'Control Panel URIs',
-                'headerSize' => $headerLg,
-                'label' => 'Control Panel URIs',
-                'name' => 'uri',
-                'groupId' => null,
-            ];
+//            $groups[] = [
+//                'columns' => $colLg,
+//                'description' => 'Individual pages in the CP',
+//                'header' => 'Control Panel Pages',
+//                'headerSize' => $headerLg,
+//                'label' => 'Control Panel Pages',
+//                'name' => 'uri',
+//                'groupId' => null,
+//            ];
         }
 
         return $groups;

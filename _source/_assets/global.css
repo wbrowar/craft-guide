@@ -4,16 +4,28 @@
 
 @tailwind base;
 
-.guide img {
+.fpo {
+  background-color: rgba(255, 0, 255, 0.9);
+  outline: rgba(255, 0, 255, 0.9) solid 4px;
+  color: white !important;
+}
+
+.guide {
+  @apply g-space-y-6;
+}
+
+.guide .g-image {
+  @apply g-rounded-lg g-shadow-lg g-text-text;
   display: block;
   max-width: 100%;
   height: auto;
   line-height: 0;
 }
 
-.guide .g-video {
+.guide :is(.g-iframe, .g-video) {
+  @apply g-rounded-lg g-shadow-lg g-text-text;
   display: block;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: var(--aspect-ratio, 16 / 9);
   width: 100%;
   height: auto;
   line-height: 0;

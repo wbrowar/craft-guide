@@ -1,13 +1,12 @@
 <template>
-  <Teleport to="body">
-    <div class="guide-modal g-p-20 g-fixed g-inset-0 g-z-[500]" v-if="isOpen">
-      <div class="g-w-full g-h-full g-bg-white g-rounded-lg">
-        <div class="g-grid g-grid-rows-[auto,1fr] g-relative g-h-full g-rounded-lg g-bg-matrix-block">
-          <div class="g-p-3 g-flex g-flex-nowrap g-items-center g-justify-between g-rounded-t-lg g-bg-matrix-titlebar">
-            <slot name="header"></slot>
-          </div>
-          <div class="g-overflow-auto"><slot></slot></div>
-        </div>
+  <Teleport :disabled="!teleportTo" :to="teleportTo">
+    <div
+      class="guide-modal g-flex g-justify-center g-p-20 g-inset-0 g-z-[10]"
+      :class="[teleportTo ? 'g-fixed' : 'g-absolute']"
+      v-show="isOpen"
+    >
+      <div class="g-w-full g-h-full g-max-w-[800px] g-max-h-[600px] g-bg-white g-rounded-lg g-shadow-lg">
+        <slot></slot>
       </div>
     </div>
   </Teleport>
@@ -19,7 +18,9 @@ import { defineComponent, reactive, toRefs } from 'vue';
 export default defineComponent({
   name: 'Modal',
   components: {},
-  props: {},
+  props: {
+    teleportTo: { type: String, default: null },
+  },
   emits: ['closed', 'opened'],
   setup: () => {
     const state = reactive({

@@ -44,14 +44,6 @@ class GuideVariable
     /**
      * @return mixed
      */
-    public function getAllForUser($params = [], $queryType = 'all')
-    {
-        return Guide::$plugin->guide->getGuidesForUser($params, $queryType);
-    }
-
-    /**
-     * @return mixed
-     */
     public function getOne($params = [])
     {
         return Guide::$plugin->guide->getGuides($params, 'one');
@@ -60,7 +52,7 @@ class GuideVariable
     /**
      * @return string
      */
-    public function include($params = [])
+    public function include($params = []): string
     {
         $guide = Guide::$plugin->guide->getGuides($params, 'one');
 
@@ -86,6 +78,9 @@ class GuideVariable
                 break;
             case 'myCompanyName':
                 $value = !empty(Guide::$settings->myCompanyName) ? Guide::$settings->myCompanyName : Template::raw('<span class="fpo">My Company Name</span>');
+                break;
+            case 'projectName':
+                $value = !empty(Guide::$settings->projectName) ? Guide::$settings->projectName : Template::raw('<span class="fpo">My Company Name</span>');
                 break;
         }
 
