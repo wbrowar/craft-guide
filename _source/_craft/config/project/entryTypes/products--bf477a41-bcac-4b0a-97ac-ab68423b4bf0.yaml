@@ -4,6 +4,9 @@ fieldLayouts:
       -
         elements:
           -
+            heading: heading
+            type: craft\fieldlayoutelements\Heading
+          -
             autocapitalize: true
             autocomplete: false
             autocorrect: true
@@ -25,7 +28,15 @@ fieldLayouts:
             title: null
             type: craft\fieldlayoutelements\EntryTitleField
             warning: null
-            width: 75
+            width: 50
+          -
+            type: wbrowar\guide\fieldlayoutelements\GuideDisplay
+            uiId: ONxnGM08QpCv9Lq
+            width: 100
+        name: Content
+        sortOrder: 1
+      -
+        elements:
           -
             fieldUid: 372d45f0-68b1-40e9-91c5-83db53bdb4db
             instructions: null
@@ -34,7 +45,7 @@ fieldLayouts:
             tip: null
             type: craft\fieldlayoutelements\CustomField
             warning: null
-            width: 25
+            width: 100
           -
             fieldUid: 00d24b9b-4fb2-48de-aae0-1fd8aef75302
             instructions: null
@@ -53,8 +64,8 @@ fieldLayouts:
             type: craft\fieldlayoutelements\CustomField
             warning: null
             width: 100
-        name: Content
-        sortOrder: 1
+        name: 'Product Details'
+        sortOrder: 2
 handle: products
 hasTitleField: true
 name: Products

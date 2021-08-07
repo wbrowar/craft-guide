@@ -13,31 +13,33 @@
 {% if guides|length %}
   {% set displaySlug = 'guide-' ~ (displayId ?? 'display') %}
 
-  {% if guides|length > 1 %}
-    {% set guideNav = [] %}
-    {% set guideNav = guides|map((guide) => { slug: guide.slug, title: guide.title }) %}
-  {% endif %}
+  {% set guideNav = [] %}
+  {% for guide in guides %}
+    {% if not (teleportMap['id-' ~ guide.id] ?? false) %}
+      {% set guideNav = guideNav|merge([{ id: guide.id, slug: guide.slug, title: guide.title }]) %}
+    {% endif %}
+  {% endfor %}
 
   <div
     data-guide-display="{{ displaySlug }}"
-    {% if guideNav ?? false %}data-guide-nav-data="{{ guideNav|json_encode }}"{% endif %}
+    {% if guideNav|length > 1 %}data-guide-nav-data="{{ guideNav|json_encode }}"{% endif %}
     {% if teleportContainerClass ?? false %}data-teleport-container-class="{{ teleportContainerClass }}"{% endif %}
     {% if teleportMethod ?? false %}data-teleport-method="{{ teleportMethod }}"{% endif %}
     {% if teleportSelector ?? false %}data-teleport-selector="{{ teleportSelector }}"{% endif %}
   ></div>
   <template id="{{ displaySlug }}">
     <teleport :to="teleportTarget" :disabled="!teleportTarget">
-      <div{% if guideNav ?? false %} class="g-grid g-grid-cols-[var(--grid-cols)] g-gap-6 g-relative" style="--grid-cols: 1fr 200px;"{% endif %}>
+      <div{% if guideNav|length > 1 %} class="g-grid g-grid-cols-[var(--grid-cols)] g-gap-6 g-relative" style="--grid-cols: 1fr 200px;"{% endif %}>
         <div>
           {% for guide in guides %}
             {% if teleportMap['id-' ~ guide.id] ?? false %}<teleport to="{{ teleportMap['id-' ~ guide.id] }}">{% endif %}
-            <div class="guide"{% if guideNav ?? false %} v-if="currentGuide === '{{ guide.slug }}'"{% endif %}>
+            <div class="guide"{% if not (teleportMap['id-' ~ guide.id] ?? false) and (guideNav|length > 1) %} v-if="currentGuide === '{{ guide.slug }}'"{% endif %}>
               {{ include('guide/_partials/render_content', { guide: guide }) }}
             </div>
             {% if teleportMap['id-' ~ guide.id] ?? false %}</teleport>{% endif %}
           {% endfor %}
         </div>
-        {% if guideNav ?? false %}
+        {% if guideNav|length > 1 %}
           <div>
             <div class="g-sticky g-top-16">
               <h2>Guides</h2>

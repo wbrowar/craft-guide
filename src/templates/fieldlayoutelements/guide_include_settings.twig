@@ -4,42 +4,19 @@
  * UI element field
  *
  * @author    Will Browar
- * @copyright Copyright (c) 2020 Will Browar
+ * @copyright Copyright (c) 2021 Will Browar
  * @link      https://wbrowar.com
  * @package   Guide
- * @since     2.2.0
+ * @since     3.0.0
  */ #}
 
 {% import "_includes/forms" as forms %}
 
-{% set guideOptions = [] %}
-{% if selectableGuides|length %}
-  {% for item in selectableGuides %}
-    {% set guideOptions = guideOptions|merge([{
-      value: item.id,
-      label: item.title,
-    }]) %}
-  {% endfor %}
-
-  {{ forms.selectField({
-    label: 'Guide',
-    tip: 'An `element` variable will be passed into the selected guide.',
-    id: 'guideId',
-    name: 'guideId',
-    options: guideOptions,
-    required: true,
-    value: guideId,
-  }) }}
-
-  {{ forms.lightswitchField({
-    label: 'Display Guide UI',
-    id: 'displayGuideUi',
-    name: 'displayGuideUi',
-    instructions: 'Show branded Guide frame around guide content.',
-    on: displayGuideUi ?? true,
-  }) }}
-{% else %}
-  No guides are available for UI elements right now.{% if userOperations.useOrganizer %} Create a new guide with
-<a href="{{ url('guide/organizer') }}">the Guide Organizer.</a>{% endif %}
-  <input type="hidden" name="guideId" value="0">
-{% endif %}
+{{ forms.textField({
+  label: 'ID',
+  tip: 'A unique ID required to place guides into this UI Element',
+  id: 'uiId',
+  name: 'uiId',
+  required: true,
+  value: uiId ?? randomString,
+}) }}

@@ -143,8 +143,24 @@
           </div>
           <div class="g-relative g-text-select-light" v-if="proEdition">
             <div class="g-space-x-1">
-              <button class="g-text-white" type="button" @click="setGridView('list')">List</button>
-              <button class="g-text-white" type="button" @click="setGridView('grid')">Grid</button>
+              <button
+                class="g-my-2 g-mr-1 g-text-white"
+                :class="[gridView === 'list' ? 'g-opacity-100' : 'g-opacity-70']"
+                title="Display Craft Control Panel areas as a list"
+                type="button"
+                @click="setGridView('list')"
+              >
+                <SvgList class="g-py-2 g-w-5 g-h-5" />
+              </button>
+              <button
+                class="g-my-2 g-mr-1 g-text-white"
+                :class="[gridView === 'grid' ? 'g-opacity-100' : 'g-opacity-70']"
+                title="Display Craft Control Panel areas as a grid"
+                type="button"
+                @click="setGridView('grid')"
+              >
+                <SvgGrid class="g-py-2 g-w-5 g-h-5" />
+              </button>
             </div>
             <ul class="g-space-y-2">
               <li
@@ -194,7 +210,8 @@ import { log } from '../globals';
 import Modal from './Modal.vue';
 import OrganizerDropZone from './OrganizerDropZone.vue';
 import PlacementEditor from './PlacementEditor.vue';
-import SvgPlus from './SvgPlus.vue';
+import SvgGrid from './SvgGrid.vue';
+import SvgList from './SvgList.vue';
 import { Guide, Placement, PlacementGroup, PluginSettings, PluginUserOperations } from '~/types/plugins';
 
 export default defineComponent({
@@ -203,7 +220,8 @@ export default defineComponent({
     Modal,
     OrganizerDropZone,
     PlacementEditor,
-    SvgPlus,
+    SvgGrid,
+    SvgList,
   },
   props: {
     actionUrlGetAllPlacements: { type: String, required: true },

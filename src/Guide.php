@@ -19,7 +19,7 @@ use craft\helpers\UrlHelper;
 use craft\models\FieldLayout;
 use craft\services\UserPermissions;
 use craft\web\View;
-use wbrowar\guide\fieldlayoutelements\GuideInclude;
+use wbrowar\guide\fieldlayoutelements\GuideDisplay;
 use wbrowar\guide\models\Settings;
 use wbrowar\guide\services\Guide as GuideService;
 use wbrowar\guide\services\Placement as PlacementService;
@@ -361,7 +361,7 @@ class Guide extends Plugin
                 FieldLayout::class,
                 FieldLayout::EVENT_DEFINE_UI_ELEMENTS,
                 function(DefineFieldLayoutElementsEvent $event) {
-                    $event->elements[] = GuideInclude::class;
+                    $event->elements[] = GuideDisplay::class;
                 }
             );
 
@@ -530,12 +530,12 @@ class Guide extends Plugin
 
         if (!empty($guideIds)) {
             $guides = self::$plugin->guide->getGuides(['id' => $guideIds]);
-
+            
             // Render sidebar template
             return self::$view->renderTemplate($template, [
                 'element' => $element,
                 'guides' => $guides,
-                'teleportMap' => $teleportMap ?? null,
+                'teleportMap' => $teleportMap,
             ]);
         }
 

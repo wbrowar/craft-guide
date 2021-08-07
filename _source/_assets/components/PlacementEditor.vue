@@ -93,6 +93,7 @@ export default defineComponent({
 
       this.groups.forEach((group) => {
         let header = group.header;
+        let name = group.name;
 
         switch (group.name) {
           case 'assetVolume':
@@ -106,19 +107,16 @@ export default defineComponent({
             break;
         }
 
-        options.push({ label: header, value: group.name });
+        if (group.groupId) {
+          name += `|${group.groupId}`;
+        }
+
+        options.push({ label: header, value: name });
       });
 
       options.push({ label: 'Control Panel Pages', value: 'uri' });
 
       return options;
-    },
-    groupIdValue() {
-      const selectedGroup = this.groups.find((group) => {
-        return group.name === this.groupValue;
-      });
-
-      return selectedGroup?.groupId || null;
     },
     isNew() {
       return this.placement?.id === null;
@@ -144,7 +142,9 @@ export default defineComponent({
     },
     resetFields() {
       this.$nextTick(() => {
-        this.$refs.groupField.setFieldValue(this.placement?.group || 'nav');
+        this.$refs.groupField.setFieldValue(
+          this.placement?.group + (this.placement?.groupId ? `|${this.placement.groupId}` : '') || 'nav'
+        );
         this.$refs.uriField.setFieldValue(this.placement?.uri || '');
         this.$refs.selectorField.setFieldValue(this.placement?.selector || '');
       });
@@ -153,10 +153,14 @@ export default defineComponent({
       const saveValue = this.placement;
 
       if (this.groupValue) {
-        saveValue.group = this.groupValue;
-      }
-      if (this.groupIdValue) {
-        saveValue.groupId = this.groupIdValue;
+        const groupSplit = this.groupValue.split('|');
+
+        if (groupSplit[0]) {
+          saveValue.group = groupSplit[0];
+        }
+        if (groupSplit[1]) {
+          saveValue.groupId = parseFloat(groupSplit[1]);
+        }
       }
       if (this.selectorValue !== '') {
         saveValue.selector = this.selectorValue;

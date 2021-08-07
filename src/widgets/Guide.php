@@ -106,7 +106,6 @@ class Guide extends Widget
             [
                 'guide' => GuidePlugin::$plugin->guide->getGuides(['id' => $this->guideId], 'one'),
                 'proEdition' => GuidePlugin::$pro,
-                'settings' => GuidePlugin::$settings,
             ]
         );
     }
