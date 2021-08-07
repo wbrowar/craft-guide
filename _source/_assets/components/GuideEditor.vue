@@ -51,15 +51,15 @@
           >
             <button class="g-w-full g-h-[60px]" type="button" @click="currentTab = 'snippets'">snippets</button>
           </li>
-          <li
-            class="g-flex-grow"
-            :class="currentTab === 'utility-classes' ? 'g-bg-select-dark' : 'g-bg-select-light'"
-            v-if="contentSource === 'field'"
-          >
-            <button class="g-w-full g-h-[60px]" type="button" @click="currentTab = 'utility-classes'">
-              utility-classes
-            </button>
-          </li>
+          <!--          <li-->
+          <!--            class="g-flex-grow"-->
+          <!--            :class="currentTab === 'utility-classes' ? 'g-bg-select-dark' : 'g-bg-select-light'"-->
+          <!--            v-if="contentSource === 'field'"-->
+          <!--          >-->
+          <!--            <button class="g-w-full g-h-[60px]" type="button" @click="currentTab = 'utility-classes'">-->
+          <!--              utility-classes-->
+          <!--            </button>-->
+          <!--          </li>-->
         </ul>
       </div>
       <div>
@@ -122,11 +122,11 @@
             name="summary"
           />
         </div>
-        <div class="g-p-6" v-show="currentTab === 'utility-classes'">
-          <h2>Utility Classes</h2>
-          <p class="g-text-text">You may use the classes below to style and lay out your guide content.</p>
-          <UtilityClassesSearch />
-        </div>
+        <!--        <div class="g-p-6" v-show="currentTab === 'utility-classes'">-->
+        <!--          <h2>Utility Classes</h2>-->
+        <!--          <p class="g-text-text">You may use the classes below to style and lay out your guide content.</p>-->
+        <!--          <UtilityClassesSearch />-->
+        <!--        </div>-->
         <ul v-show="tabComponents.length">
           <div class="g-p-6" v-if="currentTab === 'components'">
             <h2>Components</h2>
@@ -299,11 +299,11 @@
 <script lang="ts">
 import { defineComponent, PropType, reactive, toRefs } from 'vue';
 import { kebab, log, table } from '../globals';
-import { editorData } from '../editorData';
+import { editorData, utilityClasses } from '../editorData';
 import ComponentListItem from './ComponentListItem.vue';
 import CraftFieldSelect from './CraftFieldSelect.vue';
 import CraftFieldText from './CraftFieldText.vue';
-import UtilityClassesSearch from './UtilityClassesSearch.vue';
+// import UtilityClassesSearch from './UtilityClassesSearch.vue';
 import { VAceEditor } from 'vue3-ace-editor';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/mode-markdown';
@@ -324,7 +324,7 @@ export default defineComponent({
     ComponentListItem,
     CraftFieldSelect,
     CraftFieldText,
-    UtilityClassesSearch,
+    // UtilityClassesSearch,
     VAceEditor,
   },
   props: {
@@ -468,6 +468,8 @@ export default defineComponent({
       this.$refs.summaryField.setFieldValue(this.guide.summary);
     }
 
+    // Configure ACE Editor
+    // Bind saving shortcut
     this.$refs.editor._editor.commands.addCommand({
       name: 'saveGuide',
       bindKey: { win: 'Ctrl-S', mac: 'Command-S' },
@@ -475,6 +477,23 @@ export default defineComponent({
         this.submitForm();
       },
     });
+
+    // Add utility classes to autocomplete
+    const staticWordCompleter = {
+      getCompletions: function (editor, session, pos, prefix, callback) {
+        callback(
+          null,
+          utilityClasses.map(function (word) {
+            return {
+              caption: word,
+              value: word,
+              meta: 'Guide utility class',
+            };
+          })
+        );
+      },
+    };
+    this.$refs.editor._editor.completers = [...this.$refs.editor._editor.completers, staticWordCompleter];
 
     log('Guide Editor loaded for guide');
     table(this.guide);

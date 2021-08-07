@@ -1,7 +1,7 @@
 module.exports = {
   mode: 'jit',
   prefix: 'g-',
-  purge: ['./components/**/*.{vue,js,ts}'],
+  purge: ['./editorData.ts', './components/**/*.{vue,js,ts}'],
   theme: {
     colors: {
       primary: '#E12D39',

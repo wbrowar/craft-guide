@@ -264,74 +264,6 @@ class Placement extends Component
     /*
      * @return mixed
      */
-    public function getOrganizerConfig()
-    {
-//        $organizer = $this->getOrganizer();
-//
-//        if (!$organizer) {
-//            $organizer = new Placements();
-//        }
-//
-//        $config = [
-//            'categories' => [],
-//            'guides' => [],
-//            'organizer' => [
-//                'cpNav' => ($organizer->cpNav ?? false) ? Json::decodeIfJson($organizer->cpNav) : [],
-//                'id' => $organizer->id ?? null,
-//            ],
-//            'sections' => [],
-//            'showDashboard' => Guide::$pro,
-//            'showEditPages' => Guide::$pro,
-//            'showUsers' => Craft::$app->getEdition() == Craft::Pro,
-//            'volumes' => [],
-//        ];
-//
-//        $guides = Guide::$plugin->guide->getGuides([]);
-//        foreach ($guides as $guide) {
-//            $config['guides'][] = [
-//                'deleteUrl' => UrlHelper::url('guide/delete/' . $guide->id),
-//                'duplicateUrl' => UrlHelper::url('guide/duplicate/' . $guide->id),
-//                'editUrl' => UrlHelper::url('guide/edit/' . $guide->id),
-//                'id' => $guide->id,
-//                'title' => $guide->title,
-//                'parentType' => $guide->parentType,
-//                'parentUid' => $guide->parentUid,
-//                'showSettings' => false,
-//                'summary' => $guide->summary,
-//                'viewUrl' => UrlHelper::url('guide/page/' . $guide->slug),
-//            ];
-//        }
-//
-//        $categories = Craft::$app->getCategories()->getAllGroups();
-//        foreach ($categories as $category) {
-//            $config['categories'][] = [
-//                'name' => $category->name,
-//                'uid' => $category->uid,
-//            ];
-//        }
-//
-//        $sections = Craft::$app->getSections()->getAllSections();
-//        foreach ($sections as $section) {
-//            $config['sections'][] = [
-//                 'name' => $section->name,
-//                 'uid' => $section->uid,
-//            ];
-//        }
-//
-//        $volumes = Craft::$app->getVolumes()->getAllVolumes();
-//        foreach ($volumes as $volume) {
-//            $config['volumes'][] = [
-//                'name' => $volume->name,
-//                'uid' => $volume->uid,
-//            ];
-//        }
-//
-//        return $config;
-    }
-
-    /*
-     * @return mixed
-     */
     public function savePlacement(PlacementModel $model, int $id = null):int
     {
         if ($id ?? false) {
@@ -339,6 +271,8 @@ class Placement extends Component
         } else {
             $record = new Placements();
         }
+
+        // todo remove beginning / and cpTrigger from URI
 
         $record->access = $model->access;
         $record->group = $model->group;

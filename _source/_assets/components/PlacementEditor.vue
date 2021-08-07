@@ -23,13 +23,22 @@
           @value-changed="onGroupChanged"
         />
         <CraftFieldText
+          ref="uriField"
+          required
+          instructions="The URI of the page the guide will be displayed on. For example, the URI of this page is: `guide/organizer`"
+          label="Page URI"
+          name="uri"
+          @value-changed="onUriChanged"
+          v-show="groupValue === 'uri'"
+        />
+        <CraftFieldText
           ref="selectorField"
           :required="groupValue === 'uri'"
           :instructions="selectorFieldInstructions"
           label="CSS Selector"
           name="selector"
           @value-changed="onSelectorChanged"
-          v-if="groupValue !== 'nav'"
+          v-show="groupValue !== 'nav'"
         />
       </div>
     </div>
@@ -57,7 +66,8 @@ export default defineComponent({
   setup: () => {
     const state = reactive({
       groupValue: '',
-      selectorValue: null,
+      selectorValue: '',
+      uriValue: '',
     });
 
     return { ...toRefs(state) };
@@ -68,6 +78,12 @@ export default defineComponent({
 
       if (this.groupValue === '') {
         errors.push(`A group must be selected.`);
+      }
+      if (this.groupValue === 'uri' && this.selectorValue === '') {
+        errors.push(`Selector cannot be empty.`);
+      }
+      if (this.groupValue === 'uri' && this.uriValue === '') {
+        errors.push(`Page URI cannot be empty.`);
       }
 
       return errors;
@@ -121,11 +137,15 @@ export default defineComponent({
       this.groupValue = newValue;
     },
     onSelectorChanged(newValue) {
-      this.selectorValue = newValue !== '' ? newValue : null;
+      this.selectorValue = newValue !== '' ? newValue : '';
+    },
+    onUriChanged(newValue) {
+      this.uriValue = newValue !== '' ? newValue : '';
     },
     resetFields() {
       this.$nextTick(() => {
         this.$refs.groupField.setFieldValue(this.placement?.group || 'nav');
+        this.$refs.uriField.setFieldValue(this.placement?.uri || '');
         this.$refs.selectorField.setFieldValue(this.placement?.selector || '');
       });
     },
@@ -138,8 +158,11 @@ export default defineComponent({
       if (this.groupIdValue) {
         saveValue.groupId = this.groupIdValue;
       }
-      if (this.selectorValue) {
+      if (this.selectorValue !== '') {
         saveValue.selector = this.selectorValue;
+      }
+      if (this.uriValue !== '') {
+        saveValue.uri = this.uriValue;
       }
 
       this.$emit('saved', saveValue);

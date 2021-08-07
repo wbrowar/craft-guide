@@ -145,15 +145,13 @@ class Guide extends Plugin
                 }
 
                 // Admin-specific JavaScript
-                if (Craft::$app->getRequest()->getSegment(1) == 'guide' && Craft::$app->getRequest()->getSegment(2) != 'page') {
-                    if (true) {
-                        $assets = self::$plugin->_getPathsToAssetFiles('guide-admin.ts');
-                        if ($assets['css'] ?? false) {
-                            Craft::$app->getView()->registerCssFile($assets['css']);
-                        }
-                        if ($assets['js'] ?? false) {
-                            Craft::$app->getView()->registerJsFile($assets['js'], ['position' => Craft::$app->getView()::POS_BEGIN, 'type' => 'module']);
-                        }
+                if (Craft::$app->getRequest()->getSegment(1) == 'guide' && ((Craft::$app->getRequest()->getSegment(2) ?? false) && Craft::$app->getRequest()->getSegment(2) != 'page')) {
+                    $assets = self::$plugin->_getPathsToAssetFiles('guide-admin.ts');
+                    if ($assets['css'] ?? false) {
+                        Craft::$app->getView()->registerCssFile($assets['css']);
+                    }
+                    if ($assets['js'] ?? false) {
+                        Craft::$app->getView()->registerJsFile($assets['js'], ['position' => Craft::$app->getView()::POS_BEGIN, 'type' => 'module']);
                     }
 
                     // Add global settings to end body
@@ -185,6 +183,46 @@ class Guide extends Plugin
                         echo self::$view->renderTemplate('guide/_partials/admin_globals', $adminGlobalsVariables);
                     });
                 }
+
+                // Add guides to the bottom of the page
+                Event::on(View::class, View::EVENT_END_BODY, function(Event $event) {
+                    $cpTrigger = Craft::$app->getConfig()->getGeneral()->cpTrigger ?? '';
+                    $uri = Craft::$app->getRequest()->getFullUri();
+                    
+                    if (substr($uri, 0, strlen($cpTrigger)) == $cpTrigger) {
+                        $uri = substr($uri, strlen($cpTrigger));
+                    }
+
+                    if (substr($uri, 0, 1) == '/') {
+                        $uri = substr($uri, 1);
+                    }
+                    
+                    $placements = self::$plugin->placement->getPlacements(['uri' => $uri]);
+                    
+                    if ($placements ?? false) {
+                        $guideIds = [];
+                        $teleportMap = [];
+
+                        foreach ($placements as $placement) {
+                            if ($placement['selector'] ?? false) {
+                                $teleportMap['id-' . $placement['guideId']] = $placement['selector'];
+                                $guideIds[] = $placement['guideId'];
+                            }
+                        }
+
+                        if ($guideIds ?? false) {
+                            $guides = self::$plugin->guide->getGuides(['id' => $guideIds]);
+
+                            if ($guides ?? false) {
+                                echo self::$view->renderTemplate('guide/_partials/guide_display', [
+                                    'displayId' => 'uri',
+                                    'guides' => $guides,
+                                    'teleportMap' => $teleportMap,
+                                ]);
+                            }
+                        }
+                    }
+                });
             }
 
             // Add template routes
