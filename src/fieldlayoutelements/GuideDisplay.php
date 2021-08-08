@@ -75,7 +75,7 @@ class GuideDisplay extends BaseUiElement
     public function formHtml(ElementInterface $element = null, bool $static = false)
     {
         try {
-            $placement = Guide::$plugin->placement->getPlacements(['group' => 'uiElement', 'groupId' => $this->uiId], 'one');
+            $placement = Guide::$plugin->placement->getPlacements(['group' => 'uiElement', 'groupId' => 'uiElement-' . $this->uiId], 'one');
 
             if ($placement) {
                 $guide = Guide::$plugin->guide->getGuides(['id' => $placement->guideId], 'one');
@@ -84,6 +84,7 @@ class GuideDisplay extends BaseUiElement
             $content = Template::raw(Guide::$view->renderTemplate('guide/fieldlayoutelements/guide_display_body.twig', [
                 'element' => $element,
                 'guide' => $guide ?? null,
+                'placementId' => $placement->id ?? null,
                 'static' => $static,
                 'uiId' => $this->uiId,
             ]));

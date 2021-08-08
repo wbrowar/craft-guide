@@ -5,11 +5,11 @@ const globalsElement = document.getElementById('guide-admin-globals');
 export const assetComponents: EditorComponent[] = globalsElement?.dataset?.assetComponents
   ? JSON.parse(globalsElement.dataset.assetComponents)
   : null;
-export const devMode: boolean = globalsElement?.dataset?.devMode ? globalsElement.dataset.devMode === 'true' : null;
+export const devMode: boolean = globalsElement?.dataset?.devMode ? globalsElement.dataset.devMode === 'true' : false;
 export const guides: Guide[] = globalsElement?.dataset?.guides ? JSON.parse(globalsElement.dataset.guides) : null;
 export const proEdition: boolean = globalsElement?.dataset?.proEdition
   ? globalsElement.dataset.proEdition === 'true'
-  : null;
+  : false;
 // export const proEdition = false;
 export const settings: PluginSettings = globalsElement?.dataset?.settings
   ? JSON.parse(globalsElement.dataset.settings)

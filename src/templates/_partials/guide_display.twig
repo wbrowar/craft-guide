@@ -10,19 +10,23 @@
  * @since     3.0.0
  */ #}
 
-{% if guides|length %}
+{% if guides|length or (inlineEditorId ?? false) %}
   {% set displaySlug = 'guide-' ~ (displayId ?? 'display') %}
 
   {% set guideNav = [] %}
-  {% for guide in guides %}
-    {% if not (teleportMap['id-' ~ guide.id] ?? false) %}
-      {% set guideNav = guideNav|merge([{ id: guide.id, slug: guide.slug, title: guide.title }]) %}
-    {% endif %}
-  {% endfor %}
+  {% if guides|length %}
+    {% for guide in guides %}
+      {% if not (teleportMap['id-' ~ guide.id] ?? false) %}
+        {% set guideNav = guideNav|merge([{ id: guide.id, slug: guide.slug, title: guide.title }]) %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
 
   <div
+    {% if inlineEditorId ?? false %}data-enable-inline-editor{% endif %}
     data-guide-display="{{ displaySlug }}"
     {% if guideNav|length > 1 %}data-guide-nav-data="{{ guideNav|json_encode }}"{% endif %}
+    {% if not guides|length %}data-start-in-inline-editor{% endif %}
     {% if teleportContainerClass ?? false %}data-teleport-container-class="{{ teleportContainerClass }}"{% endif %}
     {% if teleportMethod ?? false %}data-teleport-method="{{ teleportMethod }}"{% endif %}
     {% if teleportSelector ?? false %}data-teleport-selector="{{ teleportSelector }}"{% endif %}
@@ -30,14 +34,24 @@
   <template id="{{ displaySlug }}">
     <teleport :to="teleportTarget" :disabled="!teleportTarget">
       <div{% if guideNav|length > 1 %} class="g-grid g-grid-cols-[var(--grid-cols)] g-gap-6 g-relative" style="--grid-cols: 1fr 200px;"{% endif %}>
-        <div>
-          {% for guide in guides %}
-            {% if teleportMap['id-' ~ guide.id] ?? false %}<teleport to="{{ teleportMap['id-' ~ guide.id] }}">{% endif %}
-            <div class="guide"{% if not (teleportMap['id-' ~ guide.id] ?? false) and (guideNav|length > 1) %} v-if="currentGuide === '{{ guide.slug }}'"{% endif %}>
-              {{ include('guide/_partials/render_content', { guide: guide }) }}
-            </div>
-            {% if teleportMap['id-' ~ guide.id] ?? false %}</teleport>{% endif %}
-          {% endfor %}
+        {% if inlineEditorId ?? false %}<placement-inline-editor
+          placement-inline-editor="{{ inlineEditorId }}"
+          {% if placementId ?? false %}placement-id="{{ placementId }}"{% endif %}
+          v-if="showInlineEditor"
+        ></placement-inline-editor>{% endif %}
+        <div {% if inlineEditorId ?? false %}v-else{% endif %}>
+          {% if guides|length %}
+            {% for guide in guides %}
+              {% if teleportMap['id-' ~ guide.id] ?? false %}<teleport to="{{ teleportMap['id-' ~ guide.id] }}">{% endif %}
+              <div class="guide g-relative"{% if not (teleportMap['id-' ~ guide.id] ?? false) and (guideNav|length > 1) %} v-if="currentGuide === '{{ guide.slug }}'"{% endif %}>
+                {{ include('guide/_partials/render_content', { guide: guide }) }}
+                <div class="guide-edit-button g-absolute g-top-0 g-right-0" v-if="enableInlineEditor">
+                  <button class="btn small g-duration-150" type="button" @click="showInlineEditor = true"><svg-settings class="g-h-4 g-w-4"></svg-settings></button>
+                </div>
+              </div>
+              {% if teleportMap['id-' ~ guide.id] ?? false %}</teleport>{% endif %}
+            {% endfor %}
+          {% endif %}
         </div>
         {% if guideNav|length > 1 %}
           <div>

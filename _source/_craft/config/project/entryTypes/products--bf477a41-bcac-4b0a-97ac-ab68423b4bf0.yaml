@@ -32,7 +32,7 @@ fieldLayouts:
           -
             type: wbrowar\guide\fieldlayoutelements\GuideDisplay
             uiId: ONxnGM08QpCv9Lq
-            width: 100
+            width: 50
         name: Content
         sortOrder: 1
       -
