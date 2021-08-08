@@ -170,11 +170,11 @@ class Guide extends Plugin
                 View::class,
                 View::EVENT_REGISTER_CP_TEMPLATE_ROOTS,
                 function(RegisterTemplateRootsEvent $event) {
-                    if ($this->getSettings()->templatePath ?? false) {
+                    if (self::$settings->templatePath ?? false) {
                         // Set the path set in the Template Path setting to a template root that can be referenced later
                         $oldMode = self::$view->getTemplateMode();
                         self::$view->setTemplateMode(self::$view::TEMPLATE_MODE_SITE);
-                        $templatePath = self::$view->getTemplatesPath() . '/' . $this->getSettings()->templatePath . '/';
+                        $templatePath = self::$view->getTemplatesPath() . '/' . self::$settings->templatePath . '/';
                         self::$view->setTemplateMode($oldMode);
                         $event->roots['guide_template_path'] = $templatePath;
                     }
@@ -528,10 +528,12 @@ class Guide extends Plugin
      * Render guides
      *
      * @param string $template The template to be rendered
-     * @param mixed $queries An array of Placement query parameters
+     * @param mixed  $queries  An array of Placement query parameters
+     *
      * @return string
      */
-    private function _renderGuidesForTemplateHook($template, $queries, $element = null) {
+    private function _renderGuidesForTemplateHook(string $template, $queries, $element = null): string
+    {
         $guideIds = [];
         $teleportMap = [];
 
@@ -555,6 +557,7 @@ class Guide extends Plugin
                 'element' => $element,
                 'guides' => $guides,
                 'teleportMap' => $teleportMap,
+                'teleportMethod' => self::$settings->defaultTeleportMethod,
             ]);
         }
 

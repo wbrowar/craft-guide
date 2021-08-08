@@ -40,6 +40,7 @@ export interface Placement {
   id: number;
   portalMethod: 'append' | 'prepend';
   selector: string | null;
+  theme: 'default' | 'frame';
   uri: string | null;
 }
 

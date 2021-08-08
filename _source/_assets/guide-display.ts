@@ -1,10 +1,9 @@
 import { createApp } from 'vue';
 import GuideDisplay from './components/GuideDisplay.vue';
-import PlacementInlineEditor from './components/PlacementInlineEditor.vue';
 import './global.css';
 
 // Add guides to the page
-const guideDisplays = document.querySelectorAll('[data-guide-display]');
+const guideDisplays: NodeListOf<HTMLElement> = document.querySelectorAll('[data-guide-display]');
 if (guideDisplays) {
   guideDisplays.forEach((display) => {
     if (display.dataset?.guideDisplay) {
@@ -28,17 +27,7 @@ if (guideDisplays) {
       }
 
       GuideDisplay.template = `#${display.dataset.guideDisplay}`;
-      createApp(GuideDisplay, display.dataset).mount(display);
+      createApp({ ...GuideDisplay }, display.dataset).mount(display);
     }
-  });
-}
-
-// Add placement editor to the
-const placementInlineEditors = document.querySelectorAll('[data-placement-inline-editor]');
-if (placementInlineEditors) {
-  placementInlineEditors.forEach((editor) => {
-    createApp(PlacementInlineEditor, {
-      ...editor.dataset,
-    }).mount(editor);
   });
 }

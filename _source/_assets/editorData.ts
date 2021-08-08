@@ -209,7 +209,7 @@ const utilityClassesBase: string[] = [
   'g-items-center',
   'g-justify-center',
   'g-grid-cols-[var(--grid-cols)]',
-  'g-mb-3',
+  'g-my-3',
   'g-absolute',
   'g-relative',
   'g-sticky',
@@ -234,7 +234,7 @@ const utilityClassesBase: string[] = [
 ];
 
 if (import.meta.env.DEV) {
-  const classes = [];
+  const classes: string[] = [];
   const variants = ['sm', 'md', 'lg', 'tldr'];
   utilityClassesBase.forEach((classString) => {
     variants.forEach((variant) => {

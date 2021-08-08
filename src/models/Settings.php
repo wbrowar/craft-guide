@@ -10,9 +10,6 @@
 
 namespace wbrowar\guide\models;
 
-use wbrowar\guide\Guide;
-
-use Craft;
 use craft\base\Model;
 
 /**

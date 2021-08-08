@@ -74,6 +74,21 @@
         <a class="btn icon add" href="{{ url('settings/assets/volumes/new') }}">Create a New Volume</a>
       </p>
     {% endif %}
+
+    {% set options = [
+      { label: 'Above edit fields', value: 'prepend' },
+      { label: 'Below edit fields', value: 'append' },
+    ] %}
+{#{% dd settings %}#}
+    {{ forms.selectField({
+      label: 'Edit Page Guide Location',
+      id: 'defaultTeleportMethod',
+      name: 'defaultTeleportMethod',
+      options: options,
+      required: true,
+      value: settings.defaultTeleportMethod,
+      instructions: 'Determine if guides should appear above or below content editing fields on element edit pages.',
+    }) }}
   {% case 'variables' %}
     {% set classicCompanies = shuffle([
       'Acme Company, LLC',

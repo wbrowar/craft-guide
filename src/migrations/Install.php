@@ -109,6 +109,7 @@ class Install extends Migration
                     'groupId' => $this->string(255),
                     'portalMethod' => $this->string(255),
                     'selector' => $this->string(255),
+                    'theme' => $this->string(255),
                     'uri' => $this->string(255),
                 ]
             );

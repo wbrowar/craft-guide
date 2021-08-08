@@ -53,6 +53,7 @@ export default defineComponent({
       id: parseFloat(props.placementId) || null,
       portalMethod: 'append',
       selector: null,
+      theme: 'default',
       uri: null,
     };
 

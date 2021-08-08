@@ -47,6 +47,10 @@ fieldLayouts:
             warning: null
             width: 100
           -
+            type: wbrowar\guide\fieldlayoutelements\GuideDisplay
+            uiId: oEFWfUIhV0nGkpm
+            width: 100
+          -
             fieldUid: 00d24b9b-4fb2-48de-aae0-1fd8aef75302
             instructions: null
             label: null

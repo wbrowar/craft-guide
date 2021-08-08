@@ -292,6 +292,7 @@ export default defineComponent({
         id: null,
         portalMethod: 'append',
         selector: null,
+        theme: 'default',
         uri: null,
       };
 
