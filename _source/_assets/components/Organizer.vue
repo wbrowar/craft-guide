@@ -145,21 +145,21 @@
             <div class="g-space-x-1">
               <button
                 class="g-my-2 g-mr-1 g-text-white"
-                :class="[gridView === 'list' ? 'g-opacity-100' : 'g-opacity-70']"
-                title="Display Craft Control Panel areas as a list"
-                type="button"
-                @click="setGridView('list')"
-              >
-                <SvgList class="g-py-2 g-w-5 g-h-5" />
-              </button>
-              <button
-                class="g-my-2 g-mr-1 g-text-white"
                 :class="[gridView === 'grid' ? 'g-opacity-100' : 'g-opacity-70']"
                 title="Display Craft Control Panel areas as a grid"
                 type="button"
                 @click="setGridView('grid')"
               >
                 <SvgGrid class="g-py-2 g-w-5 g-h-5" />
+              </button>
+              <button
+                class="g-my-2 g-mr-1 g-text-white"
+                :class="[gridView === 'list' ? 'g-opacity-100' : 'g-opacity-70']"
+                title="Display Craft Control Panel areas as a list"
+                type="button"
+                @click="setGridView('list')"
+              >
+                <SvgList class="g-py-2 g-w-5 g-h-5" />
               </button>
             </div>
             <ul class="g-space-y-2">
@@ -206,7 +206,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, reactive, toRefs } from 'vue';
-import { log } from '../globals';
+import { devMode, guides, log, proEdition, settings, userOperations } from '../globals';
 import Modal from './Modal.vue';
 import OrganizerDropZone from './OrganizerDropZone.vue';
 import PlacementEditor from './PlacementEditor.vue';
@@ -226,23 +226,23 @@ export default defineComponent({
   props: {
     actionUrlGetAllPlacements: { type: String, required: true },
     cpTrigger: String,
-    devMode: { type: Boolean, default: false },
     groupsData: { type: String, required: true },
-    guides: { type: Array as PropType<Guide[]>, required: true },
     isNew: { type: Boolean, default: false },
-    proEdition: { type: Boolean, default: false },
-    settings: { type: Object as PropType<PluginSettings>, required: true },
-    userOperations: { type: Object as PropType<PluginUserOperations>, required: true },
   },
   setup: (props) => {
     const state = reactive({
       currentEditPlacement: null as Placement | null,
       currentPreparingGuideId: null as Placement | null,
+      devMode,
       gridView: 'grid' as 'list' | 'grid',
       groups: JSON.parse(props.groupsData),
-      placements: [] as Placement[],
       groupFilters: [],
+      guides,
+      placements: [] as Placement[],
+      proEdition,
+      settings,
       selectedGroupFilters: [] as PlacementGroup[],
+      userOperations,
     });
 
     // Use group data to set filters
@@ -283,7 +283,7 @@ export default defineComponent({
     },
   },
   methods: {
-    addPlacementForGuide(guide, group: PlacementGroup = null, groupId: number = null) {
+    addPlacementForGuide(guide, group: PlacementGroup = null, groupId: string = null) {
       const placement: Placement = {
         access: 'all',
         group: group,
@@ -358,7 +358,7 @@ export default defineComponent({
       e.dataTransfer.setData('placementId', 'new');
       e.dataTransfer.setData('guideId', guideId);
     },
-    placementsForGroup(group: string, groupId: number | null = null) {
+    placementsForGroup(group: string, groupId: string | null = null) {
       return this.placements.filter((placement) => {
         return placement.group === group && (groupId ? placement.groupId === groupId : true);
       });

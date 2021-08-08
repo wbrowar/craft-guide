@@ -298,7 +298,18 @@
 
 <script lang="ts">
 import { defineComponent, PropType, reactive, toRefs } from 'vue';
-import { kebab, log, table } from '../globals';
+import {
+  assetComponents,
+  devMode,
+  guides,
+  kebab,
+  log,
+  proEdition,
+  settings,
+  table,
+  templates,
+  userOperations,
+} from '../globals';
 import { editorData, utilityClasses } from '../editorData';
 import ComponentListItem from './ComponentListItem.vue';
 import CraftFieldSelect from './CraftFieldSelect.vue';
@@ -309,14 +320,7 @@ import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/mode-markdown';
 import 'ace-builds/src-noconflict/mode-twig';
 import 'ace-builds/src-noconflict/theme-tomorrow_night_bright';
-import {
-  EditorComponent,
-  EditorTabGroup,
-  Guide,
-  GuideContentSource,
-  PluginSettings,
-  PluginUserOperations,
-} from '~/types/plugins';
+import { EditorComponent, EditorTabGroup, Guide, GuideContentSource } from '~/types/plugins';
 
 export default defineComponent({
   name: 'GuideEditor',
@@ -328,22 +332,9 @@ export default defineComponent({
     VAceEditor,
   },
   props: {
-    assetComponents: { type: Array as PropType<EditorComponent[]>, required: true },
-    devMode: { type: Boolean, default: false },
     formData: { type: String, required: true },
     guideData: { type: String, required: true },
-    guideComponents: { type: Array as PropType<EditorComponent[]>, required: true },
     isNew: { type: Boolean, default: false },
-    proEdition: { type: Boolean, default: false },
-    settings: { type: Object as PropType<PluginSettings>, required: true },
-    templates: {
-      type: Object as PropType<{
-        filenames: Record<string, string>;
-        contents: Record<string, string>;
-      }>,
-      required: true,
-    },
-    userOperations: { type: Object as PropType<PluginUserOperations>, required: true },
   },
   setup: (props) => {
     const state = reactive({
@@ -351,22 +342,38 @@ export default defineComponent({
       contentUrl: '',
       currentDocs: null,
       currentTab: 'publishing' as EditorTabGroup,
+      devMode,
       editorComponents: editorData as EditorComponent[],
       editorContent: '',
       guide: JSON.parse(props.guideData) as Guide,
       guideTemplate: '__none__',
       pageForm: JSON.parse(props.formData),
+      proEdition,
+      settings,
       slugFocused: false,
       slugValue: '',
+      templates,
       templatesFieldOptions: [] as Record<string, string>[],
       titleValue: '',
+      userOperations,
     });
 
-    state.editorComponents.push(...props.assetComponents);
-    state.editorComponents.push(...props.guideComponents);
+    const guideComponents: EditorComponent[] = guides.map((guide: Guide) => {
+      return {
+        title: guide.title,
+        group: 'guides',
+        code: `{{ craft.guide.include({ slug: '${guide.slug}' }) }}`,
+        documentation: guide.summary || null,
+        props: {
+          slug: `The slug of the guide, as set in the Guide Editor.`,
+        },
+      } as EditorComponent;
+    });
+    state.editorComponents.push(...assetComponents);
+    state.editorComponents.push(...guideComponents);
 
-    state.templatesFieldOptions = Object.keys(props.templates.filenames).map((key) => {
-      return { label: props.templates.filenames[key], value: key };
+    state.templatesFieldOptions = Object.keys(templates.filenames).map((key) => {
+      return { label: templates.filenames[key], value: key };
     });
 
     return { ...toRefs(state) };

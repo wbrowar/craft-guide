@@ -1,24 +1,35 @@
 {
   "guide-admin.ts": {
-    "file": "assets/guide-admin.6adccbda.js",
+    "file": "assets/guide-admin.8b0bcca9.js",
     "src": "guide-admin.ts",
     "isEntry": true,
     "imports": [
-      "_vendor.04c2ece6.js"
+      "_vendor.34cf0390.js",
+      "_CraftFieldText.0cef7775.js"
     ],
     "css": [
-      "assets/guide-admin.380460bd.css"
+      "assets/guide-admin.c26803b2.css"
     ]
   },
   "guide-display.ts": {
-    "file": "assets/guide-display.52851fd5.js",
+    "file": "assets/guide-display.022779ac.js",
     "src": "guide-display.ts",
     "isEntry": true,
+    "imports": [
+      "_vendor.34cf0390.js",
+      "_CraftFieldText.0cef7775.js"
+    ],
     "css": [
-      "assets/guide-display.8530a434.css"
+      "assets/guide-display.9c8a63cc.css"
     ]
   },
-  "_vendor.04c2ece6.js": {
-    "file": "assets/vendor.04c2ece6.js"
+  "_vendor.34cf0390.js": {
+    "file": "assets/vendor.34cf0390.js"
+  },
+  "_CraftFieldText.0cef7775.js": {
+    "file": "assets/CraftFieldText.0cef7775.js",
+    "imports": [
+      "_vendor.34cf0390.js"
+    ]
   }
 }

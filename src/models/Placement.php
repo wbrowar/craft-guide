@@ -86,8 +86,8 @@ class Placement extends Model
         return [
             ['guideId', 'required'],
 
-            [['guideId', 'groupId'], 'integer'],
-            [['access', 'group', 'portalMethod', 'selector', 'uri'], 'string'],
+            [['guideId'], 'integer'],
+            [['access', 'group', 'groupId', 'portalMethod', 'selector', 'uri'], 'string'],
 
             ['access', 'default', 'value' => 'all'],
             ['portalMethod', 'default', 'value' => 'append'],

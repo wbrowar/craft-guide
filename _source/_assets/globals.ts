@@ -1,9 +1,32 @@
-let devMode = false;
-const globals = document.getElementById('guide-admin-globals');
+import { EditorComponent, Guide, PluginSettings, PluginUserOperations } from './types/plugins';
 
-if (globals) {
-  devMode = globals.dataset.devMode === 'true';
-}
+const globalsElement = document.getElementById('guide-admin-globals');
+
+export const assetComponents: EditorComponent[] = globalsElement?.dataset?.assetComponents
+  ? JSON.parse(globalsElement.dataset.assetComponents)
+  : null;
+export const devMode: boolean = globalsElement?.dataset?.devMode ? globalsElement.dataset.devMode === 'true' : null;
+export const guides: Guide[] = globalsElement?.dataset?.guides ? JSON.parse(globalsElement.dataset.guides) : null;
+export const proEdition: boolean = globalsElement?.dataset?.proEdition
+  ? globalsElement.dataset.proEdition === 'true'
+  : null;
+// export const proEdition = false;
+export const settings: PluginSettings = globalsElement?.dataset?.settings
+  ? JSON.parse(globalsElement.dataset.settings)
+  : null;
+export const templates: {
+  filenames: Record<string, string>;
+  contents: Record<string, string>;
+} = globalsElement?.dataset?.templates ? JSON.parse(globalsElement.dataset.templates) : null;
+export const userOperations: PluginUserOperations = globalsElement?.dataset?.userOperations
+  ? JSON.parse(globalsElement.dataset.userOperations)
+  : null;
+// export const userOperations: PluginUserOperations = {
+//   editGuides: false,
+//   deleteGuides: false,
+//   setAccessPermissions: true,
+//   useOrganizer: true,
+// };
 
 // LOGGING FUNCTIONS
 export function dir(...args: any[]) {

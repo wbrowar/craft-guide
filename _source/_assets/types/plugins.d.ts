@@ -35,7 +35,7 @@ export type GuideContentSource = 'field' | 'iframe' | 'template';
 export interface Placement {
   access: PlacementAccess;
   group: PlacementGroup;
-  groupId: number | null;
+  groupId: string | null;
   guideId: number;
   id: number;
   portalMethod: 'append' | 'prepend';

@@ -153,66 +153,15 @@ class Guide extends Plugin
                     if ($assets['js'] ?? false) {
                         Craft::$app->getView()->registerJsFile($assets['js'], ['position' => Craft::$app->getView()::POS_BEGIN, 'type' => 'module']);
                     }
-
-                    // Add global settings to end body
-                    Event::on(View::class, View::EVENT_END_BODY, function(Event $event) {
-                        $guidesData = [];
-                        $guides = self::$plugin->guide->getGuides([
-                            'orderBy' => 'title asc',
-                        ]);
-                        foreach ($guides as $guide) {
-                            $guidesData[] = [
-                                'deleteUrl' => UrlHelper::url('guide/delete/' . $guide->id),
-                                'editUrl' => UrlHelper::url('guide/edit/' . $guide->id),
-                                'id' => $guide->id,
-                                'title' => $guide->title,
-                                'slug' => $guide->slug,
-                                'summary' => $guide->summary,
-                                'viewUrl' => UrlHelper::url('guide/page/' . $guide->slug),
-                            ];
-                        }
-
-                        $adminGlobalsVariables = [
-                            'assetComponents' => self::$plugin->guideComponents->getAssetComponents(),
-                            'guides' => $guidesData,
-                            'proEdition' => self::$pro,
-                            'settings' => self::$settings,
-                            'templates' => $this->_getTemplatesFromUserTemplatePath(),
-                            'userOperations' => self::$userOperations,
-                        ];
-                        echo self::$view->renderTemplate('guide/_partials/admin_globals', $adminGlobalsVariables);
-                    });
                 }
 
                 // Add guides to the bottom of the page
                 Event::on(View::class, View::EVENT_END_BODY, function(Event $event) {
-                    $uri = self::$plugin->placement->formatUri(Craft::$app->getRequest()->getFullUri());
-                    
-                    $placements = self::$plugin->placement->getPlacements(['uri' => $uri]);
-                    
-                    if ($placements ?? false) {
-                        $guideIds = [];
-                        $teleportMap = [];
+                    // Add global settings to end body
+                    $this->_renderAdminGlobals();
 
-                        foreach ($placements as $placement) {
-                            if ($placement['selector'] ?? false) {
-                                $teleportMap['id-' . $placement['guideId']] = $placement['selector'];
-                                $guideIds[] = $placement['guideId'];
-                            }
-                        }
-
-                        if ($guideIds ?? false) {
-                            $guides = self::$plugin->guide->getGuides(['id' => $guideIds]);
-
-                            if ($guides ?? false) {
-                                echo self::$view->renderTemplate('guide/_partials/guide_display', [
-                                    'displayId' => 'uri',
-                                    'guides' => $guides,
-                                    'teleportMap' => $teleportMap,
-                                ]);
-                            }
-                        }
-                    }
+                    // Get and display guides for the given page
+                    $this->_renderGuideDisplaysForPage();
                 });
             }
 
@@ -297,10 +246,14 @@ class Guide extends Plugin
                 ]];
 
                 if ($context['element']->volumeId ?? false) {
-                    $queries[] = [
-                        'group' => 'assetVolume',
-                        'groupId' => $context['element']->volumeId,
-                    ];
+                    $volume = Craft::$app->getVolumes()->getVolumeById($context['element']->volumeId);
+                    
+                    if ($volume) {
+                        $queries[] = [
+                            'group' => 'assetVolume',
+                            'groupId' => $volume->uid,
+                        ];
+                    }
                 }
                 return $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['element'] ?? null);
             });
@@ -313,7 +266,7 @@ class Guide extends Plugin
                 if ($context['group']->id ?? false) {
                     $queries[] = [
                         'group' => 'categoryGroup',
-                        'groupId' => $context['group']->id,
+                        'groupId' => $context['group']->uid,
                     ];
                 }
                 return $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['element'] ?? null);
@@ -327,7 +280,7 @@ class Guide extends Plugin
                 if ($context['entry']->section->id ?? false) {
                     $queries[] = [
                         'group' => 'section',
-                        'groupId' => $context['entry']->section->id,
+                        'groupId' => $context['entry']->section->uid,
                     ];
                 }
                 return $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['element'] ?? null);
@@ -341,7 +294,7 @@ class Guide extends Plugin
                 if ($context['globalSet']->id ?? false) {
                     $queries[] = [
                         'group' => 'globalSet',
-                        'groupId' => $context['globalSet']->id,
+                        'groupId' => $context['globalSet']->uid,
                     ];
                 }
 
@@ -503,6 +456,72 @@ class Guide extends Plugin
         }
 
         return $assetPaths;
+    }
+
+    /**
+     * Render admin globals used by Guide and Organizer editors
+     */
+    public function _renderAdminGlobals()
+    {
+        $guidesData = [];
+        $guides = self::$plugin->guide->getGuides([
+            'orderBy' => 'title asc',
+        ]);
+        foreach ($guides as $guide) {
+            $guidesData[] = [
+                'deleteUrl' => UrlHelper::url('guide/delete/' . $guide->id),
+                'editUrl' => UrlHelper::url('guide/edit/' . $guide->id),
+                'id' => $guide->id,
+                'title' => $guide->title,
+                'slug' => $guide->slug,
+                'summary' => $guide->summary,
+                'viewUrl' => UrlHelper::url('guide/page/' . $guide->slug),
+            ];
+        }
+
+        $adminGlobalsVariables = [
+            'assetComponents' => self::$plugin->guideComponents->getAssetComponents(),
+            'guides' => $guidesData,
+            'proEdition' => self::$pro,
+            'settings' => self::$settings,
+            'templates' => $this->_getTemplatesFromUserTemplatePath(),
+            'userOperations' => self::$userOperations,
+        ];
+        echo self::$view->renderTemplate('guide/_partials/admin_globals', $adminGlobalsVariables);
+    }
+
+    /**
+     * Render admin globals used by Guide and Organizer editors
+     */
+    public function _renderGuideDisplaysForPage()
+    {
+        $uri = self::$plugin->placement->formatUri(Craft::$app->getRequest()->getFullUri());
+
+        $placements = self::$plugin->placement->getPlacements(['uri' => $uri]);
+
+        if ($placements ?? false) {
+            $guideIds = [];
+            $teleportMap = [];
+
+            foreach ($placements as $placement) {
+                if ($placement['selector'] ?? false) {
+                    $teleportMap['id-' . $placement['guideId']] = $placement['selector'];
+                    $guideIds[] = $placement['guideId'];
+                }
+            }
+
+            if ($guideIds ?? false) {
+                $guides = self::$plugin->guide->getGuides(['id' => $guideIds]);
+
+                if ($guides ?? false) {
+                    echo self::$view->renderTemplate('guide/_partials/guide_display', [
+                        'displayId' => 'uri',
+                        'guides' => $guides,
+                        'teleportMap' => $teleportMap,
+                    ]);
+                }
+            }
+        }
     }
 
     /**

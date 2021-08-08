@@ -61,7 +61,7 @@ class GuideDisplay extends BaseUiElement
     public function settingsHtml()
     {
         return Craft::$app->getView()->renderTemplate(
-            'guide/fieldlayoutelements/guide_include_settings',
+            'guide/fieldlayoutelements/guide_display_settings',
             [
                 'randomString' => $this->_generateRandomString(15),
                 'uiId' => $this->uiId,
@@ -75,8 +75,15 @@ class GuideDisplay extends BaseUiElement
     public function formHtml(ElementInterface $element = null, bool $static = false)
     {
         try {
-            $content = Template::raw(Guide::$view->renderTemplate('guide/fieldlayoutelements/guide_include_body.twig', [
+            $placement = Guide::$plugin->placement->getPlacements(['group' => 'uiElement', 'groupId' => $this->uiId], 'one');
+
+            if ($placement) {
+                $guide = Guide::$plugin->guide->getGuides(['id' => $placement->guideId], 'one');
+            }
+
+            $content = Template::raw(Guide::$view->renderTemplate('guide/fieldlayoutelements/guide_display_body.twig', [
                 'element' => $element,
+                'guide' => $guide ?? null,
                 'static' => $static,
                 'uiId' => $this->uiId,
             ]));

@@ -36,7 +36,10 @@
           @dragstart="onPlacementDragStart($event, placement.id, placement.guideId)"
           @mouseleave="confirmDelete = false"
         >
-          <h4 class="g-mb-0">{{ guideForPlacement(placement.guideId).title }}</h4>
+          <h4 class="g-mb-0">
+            {{ guideForPlacement(placement.guideId).title
+            }}<span class="g-ml-2 g-font-normal g-opacity-40" v-if="placement.selector">{{ placement.selector }}</span>
+          </h4>
           <div class="g-inline-flex g-flex-nowrap g-gap-1 g-opacity-0 group-hover:g-opacity-100">
             <button
               class="btn small"

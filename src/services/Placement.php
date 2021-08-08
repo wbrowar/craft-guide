@@ -107,7 +107,7 @@ class Placement extends Component
                         'label' => 'Asset Volumes',
                         'headerSize' => $headerSm,
                         'name' => 'assetVolume',
-                        'groupId' => intval($item->id),
+                        'groupId' => $item->uid,
                     ];
                 }
             }
@@ -134,7 +134,7 @@ class Placement extends Component
                         'headerSize' => $headerSm,
                         'label' => 'Category Groups',
                         'name' => 'categoryGroup',
-                        'groupId' => intval($item->id),
+                        'groupId' => $item->uid,
                     ];
                 }
             }
@@ -161,7 +161,7 @@ class Placement extends Component
                         'headerSize' => $headerSm,
                         'label' => 'Sections',
                         'name' => 'section',
-                        'groupId' => intval($section->id),
+                        'groupId' => $section->uid,
                     ];
                 }
             }
@@ -188,7 +188,7 @@ class Placement extends Component
                         'headerSize' => $headerSm,
                         'label' => 'Global Sets',
                         'name' => 'globalSet',
-                        'groupId' => intval($globalSet->id),
+                        'groupId' => $globalSet->uid,
                     ];
                 }
             }

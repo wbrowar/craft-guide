@@ -106,7 +106,7 @@ class Install extends Migration
                     'guideId' => $this->integer()->notNull(),
                     'access' => $this->string(255),
                     'group' => $this->string(255),
-                    'groupId' => $this->integer(),
+                    'groupId' => $this->string(255),
                     'portalMethod' => $this->string(255),
                     'selector' => $this->string(255),
                     'uri' => $this->string(255),
