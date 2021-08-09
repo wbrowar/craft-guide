@@ -150,8 +150,17 @@ class Guide extends Plugin
 //                Craft::dd(Craft::$app->getRequest()->getSegment(1));
                 $routeIsGuideAdmin = Craft::$app->getRequest()->getSegment(1) == 'guide' && in_array(Craft::$app->getRequest()->getSegment(2), ['edit', 'new', 'organizer']);
                 $routeIsGuideUtilities = Craft::$app->getRequest()->getSegment(1) == 'utilities' && Craft::$app->getRequest()->getSegment(2) == 'guide-export-import';
+                $routeIsGuideWelcome = Craft::$app->getRequest()->getSegment(1) == 'guide' && Craft::$app->getRequest()->getSegment(2) == 'welcome';
                 if ($routeIsGuideAdmin || $routeIsGuideUtilities) {
                     $assets = self::$plugin->_getPathsToAssetFiles('guide-admin.ts');
+                    if ($assets['css'] ?? false) {
+                        Craft::$app->getView()->registerCssFile($assets['css']);
+                    }
+                    if ($assets['js'] ?? false) {
+                        Craft::$app->getView()->registerJsFile($assets['js'], ['position' => Craft::$app->getView()::POS_BEGIN, 'type' => 'module']);
+                    }
+                } else if ($routeIsGuideWelcome) {
+                    $assets = self::$plugin->_getPathsToAssetFiles('guide-welcome.ts');
                     if ($assets['css'] ?? false) {
                         Craft::$app->getView()->registerCssFile($assets['css']);
                     }

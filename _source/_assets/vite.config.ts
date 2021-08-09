@@ -12,6 +12,7 @@ export default defineConfig({
       input: {
         'guide-admin': './guide-admin.ts',
         'guide-display': './guide-display.ts',
+        'guide-welcome': './guide-welcome.ts',
       },
     },
   },

@@ -11,51 +11,55 @@
  */ #}
 
 {% extends "_layouts/cp" %}
-{% import "_includes/forms" as forms %}
+{#{% import "_includes/forms" as forms %}#}
 
 {% set title = "Welcome" %}
 {% set selectedSubnavItem = 'settings' %}
 
-{% set bodyClass = 'guide_welcome' %}
-
 {% block content %}
-  <div id="guide__welcome">
-    {% set assetPath = view.getAssetManager().getPublishedUrl('@wbrowar/guide/assetbundles/guide/dist', true) %}
-    <welcome-message asset-path="{{ assetPath }}" v-cloak>
-      <form method="post">
-        <input type="hidden" name="action" value="guide/settings">
-        <input type="hidden" name="page" value="general">
-        {{ csrfInput() }}
+  <div
+    id="guide-welcome"
+    data-skip-url="{{ url('guide') }}"
+  ></div>
 
-        <div class="fields">
-          {{ forms.textField({
-            label: 'Template Path',
-            id: 'templatePath',
-            name: 'templatePath',
-            value: settings.templatePath ?? '_guide',
-            instructions: 'A path inside of the **templates** directory where Guide will look for templates.',
-          }) }}
 
-          {% set volumes = craft.app.volumes.allVolumes %}
-          {% set options = [{ label: 'Select One Later', value: 0 }] %}
-          {% for item in volumes %}
-            {% set options = options|merge([{ label: item.name, value: item.uid }]) %}
-          {% endfor %}
+{#  <div id="guide__welcome">#}
+{#    {% set assetPath = view.getAssetManager().getPublishedUrl('@wbrowar/guide/assetbundles/guide/dist', true) %}#}
+{#    <welcome-message asset-path="{{ assetPath }}" v-cloak>#}
+{#      <form method="post">#}
+{#        <input type="hidden" name="action" value="guide/settings">#}
+{#        <input type="hidden" name="page" value="general">#}
+{#        {{ csrfInput() }}#}
 
-          {{ forms.selectField({
-            label: 'Asset Volume',
-            id: 'assetVolume',
-            name: 'assetVolume',
-            options: options,
-            value: settings.assetVolume ?? 0,
-            instructions: 'An asset volume that stores all images and videos used in guides.',
-          }) }}
-        </div>
+{#        <div class="fields">#}
+{#          {{ forms.textField({#}
+{#            label: 'Template Path',#}
+{#            id: 'templatePath',#}
+{#            name: 'templatePath',#}
+{#            value: settings.templatePath ?? '_guide',#}
+{#            instructions: 'A path inside of the **templates** directory where Guide will look for templates.',#}
+{#          }) }}#}
 
-        <input class="btn submit" type="submit" value="Start Using Guide">
-      </form>
-    </welcome-message>
+{#          {% set volumes = craft.app.volumes.allVolumes %}#}
+{#          {% set options = [{ label: 'Select One Later', value: 0 }] %}#}
+{#          {% for item in volumes %}#}
+{#            {% set options = options|merge([{ label: item.name, value: item.uid }]) %}#}
+{#          {% endfor %}#}
 
-    <a class="guide_welcome__skip" href="{{ url('guide') }}">Skip</a>
-  </div>
+{#          {{ forms.selectField({#}
+{#            label: 'Asset Volume',#}
+{#            id: 'assetVolume',#}
+{#            name: 'assetVolume',#}
+{#            options: options,#}
+{#            value: settings.assetVolume ?? 0,#}
+{#            instructions: 'An asset volume that stores all images and videos used in guides.',#}
+{#          }) }}#}
+{#        </div>#}
+
+{#        <input class="btn submit" type="submit" value="Start Using Guide">#}
+{#      </form>#}
+{#    </welcome-message>#}
+
+{#    <a class="guide_welcome__skip" href="{{ url('guide') }}">Skip</a>#}
+{#  </div>#}
 {% endblock %}

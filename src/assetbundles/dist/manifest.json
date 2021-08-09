@@ -1,35 +1,60 @@
 {
   "guide-admin.ts": {
-    "file": "assets/guide-admin.73b2100d.js",
+    "file": "assets/guide-admin.662ab8fc.js",
     "src": "guide-admin.ts",
     "isEntry": true,
     "imports": [
-      "_vendor.4b64b203.js",
-      "_CraftFieldSelect.633afd5b.js"
+      "_vendor.0cd9bbf7.js",
+      "_CraftFieldSelect.35d5fb7d.js",
+      "_CraftFieldText.99fa69fc.js",
+      "_SvgSettings.5c9514bf.js"
     ],
     "css": [
       "assets/guide-admin.c26803b2.css"
     ]
   },
   "guide-display.ts": {
-    "file": "assets/guide-display.54b61b9a.js",
+    "file": "assets/guide-display.71d66757.js",
     "src": "guide-display.ts",
     "isEntry": true,
     "imports": [
-      "_vendor.4b64b203.js",
-      "_CraftFieldSelect.633afd5b.js"
+      "_vendor.0cd9bbf7.js",
+      "_CraftFieldSelect.35d5fb7d.js",
+      "_SvgSettings.5c9514bf.js"
     ],
     "css": [
-      "assets/guide-display.cd59d355.css"
+      "assets/guide-display.280f0589.css"
     ]
   },
-  "_vendor.4b64b203.js": {
-    "file": "assets/vendor.4b64b203.js"
-  },
-  "_CraftFieldSelect.633afd5b.js": {
-    "file": "assets/CraftFieldSelect.633afd5b.js",
+  "guide-welcome.ts": {
+    "file": "assets/guide-welcome.e769974e.js",
+    "src": "guide-welcome.ts",
+    "isEntry": true,
     "imports": [
-      "_vendor.4b64b203.js"
+      "_vendor.0cd9bbf7.js",
+      "_CraftFieldSelect.35d5fb7d.js",
+      "_CraftFieldText.99fa69fc.js"
+    ]
+  },
+  "_vendor.0cd9bbf7.js": {
+    "file": "assets/vendor.0cd9bbf7.js"
+  },
+  "_CraftFieldSelect.35d5fb7d.js": {
+    "file": "assets/CraftFieldSelect.35d5fb7d.js",
+    "imports": [
+      "_vendor.0cd9bbf7.js"
+    ]
+  },
+  "_CraftFieldText.99fa69fc.js": {
+    "file": "assets/CraftFieldText.99fa69fc.js",
+    "imports": [
+      "_vendor.0cd9bbf7.js"
+    ]
+  },
+  "_SvgSettings.5c9514bf.js": {
+    "file": "assets/SvgSettings.5c9514bf.js",
+    "imports": [
+      "_vendor.0cd9bbf7.js"
     ]
   }
 }

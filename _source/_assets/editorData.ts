@@ -127,7 +127,7 @@ Content
   {
     title: 'Tip',
     group: 'components',
-    code: `craft.guide.component('tip', { message: 'REPLACE_TEXT' })`,
+    code: `{{ craft.guide.component('tip', { message: 'REPLACE_TEXT' }) }}`,
     documentation: `<p>Play audio in the browser’s audio player.</p>`,
     props: {
       label: `The label text for the button.`,
@@ -147,7 +147,7 @@ Content
   {
     title: 'Warning',
     group: 'components',
-    code: `craft.guide.component('tip', { message: 'REPLACE_TEXT' })`,
+    code: `{{ craft.guide.component('warning', { message: 'REPLACE_TEXT' }) }}`,
     documentation: `<p>Play audio in the browser’s audio player.</p>`,
     props: {
       label: `The label text for the button.`,
