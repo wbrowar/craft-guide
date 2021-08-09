@@ -2,8 +2,20 @@
   <Teleport to="body">
     <div class="g-fixed g-inset-0 g-w-full g-h-screen g-bg-white g-z-[500]">
       <div class="g-grid g-grid-rows-[var(--grid-rows)] g-h-full" style="--grid-rows: 1fr auto">
-        <div>
-          <div v-for="(person, index) in loggedInPeople" :key="person.name">
+        <div
+          class="g-grid"
+          :class="{
+            'g-grid-cols-1': loggedInPeople.length === 1,
+            'g-grid-cols-2': loggedInPeople.length === 2,
+            'g-grid-cols-3': loggedInPeople.length >= 3,
+          }"
+        >
+          <div
+            v-for="(person, index) in loggedInPeople"
+            :key="person.name"
+            class="g-bg-secondary g-border-solid g-border-8 g-text-white"
+            :class="[index === talking ? 'g-border-focus-light' : 'g-border-secondary']"
+          >
             <p>
               {{ person.name }} <span v-if="person.muted">⚫</span><span v-else>🔴</span>
               <span v-if="index == talking">💬</span>
