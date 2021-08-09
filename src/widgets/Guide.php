@@ -84,16 +84,20 @@ class Guide extends Widget
      */
     public function getSettingsHtml()
     {
-        $placements = GuidePlugin::$plugin->placement->getPlacements(['group' => 'widget']);
+        if (GuidePlugin::$pro) {
+            $placements = GuidePlugin::$plugin->placement->getPlacements(['group' => 'widget']);
 
-        return Craft::$app->getView()->renderTemplate(
-            'guide/widgets/guide_settings',
-            [
-                'selectableGuides' => GuidePlugin::$plugin->guide->getGuidesForUserFromPlacements($placements),
-                'userOperations' => GuidePlugin::$userOperations,
-                'widget' => $this,
-            ]
-        );
+            return Craft::$app->getView()->renderTemplate(
+                'guide/widgets/guide_settings',
+                [
+                    'selectableGuides' => GuidePlugin::$plugin->guide->getGuidesForUserFromPlacements($placements),
+                    'userOperations' => GuidePlugin::$userOperations,
+                    'widget' => $this,
+                ]
+            );
+        }
+
+        return null;
     }
 
     /**

@@ -22,6 +22,7 @@ use craft\web\View;
 use wbrowar\guide\fieldlayoutelements\GuideDisplay;
 use wbrowar\guide\models\Settings;
 use wbrowar\guide\services\Guide as GuideService;
+use wbrowar\guide\services\ImportExport as ImportExportService;
 use wbrowar\guide\services\Placement as PlacementService;
 use wbrowar\guide\services\GuideComponents as GuideComponentsService;
 use wbrowar\guide\twigextensions\GuideTwigExtension;
@@ -49,9 +50,10 @@ use yii\base\Event;
  * @package   Guide
  * @since     2.0.0
  *
- * @property  GuideService $guide
- * @property  PlacementService $placement
- * @property  GuideComponentsService $guideComponents
+ * @property ImportExportService $importExport
+ * @property GuideService $guide
+ * @property PlacementService $placement
+ * @property GuideComponentsService $guideComponents
  */
 class Guide extends Plugin
 {
@@ -145,7 +147,10 @@ class Guide extends Plugin
                 }
 
                 // Admin-specific JavaScript
-                if (Craft::$app->getRequest()->getSegment(1) == 'guide' && ((Craft::$app->getRequest()->getSegment(2) ?? false) && Craft::$app->getRequest()->getSegment(2) != 'page')) {
+//                Craft::dd(Craft::$app->getRequest()->getSegment(1));
+                $routeIsGuideAdmin = Craft::$app->getRequest()->getSegment(1) == 'guide' && in_array(Craft::$app->getRequest()->getSegment(2), ['edit', 'new', 'organizer']);
+                $routeIsGuideUtilities = Craft::$app->getRequest()->getSegment(1) == 'utilities' && Craft::$app->getRequest()->getSegment(2) == 'guide-export-import';
+                if ($routeIsGuideAdmin || $routeIsGuideUtilities) {
                     $assets = self::$plugin->_getPathsToAssetFiles('guide-admin.ts');
                     if ($assets['css'] ?? false) {
                         Craft::$app->getView()->registerCssFile($assets['css']);
@@ -186,13 +191,10 @@ class Guide extends Plugin
                 UrlManager::class,
                 UrlManager::EVENT_REGISTER_CP_URL_RULES,
                 function (RegisterUrlRulesEvent $event) {
-                    // Actions
-                    $event->rules['guide/duplicate/<guideId:\d{1,}>'] = 'guide/guide/duplicate-guide';
-
                     // Templates
                     $event->rules['guide'] = ['template' => 'guide/index', 'variables' => ['cpNavPlacements' => self::$plugin->placement->getPlacements([ 'group' => 'nav' ], 'guideId'), 'settings' => self::$settings, 'userOperations' => self::$userOperations]];
                     $event->rules['guide/welcome'] = ['template' => 'guide/welcome', 'variables' => ['settings' => self::$settings]];
-                    $event->rules['guide/page/<slug:(.*)>'] = ['template' => 'guide/page', 'variables' => ['settings' => self::$settings, 'userOperations' => self::$userOperations]];
+                    $event->rules['guide/page/<slug:(.*)>'] = ['template' => 'guide/page', 'variables' => ['proEdition' => self::$pro, 'settings' => self::$settings, 'userOperations' => self::$userOperations]];
                     $event->rules['guide/settings/general'] = ['template' => 'guide/settings', 'variables' => ['proEdition' => self::$pro, 'selectedTab' => 'general', 'settings' => self::$settings]];
                     $event->rules['guide/settings/variables'] = ['template' => 'guide/settings', 'variables' => ['proEdition' => self::$pro, 'selectedTab' => 'variables', 'settings' => self::$settings]];
 

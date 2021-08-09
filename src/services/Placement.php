@@ -65,24 +65,13 @@ class Placement extends Component
      *
      * @return mixed
      */
-    public function getPlacementGroups(): mixed
+    public function getPlacementGroups()
     {
-        $colLg = 3;
         $colMd = 2;
         $colSm = 1;
-        $headerLg = 3;
         $headerMd = 2;
         $headerSm = 1;
-
-//        $groups = [[
-//            'columns' => $colLg,
-//            'description' => 'The Guide CP Section',
-//            'header' => 'Guide',
-//            'headerSize' => $headerLg,
-//            'label' => 'Guide',
-//            'name' => 'nav',
-//            'groupId' => null,
-//        ]];
+        $groups = [];
         
         if (Guide::$pro) {
             // Assets and asset volumes - if any
@@ -214,28 +203,6 @@ class Placement extends Component
                 'name' => 'widget',
                 'groupId' => null,
             ];
-
-            // UI Elements
-//            $groups[] = [
-//                'columns' => $colMd,
-//                'description' => 'Guides added to UI Elements',
-//                'header' => 'UI Elements',
-//                'headerSize' => $headerMd,
-//                'label' => 'UI Elements',
-//                'name' => 'uiElement',
-//                'groupId' => null,
-//            ];
-
-            // URIs
-//            $groups[] = [
-//                'columns' => $colLg,
-//                'description' => 'Individual pages in the CP',
-//                'header' => 'Control Panel Pages',
-//                'headerSize' => $headerLg,
-//                'label' => 'Control Panel Pages',
-//                'name' => 'uri',
-//                'groupId' => null,
-//            ];
         }
 
         return $groups;
@@ -248,41 +215,55 @@ class Placement extends Component
      */
     public function getPlacements(array $params = [], string $queryType = 'all')
     {
-        if (Guide::$pro) {
-            if ($params['limit'] ?? false) {
-                $limit = $params['limit'];
-                unset($params['limit']);
-            } else {
-                $limit = null;
-            }
+        if (!Guide::$pro) {
+            $params['group'] = 'nav';
+        }
 
-            if ($params['orderBy'] ?? false) {
-                $orderBy = $params['orderBy'];
-                unset($params['orderBy']);
-            } else {
-                $orderBy = 'id';
-            }
+        if (!($params['guideId'] ?? false)) {
+            $params['guideId'] = Guide::$plugin->guide->getGuides([], 'ids');
+        }
 
-            switch ($queryType) {
-                case 'all':
-                    $placements = Placements::find()->where($params)->limit($limit)->orderBy($orderBy)->all();
-                    break;
-                case 'new':
-                    $placements = new Placements([]);
-                    break;
-                case 'one':
-                    $placements = Placements::find()->where($params)->orderBy($orderBy)->one();
-                    break;
-                case 'count':
-                    $placements = Placements::find()->where($params)->count();
-                    break;
-                case 'ids':
-                    $placements = Placements::find()->where($params)->ids();
-                    break;
-                case 'guideId':
-                    $placements = Placements::find()->where($params)->select(['guideId'])->all();
-                    break;
-            }
+        if ($params['limit'] ?? false) {
+            $limit = $params['limit'];
+            unset($params['limit']);
+        } else {
+            $limit = null;
+        }
+
+        if ($params['orderBy'] ?? false) {
+            $orderBy = $params['orderBy'];
+            unset($params['orderBy']);
+        } else {
+            $orderBy = 'id';
+        }
+
+        switch ($queryType) {
+            case 'all':
+                $placements = Placements::find()->where($params)->limit($limit)->orderBy($orderBy)->all();
+                break;
+            case 'new':
+                $placements = new Placements([]);
+                break;
+            case 'one':
+                $placements = Placements::find()->where($params)->orderBy($orderBy)->one();
+                break;
+            case 'count':
+                $placements = Placements::find()->where($params)->count();
+                break;
+            case 'guideId':
+                $placementData = Placements::find()->where($params)->select(['guideId'])->all();
+                $placements = [];
+                foreach ($placementData as $data) {
+                    $placements[] = $data->guideId;
+                }
+                break;
+            case 'ids':
+                $placementData = Placements::find()->where($params)->select(['id'])->all();
+                $placements = [];
+                foreach ($placementData as $data) {
+                    $placements[] = $data->id;
+                }
+                break;
         }
 
         return $placements ?? null;

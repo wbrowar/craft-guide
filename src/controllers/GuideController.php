@@ -10,7 +10,6 @@
 
 namespace wbrowar\guide\controllers;
 
-use craft\helpers\DateTimeHelper;
 use craft\helpers\StringHelper;
 use craft\helpers\UrlHelper;
 use wbrowar\guide\Guide;
@@ -60,38 +59,6 @@ class GuideController extends Controller
     }
 
     /**
-     * Duplicates a single guide based on ID.
-     *
-     * actions/guide/guide/duplicate-guide
-     *
-     * @return mixed
-     */
-    public function actionDuplicateGuide()
-    {
-        // Get guide ID from URL
-        $id = Craft::$app->getRequest()->getSegment(3);
-
-        // Get Guide from ID
-        $guide = Guide::$plugin->guide->getGuides([
-            'id' => $id,
-        ], 'one')->toArray();
-
-        // Remove items specific to original Guide
-        unset($guide['id']);
-        unset($guide['dateCreated']);
-        unset($guide['dateUpdated']);
-        unset($guide['uid']);
-        $guide['parentUid'] = '';
-        $guide['parentType'] = '__none__';
-
-        $guideModel = new GuideModel($guide);
-
-        Guide::$plugin->guide->saveGuide($guideModel);
-
-        return $this->redirect(UrlHelper::url($params['redirect'] ?? 'guide/organizer'));
-    }
-
-    /**
      * Saves a guide based on parameters passed in.
      *
      * actions/guide/guide/save-guide
@@ -127,46 +94,6 @@ class GuideController extends Controller
         }
     }
 
-    /**
-     * Sets a new Parent Type and UID for a given guide.
-     *
-     * actions/guide/guide/update-guide-parent
-     *
-     * @return mixed
-     */
-    public function actionUpdateGuideParent()
-    {
-        $params = Craft::$app->getRequest()->getBodyParams();
-        $results = [
-            'status' => 'error',
-            'error' => '',
-        ];
-
-        if (($params['id'] ?? false) && ($params['parentType'] ?? false)) {
-            $guide = Guide::$plugin->guide->getGuides(['id' => $params['id']], 'one')->toArray();
-
-            if ($guide ?? false) {
-                $guide['parentType'] = $params['parentType'];
-                $guide['parentUid'] = $params['parentUid'] ?? null;
-
-                $guideModel = $this->_guideModelFromRecordArray($guide);
-
-                $saved = Guide::$plugin->guide->saveGuide($guideModel, $params['id']);
-
-                if ($saved) {
-                    $results['status'] = 'success';
-                    return $this->asJson($results);
-                }
-                $results['error'] = 'Couldn’t save Guide.';
-            } else {
-                $results['error'] = 'Couldn’t find Guide.';
-            }
-        } else {
-            $results['error'] = '`id` or `parentType` not provided.';
-        }
-        return $this->asJson($results);
-    }
-
     // Private Methods
     // =========================================================================
 
@@ -179,21 +106,5 @@ class GuideController extends Controller
     private function _generateSlugFromTitle(string $title):string
     {
         return StringHelper::toKebabCase($title);
-    }
-
-    /**
-     * Generates a new GuideModel without the record’s default properties
-     *
-     * @guideArray array A guide in the form of an array
-     * @return GuideModel
-     */
-    private function _guideModelFromRecordArray(array $guideArray):GuideModel
-    {
-        unset($guideArray['id']);
-        unset($guideArray['dateCreated']);
-        unset($guideArray['dateUpdated']);
-        unset($guideArray['uid']);
-
-        return new GuideModel($guideArray);
     }
 }

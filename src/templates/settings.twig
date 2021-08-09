@@ -75,29 +75,29 @@
       </p>
     {% endif %}
 
-    {% set options = [
-      { label: 'Above edit fields', value: 'prepend' },
-      { label: 'Below edit fields', value: 'append' },
-    ] %}
-{#{% dd settings %}#}
-    {{ forms.selectField({
-      label: 'Edit Page Guide Location',
-      id: 'defaultTeleportMethod',
-      name: 'defaultTeleportMethod',
-      options: options,
-      required: true,
-      value: settings.defaultTeleportMethod,
-      instructions: 'Determine if guides should appear above or below content editing fields on element edit pages.',
-    }) }}
+    {% if proEdition %}
+      {% set options = [
+        { label: 'Above edit fields', value: 'prepend' },
+        { label: 'Below edit fields', value: 'append' },
+      ] %}
+      {{ forms.selectField({
+        label: 'Edit Page Guide Location',
+        id: 'defaultTeleportMethod',
+        name: 'defaultTeleportMethod',
+        options: options,
+        required: true,
+        value: settings.defaultTeleportMethod,
+        instructions: 'Determine if guides should appear above or below content editing fields on element edit pages.',
+      }) }}
+    {% else %}
+      <input type="hidden" name="defaultTeleportMethod" value="prepend">
+    {% endif %}
   {% case 'variables' %}
     {% set classicCompanies = shuffle([
-      'Acme Company, LLC',
-      'Cyberdyne Systems',
-      'Genco Pura Olive Oil Company',
-      'Shelby Company Limited',
-      'Sterling Cooper Draper Price',
-      'Weyland Corporation',
-      'Wayne Enterprises',
+      'Happy Lager',
+      'The Museum of Euro Art',
+      'Pixel & Tonic',
+      'Spoke & Chain',
     ]) %}
 
     {{ forms.textField({
@@ -131,16 +131,15 @@
   {% endswitch %}
 
   {% if not proEdition and currentUser.admin %}
-    <div class="guide_styles">
-      <div class="c_tip">
-        <div class="c_tip__header">Thanks for using the LITE edition of Guide!</div>
-        <div class="c_tip__content">
-          <p>The PRO edition of Guide offers an easy to use, drag-and-drop editor letting you and your content authors collaborate by making guides in the CP. You can also embed external docs, customize the look and feel, and display guides on content edit pages and in dashboard widgets.</p>
-          <p>
-            <a class="btn small submit" href="{{ url('plugin-store/guide') }}">Check out Guide PRO in the Plugin Store</a>
-          </p>
-        </div>
-      </div>
+    <hr>
+    <div class="readable">
+      <blockquote class="note tip">
+        <strong>Thanks for using the LITE edition of Guide!</strong>
+        <p>The PRO edition of Guide offers a drag-and-drop editor that includes snippets and components, lets you display guides—and contextually useful information—on content edit pages or on any page within the Craft CP, and makes it easy to create standalone CP pages, widgets, and UI Elements.</p>
+        <p>
+          <a class="btn submit" href="{{ url('plugin-store/guide') }}">Check out Guide PRO in the Plugin Store</a>
+        </p>
+      </blockquote>
     </div>
   {% endif %}
 {% endset %}

@@ -33,6 +33,14 @@ fieldLayouts:
             type: wbrowar\guide\fieldlayoutelements\GuideDisplay
             uiId: ONxnGM08QpCv9Lq
             width: 50
+          -
+            style: tip
+            tip: Heyyy
+            type: craft\fieldlayoutelements\Tip
+          -
+            style: warning
+            tip: Hey.
+            type: craft\fieldlayoutelements\Tip
         name: Content
         sortOrder: 1
       -

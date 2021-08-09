@@ -46,7 +46,7 @@
               title="Edit"
               type="button"
               @click="onEditPlacementClicked(placement)"
-              v-if="!confirmDelete"
+              v-if="!confirmDelete && proEdition"
             >
               <SvgEdit class="g-w-3 g-h-3" /><span class="g-sr-only">Edit</span>
             </button>
@@ -70,7 +70,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, reactive, toRefs } from 'vue';
-import { log } from '../globals';
+import { log, proEdition } from '../globals';
 import SvgClose from './SvgClose.vue';
 import SvgEdit from './SvgEdit.vue';
 import { Guide, Placement } from '../types/plugins';
@@ -93,6 +93,7 @@ export default defineComponent({
   setup() {
     const state = reactive({
       confirmDelete: false,
+      proEdition,
     });
 
     return { ...toRefs(state) };

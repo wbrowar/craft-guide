@@ -10,8 +10,12 @@
  * @since     2.0.0
  */ #}
 
-{% if (guide ?? false) and proEdition %}
-  {% include 'guide/_partials/guide_display.twig' with { displayId: 'widget', guides: [guide] } only %}
+{% if proEdition %}
+  {% if guide ?? false %}
+    {% include 'guide/_partials/guide_display.twig' with { displayId: 'widget', guides: [guide] } only %}
+  {% else %}
+    <p>The guide that was displayed here is no longer available. Select another guide in this widget’s settings.</p>
+  {% endif %}
 {% else %}
-  <div style="padding: 20px;">The guide that was displayed here is no longer available. Select another guide in this widget’s settings.</div>
+  <p>Guide widgets are available in the PRO edition of Guide. <a href="{{ url('plugin-store/guide') }}">Please upgrade the Guide plugin</a> to add guides to Dashboard widgets.</p>
 {% endif %}

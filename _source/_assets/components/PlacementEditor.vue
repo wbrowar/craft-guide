@@ -59,7 +59,7 @@ export default defineComponent({
     CraftFieldText,
   },
   props: {
-    groups: { type: Array, required: true },
+    groups: Array,
     placement: Object as PropType<Placement>,
   },
   emits: ['canceled', 'saved'],
@@ -91,7 +91,7 @@ export default defineComponent({
     groupFieldOptions() {
       const options = [{ label: 'Guide', value: 'nav' }];
 
-      this.groups.forEach((group) => {
+      this.groups?.forEach((group) => {
         let header = group.header;
         let name = group.name;
 

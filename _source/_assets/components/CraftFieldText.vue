@@ -7,11 +7,10 @@
       <p v-html="instructions"></p>
     </div>
     <div class="input ltr">
-      <input
+      <textarea
         :id="name"
         v-model="fieldValue"
         class="text fullwidth"
-        type="text"
         :name="name"
         autofocus=""
         autocomplete="off"
@@ -19,6 +18,21 @@
         :aria-describedby="instructions ? `${name}-instructions` : null"
         v-bind="fieldAttributes"
         @focus="$emit('focused')"
+        v-if="fieldType === 'textarea'"
+      />
+      <input
+        :id="name"
+        v-model="fieldValue"
+        class="text fullwidth"
+        :type="fieldType"
+        :name="name"
+        autofocus=""
+        autocomplete="off"
+        :placeholder="placeholder ? placeholder : null"
+        :aria-describedby="instructions ? `${name}-instructions` : null"
+        v-bind="fieldAttributes"
+        @focus="$emit('focused')"
+        v-else
       />
     </div>
   </div>
@@ -32,6 +46,7 @@ export default defineComponent({
   components: {},
   props: {
     fieldAttributes: Object,
+    fieldType: { type: String, default: 'text' },
     instructions: String,
     label: { type: String, required: true },
     name: { type: String, required: true },

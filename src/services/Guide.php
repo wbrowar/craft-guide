@@ -11,7 +11,7 @@
 namespace wbrowar\guide\services;
 
 use craft\elements\User;
-use craft\helpers\Json;
+use wbrowar\guide\Guide as GuidePlugin;
 use wbrowar\guide\models\Guide as GuideModel;
 
 use Craft;
@@ -39,6 +39,10 @@ class Guide extends Component
      */
     public function getGuides(array $params = [], string $queryType = 'all')
     {
+        if (!GuidePlugin::$pro) {
+            $params['contentSource'] = 'template';
+        }
+
         if ($params['limit'] ?? false) {
             $limit = $params['limit'];
             unset($params['limit']);
@@ -55,20 +59,27 @@ class Guide extends Component
 
         switch ($queryType) {
             case 'all':
-                $userGuides = Guides::find()->where($params)->limit($limit)->orderBy($orderBy)->all();
+                $guides = Guides::find()->where($params)->limit($limit)->orderBy($orderBy)->all();
                 break;
             case 'new':
-                $userGuides = new Guides([]);
+                $guides = new Guides([]);
                 break;
             case 'one':
-                $userGuides = Guides::find()->where($params)->orderBy($orderBy)->one();
+                $guides = Guides::find()->where($params)->orderBy($orderBy)->one();
                 break;
             case 'count':
-                $userGuides = Guides::find()->where($params)->count();
+                $guides = Guides::find()->where($params)->count();
+                break;
+            case 'ids':
+                $guideData = Guides::find()->where($params)->select(['id'])->all();
+                $guides = [];
+                foreach ($guideData as $data) {
+                    $guides[] = $data->id;
+                }
                 break;
         }
 
-        return $userGuides ?? null;
+        return $guides ?? null;
     }
 
     /**

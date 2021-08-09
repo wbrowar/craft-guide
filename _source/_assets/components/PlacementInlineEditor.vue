@@ -7,7 +7,6 @@
     <div v-else-if="guides.length">
       <CraftFieldSelect
         ref="guideField"
-        required
         instructions="Select a guide to be displayed here."
         label="Guide"
         name="guide"
@@ -79,6 +78,12 @@ export default defineComponent({
           (response, textStatus, request) => {
             log('Deleting placement', response, textStatus, request);
             this.placementSaved = true;
+
+            if (response.status === 'success') {
+              window.Craft?.cp?.displayNotice('Guide removed');
+            } else {
+              window.Craft?.cp?.displayError(response.data.error);
+            }
           }
         );
       }
@@ -108,6 +113,12 @@ export default defineComponent({
         (response, textStatus, request) => {
           log('Saving placement', response, textStatus, request);
           this.placementSaved = true;
+
+          if (response.status === 'success') {
+            window.Craft?.cp?.displayNotice('Guide UI Element updated');
+          } else {
+            window.Craft?.cp?.displayError(response.data.error);
+          }
         }
       );
     },

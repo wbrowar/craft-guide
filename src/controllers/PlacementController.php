@@ -80,17 +80,19 @@ class PlacementController extends Controller
         $placements = Guide::$plugin->placement->getPlacements();
 
         $placementsCleaned = [];
-        foreach ($placements as $placement) {
-            if ($placement['dateCreated'] ?? false) {
-                unset($placement['dateCreated']);
+        if ($placements ?? false) {
+            foreach ($placements as $placement) {
+                if ($placement['dateCreated'] ?? false) {
+                    unset($placement['dateCreated']);
+                }
+                if ($placement['dateUpdated'] ?? false) {
+                    unset($placement['dateUpdated']);
+                }
+                if ($placement['uid'] ?? false) {
+                    unset($placement['uid']);
+                }
+                $placementsCleaned[] = $placement;
             }
-            if ($placement['dateUpdated'] ?? false) {
-                unset($placement['dateUpdated']);
-            }
-            if ($placement['uid'] ?? false) {
-                unset($placement['uid']);
-            }
-            $placementsCleaned[] = $placement;
         }
 
         return $this->asJson($placementsCleaned);

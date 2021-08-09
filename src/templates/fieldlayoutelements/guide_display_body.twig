@@ -10,17 +10,20 @@
  * @since     3.0.0
  */ #}
 
-{% if uiId ?? false %}
-  {% set displayId = 'uiElement-' ~ uiId %}
+{% if proEdition %}
+  {% if uiId ?? false %}
+    {% set displayId = 'uiElement-' ~ uiId %}
 
-  {% include 'guide/_partials/guide_display.twig' with {
-    displayId: displayId,
-    element: element ?? null,
-    guides: guide ?? false ? [guide] : null,
-    inlineEditorId: displayId,
-    placementId: placementId ?? false,
-  } only %}
+    {% include 'guide/_partials/guide_display.twig' with {
+      displayId: displayId,
+      element: element ?? null,
+      guides: guide ?? false ? [guide] : null,
+      inlineEditorId: displayId,
+      placementId: placementId ?? false,
+    } only %}
+  {% else %}
+    <p>A UI Element ID is required to place guides in this UI Element. Please update the settings for this UI Element to add guides here.</p>
+  {% endif %}
 {% else %}
-  <p>A UI Element ID is required to place guides in this UI Element. Please update the settings for this UI Element to add guides here.</p>
+  <p>Guide UI elements are available in the PRO edition of Guide. <a href="{{ url('plugin-store/guide') }}">Please upgrade the Guide plugin</a> to add guides to UI elements.</p>
 {% endif %}
-

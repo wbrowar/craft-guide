@@ -21,35 +21,70 @@
       <div class="g-sticky g-top-0 g-bg-white">
         <ul class="g-flex g-flex-nowrap">
           <li class="g-flex-grow" :class="currentTab === 'publishing' ? 'g-bg-select-dark' : 'g-bg-select-light'">
-            <button class="g-w-full g-h-[60px]" type="button" @click="currentTab = 'publishing'">publishing</button>
+            <button
+              class="g-w-full g-h-[60px] g-cursor-pointer"
+              title="Settings"
+              type="button"
+              @click="currentTab = 'publishing'"
+            >
+              <SvgSettings class="g-w-6 g-h-6" :class="[currentTab === 'publishing' ? 'g-text-select-light' : null]" />
+            </button>
           </li>
           <li
             class="g-flex-grow"
             :class="currentTab === 'components' ? 'g-bg-select-dark' : 'g-bg-select-light'"
             v-if="contentSource === 'field'"
           >
-            <button class="g-w-full g-h-[60px]" type="button" @click="currentTab = 'components'">components</button>
+            <button
+              class="g-w-full g-h-[60px] g-cursor-pointer"
+              title="Components"
+              type="button"
+              @click="currentTab = 'components'"
+            >
+              <SvgPuzzle class="g-w-6 g-h-6" :class="[currentTab === 'components' ? 'g-text-select-light' : null]" />
+            </button>
           </li>
           <li
             class="g-flex-grow"
             :class="currentTab === 'images' ? 'g-bg-select-dark' : 'g-bg-select-light'"
             v-if="contentSource === 'field'"
           >
-            <button class="g-w-full g-h-[60px]" type="button" @click="currentTab = 'images'">images</button>
+            <button
+              class="g-w-full g-h-[60px] g-cursor-pointer"
+              title="Images"
+              type="button"
+              @click="currentTab = 'images'"
+            >
+              <SvgPhotograph class="g-w-6 g-h-6" :class="[currentTab === 'images' ? 'g-text-select-light' : null]" />
+            </button>
           </li>
           <li
             class="g-flex-grow"
             :class="currentTab === 'guides' ? 'g-bg-select-dark' : 'g-bg-select-light'"
             v-if="contentSource === 'field'"
           >
-            <button class="g-w-full g-h-[60px]" type="button" @click="currentTab = 'guides'">guides</button>
+            <button
+              class="g-w-full g-h-[60px] g-cursor-pointer"
+              title="Guides"
+              type="button"
+              @click="currentTab = 'guides'"
+            >
+              <SvgGuide class="g-w-6 g-h-6" :class="[currentTab === 'guides' ? 'g-text-select-light' : null]" />
+            </button>
           </li>
           <li
             class="g-flex-grow"
             :class="currentTab === 'snippets' ? 'g-bg-select-dark' : 'g-bg-select-light'"
             v-if="contentSource === 'field'"
           >
-            <button class="g-w-full g-h-[60px]" type="button" @click="currentTab = 'snippets'">snippets</button>
+            <button
+              class="g-w-full g-h-[60px] g-cursor-pointer"
+              title="Snippets"
+              type="button"
+              @click="currentTab = 'snippets'"
+            >
+              <SvgAnnotation class="g-w-6 g-h-6" :class="[currentTab === 'snippets' ? 'g-text-select-light' : null]" />
+            </button>
           </li>
           <!--          <li-->
           <!--            class="g-flex-grow"-->
@@ -92,6 +127,7 @@
               { label: 'External Page (iframe)', value: 'iframe' },
             ]"
             @value-changed="onContentSourceChanged"
+            v-show="proEdition"
           />
           <CraftFieldSelect
             ref="templateField"
@@ -237,13 +273,15 @@
                 `The <strong>${guideTemplate}</strong> template will be loaded from the <strong>${settings.templatePath}</strong> directiory.`
               "
             ></p>
-            <p>
-              You can copy the contents of this file into the Code Editor (this will replace the current Code Editor
-              code).
-            </p>
-            <button class="btn submit" type="button" @click="insertGuideTemplateIntoEditor">
-              Copy Template to Code Editor
-            </button>
+            <div v-if="proEdition">
+              <p>
+                You can copy the contents of this file into the Code Editor (this will replace the current Code Editor
+                code).
+              </p>
+              <button class="btn submit" type="button" @click="insertGuideTemplateIntoEditor">
+                Copy Template to Code Editor
+              </button>
+            </div>
           </div>
           <p v-html="`Select a file from the <strong>Template</strong> field.`" v-else></p>
         </div>
@@ -297,7 +335,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, reactive, toRefs } from 'vue';
+import { defineComponent, reactive, toRefs } from 'vue';
 import {
   assetComponents,
   devMode,
@@ -314,13 +352,18 @@ import { editorData, utilityClasses } from '../editorData';
 import ComponentListItem from './ComponentListItem.vue';
 import CraftFieldSelect from './CraftFieldSelect.vue';
 import CraftFieldText from './CraftFieldText.vue';
-// import UtilityClassesSearch from './UtilityClassesSearch.vue';
+import SvgAnnotation from './SvgAnnotation.vue';
+import SvgGuide from './SvgGuide.vue';
+import SvgPuzzle from './SvgPuzzle.vue';
+import SvgPhotograph from './SvgPhotograph.vue';
+import SvgSettings from './SvgSettings.vue';
 import { VAceEditor } from 'vue3-ace-editor';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/mode-markdown';
 import 'ace-builds/src-noconflict/mode-twig';
 import 'ace-builds/src-noconflict/theme-tomorrow_night_bright';
 import { EditorComponent, EditorTabGroup, Guide, GuideContentSource } from '~/types/plugins';
+// import UtilityClassesSearch from './UtilityClassesSearch.vue';
 
 export default defineComponent({
   name: 'GuideEditor',
@@ -328,8 +371,13 @@ export default defineComponent({
     ComponentListItem,
     CraftFieldSelect,
     CraftFieldText,
-    // UtilityClassesSearch,
+    SvgAnnotation,
+    SvgGuide,
+    SvgPhotograph,
+    SvgPuzzle,
+    SvgSettings,
     VAceEditor,
+    // UtilityClassesSearch,
   },
   props: {
     formData: { type: String, required: true },
@@ -420,7 +468,7 @@ export default defineComponent({
       this.$refs.editor.focus();
     },
     onContentSourceChanged(newValue) {
-      this.contentSource = newValue;
+      this.contentSource = this.proEdition ? newValue : 'template';
     },
     onContentUrlChanged(newValue) {
       this.contentUrl = newValue;
@@ -453,11 +501,15 @@ export default defineComponent({
       contentEl.style.padding = '0px';
     }
 
-    if (this.guide?.contentSource) {
-      this.$refs.contentSourceField.setFieldValue(this.guide.contentSource);
-    }
     if (this.guide?.content) {
       this.editorContent = this.guide.content;
+    }
+    if (this.guide?.contentSource) {
+      if (this.proEdition) {
+        this.$refs.contentSourceField.setFieldValue(this.guide.contentSource);
+      } else {
+        this.$refs.contentSourceField.setFieldValue('template');
+      }
     }
     if (this.guide?.contentUrl) {
       this.$refs.contentUrlField.setFieldValue(this.guide.contentUrl);

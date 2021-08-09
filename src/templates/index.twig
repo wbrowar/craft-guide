@@ -19,7 +19,7 @@
 {% set pluginCpUrl = url('guide') %}
 
 {% if cpNavPlacements ?? false %}
-  {% set guides = craft.guide.getAll({ id: cpNavPlacements|map((item) => item.guideId) }) %}
+  {% set guides = craft.guide.getAll({ id: cpNavPlacements }) %}
 {% endif %}
 
 {% set content %}

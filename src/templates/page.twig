@@ -14,7 +14,7 @@
 
 {% set guide = (slug ?? false) ? craft.guide.getOne({ slug: slug }) : craft.guide.getAll({}, 'new') %}
 
-{% if not (guide.slug ?? false) %}
+{% if not (guide.slug ?? false) or not proEdition %}
   {% redirect 'guide' %}
 {% endif %}
 

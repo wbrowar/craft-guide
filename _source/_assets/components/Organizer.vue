@@ -55,6 +55,7 @@
               title="View guide on a seperate page"
               type="button"
               :href="cpUrl(`guide/page/${guide.slug}`)"
+              v-if="proEdition"
               >View</a
             >
             <button
@@ -247,7 +248,7 @@ export default defineComponent({
 
     // Use group data to set filters
     const selectedGroupFilters: PlacementGroup[] = [];
-    state.groups.forEach((group) => {
+    state.groups?.forEach((group) => {
       const filter = { label: group.label, value: group.name };
       if (!selectedGroupFilters.includes(group.name)) {
         state.groupFilters.push(filter);
@@ -316,6 +317,12 @@ export default defineComponent({
         (response, textStatus, request) => {
           log('Deleting placement', response, textStatus, request);
           this.getPlacementList();
+
+          if (response.status === 'success') {
+            window.Craft?.cp?.displayNotice('Organizer Saved');
+          } else {
+            window.Craft?.cp?.displayError(response.data.error);
+          }
         }
       );
     },
@@ -371,6 +378,12 @@ export default defineComponent({
         (response, textStatus, request) => {
           log('Saving placement', response, textStatus, request);
           this.getPlacementList();
+
+          if (response.status === 'success') {
+            window.Craft?.cp?.displayNotice('Organizer Saved');
+          } else {
+            window.Craft?.cp?.displayError(response.data.error);
+          }
         }
       );
     },

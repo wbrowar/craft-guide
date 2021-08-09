@@ -85,6 +85,7 @@ class GuideDisplay extends BaseUiElement
                 'element' => $element,
                 'guide' => $guide ?? null,
                 'placementId' => $placement->id ?? null,
+                'proEdition' => Guide::$pro,
                 'static' => $static,
                 'uiId' => $this->uiId,
             ]));
