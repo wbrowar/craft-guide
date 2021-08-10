@@ -16,7 +16,7 @@ export const editorData: EditorComponent[] = [
     title: 'Button',
     group: 'components',
     code: `{{ craft.guide.component('button', { label: 'REPLACE_LABEL', url: url('REPLACE_URL') }) }}`,
-    documentation: `<p>Play audio in the browser’s audio player.</p>`,
+    documentation: `<p>A call-to-action link that looks like a button.</p>`,
     props: {
       label: `The label text for the button.`,
       url: `The URL that the button goes to when clicked.`,
@@ -49,53 +49,59 @@ export const editorData: EditorComponent[] = [
     <p>REPLACE_CONTENT</p>
   </div>
 </div>`,
-    documentation: `<p>FPO.</p>`,
+    documentation: `<p>An example using utility classes to lay out content using CSS grid columns.</p>`,
+  },
+  {
+    title: 'Grid – Custom Columns',
+    group: 'components',
+    code: `<div class="g-grid g-grid-cols-[var(--grid-cols)] g-gap-6" style="--grid-cols: repeat(3, 1fr);">
+  <div>
+    <p>REPLACE_CONTENT</p>
+  </div>
+  <div>
+    <p>REPLACE_CONTENT</p>
+  </div>
+  <div>
+    <p>REPLACE_CONTENT</p>
+  </div>
+</div>`,
+    documentation: `<p>An example using utility classes to lay out content using CSS Custom Properties to define the grid’s columns.</p>`,
   },
   {
     title: 'Heading',
     group: 'components',
     code: `{{ craft.guide.component('heading', { level: 1, text: 'REPLACE_TEXT' }) }}`,
-    documentation: `<p>Play audio in the browser’s audio player.</p>`,
+    documentation: `<p>A section heading wrapped in an anchor link.</p>`,
     props: {
-      level: `The label text for the button.`,
-      text: `The URL of the image to be displayed.`,
+      level: `A number that defines the wrapper tag. For example, the value of <strong>2</strong> would set the wrapper tag to <strong>h2</strong>.`,
+      text: `The text displayed in the header.`,
     },
   },
   {
     title: 'Image',
     group: 'components',
     code: `{{ craft.guide.component('image', { url: 'REPLACE_URL' }) }}`,
-    documentation: `<p>Display an image.</p>`,
+    documentation: `<p>Display an image or a screenshot from a URL.</p>`,
     props: {
-      asset: `An image asset.`,
       url: `The URL of the image to be displayed.`,
-    },
-  },
-  {
-    title: 'Guide Include',
-    group: 'components',
-    code: `{{ craft.guide.include({ slug: 'REPLACE_SLUG' }) }}`,
-    documentation: `<p>Embed the contents of another guide.</p>`,
-    props: {
-      slug: `The slug of the guide, as set in the Guide Editor.`,
     },
   },
   {
     title: 'Markdown',
     group: 'components',
-    code: `{% filter md('gfm') %}
+    code: `{% filter markdown('gfm') %}
 
 ## Heading
 
 Content
 
 {% endfilter %}`,
-    documentation: `<p>Play audio in the browser’s audio player.</p>`,
+    documentation: `<p>Use Craft’s "markdown" Twig filter to render markdown content.</p>`,
   },
   {
     title: 'Table',
     group: 'components',
-    code: `<table>
+    code: `<table class="g-table">
   <thead>
     <tr>
       <th>Table</th>
@@ -109,62 +115,62 @@ Content
     </tr>
   </tbody>
 </table>`,
-    documentation: `<p>Play audio in the browser’s audio player.</p>`,
+    documentation: `<p>A styled HTML table.</p>`,
   },
   {
     title: 'Tip',
     group: 'components',
-    code: `{{ craft.guide.component('tip', { message: 'REPLACE_TEXT' }) }}`,
-    documentation: `<p>Play audio in the browser’s audio player.</p>`,
+    code: `{{ craft.guide.component('tip', { text: 'REPLACE_TEXT' }) }}`,
+    documentation: `<p>Inform content authors in a way that stands out from surrounding text.</p>`,
     props: {
-      message: `The label text for the button.`,
+      message: `Text displayed in the tip.`,
     },
   },
   {
     title: 'Variable Client Name',
     group: 'components',
     code: `{{ craft.guide.var('clientName') }}`,
-    documentation: `<p>Play audio in the browser’s audio player.</p>`,
+    documentation: `<p>Display the value of the <strong>Client Name</strong> variable.</p>`,
   },
   {
     title: 'Variable My Company Name',
     group: 'components',
     code: `{{ craft.guide.var('myCompanyName') }}`,
-    documentation: `<p>Play audio in the browser’s audio player.</p>`,
+    documentation: `<p>Display the value of the <strong>My Company Name</strong> variable.</p>`,
   },
   {
     title: 'Variable Project Name',
     group: 'components',
     code: `{{ craft.guide.var('projectName') }}`,
-    documentation: `<p>Play audio in the browser’s audio player.</p>`,
+    documentation: `<p>Display the value of the <strong>Project Name</strong> variable.</p>`,
   },
   {
     title: 'Vimeo Video',
     group: 'components',
     code: `{{ craft.guide.component('video', { source: 'vimeo', videoId: 'REPLACE_VIDEO_ID' }) }}`,
-    documentation: `<p>Play audio in the browser’s audio player.</p>`,
+    documentation: `<p>Play a Vimeo video in an iframe.</p>`,
     props: {
-      source: `The label text for the button.`,
-      videoId: `The URL of the image to be displayed.`,
+      source: `Determine the video hosting service’s embed code.`,
+      videoId: `The ID of the Vimeo video, found in the URL or embed code provided by Vimeo.`,
     },
   },
   {
     title: 'Warning',
     group: 'components',
-    code: `{{ craft.guide.component('warning', { message: 'REPLACE_TEXT' }) }}`,
-    documentation: `<p>Play audio in the browser’s audio player.</p>`,
+    code: `{{ craft.guide.component('warning', { text: 'REPLACE_TEXT' }) }}`,
+    documentation: `<p>Warn content authors about potential content issues.</p>`,
     props: {
-      message: `The label text for the button.`,
+      message: `Text displayed in the warning.`,
     },
   },
   {
     title: 'YouTube Video',
     group: 'components',
     code: `{{ craft.guide.component('video', { source: 'youtube', videoId: 'REPLACE_VIDEO_ID' }) }}`,
-    documentation: `<p>Play audio in the browser’s audio player.</p>`,
+    documentation: `<p>Play a YouTube video in an iframe.</p>`,
     props: {
-      source: `The label text for the button.`,
-      videoId: `The URL of the image to be displayed.`,
+      source: `Determine the video hosting service’s embed code.`,
+      videoId: `The ID of the Vimeo video, found in the URL or embed code provided by YouTube.`,
     },
   },
   // Snippets
@@ -174,15 +180,49 @@ Content
   // todo add snippet: Logged in users – List of currently logged in users.
   // todo add snippet: Content Stats
   // todo add snippet: Changelog
-  // todo add snippet:
+  {
+    title: 'Content Stats',
+    group: 'snippets',
+    code: `{# Set the type of element to be displayed. #}
+{% set type = 'entries' %}
+{# Set the statuses to be displayed #}
+{% set statuses = ['live', 'disabled', 'pending', 'expired'] %}
+
+{% if type == 'entries' %}
+  {% set live = craft.entries.limit(null).status('live').count() %}
+  {% set disabled = craft.entries.limit(null).status('disabled').count() %}
+  {% set pending = craft.entries.limit(null).status('pending').count() %}
+  {% set expired = craft.entries.limit(null).status('expired').count() %}
+{% endif %}
+
+{% if 'live' in statuses %}
+<div class="element small hasstatus" title="Live elements"><span class="status live"></span><div class="label"><span class="title">Live: {{ live }}</span></div></div>
+{% endif %}
+
+{% if 'disabled' in statuses %}
+<div class="element small hasstatus" title="Disabled elements"><span class="status disabled"></span><div class="label"><span class="title">Disabled: {{ disabled }}</span></div></div>
+{% endif %}
+
+{% if 'pending' in statuses %}
+<div class="element small hasstatus" title="Disabled elements"><span class="status pending"></span><div class="label"><span class="title">Pending: {{ pending }}</span></div></div>
+{% endif %}
+
+{% if 'expired' in statuses %}
+<div class="element small hasstatus" title="Expired elements"><span class="status expired"></span><div class="label"><span class="title">Expired: {{ expired }}</span></div></div>
+{% endif %}`,
+    documentation: `<p>Show a total of entries that are currently published.</p>`,
+  },
   {
     title: 'Low-Res Image Check',
     group: 'snippets',
-    code: `{# Set the width to the smallest size that an image should be uploaded. #}
+    code: `{# Set the asset volume you would like to check for images in. #}
+{% set volume = 'REPLACE_VOLUME' %}
+{# Set the width to the smallest size that an image should be uploaded. #}
 {% set width = 300 %}
 
 {# Find all images within the targeted asset volume that are not wider than the \`width\` value. #}
-{% set assets = craft.assets.volume('REPLACE_VOLUME').width('< ' ~ width).kind('image').all() %}
+{% set assets = craft.assets.volume(volume).width('< ' ~ width).kind('image').all() %}
+{% set assets = craft.assets.volume(volume).width('< ' ~ width).kind('image').all() %}
 
 {# Display a list of offending images and instruct authors on what size is recommended. #}
 {% if assets|length %}
@@ -194,7 +234,7 @@ Content
       <div class="g-grid g-grid-cols-[var(--grid-cols)] g-gap-2" style="--grid-cols: 300px 1fr;">
         <img loading="lazy" src="{{ asset.url }}" width="300" />
         <div>
-          <a class="btn submit" href="{{ asset.cpEditUrl }}">Edit</a>
+          {{ craft.guide.component('button', { attrs: { class: ['submit'] }, label: 'Edit Image', url: asset.cpEditUrl }) }}
           <p><strong>Title</strong><br>{{ asset.title }}</p>
           <p><strong>File name</strong><br>{{ asset.filename }}</p>
           <p><strong>Width</strong><br>{{ asset.width }}px</p>
@@ -203,7 +243,7 @@ Content
     {% endfor %}
   </div>
 {% endif %}`,
-    documentation: `<p>Play audio in the browser’s audio player.</p>`,
+    documentation: `<p>Find images that would get upscaled if transformed.</p>`,
   },
 ];
 
@@ -221,6 +261,7 @@ const utilityClassesBase: string[] = [
   'g-grid-cols-4',
   'g-grid-cols-5',
   'g-grid-cols-6',
+  'g-grid-cols-[var(--grid-cols)]',
   'g-grid-cols-[var(--grid-cols-sm)]',
   'g-grid-cols-[var(--grid-cols-md)]',
   'g-grid-cols-[var(--grid-cols-lg)]',

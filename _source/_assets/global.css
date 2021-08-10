@@ -10,10 +10,30 @@
   color: white !important;
 }
 
+/* Wrapper */
 .guide {
   @apply g-space-y-6;
 }
 
+/* Elements */
+.guide code {
+  background-color: hsla(209, 20%, 25%, 0.2);
+  outline: 4px solid hsla(209, 20%, 25%, 0.2);
+  word-break: break-word;
+  color: hsl(209, 20%, 25%);
+}
+.guide pre {
+  padding: 15px;
+  background-color: hsla(209, 20%, 25%, 0.2);
+  border-radius: 5px;
+  white-space: pre-wrap;
+}
+.guide pre code {
+  background-color: transparent;
+  outline-color: transparent;
+}
+
+/* Components */
 .guide .g-heading {
   position: relative;
   scroll-margin-top: 70px;
@@ -44,6 +64,43 @@
   width: 100%;
   height: auto;
   line-height: 0;
+}
+
+.guide .g-table {
+  width: 100%;
+  border: 1px solid hsla(209, 20%, 25%, 0.9);
+  border-radius: 5px;
+}
+.guide .g-table thead {
+  border-radius: calc(5px * .5) calc(5px * .5) 0 0;
+  background-color: hsla(209, 20%, 25%, 0.9);
+}
+.guide .g-table thead :is(th, td) {
+  padding: 10px;
+  font-weight: 500;
+  color: #FFFFFF;
+}
+.guide .g-table th:first-child, .guide .g-table td:first-child {
+  border-radius: calc(5px * .5) 0 0 0;
+}
+.guide .g-table th:last-child, .guide .g-table td:last-child {
+  border-radius: 0 calc(5px * .5) 0 0;
+}
+
+.guide .g-table tbody tr {
+  border-bottom: 1px solid hsla(209, 20%, 25%, 0.9);
+  border-right: 1px solid hsla(209, 20%, 25%, 0.9);
+}
+.guide .g-table tbody td {
+  padding: 10px;
+  border-top: 1px solid hsla(209, 20%, 25%, 0.9);
+  border-left: 1px solid hsla(209, 20%, 25%, 0.9);
+}
+.guide .g-table tbody td:first-child {
+  border-left: none;
+}
+.guide .g-table tbody tr:first-child td {
+  border-top: none;
 }
 
 @tailwind components;
