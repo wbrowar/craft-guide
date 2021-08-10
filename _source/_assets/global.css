@@ -14,6 +14,21 @@
   @apply g-space-y-6;
 }
 
+.guide .g-heading {
+  position: relative;
+  scroll-margin-top: 70px;
+}
+.guide .g-heading:hover::before {
+  content: '#';
+  display: block;
+  position: absolute;
+  top: 0;
+  left: calc(-1ch * 1.3);
+}
+.guide .g-heading a {
+  @apply g-text-text g-no-underline;
+}
+
 .guide .g-image {
   @apply g-rounded-lg g-shadow-lg g-text-text;
   display: block;

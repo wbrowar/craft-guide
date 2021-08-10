@@ -7,9 +7,9 @@
       <h4>{{ title }}</h4>
       <p v-html="docs.description" v-if="docs?.description"></p>
       <div class="g-space-x-1">
-        <button class="btn small g-mt-1" type="button" @click="onInsert">➕ Add</button>
-        <button class="btn small g-mt-1" type="button" @click="onCopy">🗂 Copy</button>
-        <button class="btn small g-mt-1" type="button" @click="onDocumentation" v-if="docs">📓 Documentation</button>
+        <button class="btn small icon add g-mt-1" type="button" @click="onInsert">Add</button>
+        <button class="btn small icon copy g-mt-1" type="button" @click="onCopy">Copy</button>
+        <button class="btn small g-mt-1" type="button" @click="onDocumentation" v-if="docs">Documentation</button>
       </div>
     </div>
   </div>

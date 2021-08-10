@@ -1,4 +1,4 @@
-dateModified: 1628477241
+dateModified: 1628551895
 email:
   fromEmail: email@example.com
   fromName: 'Craft Plugin'
@@ -24,10 +24,10 @@ plugins:
     schemaVersion: 3.0.0
     settings:
       assetVolume: 791d4dc9-0bae-4126-b9cb-7718b2df18b6 # Guide
-      clientName: ''
+      clientName: 'Spoke & Chains'
       defaultTeleportMethod: prepend
-      myCompanyName: ''
-      projectName: ''
+      myCompanyName: 'My Company'
+      projectName: 'My Project'
       templatePath: _guide
 system:
   edition: pro

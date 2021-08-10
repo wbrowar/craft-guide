@@ -1,0 +1,13 @@
+{% extends 'guide/_partials/render_component.twig' %}
+
+{% if classes ?? false %}
+  {% set classes = classes|merge(['readable']) %}
+{% else %}
+  {% set classes = ['readable'] %}
+{% endif %}
+
+{% set content %}
+  <blockquote class="note tip">
+    {{ message }}
+  </blockquote>
+{% endset %}

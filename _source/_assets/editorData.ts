@@ -35,27 +35,30 @@ export const editorData: EditorComponent[] = [
   {
     title: 'Grid',
     group: 'components',
-    code: `<grid :columns="2">
+    code: `<div class="g-grid sm:g-grid-cols-2 md:g-grid-cols-3 lg:g-grid-cols-4 g-gap-6">
   <div>
-    <p>1st column content</p>
+    <p>REPLACE_CONTENT</p>
   </div>
   <div>
-    <p>2nd column content</p>
+    <p>REPLACE_CONTENT</p>
   </div>
-</grid>`,
+  <div>
+    <p>REPLACE_CONTENT</p>
+  </div>
+  <div>
+    <p>REPLACE_CONTENT</p>
+  </div>
+</div>`,
     documentation: `<p>FPO.</p>`,
-    props: {
-      columns: `FPO`,
-    },
   },
   {
     title: 'Heading',
     group: 'components',
-    code: `{{ craft.guide.component('heading', { text: 'REPLACE_TEXT' }) }}`,
+    code: `{{ craft.guide.component('heading', { level: 1, text: 'REPLACE_TEXT' }) }}`,
     documentation: `<p>Play audio in the browser’s audio player.</p>`,
     props: {
-      label: `The label text for the button.`,
-      url: `The URL of the image to be displayed.`,
+      level: `The label text for the button.`,
+      text: `The URL of the image to be displayed.`,
     },
   },
   {
@@ -82,24 +85,12 @@ export const editorData: EditorComponent[] = [
     group: 'components',
     code: `{% filter md('gfm') %}
 
+## Heading
+
 Content
 
 {% endfilter %}`,
     documentation: `<p>Play audio in the browser’s audio player.</p>`,
-    props: {
-      label: `The label text for the button.`,
-      url: `The URL of the image to be displayed.`,
-    },
-  },
-  {
-    title: 'My Company Name',
-    group: 'components',
-    code: `{{ craft.guide.var('myCompanyName') }}`,
-    documentation: `<p>Play audio in the browser’s audio player.</p>`,
-    props: {
-      label: `The label text for the button.`,
-      url: `The URL of the image to be displayed.`,
-    },
   },
   {
     title: 'Table',
@@ -119,10 +110,6 @@ Content
   </tbody>
 </table>`,
     documentation: `<p>Play audio in the browser’s audio player.</p>`,
-    props: {
-      label: `The label text for the button.`,
-      url: `The URL of the image to be displayed.`,
-    },
   },
   {
     title: 'Tip',
@@ -130,9 +117,26 @@ Content
     code: `{{ craft.guide.component('tip', { message: 'REPLACE_TEXT' }) }}`,
     documentation: `<p>Play audio in the browser’s audio player.</p>`,
     props: {
-      label: `The label text for the button.`,
-      url: `The URL of the image to be displayed.`,
+      message: `The label text for the button.`,
     },
+  },
+  {
+    title: 'Variable Client Name',
+    group: 'components',
+    code: `{{ craft.guide.var('clientName') }}`,
+    documentation: `<p>Play audio in the browser’s audio player.</p>`,
+  },
+  {
+    title: 'Variable My Company Name',
+    group: 'components',
+    code: `{{ craft.guide.var('myCompanyName') }}`,
+    documentation: `<p>Play audio in the browser’s audio player.</p>`,
+  },
+  {
+    title: 'Variable Project Name',
+    group: 'components',
+    code: `{{ craft.guide.var('projectName') }}`,
+    documentation: `<p>Play audio in the browser’s audio player.</p>`,
   },
   {
     title: 'Vimeo Video',
@@ -140,8 +144,8 @@ Content
     code: `{{ craft.guide.component('video', { source: 'vimeo', videoId: 'REPLACE_VIDEO_ID' }) }}`,
     documentation: `<p>Play audio in the browser’s audio player.</p>`,
     props: {
-      label: `The label text for the button.`,
-      url: `The URL of the image to be displayed.`,
+      source: `The label text for the button.`,
+      videoId: `The URL of the image to be displayed.`,
     },
   },
   {
@@ -150,8 +154,7 @@ Content
     code: `{{ craft.guide.component('warning', { message: 'REPLACE_TEXT' }) }}`,
     documentation: `<p>Play audio in the browser’s audio player.</p>`,
     props: {
-      label: `The label text for the button.`,
-      url: `The URL of the image to be displayed.`,
+      message: `The label text for the button.`,
     },
   },
   {
@@ -160,8 +163,8 @@ Content
     code: `{{ craft.guide.component('video', { source: 'youtube', videoId: 'REPLACE_VIDEO_ID' }) }}`,
     documentation: `<p>Play audio in the browser’s audio player.</p>`,
     props: {
-      label: `The label text for the button.`,
-      url: `The URL of the image to be displayed.`,
+      source: `The label text for the button.`,
+      videoId: `The URL of the image to be displayed.`,
     },
   },
   // Snippets

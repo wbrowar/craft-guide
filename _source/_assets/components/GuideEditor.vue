@@ -25,7 +25,7 @@
               class="g-w-full g-h-[60px] g-cursor-pointer"
               title="Settings"
               type="button"
-              @click="currentTab = 'publishing'"
+              @click="selectTab('publishing')"
             >
               <SvgSettings class="g-w-6 g-h-6" :class="[currentTab === 'publishing' ? 'g-text-select-light' : null]" />
             </button>
@@ -39,7 +39,7 @@
               class="g-w-full g-h-[60px] g-cursor-pointer"
               title="Components"
               type="button"
-              @click="currentTab = 'components'"
+              @click="selectTab('components')"
             >
               <SvgPuzzle class="g-w-6 g-h-6" :class="[currentTab === 'components' ? 'g-text-select-light' : null]" />
             </button>
@@ -53,7 +53,7 @@
               class="g-w-full g-h-[60px] g-cursor-pointer"
               title="Images"
               type="button"
-              @click="currentTab = 'images'"
+              @click="selectTab('images')"
             >
               <SvgPhotograph class="g-w-6 g-h-6" :class="[currentTab === 'images' ? 'g-text-select-light' : null]" />
             </button>
@@ -67,7 +67,7 @@
               class="g-w-full g-h-[60px] g-cursor-pointer"
               title="Guides"
               type="button"
-              @click="currentTab = 'guides'"
+              @click="selectTab('guides')"
             >
               <SvgGuide class="g-w-6 g-h-6" :class="[currentTab === 'guides' ? 'g-text-select-light' : null]" />
             </button>
@@ -81,7 +81,7 @@
               class="g-w-full g-h-[60px] g-cursor-pointer"
               title="Snippets"
               type="button"
-              @click="currentTab = 'snippets'"
+              @click="selectTab('snippets')"
             >
               <SvgAnnotation class="g-w-6 g-h-6" :class="[currentTab === 'snippets' ? 'g-text-select-light' : null]" />
             </button>
@@ -291,7 +291,7 @@
       <div class="g-absolute g-inset-y-0 g-right-0 g-w-64 g-p-2 g-z-10 lg:g-w-96" v-if="currentDocs">
         <div
           class="
-            g-box-border g-p-5 g-pt-10 g-w-full g-h-full g-bg-matrix-block g-rounded-sm g-shadow-lg g-overflow-auto
+            g-box-border g-p-5 g-pt-14 g-w-full g-h-full g-bg-matrix-block g-rounded-sm g-shadow-lg g-overflow-auto
           "
         >
           <h1 v-html="currentDocs.title" v-if="currentDocs.title"></h1>
@@ -303,10 +303,10 @@
               <pre class="g-p-3 g-select-all"><code>{{ currentDocs.code }}</code></pre>
             </div>
             <div class="g-space-x-1">
-              <button class="btn small g-mt-1" type="button" @click="insertTextIntoEditor(currentDocs.code)">
-                ➕ Add
+              <button class="btn small icon add g-mt-1" type="button" @click="insertTextIntoEditor(currentDocs.code)">
+                Add
               </button>
-              <button class="btn small g-mt-1" type="button" @click="copyText(currentDocs.code)">🗂 Copy</button>
+              <button class="btn small g-mt-1" type="button" @click="copyText(currentDocs.code)">Copy</button>
             </div>
           </div>
           <div class="g-mt-6" v-if="currentDocs.props">
@@ -323,7 +323,7 @@
             </table>
           </div>
         </div>
-        <button class="g-absolute g-top-4 g-right-4" type="button" @click="currentDocs = null">Close</button>
+        <button class="btn g-absolute g-top-4 g-right-4" type="button" @click="currentDocs = null">Close</button>
       </div>
     </transition>
   </form>
@@ -389,6 +389,7 @@ export default defineComponent({
       contentSource: 'field' as GuideContentSource,
       contentUrl: '',
       currentDocs: null,
+      // currentTab: 'publishing' as EditorTabGroup,
       currentTab: 'publishing' as EditorTabGroup,
       devMode,
       editorComponents: editorData as EditorComponent[],
@@ -486,6 +487,10 @@ export default defineComponent({
         this.$refs.slugField.setFieldValue(kebab(newValue));
       }
     },
+    selectTab(tab) {
+      this.currentTab = tab;
+      localStorage.setItem('guide:edit:tab', tab);
+    },
     showDocumentation(payload) {
       this.currentDocs = this.currentDocs?.code === payload.code ? null : payload;
     },
@@ -553,6 +558,10 @@ export default defineComponent({
       },
     };
     this.$refs.editor._editor.completers = [...this.$refs.editor._editor.completers, staticWordCompleter];
+
+    if (this.proEdition && localStorage.getItem('guide:edit:tab') && this.contentSource === 'field') {
+      this.currentTab = localStorage.getItem('guide:edit:tab');
+    }
 
     log('Guide Editor loaded for guide');
     table(this.guide);

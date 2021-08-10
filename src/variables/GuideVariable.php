@@ -80,7 +80,7 @@ class GuideVariable
                 $value = !empty(Guide::$settings->myCompanyName) ? Guide::$settings->myCompanyName : Template::raw('<span class="fpo">My Company Name</span>');
                 break;
             case 'projectName':
-                $value = !empty(Guide::$settings->projectName) ? Guide::$settings->projectName : Template::raw('<span class="fpo">My Company Name</span>');
+                $value = !empty(Guide::$settings->projectName) ? Guide::$settings->projectName : Template::raw('<span class="fpo">Project Name</span>');
                 break;
         }
 
