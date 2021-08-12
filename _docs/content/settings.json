@@ -1,0 +1,10 @@
+{
+  "title": "Guide for Craft CMS",
+  "url": "https://guide.wbrowar.com",
+  "logo": {
+    "light": "/logo-light.svg",
+    "dark": "/logo-dark.svg"
+  },
+  "github": "wbrowar/craft-guide",
+  "twitter": "@wbrowar"
+}

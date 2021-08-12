@@ -1,6 +1,6 @@
 {
   "guide-admin.ts": {
-    "file": "assets/guide-admin.662ab8fc.js",
+    "file": "assets/guide-admin.f16b980b.js",
     "src": "guide-admin.ts",
     "isEntry": true,
     "imports": [
@@ -14,7 +14,7 @@
     ]
   },
   "guide-display.ts": {
-    "file": "assets/guide-display.71d66757.js",
+    "file": "assets/guide-display.f885fc76.js",
     "src": "guide-display.ts",
     "isEntry": true,
     "imports": [
@@ -23,17 +23,20 @@
       "_SvgSettings.5c9514bf.js"
     ],
     "css": [
-      "assets/guide-display.280f0589.css"
+      "assets/guide-display.dcbf4e88.css"
     ]
   },
   "guide-welcome.ts": {
-    "file": "assets/guide-welcome.e769974e.js",
+    "file": "assets/guide-welcome.976cb358.js",
     "src": "guide-welcome.ts",
     "isEntry": true,
     "imports": [
       "_vendor.0cd9bbf7.js",
       "_CraftFieldSelect.35d5fb7d.js",
       "_CraftFieldText.99fa69fc.js"
+    ],
+    "css": [
+      "assets/guide-welcome.5daca07a.css"
     ]
   },
   "_vendor.0cd9bbf7.js": {

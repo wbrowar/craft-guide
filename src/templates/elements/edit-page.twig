@@ -10,14 +10,16 @@
  * @since     2.0.0
  */ #}
 
+{% set teleportMethod = teleportMethod ?? 'prepend' %}
+
 {% if guides|length %}
   {% include 'guide/_partials/guide_display.twig' with {
     displayId: 'page',
     element: element ?? null,
     guides: guides,
-    teleportContainerClass: 'content-pane g-my-3',
+    teleportContainerClass: 'content-pane ' ~ (teleportMethod == 'prepend' ? 'g-mb-3' : 'g-mt-3'),
     teleportMap: teleportMap ?? false,
-    teleportMethod: teleportMethod ?? 'prepend',
+    teleportMethod: teleportMethod,
     teleportSelector: '#content-container'
   } only %}
 {% endif %}

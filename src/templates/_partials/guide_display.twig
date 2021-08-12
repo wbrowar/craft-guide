@@ -43,7 +43,7 @@
           {% if guides|length %}
             {% for guide in guides %}
               {% if teleportMap['id-' ~ guide.id] ?? false %}<teleport to="{{ teleportMap['id-' ~ guide.id] }}">{% endif %}
-              <div class="guide g-relative"{% if not (teleportMap['id-' ~ guide.id] ?? false) and (guideNav|length > 1) %} v-if="currentGuide === '{{ guide.slug }}'"{% endif %}>
+              <div class="guide guide-{{ guide.slug }} g-relative"{% if not (teleportMap['id-' ~ guide.id] ?? false) and (guideNav|length > 1) %} v-if="currentGuide === '{{ guide.slug }}'"{% endif %}>
                 {{ include('guide/_partials/render_content', { guide: guide }) }}
                 <div class="guide-edit-button g-absolute g-top-0 g-right-0" v-if="enableInlineEditor">
                   <button class="btn small g-duration-150" type="button" @click="showInlineEditor = true"><svg-settings class="g-h-4 g-w-4"></svg-settings></button>
