@@ -5,7 +5,7 @@
         <WelcomeAnimation class="g-object-cover g-overflow-hidden" />
         <div class="g-flex g-items-center g-justify-between g-p-6 g-bg-matrix-titlebar">
           <div></div>
-          <a class="btn submit icon go" :href="skipUrl">Skip</a>
+          <a class="btn submit icon go" :href="skipUrl">Go to Settings</a>
         </div>
       </div>
     </div>
@@ -15,19 +15,11 @@
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from 'vue';
 import { devMode, log } from '../globals';
-import CraftFieldSelect from './CraftFieldSelect.vue';
-import CraftFieldText from './CraftFieldText.vue';
 import WelcomeAnimation from './WelcomeAnimation.vue';
-import SvgPlay from './SvgPlay.vue';
-import SvgPause from './SvgPause.vue';
 
 export default defineComponent({
   name: 'GuideWelcome',
   components: {
-    CraftFieldSelect,
-    CraftFieldText,
-    SvgPlay,
-    SvgPause,
     WelcomeAnimation,
   },
   props: {

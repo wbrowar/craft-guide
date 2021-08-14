@@ -1,63 +1,63 @@
 {
   "guide-admin.ts": {
-    "file": "assets/guide-admin.f16b980b.js",
+    "file": "assets/guide-admin.6dc47d63.js",
     "src": "guide-admin.ts",
     "isEntry": true,
     "imports": [
-      "_vendor.0cd9bbf7.js",
-      "_CraftFieldSelect.35d5fb7d.js",
-      "_CraftFieldText.99fa69fc.js",
-      "_SvgSettings.5c9514bf.js"
+      "_vendor.eec5045f.js",
+      "_CraftFieldSelect.3bd4e4b1.js",
+      "_CraftFieldText.68212f21.js",
+      "_SvgSettings.a395006e.js"
     ],
     "css": [
       "assets/guide-admin.c26803b2.css"
     ]
   },
   "guide-display.ts": {
-    "file": "assets/guide-display.f885fc76.js",
+    "file": "assets/guide-display.46b98636.js",
     "src": "guide-display.ts",
     "isEntry": true,
     "imports": [
-      "_vendor.0cd9bbf7.js",
-      "_CraftFieldSelect.35d5fb7d.js",
-      "_SvgSettings.5c9514bf.js"
+      "_vendor.eec5045f.js",
+      "_CraftFieldSelect.3bd4e4b1.js",
+      "_SvgSettings.a395006e.js"
     ],
     "css": [
       "assets/guide-display.dcbf4e88.css"
     ]
   },
   "guide-welcome.ts": {
-    "file": "assets/guide-welcome.976cb358.js",
+    "file": "assets/guide-welcome.98ed9add.js",
     "src": "guide-welcome.ts",
     "isEntry": true,
     "imports": [
-      "_vendor.0cd9bbf7.js",
-      "_CraftFieldSelect.35d5fb7d.js",
-      "_CraftFieldText.99fa69fc.js"
+      "_vendor.eec5045f.js",
+      "_CraftFieldSelect.3bd4e4b1.js",
+      "_CraftFieldText.68212f21.js"
     ],
     "css": [
-      "assets/guide-welcome.5daca07a.css"
+      "assets/guide-welcome.b69f6fc8.css"
     ]
   },
-  "_vendor.0cd9bbf7.js": {
-    "file": "assets/vendor.0cd9bbf7.js"
+  "_vendor.eec5045f.js": {
+    "file": "assets/vendor.eec5045f.js"
   },
-  "_CraftFieldSelect.35d5fb7d.js": {
-    "file": "assets/CraftFieldSelect.35d5fb7d.js",
+  "_CraftFieldSelect.3bd4e4b1.js": {
+    "file": "assets/CraftFieldSelect.3bd4e4b1.js",
     "imports": [
-      "_vendor.0cd9bbf7.js"
+      "_vendor.eec5045f.js"
     ]
   },
-  "_CraftFieldText.99fa69fc.js": {
-    "file": "assets/CraftFieldText.99fa69fc.js",
+  "_CraftFieldText.68212f21.js": {
+    "file": "assets/CraftFieldText.68212f21.js",
     "imports": [
-      "_vendor.0cd9bbf7.js"
+      "_vendor.eec5045f.js"
     ]
   },
-  "_SvgSettings.5c9514bf.js": {
-    "file": "assets/SvgSettings.5c9514bf.js",
+  "_SvgSettings.a395006e.js": {
+    "file": "assets/SvgSettings.a395006e.js",
     "imports": [
-      "_vendor.0cd9bbf7.js"
+      "_vendor.eec5045f.js"
     ]
   }
 }

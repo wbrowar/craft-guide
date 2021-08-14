@@ -1,6 +1,36 @@
 <template>
   <div class="g-relative">
     <div id="scene-container" ref="sceneContainer" class="g-absolute g-inset-0" @click="onContainerClicked"></div>
+    <div class="g-absolute g-right-0 g-bottom-0 g-space-x-1" v-if="devMode">
+      <button class="btn small" type="button" @mousedown="debugButtonPressed('status')">⏺</button>
+      <button class="btn small" type="button" @mousedown="debugButtonPressed('i0_1')">
+        <b v-if="debugIncrement === 0.1">0.1</b><span v-else>0.1</span>
+      </button>
+      <button class="btn small" type="button" @mousedown="debugButtonPressed('i0_5')">
+        <b v-if="debugIncrement === 0.5">0.5</b><span v-else>0.5</span>
+      </button>
+      <button class="btn small" type="button" @mousedown="debugButtonPressed('i1')">
+        <b v-if="debugIncrement === 1">1</b><span v-else>1</span>
+      </button>
+      <span>X: {{ debugCameraX }}</span>
+      <button class="btn small" type="button" @mousedown="debugButtonPressed('xUp')">⬆️</button>
+      <button class="btn small" type="button" @mousedown="debugButtonPressed('xDown')">⬇️</button>
+      <span>Y: {{ debugCameraY }}</span>
+      <button class="btn small" type="button" @mousedown="debugButtonPressed('yUp')">⬆️</button>
+      <button class="btn small" type="button" @mousedown="debugButtonPressed('yDown')">⬇️</button>
+      <span>Z: {{ debugCameraZ }}</span>
+      <button class="btn small" type="button" @mousedown="debugButtonPressed('zUp')">⬆️</button>
+      <button class="btn small" type="button" @mousedown="debugButtonPressed('zDown')">⬇️</button>
+      <span>Rotate X: {{ debugCameraRotateX }}</span>
+      <button class="btn small" type="button" @mousedown="debugButtonPressed('xRotateUp')">⬆️</button>
+      <button class="btn small" type="button" @mousedown="debugButtonPressed('xRotateDown')">⬇️</button>
+      <span>Rotate Y: {{ debugCameraRotateY }}</span>
+      <button class="btn small" type="button" @mousedown="debugButtonPressed('yRotateUp')">⬆️</button>
+      <button class="btn small" type="button" @mousedown="debugButtonPressed('yRotateDown')">⬇️</button>
+      <span>Rotate Z: {{ debugCameraRotateZ }}</span>
+      <button class="btn small" type="button" @mousedown="debugButtonPressed('zRotateUp')">⬆️</button>
+      <button class="btn small" type="button" @mousedown="debugButtonPressed('zRotateDown')">⬇️</button>
+    </div>
   </div>
 </template>
 
@@ -8,10 +38,11 @@
 import { defineComponent, reactive, toRefs } from 'vue';
 import { devMode, log } from '../globals';
 import gsap from 'gsap';
+import MotionPathPlugin from 'gsap/MotionPathPlugin';
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { ColorRepresentation, Object3D } from 'three';
+import { Camera, ColorRepresentation, DirectionalLight, HemisphereLight, Object3D, Scene, WebGLRenderer } from 'three';
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 interface SceneSettings {
   animation: {
@@ -70,6 +101,22 @@ interface SceneSettings {
   };
 }
 
+let ambientLight: HemisphereLight;
+let container: HTMLElement;
+let camera: Camera;
+let mainLight: DirectionalLight;
+let object: any;
+let renderer: WebGLRenderer;
+let scene: Scene;
+
+let book: Object3D;
+let bookTop: Object3D;
+let bookLoose: Object3D;
+let bookLoose2: Object3D;
+let timeline;
+
+gsap.registerPlugin(MotionPathPlugin);
+
 export default defineComponent({
   name: 'WelcomeAnimation',
   components: {},
@@ -80,13 +127,16 @@ export default defineComponent({
   },
   setup(props) {
     const state = reactive({
-      animationXDirection: 1,
-      book: null,
-      bookLoose: null,
-      bookLooseTextureUrl: new URL('/guide-thank-you.png', import.meta.url),
-      bookLoose2: null,
-      bookTop: null,
       animationState: 'intro',
+      animationXDirection: 1,
+      bookLooseTextureUrl: new URL('/guide-thank-you.png', import.meta.url),
+      debugIncrement: 0.5,
+      debugCameraX: 0,
+      debugCameraY: 0,
+      debugCameraZ: 0,
+      debugCameraRotateX: 0,
+      debugCameraRotateY: 0,
+      debugCameraRotateZ: 0,
       hasBeenInteractedWith: false,
       devMode,
       objectUrl: new URL('/guide-book.gltf', import.meta.url),
@@ -110,7 +160,7 @@ export default defineComponent({
             z: 0,
           },
           rotation: {
-            x: 0,
+            x: 4.7,
             y: 0,
             z: 0,
           },
@@ -159,12 +209,12 @@ export default defineComponent({
   },
   methods: {
     animateOpenBook() {
-      if (this.bookTop && this.bookLoose && this.bookLoose2) {
+      if (bookTop && bookLoose && bookLoose2) {
         this.hasBeenInteractedWith = true;
 
         this.animationState = 'animating';
         const speed = 3;
-        gsap.to(this.bookTop.rotation, {
+        gsap.to(bookTop.rotation, {
           duration: speed,
           z: 1.9,
           ease: 'elastic.out(1, 0.3)',
@@ -172,12 +222,12 @@ export default defineComponent({
             this.animationState = 'opened';
           },
         });
-        gsap.to(this.bookLoose.rotation, {
+        gsap.to(bookLoose.rotation, {
           duration: speed,
           z: 0.15,
           ease: 'elastic.out(1, 0.3)',
         });
-        gsap.to(this.bookLoose2.rotation, {
+        gsap.to(bookLoose2.rotation, {
           duration: speed,
           z: 0.02,
           ease: 'elastic.out(1, 0.3)',
@@ -185,12 +235,12 @@ export default defineComponent({
       }
     },
     animateCloseBook() {
-      if (this.bookTop && this.bookLoose && this.bookLoose2) {
+      if (bookTop && bookLoose && bookLoose2) {
         this.hasBeenInteractedWith = true;
 
         this.animationState = 'animating';
         const speed = 1;
-        gsap.to(this.bookTop.rotation, {
+        gsap.to(bookTop.rotation, {
           duration: speed,
           z: 0,
           ease: 'power4.in',
@@ -198,12 +248,12 @@ export default defineComponent({
             this.animationState = 'closed';
           },
         });
-        gsap.to(this.bookLoose.rotation, {
+        gsap.to(bookLoose.rotation, {
           duration: speed,
           z: -0.05,
           ease: 'power4.in',
         });
-        gsap.to(this.bookLoose2.rotation, {
+        gsap.to(bookLoose2.rotation, {
           duration: speed,
           z: -0.05,
           ease: 'power4.in',
@@ -211,10 +261,10 @@ export default defineComponent({
       }
     },
     animateSlideInBook() {
-      if (this.book) {
+      if (book) {
         this.animationState = 'animating';
-        const speed = 0.7;
-        gsap.to(this.book.position, {
+        const speed = 1.2;
+        gsap.to(book.position, {
           duration: speed,
           x: 0,
           startAt: {
@@ -225,7 +275,7 @@ export default defineComponent({
             this.animationState = 'closed';
           },
         });
-        gsap.to(this.book.rotation, {
+        gsap.to(book.rotation, {
           duration: speed,
           y: Math.random() - 0.5,
           startAt: {
@@ -238,20 +288,89 @@ export default defineComponent({
           if (!this.hasBeenInteractedWith) {
             this.animateOpenBook();
           }
-        }, 3000);
+        }, 2500);
+
+        setTimeout(() => {
+          this.playCameraLoop();
+        }, 5000);
+      }
+    },
+    debugButtonPressed(action) {
+      if (camera) {
+        switch (action) {
+          case 'xUp':
+            camera.position.x += this.debugIncrement;
+            break;
+          case 'xDown':
+            camera.position.x -= this.debugIncrement;
+            break;
+          case 'yUp':
+            camera.position.y += this.debugIncrement;
+            break;
+          case 'yDown':
+            camera.position.y -= this.debugIncrement;
+            break;
+          case 'zUp':
+            camera.position.z += this.debugIncrement;
+            break;
+          case 'zDown':
+            camera.position.z -= this.debugIncrement;
+            break;
+          case 'xRotateUp':
+            camera.rotation.x += this.debugIncrement;
+            break;
+          case 'xRotateDown':
+            camera.rotation.x -= this.debugIncrement;
+            break;
+          case 'yRotateUp':
+            camera.rotation.y += this.debugIncrement;
+            break;
+          case 'yRotateDown':
+            camera.rotation.y -= this.debugIncrement;
+            break;
+          case 'zRotateUp':
+            camera.rotation.z += this.debugIncrement;
+            break;
+          case 'zRotateDown':
+            camera.rotation.z -= this.debugIncrement;
+            break;
+          case 'i0_1':
+            this.debugIncrement = 0.1;
+            break;
+          case 'i0_5':
+            this.debugIncrement = 0.5;
+            break;
+          case 'i1':
+            this.debugIncrement = 1;
+            break;
+        }
+        this.debugCameraX = camera.position.x;
+        this.debugCameraY = camera.position.y;
+        this.debugCameraZ = camera.position.z;
+        this.debugCameraRotateX = camera.rotation.x;
+        this.debugCameraRotateY = camera.rotation.y;
+        this.debugCameraRotateZ = camera.rotation.z;
+
+        log(
+          'Camera',
+          `position x: ${camera.position.x}`,
+          `position y: ${camera.position.y}`,
+          `position z: ${camera.position.z}`,
+          `rotation x: ${camera.rotation.x}`,
+          `rotation y: ${camera.rotation.y}`,
+          `rotation z: ${camera.rotation.z}`
+        );
       }
     },
     init() {
-      let object: any;
-
       // set container
-      const container = this.$refs.sceneContainer as HTMLElement;
+      container = this.$refs.sceneContainer as HTMLElement;
       // add camera
       const fov = this.settings.camera.fov; // Field of view
       const aspect = container.clientWidth / container.clientHeight;
       const near = this.settings.camera.near; // the near clipping plane
       const far = this.settings.camera.far; // the far clipping plane
-      const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+      camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
       camera.position.set(
         this.settings.camera.position.x,
         this.settings.camera.position.y,
@@ -263,18 +382,18 @@ export default defineComponent({
         this.settings.camera.rotation.z
       );
       // create scene
-      const scene = new THREE.Scene();
+      scene = new THREE.Scene();
       scene.background = new THREE.Color(this.settings.scene.bgColor);
       if (this.sceneBackgroundUrl) {
         scene.background = new THREE.TextureLoader().load(this.sceneBackgroundUrl);
       }
       // add lights
-      const ambientLight = new THREE.HemisphereLight(
+      ambientLight = new THREE.HemisphereLight(
         this.settings.lights.ambient.skyColor,
         this.settings.lights.ambient.groundColor,
         this.settings.lights.ambient.intensity
       );
-      const mainLight = new THREE.DirectionalLight(
+      mainLight = new THREE.DirectionalLight(
         this.settings.lights.directional.color,
         this.settings.lights.directional.intensity
       );
@@ -285,9 +404,9 @@ export default defineComponent({
       );
       scene.add(ambientLight, mainLight);
       // add controls
-      const controls = new OrbitControls(camera, container);
+      // const controls = new OrbitControls(camera, container);
       // create renderer
-      const renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer = new THREE.WebGLRenderer({ antialias: true });
       renderer.setSize(container.clientWidth, container.clientHeight);
       renderer.setPixelRatio(window.devicePixelRatio);
       // renderer.gammaFactor = 2.2;
@@ -324,20 +443,20 @@ export default defineComponent({
             log('Scened objects', children);
           }
 
-          this.book = object.scene.getObjectByName('Scene');
-          this.bookTop = object.scene.getObjectByName('Top');
-          this.bookLoose = object.scene.getObjectByName('Loose');
-          this.bookLoose2 = object.scene.getObjectByName('Loose_2');
+          book = object.scene.getObjectByName('Scene');
+          bookTop = object.scene.getObjectByName('Top');
+          bookLoose = object.scene.getObjectByName('Loose');
+          bookLoose2 = object.scene.getObjectByName('Loose_2');
 
-          if (this.bookLoose) {
-            this.bookLoose.texture = new THREE.TextureLoader().load(this.bookLooseTextureUrl.href);
-            this.bookLoose.texture.encoding = THREE.sRGBEncoding;
-            this.bookLoose.texture.flipY = false;
+          if (bookLoose) {
+            bookLoose.texture = new THREE.TextureLoader().load(this.bookLooseTextureUrl.href);
+            bookLoose.texture.encoding = THREE.sRGBEncoding;
+            bookLoose.texture.flipY = false;
           }
 
           this.animateSlideInBook();
 
-          log('Objects from scene', this.bookTop, this.bookLoose, this.bookLoose2);
+          log('Objects from scene', bookTop, bookLoose, bookLoose2);
         },
         undefined,
         undefined
@@ -381,6 +500,172 @@ export default defineComponent({
         this.animateCloseBook();
       } else if (this.animationState === 'closed') {
         this.animateOpenBook();
+      }
+    },
+    playCameraLoop() {
+      if (camera) {
+        const animations = [];
+        // timeline = gsap.timeline({ repeat: -1, repeatDelay: 1 });
+        timeline = gsap.timeline({
+          onComplete: function () {
+            gsap.set(book.rotation, {
+              y: () => {
+                return Math.random() - 0.5;
+              },
+            });
+            this.restart();
+          },
+        });
+
+        animations.push('leftToRight');
+        animations.push('zoomFromTop');
+        animations.push('rotateAroundBook');
+
+        // Slide from left to right
+        if (animations.includes('leftToRight')) {
+          const leftToRightDuration = 16;
+          timeline
+            .add('leftToRight')
+            .set(
+              camera.position,
+              {
+                x: -15,
+                y: 0.7,
+                z: 5,
+              },
+              'leftToRight'
+            )
+            .set(
+              camera.rotation,
+              {
+                x: 0,
+                y: 0,
+                z: 0,
+              },
+              'leftToRight'
+            )
+            .to(
+              camera.position,
+              {
+                x: 15,
+                y: 0.7,
+                z: 5,
+                ease: 'power1.inOut',
+                duration: leftToRightDuration,
+              },
+              'leftToRight'
+            )
+            .to(
+              camera.rotation,
+              {
+                x: 0,
+                y: 0,
+                z: 0,
+                duration: leftToRightDuration,
+              },
+              'leftToRight'
+            );
+        }
+
+        if (animations.includes('zoomFromTop')) {
+          const zoomFromTopDuration = 10;
+          timeline
+            .add('zoomFromTop')
+            .set(
+              camera.position,
+              {
+                x: 0,
+                y: 31,
+                z: 0,
+              },
+              'zoomFromTop'
+            )
+            .set(
+              camera.rotation,
+              {
+                x: 4.7,
+                y: 0,
+                z: 0,
+              },
+              'zoomFromTop'
+            )
+            .to(
+              camera.position,
+              {
+                x: 0,
+                y: 1,
+                z: 1.5,
+                ease: 'power4.out',
+                duration: zoomFromTopDuration,
+              },
+              'zoomFromTop'
+            )
+            .to(
+              camera.rotation,
+              {
+                x: 5.99,
+                y: 0,
+                z: 0,
+                ease: 'power1.in',
+                duration: zoomFromTopDuration,
+              },
+              'zoomFromTop'
+            );
+        }
+
+        if (animations.includes('rotateAroundBook')) {
+          const rotateAroundBookDuration = 10;
+          timeline
+            .add('rotateAroundBook')
+            .set(
+              camera.position,
+              {
+                x: 6.3,
+                y: 1,
+                z: -13,
+              },
+              'rotateAroundBook'
+            )
+            .set(
+              camera.rotation,
+              {
+                x: -6.66,
+                y: 1.499,
+                z: 0,
+              },
+              'rotateAroundBook'
+            )
+            .to(
+              camera.position,
+              {
+                x: 4.3,
+                y: 1,
+                z: 4.447071,
+                ease: 'power1.inOut',
+                duration: rotateAroundBookDuration,
+              },
+              'rotateAroundBook'
+            )
+            .to(
+              camera.rotation,
+              {
+                x: -6.46,
+                y: 1.299,
+                z: 0,
+                ease: 'power1.inOut',
+                duration: rotateAroundBookDuration,
+              },
+              'rotateAroundBook'
+            );
+        }
+
+        // 📓 Camera
+        //      globals.ts:69 ◉ 📓 position x: 4.3
+        //      globals.ts:69 ◉ 📓 position y: 1
+        //      globals.ts:69 ◉ 📓 position z: 6.447071
+        //      globals.ts:69 ◉ 📓 rotation x: -6.66
+        //      globals.ts:69 ◉ 📓 rotation y: 1.004822
+        //      globals.ts:69 ◉ 📓 rotation z: 0
       }
     },
   },
