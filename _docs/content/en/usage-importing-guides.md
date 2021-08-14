@@ -1,5 +1,5 @@
 ---
-title: Moving Guides to New Environments
+title: Re-Using Guides Across Projects
 description: 'Overview of Guide for Craft CMS'
 position: 203
 category: Using Guide
