@@ -1,63 +1,46 @@
 {
   "guide-admin.ts": {
-    "file": "assets/guide-admin.6dc47d63.js",
+    "file": "assets/guide-admin.56c59bb8.js",
     "src": "guide-admin.ts",
     "isEntry": true,
     "imports": [
-      "_vendor.eec5045f.js",
-      "_CraftFieldSelect.3bd4e4b1.js",
-      "_CraftFieldText.68212f21.js",
-      "_SvgSettings.a395006e.js"
+      "_globals.d29db01a.js",
+      "_SvgSettings.a3c8f422.js"
     ],
     "css": [
       "assets/guide-admin.c26803b2.css"
     ]
   },
   "guide-display.ts": {
-    "file": "assets/guide-display.46b98636.js",
+    "file": "assets/guide-display.6ec97db7.js",
     "src": "guide-display.ts",
     "isEntry": true,
     "imports": [
-      "_vendor.eec5045f.js",
-      "_CraftFieldSelect.3bd4e4b1.js",
-      "_SvgSettings.a395006e.js"
+      "_globals.d29db01a.js",
+      "_SvgSettings.a3c8f422.js"
     ],
     "css": [
       "assets/guide-display.dcbf4e88.css"
     ]
   },
   "guide-welcome.ts": {
-    "file": "assets/guide-welcome.98ed9add.js",
+    "file": "assets/guide-welcome.04784bad.js",
     "src": "guide-welcome.ts",
     "isEntry": true,
     "imports": [
-      "_vendor.eec5045f.js",
-      "_CraftFieldSelect.3bd4e4b1.js",
-      "_CraftFieldText.68212f21.js"
+      "_globals.d29db01a.js"
     ],
     "css": [
-      "assets/guide-welcome.b69f6fc8.css"
+      "assets/guide-welcome.7e044bc2.css"
     ]
   },
-  "_vendor.eec5045f.js": {
-    "file": "assets/vendor.eec5045f.js"
+  "_globals.d29db01a.js": {
+    "file": "assets/globals.d29db01a.js"
   },
-  "_CraftFieldSelect.3bd4e4b1.js": {
-    "file": "assets/CraftFieldSelect.3bd4e4b1.js",
+  "_SvgSettings.a3c8f422.js": {
+    "file": "assets/SvgSettings.a3c8f422.js",
     "imports": [
-      "_vendor.eec5045f.js"
-    ]
-  },
-  "_CraftFieldText.68212f21.js": {
-    "file": "assets/CraftFieldText.68212f21.js",
-    "imports": [
-      "_vendor.eec5045f.js"
-    ]
-  },
-  "_SvgSettings.a395006e.js": {
-    "file": "assets/SvgSettings.a395006e.js",
-    "imports": [
-      "_vendor.eec5045f.js"
+      "_globals.d29db01a.js"
     ]
   }
 }

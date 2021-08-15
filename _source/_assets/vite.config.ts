@@ -14,6 +14,9 @@ export default defineConfig({
         'guide-display': './guide-display.ts',
         'guide-welcome': './guide-welcome.ts',
       },
+      output: {
+        manualChunks: undefined,
+      },
     },
   },
   plugins: [vue()],

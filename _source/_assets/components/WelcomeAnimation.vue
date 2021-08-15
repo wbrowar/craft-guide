@@ -1,7 +1,7 @@
 <template>
   <div class="g-relative">
     <div id="scene-container" ref="sceneContainer" class="g-absolute g-inset-0" @click="onContainerClicked"></div>
-    <div class="g-absolute g-right-0 g-bottom-0 g-space-x-1" v-if="devMode">
+    <div class="g-absolute g-right-0 g-bottom-0 g-space-x-1" v-if="showDebugControls">
       <button class="btn small" type="button" @mousedown="debugButtonPressed('status')">⏺</button>
       <button class="btn small" type="button" @mousedown="debugButtonPressed('i0_1')">
         <b v-if="debugIncrement === 0.1">0.1</b><span v-else>0.1</span>
@@ -36,12 +36,11 @@
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from 'vue';
-import { devMode, log } from '../globals';
+import { assetPath, devMode, log } from '../globals';
 import gsap from 'gsap';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Camera, ColorRepresentation, DirectionalLight, HemisphereLight, Object3D, Scene, WebGLRenderer } from 'three';
-// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 interface SceneSettings {
   animation: {
@@ -123,10 +122,11 @@ export default defineComponent({
     sceneSettings: String,
   },
   emits: ['paused', 'played'],
-  setup(props) {
+  setup() {
     const state = reactive({
       animationState: 'intro',
       animationXDirection: 1,
+
       debugIncrement: 0.5,
       debugCameraX: 0,
       debugCameraY: 0,
@@ -135,8 +135,7 @@ export default defineComponent({
       debugCameraRotateY: 0,
       debugCameraRotateZ: 0,
       hasBeenInteractedWith: false,
-      devMode,
-      objectUrl: new URL('/guide-book.gltf', import.meta.url),
+      objectUrl: `${assetPath}/guide-book.gltf`,
       resizeObserver: null as ResizeObserver | null,
       settings: {
         animation: {
@@ -202,6 +201,9 @@ export default defineComponent({
     aspect(): string {
       const aspect: string[] = this.aspectRatio.split(' ');
       return `${(parseFloat(aspect[2]) / parseFloat(aspect[0])) * 100}%`;
+    },
+    showDebugControls() {
+      return import.meta.env.DEV;
     },
   },
   methods: {
@@ -400,13 +402,10 @@ export default defineComponent({
         this.settings.lights.directional.position.z
       );
       scene.add(ambientLight, mainLight);
-      // add controls
-      // const controls = new OrbitControls(camera, container);
       // create renderer
       renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
       renderer.setSize(container.clientWidth, container.clientHeight);
       renderer.setPixelRatio(window.devicePixelRatio);
-      // renderer.gammaFactor = 2.2;
       renderer.outputEncoding = THREE.sRGBEncoding;
       renderer.physicallyCorrectLights = true;
       container.appendChild(renderer.domElement);
@@ -416,7 +415,7 @@ export default defineComponent({
       renderer.setSize(container.clientWidth, container.clientHeight);
       const loader = new GLTFLoader();
       loader.load(
-        this.objectUrl.href,
+        this.objectUrl,
         (gltf) => {
           object = gltf;
           object.scene.scale.set(
@@ -759,7 +758,7 @@ export default defineComponent({
     },
   },
   mounted() {
-    log(`WelcomeAnimation loaded`, this.settings, JSON.stringify(this.settings));
+    log(`WelcomeAnimation loaded`);
     this.init();
   },
   beforeUnmount() {

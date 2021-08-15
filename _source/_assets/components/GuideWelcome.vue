@@ -8,7 +8,7 @@
           @paused="playing = false"
           @played="playing = true"
         />
-        <div class="g-flex g-items-center g-justify-between g-p-6 g-bg-matrix-titlebar">
+        <div class="g-flex g-items-center g-justify-between g-gap-6 g-p-6 g-bg-matrix-titlebar">
           <div class="control-button">
             <button type="button" @click="pause" v-if="playing">
               <SvgPause class="g-inline-block g-w-8 g-h-8" />
@@ -17,7 +17,12 @@
               <SvgPlay class="g-inline-block g-w-8 g-h-8" />
             </button>
           </div>
-          <div></div>
+          <div>
+            <p>
+              Welcome to Guide! To get started we’ll ned to start in Settings and configure a few things there. You can
+              then use the Organizer to create your guides and move them around Craft’s Control Panel.
+            </p>
+          </div>
           <a class="btn submit icon go" :href="skipUrl">Go to Guide</a>
         </div>
       </div>

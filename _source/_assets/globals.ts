@@ -5,6 +5,7 @@ const globalsElement = document.getElementById('guide-admin-globals');
 export const assetComponents: EditorComponent[] = globalsElement?.dataset?.assetComponents
   ? JSON.parse(globalsElement.dataset.assetComponents)
   : null;
+export const assetPath: string = globalsElement?.dataset?.assetPath || '';
 export const devMode: boolean = globalsElement?.dataset?.devMode ? globalsElement.dataset.devMode === 'true' : false;
 export const guides: Guide[] = globalsElement?.dataset?.guides ? JSON.parse(globalsElement.dataset.guides) : null;
 export const proEdition: boolean = globalsElement?.dataset?.proEdition
