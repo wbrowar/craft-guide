@@ -38,7 +38,6 @@
 import { defineComponent, reactive, toRefs } from 'vue';
 import { devMode, log } from '../globals';
 import gsap from 'gsap';
-import MotionPathPlugin from 'gsap/MotionPathPlugin';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Camera, ColorRepresentation, DirectionalLight, HemisphereLight, Object3D, Scene, WebGLRenderer } from 'three';
@@ -115,8 +114,6 @@ let bookLoose: Object3D;
 let bookLoose2: Object3D;
 let timeline;
 
-gsap.registerPlugin(MotionPathPlugin);
-
 export default defineComponent({
   name: 'WelcomeAnimation',
   components: {},
@@ -125,11 +122,11 @@ export default defineComponent({
     sceneBackgroundUrl: String,
     sceneSettings: String,
   },
+  emits: ['paused', 'played'],
   setup(props) {
     const state = reactive({
       animationState: 'intro',
       animationXDirection: 1,
-      bookLooseTextureUrl: new URL('/guide-thank-you.png', import.meta.url),
       debugIncrement: 0.5,
       debugCameraX: 0,
       debugCameraY: 0,
@@ -406,7 +403,7 @@ export default defineComponent({
       // add controls
       // const controls = new OrbitControls(camera, container);
       // create renderer
-      renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
       renderer.setSize(container.clientWidth, container.clientHeight);
       renderer.setPixelRatio(window.devicePixelRatio);
       // renderer.gammaFactor = 2.2;
@@ -447,12 +444,6 @@ export default defineComponent({
           bookTop = object.scene.getObjectByName('Top');
           bookLoose = object.scene.getObjectByName('Loose');
           bookLoose2 = object.scene.getObjectByName('Loose_2');
-
-          if (bookLoose) {
-            bookLoose.texture = new THREE.TextureLoader().load(this.bookLooseTextureUrl.href);
-            bookLoose.texture.encoding = THREE.sRGBEncoding;
-            bookLoose.texture.flipY = false;
-          }
 
           this.animateSlideInBook();
 
@@ -502,6 +493,18 @@ export default defineComponent({
         this.animateOpenBook();
       }
     },
+    pause() {
+      if (timeline) {
+        timeline.pause();
+        this.$emit('paused');
+      }
+    },
+    play() {
+      if (timeline) {
+        timeline.play();
+        this.$emit('played');
+      }
+    },
     playCameraLoop() {
       if (camera) {
         const animations = [];
@@ -519,7 +522,9 @@ export default defineComponent({
 
         animations.push('leftToRight');
         animations.push('zoomFromTop');
-        animations.push('rotateAroundBook');
+        animations.push('downRightSide');
+        animations.push('acrossFront');
+        animations.push('cornerUp');
 
         // Slide from left to right
         if (animations.includes('leftToRight')) {
@@ -568,7 +573,7 @@ export default defineComponent({
         }
 
         if (animations.includes('zoomFromTop')) {
-          const zoomFromTopDuration = 10;
+          const zoomFromTopDuration = 15;
           timeline
             .add('zoomFromTop')
             .set(
@@ -613,10 +618,10 @@ export default defineComponent({
             );
         }
 
-        if (animations.includes('rotateAroundBook')) {
-          const rotateAroundBookDuration = 10;
+        if (animations.includes('downRightSide')) {
+          const downRightSideDuration = 10;
           timeline
-            .add('rotateAroundBook')
+            .add('downRightSide')
             .set(
               camera.position,
               {
@@ -624,7 +629,7 @@ export default defineComponent({
                 y: 1,
                 z: -13,
               },
-              'rotateAroundBook'
+              'downRightSide'
             )
             .set(
               camera.rotation,
@@ -633,7 +638,7 @@ export default defineComponent({
                 y: 1.499,
                 z: 0,
               },
-              'rotateAroundBook'
+              'downRightSide'
             )
             .to(
               camera.position,
@@ -642,9 +647,9 @@ export default defineComponent({
                 y: 1,
                 z: 4.447071,
                 ease: 'power1.inOut',
-                duration: rotateAroundBookDuration,
+                duration: downRightSideDuration,
               },
-              'rotateAroundBook'
+              'downRightSide'
             )
             .to(
               camera.rotation,
@@ -653,19 +658,103 @@ export default defineComponent({
                 y: 1.299,
                 z: 0,
                 ease: 'power1.inOut',
-                duration: rotateAroundBookDuration,
+                duration: downRightSideDuration,
               },
-              'rotateAroundBook'
+              'downRightSide'
             );
         }
 
-        // 📓 Camera
-        //      globals.ts:69 ◉ 📓 position x: 4.3
-        //      globals.ts:69 ◉ 📓 position y: 1
-        //      globals.ts:69 ◉ 📓 position z: 6.447071
-        //      globals.ts:69 ◉ 📓 rotation x: -6.66
-        //      globals.ts:69 ◉ 📓 rotation y: 1.004822
-        //      globals.ts:69 ◉ 📓 rotation z: 0
+        if (animations.includes('acrossFront')) {
+          const acrossFrontDuration = 15;
+          timeline
+            .add('acrossFront')
+            .set(
+              camera.position,
+              {
+                x: 0,
+                y: 2,
+                z: -5.5,
+              },
+              'acrossFront'
+            )
+            .set(
+              camera.rotation,
+              {
+                x: 4.7,
+                y: 0,
+                z: 0,
+              },
+              'acrossFront'
+            )
+            .to(
+              camera.position,
+              {
+                x: 0,
+                y: 2,
+                z: 5.5,
+                ease: 'power1.inOut',
+                duration: acrossFrontDuration,
+              },
+              'acrossFront'
+            )
+            .to(
+              camera.rotation,
+              {
+                x: 4.7,
+                y: 0,
+                z: 0,
+                ease: 'power1.inOut',
+                duration: acrossFrontDuration,
+              },
+              'acrossFront'
+            );
+        }
+
+        if (animations.includes('cornerUp')) {
+          const cornerUpDuration = 15;
+          timeline
+            .add('cornerUp')
+            .set(
+              camera.position,
+              {
+                x: 3.499,
+                y: 0,
+                z: 3.1,
+              },
+              'cornerUp'
+            )
+            .set(
+              camera.rotation,
+              {
+                x: 6.7,
+                y: 0.8,
+                z: -0.3,
+              },
+              'cornerUp'
+            )
+            .to(
+              camera.position,
+              {
+                x: 2.99,
+                y: 1.8,
+                z: 2.7,
+                ease: 'power1.inOut',
+                duration: cornerUpDuration,
+              },
+              'cornerUp'
+            )
+            .to(
+              camera.rotation,
+              {
+                x: 5.5,
+                y: 0.8,
+                z: 0.7,
+                ease: 'power1.inOut',
+                duration: cornerUpDuration,
+              },
+              'cornerUp'
+            );
+        }
       }
     },
   },
