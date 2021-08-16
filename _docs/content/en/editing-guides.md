@@ -69,7 +69,7 @@ The components in the Snippets tab are chunks of Twig code that can provide dyna
 {# Display a list of invalid images and instruct authors on what size is recommended. #}
 {% if assets|length %}
   <h2>Images that are too small (less than {{ width }}px wide)</h2>
-  <p>These images should be replaced with a .jpg that is at least REPLACE_WIDTH wide.</p>
+  <p>These images should be replaced with a .jpg that is at least {{ width }}px wide.</p>
   
   <div class="g-space-y-2">
     {% for asset in assets %}
@@ -95,13 +95,32 @@ If nothing else, snippets can be used as inspiration to help solve common AX iss
 
 In addition to components, Guide provides a set of Twig variables:
 
-| Variable Example | Description |
+| Variable | Example/Description |
 | --- | --- |
-| `craft.guide.component('audio', { url: 'my-song.mp3' })` | Renders a Guide component based on the handle set in the first argument and a configuration object in the second argument. |
-| `craft.guide.getAll({ format: 'twig' })` | Performs a search of all guides that fit the criteria passed in. This will return an array of guide objects. |
-| `craft.guide.getOne({ id: 10 })` | Returns a single guide object based on the criteria passed in. |
-| `craft.guide.include({ slug: 'assets' })` | Finds a matching guide and renders its content in place. |
-| `craft.guide.var('clientName')` | Returns variables set in Guide Settings. |
+| `component` | Example: `{{ craft.guide.component('audio', { url: 'my-song.mp3' }) }}`<br>Renders a Guide component based on the handle set in the first argument and a configuration object in the second argument. |
+| `getAll` |  Example: `{{ craft.guide.getAll() }}`<br>Performs a search of all guides that fit the criteria passed in. This will return an array of guide objects. |
+| `getOne` |  Example: `{{ craft.guide.getOne({ id: 10 }) }}`<br>Returns a single guide object based on the criteria passed in. |
+| `include` |  Example: `{{ craft.guide.include({ slug: 'assets' }) }}`<br>Finds a matching guide and renders its content in place. |
+| `var` |  Example: `{{ craft.guide.var('clientName') }}`<br>Returns variables set in Guide Settings. |
+
+## Context-Aware Guides
+
+When using guides on element edit pages and in UI Elements, context variables are available that represents the specific piece of content you are editing.
+
+| Variable | Description |
+| --- | --- |
+| `element` | Found on Asset, Category, and Entry edit pages. Represents the current element you are updating. |
+| `user` | Found on User edit pages. Represents the current user you are updating. |
+
+Because guides can be moved around the CP, it’s a good idea to check for the variable before it is used in a guide. For example, if you want to show the title of the current entry in your guide, you could write something like this:
+
+```twig
+{% if element ?? false %}
+  <p><strong>Element title:</strong> {{ element.title }}</p>
+{% else %}
+  <p>This guide was not added to an entry edit page.</p>
+{% endif %}
+```
 
 ## Guide Templates
 
@@ -126,7 +145,5 @@ This will allow you to move the Template Path to a different location without br
 Selecting `External Page` from the Content Source guide option will let you display an external page in an iframe.
 
 ![The Craft Docs in an iframe](https://assets.wbrowar.com/guide/img/guide-iframe.png)
-
-The iframe replaces the guide content and all styling is ignored.
 
 <alert type="warning">Some websites don’t allow for their pages to appear in iframes. The owner of a website may be able to confgure their server to allow for their content to appear in an iframe, however, this is usually set up this way for security reasons.</alert>

@@ -44,7 +44,7 @@ class GuideDisplay extends BaseUiElement
      */
     protected function selectorIcon()
     {
-        return Craft::getAlias('@wbrowar/guide/assetbundles/dist/icon-mask.svg');
+        return Craft::getAlias('@wbrowar/guide/assetbundles/static/icon-mask.svg');
     }
 
     /**

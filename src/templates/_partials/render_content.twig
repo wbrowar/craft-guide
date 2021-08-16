@@ -1,15 +1,15 @@
 {% if guide.contentSource == 'iframe' and (guide.contentUrl ?? false) %}
-  <iframe class="g-iframe" src="{{ guide.contentUrl }}" frameborder="0"></iframe>
+  <iframe class="g-iframe" src="{{ guide.contentUrl }}"></iframe>
 {% else %}
   {% if guide.contentSource == 'template' and (guide.template ?? false) %}
     {% if craft.app.view.resolveTemplate('guide_template_path/' ~ guide.template) %}
-      {{ include('guide_template_path/' ~ guide.template) }}
+      {{ craft.guide.render('guide_template_path/' ~ guide.template, guide.slug, _context, 'path')|raw }}
     {% else %}
       <p>This guide seems to have moved.</p>
       <a class="btn submit" href="{{ url('guide/organizer') }}">Return to Organizer</a>
     {% endif %}
   {% elseif guide.content ?? false %}
-    {{ include(template_from_string(guide.content)) }}
+    {{ craft.guide.render(guide.content, guide.slug, _context, 'string')|raw }}
   {% else %}
     <p>This guide seems to have moved.</p>
     <a class="btn submit" href="{{ url('guide/organizer') }}">Return to Organizer</a>

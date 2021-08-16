@@ -11,7 +11,7 @@ fullscreen: false
 
 When a guide is first created, it will appear in the left-hand side of the Organizer (the Organizer link in the Guide CP section). To the right of that column you’ll see a list of areas around the Guide CP. Use drag and drop to move a guide to one or more of these locations.
 
-When hovering over a guide in the Organizer, you'll see a set of buttons appear for the guide:
+When hovering over a guide in the left-hand side of the Organizer, you'll see a set of buttons appear for the guide:
 
 | Action | Description |
 | --- | --- |
@@ -20,31 +20,38 @@ When hovering over a guide in the Organizer, you'll see a set of buttons appear 
 | View | View the guide on its own page in the CP. All guides have their own page and they can be linked to using `url('guide/page/GUIDE_SLUG')`. |
 | Add | Brings up a modal letting you add the guide to a CP area without using drag and drop. |
 
+When hovering over guides that have been placed in CP areas, you’ll see buttons appear that are specific to that guide in that CP area:
+
+| Action | Description |
+| --- | --- |
+| Edit | Brings up a modal that lets you change the selected CP area. Depending on which CP area the guide is in, other fields may appear in the modal. |
+| Delete | Removes this instance of a guide in the CP area. This does not delete the guide itself. |
+
 ## Guide Display
 
 When guides are dropped into a CP area they will be listed in alphabetical order. When more than one guide is added to a section, a navigation will appear in the top-right of the guide display—letting the reader choose which guide they want to view.
 
-## Guide CP Section
+### Guide CP Section
 
 ![Guide CP page](https://assets.wbrowar.com/guide/img/guide-overview.png)
 
 Guides dragged into the Guide area of the Organizer will appear in the Guide CP Section’s Guide link. This page can be considered a traditional CMS user manual and it's available to users of the LITE edition of Guide.
 
-## Content Edit Pages
+### Content Edit Pages
 
 ![Guide modal](https://assets.wbrowar.com/guide/img/guide-modal.png)
 
-Guides can be dragged to the Entries area to appear on all entry edit pages. Guides can also be added to the edit pages of specific sections. This works the same way for Asset, Category, Global edit pages. Guides added to the Users area will appear on all user edit pages.
+Guides can be dragged to the Entries area to appear on all entry edit pages. Guides can also be added to the edit pages of specific entry sections. This works the same way for Asset, Category, Global edit pages. Guides added to the Users area will appear on all user edit pages.
 
-By default, guides that are added to edit pages are embedded above the edit page’s content fields. If preferred, a setting in Guide’s plugin settings can be changed to move guides below edit fields on all edit pages.
+By default, guides that are added to edit pages are embedded above the edit page’s content fields. If preferred, a setting in Guide’s plugin settings can be changed to move guides below edit fields across all edit pages.
 
-## Dashboard Widgets
+### Dashboard Widgets
 
 ![Guide widget](https://assets.wbrowar.com/guide/img/guide-dashboard.png)
 
 Dragging a guide to the Widgets area of the Organizer allows that guide to be added to a Guide widget. From there, a user can add a Guide widget to their dashboard and select this guide from the list of all guides in the Widget area.
 
-## Control Panel Pages
+### Control Panel Pages
 
 Guides can be added to any other page in the CP by providing the page URI and a CSS selector in a guide dragged to the Control Panel Pages area.
 

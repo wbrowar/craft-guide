@@ -81,7 +81,7 @@ The final code should look something like this:
 
 ## Utility Classes
 
-Guide uses a small subset of prefixed [Tailwind CSS classes](https://tailwindcss.com/docs/utility-first) to make it easier to lay out and style guide content. Utility classes are prefixed with `g-`, so, for example, to use Tailwind’s `flex` class write `g-flex`.
+Guide uses a small subset of prefixed [Tailwind CSS classes](https://tailwindcss.com/docs/utility-first) to make it easier to lay out and style guide content. Utility classes are prefixed with `g-`, so, for example, to use Tailwind’s `flex` class, write `g-flex`.
 
 The current list of supported utility classes can be found [below](#list-of-utility-classes). When using the code editor to edit a guide utility classes will autocomplete when you begin typing `g-`.
 

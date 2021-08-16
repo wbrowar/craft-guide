@@ -10,6 +10,7 @@
 
 namespace wbrowar\guide\variables;
 
+use craft\helpers\Html;
 use craft\helpers\Template;
 use wbrowar\guide\Guide;
 
@@ -68,6 +69,28 @@ class GuideVariable
     }
 
     /**
+     * @return string
+     */
+    public function render($templateString, $slug, $variables = [], $type = 'path'): string
+    {
+        try {
+            if ($type === 'path') {
+                $content = Template::raw(Guide::$view->renderTemplate($templateString, $variables));
+            } else if ($type === 'string') {
+                $content = Template::raw(Guide::$view->renderString($templateString, $variables));
+            }
+        } catch (\Throwable $e) {
+            return $this->_error($e->getMessage() . ' in guide with the slug: ' . $slug, 'error');
+        }
+
+        if ($content ?? false) {
+            return $content;
+        }
+
+        return 'Guide could not be displayed.';
+    }
+
+    /**
      * @return string|null
      */
     public function var($variable)
@@ -85,5 +108,30 @@ class GuideVariable
         }
 
         return $value ?? null;
+    }
+
+
+
+    /**
+     * Renders an error message.
+     *
+     * @param string $error
+     * @param string $errorClass
+     * @return string
+     */
+    private function _error(string $error, string $errorClass): string
+    {
+        $icon = Html::tag('span', '', [
+            'data' => [
+                'icon' => 'alert',
+            ]
+        ]);
+        $content = Html::tag('p', $icon . ' ' . Html::encode($error), [
+            'class' => $errorClass,
+        ]);
+
+        return Html::tag('div', $content, [
+            'class' => 'pane',
+        ]);
     }
 }

@@ -11,6 +11,8 @@ fullscreen: false
 
 Craft CMS is intuitive. Marketing plans and organizational workflows—not so much. Guide lets you create a user manual throughout Craft CMS so clients don‘t need to go far to get the answers they need.
 
+Guide was built to be a CMS manual, but Guide 3 is also a quick way to create widgets and unique Craft CP pages, without the use of a custom module or knowledge of PHP.
+
 ## Guide 3 for Craft CMS 3
 
 ![Guide in the Control Panel](https://assets.wbrowar.com/guide/img/guide-overview.png)

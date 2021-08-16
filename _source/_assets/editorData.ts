@@ -226,7 +226,7 @@ Content
 {# Display a list of invalid images and instruct authors on what size is recommended. #}
 {% if assets|length %}
   <h2>Images that are too small (less than {{ width }}px wide)</h2>
-  <p>These images should be replaced with a .jpg that is at least REPLACE_WIDTH wide.</p>
+  <p>These images should be replaced with a .jpg that is at least {{ width }}px wide.</p>
   
   <div class="g-space-y-2">
     {% for asset in assets %}
