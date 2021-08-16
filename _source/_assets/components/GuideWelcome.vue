@@ -19,7 +19,7 @@
           </div>
           <div>
             <p>
-              Welcome to Guide! To get started we’ll ned to start in Settings and configure a few things there. You can
+              Welcome to Guide! To get started you’ll need to head to Settings and configure a few things there. You can
               then use the Organizer to create your guides and move them around Craft’s Control Panel.
             </p>
           </div>

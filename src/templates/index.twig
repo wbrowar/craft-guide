@@ -29,7 +29,9 @@
     {% include 'guide/_partials/guide_display.twig' with { displayId: 'nav', guides: guides } only %}
   {% elseif userOperations.useOrganizer %}
     {% redirect 'guide/organizer' %}
-  {% else %}
+  {% elseif craft.app.config.general.allowAdminChanges %}
     {% redirect 'guide/settings/general' %}
+  {% else %}
+    Guide needs to be set up before it can be used. Return here in an environment where "allowAdminChanges" is set to "true" to begin.
   {% endif %}
 {% endset %}

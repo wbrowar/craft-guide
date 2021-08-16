@@ -50,7 +50,7 @@ class Guide extends Widget
     public static function icon()
     {
 
-        return Craft::getAlias("@wbrowar/guide/assetbundles/guide/dist/icon/icon-mask.svg");
+        return Craft::getAlias('@wbrowar/guide/assetbundles/dist/icon-mask.svg');
     }
 
     /**

@@ -220,11 +220,10 @@ Content
 {# Set the width to the smallest size that an image should be uploaded. #}
 {% set width = 300 %}
 
-{# Find all images within the targeted asset volume that are not wider than the \`width\` value. #}
-{% set assets = craft.assets.volume(volume).width('< ' ~ width).kind('image').all() %}
+{# Find all images within the targeted asset volume that are not wider than the "width" value. #}
 {% set assets = craft.assets.volume(volume).width('< ' ~ width).kind('image').all() %}
 
-{# Display a list of offending images and instruct authors on what size is recommended. #}
+{# Display a list of invalid images and instruct authors on what size is recommended. #}
 {% if assets|length %}
   <h2>Images that are too small (less than {{ width }}px wide)</h2>
   <p>These images should be replaced with a .jpg that is at least REPLACE_WIDTH wide.</p>

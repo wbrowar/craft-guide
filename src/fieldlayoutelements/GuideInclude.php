@@ -49,7 +49,7 @@ class GuideInclude extends BaseUiElement
      */
     protected function selectorIcon()
     {
-        return '@wbrowar/guide/assetbundles/guide/dist/icon/icon-mask.svg';
+        return Craft::getAlias('@wbrowar/guide/assetbundles/dist/icon-mask.svg');
     }
 
     /**

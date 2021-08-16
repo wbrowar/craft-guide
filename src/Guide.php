@@ -590,7 +590,7 @@ class Guide extends Plugin
         $userTemplatePath = Craft::$app->getView()->getTemplatesPath() . DIRECTORY_SEPARATOR . self::$settings->templatePath;
 
         if (is_dir($userTemplatePath) ?? false) {
-            $filesInDirectory = FileHelper::findFiles(Craft::$app->getView()->getTemplatesPath() . DIRECTORY_SEPARATOR . self::$settings->templatePath, ['only' => ['*.html', '*.md', '*.twig']]);
+            $filesInDirectory = FileHelper::findFiles(Craft::$app->getView()->getTemplatesPath() . DIRECTORY_SEPARATOR . self::$settings->templatePath, ['only' => ['*.html', '*.twig']]);
 
             foreach ($filesInDirectory as $item) {
                 $template = str_replace($userTemplatePath . DIRECTORY_SEPARATOR, '', $item);
