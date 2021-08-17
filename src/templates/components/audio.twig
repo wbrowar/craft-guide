@@ -3,7 +3,7 @@
 {% set attributes = {
   controls: controls ?? true,
   loop: loop ?? true,
-  src: url,
+  src: src ?? url ?? null,
 } %}
 
 {% set element = 'audio' %}

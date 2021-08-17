@@ -1,0 +1,41 @@
+field: d65bd547-333e-464c-a99a-2badd5d23c4d # Content Tabs
+fieldLayouts:
+  3865cdd1-88ba-4ca5-9c28-8ff4ae5614d2:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: 7c46a49e-c31d-4362-aeaf-8756478b2bef # Custom Text
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+fields:
+  7c46a49e-c31d-4362-aeaf-8756478b2bef: # Custom Text
+    columnSuffix: roxraaib
+    contentColumnType: text
+    fieldGroup: null
+    handle: customText
+    instructions: ''
+    name: 'Custom Text'
+    searchable: false
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: null
+      initialRows: '4'
+      multiline: ''
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+handle: features
+name: Features
+sortOrder: 1

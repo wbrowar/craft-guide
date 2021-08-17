@@ -1,0 +1,49 @@
+columnSuffix: hpvwdsrc
+contentColumnType: text
+fieldGroup: 609d6436-d5b0-4f19-a3e3-9915dee9e01a # Products
+handle: featuresList
+instructions: ''
+name: 'Features List'
+searchable: false
+settings:
+  addRowLabel: 'Add a row'
+  columnType: text
+  columns:
+    __assoc__:
+      -
+        - col3
+        -
+          __assoc__:
+            -
+              - heading
+              - 'Icon Color'
+            -
+              - handle
+              - iconColor
+            -
+              - width
+              - 20%
+            -
+              - type
+              - color
+      -
+        - col1
+        -
+          __assoc__:
+            -
+              - heading
+              - Header
+            -
+              - handle
+              - header
+            -
+              - width
+              - ''
+            -
+              - type
+              - singleline
+  maxRows: ''
+  minRows: ''
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Table

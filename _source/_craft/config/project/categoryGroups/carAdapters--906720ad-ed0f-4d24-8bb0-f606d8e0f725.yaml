@@ -1,6 +1,6 @@
 defaultPlacement: end
 fieldLayouts:
-  d8eae594-e177-4bb2-a121-bc3df4ae8e5d:
+  95f1017b-3ac5-4136-940f-4666a91b8a65:
     tabs:
       -
         elements:
@@ -29,13 +29,13 @@ fieldLayouts:
             width: 100
         name: Content
         sortOrder: 1
-handle: fogLamps
-name: 'Fog Lamps'
+handle: carAdapters
+name: 'Car Adapters'
 siteSettings:
   11ace5e4-2164-419f-aa8c-14a6ccb74727:
     hasUrls: true
     template: null
-    uriFormat: 'fog-lamps/{slug}'
+    uriFormat: 'car-adapters/{slug}'
 structure:
   maxLevels: null
-  uid: f5d12a21-8d2a-4bd1-9001-b30bc0f75450
+  uid: 81859d6e-d49b-4690-8e07-fcb1a20903f5

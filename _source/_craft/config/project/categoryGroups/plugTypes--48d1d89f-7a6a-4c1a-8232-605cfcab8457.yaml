@@ -1,6 +1,6 @@
 defaultPlacement: end
 fieldLayouts:
-  4ec66396-6808-4302-875c-b7d19be42ac3:
+  b948b5cf-b0fc-484d-9e4e-2ff3e21ec46c:
     tabs:
       -
         elements:
@@ -29,13 +29,13 @@ fieldLayouts:
             width: 100
         name: Content
         sortOrder: 1
-handle: categoryGroup2
-name: Wheels
+handle: plugTypes
+name: 'Plug Types'
 siteSettings:
   11ace5e4-2164-419f-aa8c-14a6ccb74727:
     hasUrls: true
     template: null
-    uriFormat: 'category-group-2/{slug}'
+    uriFormat: 'plug-types/{slug}'
 structure:
   maxLevels: null
-  uid: c6629143-8441-4618-aa45-1bce7920d683
+  uid: 5b1213a6-8512-456b-9b45-3bfd447e2656

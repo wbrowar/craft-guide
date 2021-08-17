@@ -47,7 +47,7 @@
           <li
             class="g-flex-grow"
             :class="currentTab === 'images' ? 'g-bg-select-dark' : 'g-bg-select-light'"
-            v-if="contentSource === 'field'"
+            v-if="contentSource === 'field' && assetComponentsTotal"
           >
             <button
               class="g-w-full g-h-[60px] g-cursor-pointer"
@@ -61,7 +61,7 @@
           <li
             class="g-flex-grow"
             :class="currentTab === 'guides' ? 'g-bg-select-dark' : 'g-bg-select-light'"
-            v-if="contentSource === 'field'"
+            v-if="contentSource === 'field' && guideComponentsTotal"
           >
             <button
               class="g-w-full g-h-[60px] g-cursor-pointer"
@@ -86,15 +86,6 @@
               <SvgAnnotation class="g-w-6 g-h-6" :class="[currentTab === 'snippets' ? 'g-text-select-light' : null]" />
             </button>
           </li>
-          <!--          <li-->
-          <!--            class="g-flex-grow"-->
-          <!--            :class="currentTab === 'utility-classes' ? 'g-bg-select-dark' : 'g-bg-select-light'"-->
-          <!--            v-if="contentSource === 'field'"-->
-          <!--          >-->
-          <!--            <button class="g-w-full g-h-[60px]" type="button" @click="currentTab = 'utility-classes'">-->
-          <!--              utility-classes-->
-          <!--            </button>-->
-          <!--          </li>-->
         </ul>
       </div>
       <div>
@@ -158,23 +149,18 @@
             name="summary"
           />
         </div>
-        <!--        <div class="g-p-6" v-show="currentTab === 'utility-classes'">-->
-        <!--          <h2>Utility Classes</h2>-->
-        <!--          <p class="g-text-text">You may use the classes below to style and lay out your guide content.</p>-->
-        <!--          <UtilityClassesSearch />-->
-        <!--        </div>-->
-        <ul v-show="tabComponents.length">
+        <ul v-show="['components', 'guides', 'images', 'snippets'].includes(currentTab)">
           <div class="g-p-6" v-if="currentTab === 'components'">
             <h2>Components</h2>
             <p class="g-text-text">Add basic building blocks to your guide using Twig and Vue components.</p>
           </div>
-          <div class="g-p-6" v-if="currentTab === 'guides'">
-            <h2>Guides</h2>
-            <p class="g-text-text">Include content from other guides into your guide.</p>
-          </div>
           <div class="g-p-6" v-if="currentTab === 'images'">
             <h2>Images</h2>
             <p class="g-text-text">Display screenshots and other images located in your Guide Asset Volume.</p>
+          </div>
+          <div class="g-p-6" v-if="currentTab === 'guides'">
+            <h2>Guides</h2>
+            <p class="g-text-text">Include content from other guides into your guide.</p>
           </div>
           <div class="g-p-6" v-if="currentTab === 'snippets'">
             <h2>Snippets</h2>
@@ -189,6 +175,7 @@
               :docs="{
                 description: component.documentation,
                 props: component.props,
+                summary: component.summary,
               }"
               :image-srcset="
                 component.thumbnail1x && component.thumbnail2x
@@ -363,7 +350,6 @@ import 'ace-builds/src-noconflict/mode-markdown';
 import 'ace-builds/src-noconflict/mode-twig';
 import 'ace-builds/src-noconflict/theme-tomorrow_night_bright';
 import { EditorComponent, EditorTabGroup, Guide, GuideContentSource } from '~/types/plugins';
-// import UtilityClassesSearch from './UtilityClassesSearch.vue';
 
 export default defineComponent({
   name: 'GuideEditor',
@@ -377,7 +363,6 @@ export default defineComponent({
     SvgPuzzle,
     SvgSettings,
     VAceEditor,
-    // UtilityClassesSearch,
   },
   props: {
     formData: { type: String, required: true },
@@ -386,15 +371,16 @@ export default defineComponent({
   },
   setup: (props) => {
     const state = reactive({
+      assetComponentsTotal: 0,
       contentSource: 'field' as GuideContentSource,
       contentUrl: '',
       currentDocs: null,
-      // currentTab: 'publishing' as EditorTabGroup,
       currentTab: 'publishing' as EditorTabGroup,
       devMode,
       editorComponents: editorData as EditorComponent[],
       editorContent: '',
       guide: JSON.parse(props.guideData) as Guide,
+      guideComponentsTotal: 0,
       guideTemplate: '__none__',
       pageForm: JSON.parse(props.formData),
       proEdition,
@@ -420,6 +406,8 @@ export default defineComponent({
     });
     state.editorComponents.push(...assetComponents);
     state.editorComponents.push(...guideComponents);
+    state.assetComponentsTotal = assetComponents.length;
+    state.guideComponentsTotal = guideComponents.length;
 
     state.templatesFieldOptions = Object.keys(templates.filenames).map((key) => {
       return { label: templates.filenames[key], value: key };

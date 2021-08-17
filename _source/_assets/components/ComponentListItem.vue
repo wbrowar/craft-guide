@@ -5,7 +5,7 @@
     </button>
     <div class="g-p-3 g-flex-grow g-border-t g-border-solid g-border-matrix-border">
       <h4>{{ title }}</h4>
-      <p v-html="docs.description" v-if="docs?.description"></p>
+      <p v-html="docs.summary" v-if="docs?.summary"></p>
       <div class="g-space-x-1">
         <button class="btn small icon add g-mt-1" type="button" @click="onInsert">Add</button>
         <button class="btn small icon copy g-mt-1" type="button" @click="onCopy">Copy</button>
@@ -39,6 +39,7 @@ export default defineComponent({
         description: this.docs?.description || null,
         imageSrcset: this.imageSrcset || null,
         props: this.docs?.props || null,
+        summary: this.docs?.summary || null,
         title: this.title,
       });
     },

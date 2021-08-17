@@ -2,6 +2,7 @@ export interface EditorComponent {
   code: string;
   documentation?: string;
   group: EditorTabGroup;
+  summary?: string;
   thumbnail1x?: string;
   thumbnail2x?: string;
   title: string;

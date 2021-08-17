@@ -60,7 +60,16 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    // Hide content and replace it with a summary
+    function ({ addVariant, e }) {
+      addVariant('tldr', ({ modifySelectors, separator }) => {
+        modifySelectors(({ className }) => {
+          return `.guide-tldr .${e(`tldr${separator}${className}`)}`;
+        });
+      });
+    },
+  ],
   corePlugins: {
     preflight: false,
   },

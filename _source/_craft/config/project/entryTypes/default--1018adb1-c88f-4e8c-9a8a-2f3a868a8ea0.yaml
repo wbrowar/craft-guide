@@ -1,6 +1,5 @@
-defaultPlacement: end
 fieldLayouts:
-  44ed8487-d260-460b-b090-913a1f06b851:
+  1f6be9a8-9a97-4f0b-8fe3-a18a7b456fbf:
     tabs:
       -
         elements:
@@ -24,18 +23,16 @@ fieldLayouts:
             step: null
             tip: null
             title: null
-            type: craft\fieldlayoutelements\TitleField
+            type: craft\fieldlayoutelements\EntryTitleField
             warning: null
             width: 100
         name: Content
         sortOrder: 1
-handle: group1
-name: Headlights
-siteSettings:
-  11ace5e4-2164-419f-aa8c-14a6ccb74727:
-    hasUrls: true
-    template: null
-    uriFormat: 'group-1/{slug}'
-structure:
-  maxLevels: null
-  uid: ae103143-2a92-419b-8e7f-d5fc657987c7
+handle: default
+hasTitleField: true
+name: Default
+section: 5ef974bc-0dc4-4b00-807a-3bd224be6a06 # News
+sortOrder: 1
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site

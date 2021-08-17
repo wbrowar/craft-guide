@@ -172,7 +172,7 @@ class Placement extends Component
                 foreach ($globalSets as $globalSet) {
                     $groups[] = [
                         'columns' => $colSm,
-                        'description' => $globalSet->name . 'global edit pages',
+                        'description' => $globalSet->name . ' global edit pages',
                         'header' => $globalSet->name,
                         'headerSize' => $headerSm,
                         'label' => 'Global Sets',

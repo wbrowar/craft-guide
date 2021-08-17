@@ -7,6 +7,6 @@
 } %}
 
 {% set classes = ['btn'] %}
-{% set element = (url ?? false) ? 'a' : 'button' %}
+{% set element = (attributes.href ?? false) ? 'a' : 'button' %}
 
 {% block content -%}{{ label }}{%- endblock %}

@@ -1,5 +1,5 @@
 fieldLayouts:
-  0f5e8c0e-0b86-4553-9c60-018fdcfe6a3a:
+  c042187f-53a8-4bed-9d0d-6d97e721c7cd:
     tabs:
       -
         elements:
@@ -23,31 +23,16 @@ fieldLayouts:
             step: null
             tip: null
             title: null
-            type: craft\fieldlayoutelements\AssetTitleField
+            type: craft\fieldlayoutelements\EntryTitleField
             warning: null
             width: 100
         name: Content
         sortOrder: 1
-      -
-        elements:
-          -
-            fieldUid: 00d24b9b-4fb2-48de-aae0-1fd8aef75302
-            instructions: null
-            label: null
-            required: false
-            tip: null
-            type: craft\fieldlayoutelements\CustomField
-            warning: null
-            width: 100
-        name: Settings
-        sortOrder: 2
-handle: drinkPhotos
-hasUrls: true
-name: 'Drink Photos'
-settings:
-  path: '@baseAssetPath/drink-photos'
+handle: about
+hasTitleField: false
+name: About
+section: b7a8bec3-5e77-4455-837c-d879aca946c3 # About
 sortOrder: 1
+titleFormat: '{section.name|raw}'
 titleTranslationKeyFormat: null
-titleTranslationMethod: null
-type: craft\volumes\Local
-url: '@baseAssetUrl/drink-photos'
+titleTranslationMethod: site

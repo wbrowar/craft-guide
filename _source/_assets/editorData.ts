@@ -6,20 +6,22 @@ export const editorData: EditorComponent[] = [
   {
     title: 'Audio',
     group: 'components',
-    code: `{{ craft.guide.component('audio', { url: 'REPLACE_URL' }) }}`,
+    code: `{{ craft.guide.component('audio', { src: 'REPLACE_URL' }) }}`,
+    summary: `<p>Play audio in the browser’s audio player.</p>`,
     documentation: `<p>Play audio in the browser’s audio player.</p>`,
     props: {
-      url: `A absolute URL to your audio file.`,
+      src: `A absolute URL to your audio file.`,
     },
   },
   {
     title: 'Button',
     group: 'components',
     code: `{{ craft.guide.component('button', { label: 'REPLACE_LABEL', url: url('REPLACE_URL') }) }}`,
+    summary: `<p>A call-to-action link that looks like a button.</p>`,
     documentation: `<p>A call-to-action link that looks like a button.</p>`,
     props: {
       label: `The label text for the button.`,
-      url: `The URL that the button goes to when clicked.`,
+      href: `The URL that the button goes to when clicked.`,
     },
   },
   {
@@ -30,7 +32,8 @@ export const editorData: EditorComponent[] = [
   
 }
 {% endcss %}`,
-    documentation: `<p>Write custom CSS for this guide. A ".guide" class wraps around all guide content for specificity.</p>`,
+    summary: `<p>Write custom CSS for this guide.</p>`,
+    documentation: `<p>Write custom CSS for this guide. A ".guide" class wraps around all guide content. </p>`,
   },
   {
     title: 'Grid',
@@ -49,6 +52,7 @@ export const editorData: EditorComponent[] = [
     <p>REPLACE_CONTENT</p>
   </div>
 </div>`,
+    summary: `<p>A 4-column CSS grid example.</p>`,
     documentation: `<p>An example using utility classes to lay out content using CSS grid columns.</p>`,
   },
   {
@@ -63,14 +67,16 @@ export const editorData: EditorComponent[] = [
   </div>
   <div>
     <p>REPLACE_CONTENT</p>
-  </div>
+  </div> 
 </div>`,
+    summary: `<p>A custom CSS grid example.</p>`,
     documentation: `<p>An example using utility classes to lay out content using CSS Custom Properties to define the grid’s columns.</p>`,
   },
   {
     title: 'Heading',
     group: 'components',
     code: `{{ craft.guide.component('heading', { level: 1, text: 'REPLACE_TEXT' }) }}`,
+    summary: `<p>A section heading wrapped in an anchor link.</p>`,
     documentation: `<p>A section heading wrapped in an anchor link.</p>`,
     props: {
       level: `A number that defines the wrapper tag. For example, the value of <strong>2</strong> would set the wrapper tag to <strong>h2</strong>.`,
@@ -81,9 +87,10 @@ export const editorData: EditorComponent[] = [
     title: 'Image',
     group: 'components',
     code: `{{ craft.guide.component('image', { url: 'REPLACE_URL' }) }}`,
+    summary: `<p>Display an image or a screenshot from a URL.</p>`,
     documentation: `<p>Display an image or a screenshot from a URL.</p>`,
     props: {
-      url: `The URL of the image to be displayed.`,
+      src: `The URL of the image to be displayed.`,
     },
   },
   {
@@ -96,6 +103,7 @@ export const editorData: EditorComponent[] = [
 Content
 
 {% endfilter %}`,
+    summary: `<p>Render Markdown in your guide.</p>`,
     documentation: `<p>Use Craft’s "markdown" Twig filter to render markdown content.</p>`,
   },
   {
@@ -115,12 +123,14 @@ Content
     </tr>
   </tbody>
 </table>`,
+    summary: `<p>A styled HTML table.</p>`,
     documentation: `<p>A styled HTML table.</p>`,
   },
   {
     title: 'Tip',
     group: 'components',
     code: `{{ craft.guide.component('tip', { text: 'REPLACE_TEXT' }) }}`,
+    summary: `<p>Inform content authors in a way that stands out from surrounding text.</p>`,
     documentation: `<p>Inform content authors in a way that stands out from surrounding text.</p>`,
     props: {
       message: `Text displayed in the tip.`,
@@ -130,24 +140,28 @@ Content
     title: 'Variable Client Name',
     group: 'components',
     code: `{{ craft.guide.var('clientName') }}`,
+    summary: `<p>Display the value of the <strong>Client Name</strong> variable.</p>`,
     documentation: `<p>Display the value of the <strong>Client Name</strong> variable.</p>`,
   },
   {
     title: 'Variable My Company Name',
     group: 'components',
     code: `{{ craft.guide.var('myCompanyName') }}`,
+    summary: `<p>Display the value of the <strong>My Company Name</strong> variable.</p>`,
     documentation: `<p>Display the value of the <strong>My Company Name</strong> variable.</p>`,
   },
   {
     title: 'Variable Project Name',
     group: 'components',
     code: `{{ craft.guide.var('projectName') }}`,
+    summary: `<p>Display the value of the <strong>Project Name</strong> variable.</p>`,
     documentation: `<p>Display the value of the <strong>Project Name</strong> variable.</p>`,
   },
   {
     title: 'Vimeo Video',
     group: 'components',
     code: `{{ craft.guide.component('video', { source: 'vimeo', videoId: 'REPLACE_VIDEO_ID' }) }}`,
+    summary: `<p>Play a Vimeo video in an iframe.</p>`,
     documentation: `<p>Play a Vimeo video in an iframe.</p>`,
     props: {
       source: `Determine the video hosting service’s embed code.`,
@@ -158,6 +172,7 @@ Content
     title: 'Warning',
     group: 'components',
     code: `{{ craft.guide.component('warning', { text: 'REPLACE_TEXT' }) }}`,
+    summary: `<p>Warn content authors about potential content issues.</p>`,
     documentation: `<p>Warn content authors about potential content issues.</p>`,
     props: {
       message: `Text displayed in the warning.`,
@@ -167,6 +182,7 @@ Content
     title: 'YouTube Video',
     group: 'components',
     code: `{{ craft.guide.component('video', { source: 'youtube', videoId: 'REPLACE_VIDEO_ID' }) }}`,
+    summary: `<p>Play a YouTube video in an iframe.</p>`,
     documentation: `<p>Play a YouTube video in an iframe.</p>`,
     props: {
       source: `Determine the video hosting service’s embed code.`,
@@ -210,6 +226,7 @@ Content
 {% if 'expired' in statuses %}
 <div class="element small hasstatus" title="Expired elements"><span class="status expired"></span><div class="label"><span class="title">Expired: {{ expired }}</span></div></div>
 {% endif %}`,
+    summary: `<p>Show a total of entries that are currently published.</p>`,
     documentation: `<p>Show a total of entries that are currently published.</p>`,
   },
   {
@@ -242,6 +259,7 @@ Content
     {% endfor %}
   </div>
 {% endif %}`,
+    summary: `<p>Find images that would get upscaled if transformed.</p>`,
     documentation: `<p>Find images that would get upscaled if transformed.</p>`,
   },
 ];

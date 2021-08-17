@@ -31,7 +31,7 @@
     muted: muted ?? null,
     playsinline: playsinline ?? null,
     poster: poster ?? null,
-    src: url,
+    src: src ?? url ?? null,
   } %}
   {% set element = 'video' %}
 {% endif %}

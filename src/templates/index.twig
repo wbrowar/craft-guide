@@ -23,7 +23,7 @@
 {% endif %}
 
 {% set content %}
-  {% if not (settings.templatePath ?? false) or not (settings.assetVolume ?? false) %}
+  {% if not settings.templatePath ?? false %}
     {% redirect 'guide/settings/general' %}
   {% elseif guides ?? false %}
     {% include 'guide/_partials/guide_display.twig' with { displayId: 'nav', guides: guides } only %}

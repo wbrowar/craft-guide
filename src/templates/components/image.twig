@@ -7,7 +7,7 @@
 {% set caption = caption ?? null %}
 {% set placeholder = placeholder ?? (asset ?? false ? asset.url : '') %}
 {% set sizes = sizes ?? '100vw' %}
-{% set url = url ?? null %}
+{% set src = src ?? url ?? null %}
 
 {% set alt = alt ?? image.title ?? '' %}
 {% set transforms = transforms ?? [
@@ -18,7 +18,7 @@
 {% block content -%}
   {% import _self as self %}
 
-  {% if asset ?? false or url ?? false %}
+  {% if asset ?? false or src ?? false %}
     <picture>
       {% if asset ?? false %}
         {% if transforms|length %}
@@ -26,8 +26,8 @@
         {% else %}
           <img class="g-image" src="{{ asset.url }}" loading="lazy" width="{{ asset.width }}" height="{{ asset.height }}" alt="{{ alt ?? asset.title }}" />
         {% endif %}
-      {% elseif url ?? false %}
-        <img class="g-image" src="{{ url }}" loading="lazy" alt="{{ alt }}" />
+      {% elseif src ?? false %}
+        <img class="g-image" src="{{ src }}" loading="lazy" alt="{{ alt }}" />
       {% endif %}
     </picture>
     {% if caption ?? false -%}
