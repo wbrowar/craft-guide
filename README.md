@@ -1,8 +1,5 @@
----
 
-**Work in Progress** Guide 3 is in development, but it will be released soon! If you would like to test out this version, please consider this a public Alpha until this message disappears.
-
----
+# **Work in Progress** Guide 3 is in development, but it will be released soon! If you would like to test out this version, please consider this a public Alpha until this message disappears. [Here is a preview of the docs for Guide 3.](https://3-x--guide-docs.netlify.app)
 
 ![Guide 3](resources/img/guide-3-header.png)
 
