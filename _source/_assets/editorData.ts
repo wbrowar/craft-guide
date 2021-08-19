@@ -137,6 +137,24 @@ Content
     },
   },
   {
+    title: 'TL;DR Hide',
+    group: 'components',
+    code: `<div class="tldr-hide">
+  
+</div>`,
+    summary: `<p>Show a <strong>TL;DR</strong> button on your guide and hide this content when <strong>TL;DR</strong> is active.</p>`,
+    documentation: `<p>Show a <strong>TL;DR</strong> button on your guide and hide this content when <strong>TL;DR</strong> is active.</p>`,
+  },
+  {
+    title: 'TL;DR Show',
+    group: 'components',
+    code: `<div class="tldr-show">
+  
+</div>`,
+    summary: `<p>Show a <strong>TL;DR</strong> button on your guide, hide this content and show it when <strong>TL;DR</strong> is active.</p>`,
+    documentation: `<p>Show a <strong>TL;DR</strong> button on your guide, hide this content and show it when <strong>TL;DR</strong> is active.</p>`,
+  },
+  {
     title: 'Variable Client Name',
     group: 'components',
     code: `{{ craft.guide.var('clientName') }}`,
@@ -192,48 +210,185 @@ Content
   // Snippets
   // todo add snippet: GraphQL Helper - Checklist to make sure sections are in graphql schema.
   // todo add snippet: User Role Helper - Table of sections and their user roles (flagging any that don't have a user role).
-  // todo add snippet: Entry Search – Basic search of all of your entries.
   // todo add snippet: Logged in users – List of currently logged in users.
-  // todo add snippet: Content Stats
   // todo add snippet: Changelog
   {
     title: 'Content Stats',
     group: 'snippets',
-    code: `{# Set the type of element to be displayed. #}
+    code: `{# Set the type of element to be displayed. Options: assets, categories, entries, users #}
 {% set type = 'entries' %}
-{# Set the statuses to be displayed #}
-{% set statuses = ['live', 'disabled', 'pending', 'expired'] %}
 
-{% if type == 'entries' %}
+{% if type == 'assets' %}
+  {% set title = 'Assets' %}
+  {% set statuses = ['live'] %}
+  {% set live = craft.assets.limit(null).status('live').count() %}
+{% elseif type == 'categories' %}
+  {% set title = 'Categories' %}
+  {% set statuses = ['live', 'disabled'] %}
+  {% set live = craft.categories.limit(null).status('enabled').count() %}
+  {% set disabled = craft.categories.limit(null).status('disabled').count() %}
+{% elseif type == 'entries' %}
+  {% set title = 'Entries' %}
+  {% set statuses = ['live', 'disabled', 'pending', 'expired'] %}
   {% set live = craft.entries.limit(null).status('live').count() %}
   {% set disabled = craft.entries.limit(null).status('disabled').count() %}
   {% set pending = craft.entries.limit(null).status('pending').count() %}
   {% set expired = craft.entries.limit(null).status('expired').count() %}
+{% elseif type == 'users' %}
+  {% set title = 'Users' %}
+  {% set statuses = ['live', 'disabled'] %}
+  {% set live = craft.users.limit(null).status('enabled').count() %}
+  {% set disabled = craft.users.limit(null).status('disabled').count() %}
 {% endif %}
 
-{% if 'live' in statuses %}
-<div class="element small hasstatus" title="Live elements"><span class="status live"></span><div class="label"><span class="title">Live: {{ live }}</span></div></div>
-{% endif %}
+<div class="g-text-center g-mt-6">
+  <p class="g-mb-0" style="font-size: 3rem"><b>{{ live|default('') }}</b></p>
+  <h2>{{ title|default('') }}</h2>
+</div>
 
-{% if 'disabled' in statuses %}
-<div class="element small hasstatus" title="Disabled elements"><span class="status disabled"></span><div class="label"><span class="title">Disabled: {{ disabled }}</span></div></div>
-{% endif %}
-
-{% if 'pending' in statuses %}
-<div class="element small hasstatus" title="Disabled elements"><span class="status pending"></span><div class="label"><span class="title">Pending: {{ pending }}</span></div></div>
-{% endif %}
-
-{% if 'expired' in statuses %}
-<div class="element small hasstatus" title="Expired elements"><span class="status expired"></span><div class="label"><span class="title">Expired: {{ expired }}</span></div></div>
-{% endif %}`,
+<div class="g-grid g-grid-cols-2 g-w-full">
+  {% if 'live' in statuses %}
+    <div class="element small hasstatus" title="Live elements"><span class="status live"></span><div class="label"><span class="title">Live</span></div></div>
+    <div class="g-text-right" style="font-size: 1.5em"><b>{{ live }}</b></div>
+  {% endif %}
+  
+  {% if 'disabled' in statuses %}
+    <div class="element small hasstatus" title="Live elements"><span class="status disabled"></span><div class="label"><span class="title">Disabled</span></div></div>
+    <div class="g-text-right" style="font-size: 1.5em"><b>{{ disabled }}</b></div>
+  {% endif %}
+  
+  {% if 'pending' in statuses %}
+    <div class="element small hasstatus" title="Live elements"><span class="status pending"></span><div class="label"><span class="title">Pending</span></div></div>
+    <div class="g-text-right" style="font-size: 1.5em"><b>{{ pending }}</b></div>
+  {% endif %}
+  
+  {% if 'expired' in statuses %}
+    <div class="element small hasstatus" title="Live elements"><span class="status expired"></span><div class="label"><span class="title">Expired</span></div></div>
+    <div class="g-text-right" style="font-size: 1.5em"><b>{{ expired }}</b></div>
+  {% endif %}
+</div>`,
     summary: `<p>Show a total of entries that are currently published.</p>`,
     documentation: `<p>Show a total of entries that are currently published.</p>`,
+  },
+  {
+    title: 'Element Search',
+    group: 'snippets',
+    code: `{# Import _self to use macro below #}
+{% import _self as self %}
+
+{# Start Snippet Display #}
+<h2>Entry Search</h2>
+<div class="g-flex g-flex-nowrap g-gap-3">
+  <div class="field">
+    <div class="input">
+      <input class="text fullwidth" form="guide" type="text" v-model="{{ vueString1 }}" @keyup.enter="$refs.searchButton.click()" />
+    </div>
+  </div>
+  <a class="btn submit" :href="'?search=' + {{ vueString1 }}" ref="searchButton">Search</a>
+</div>
+
+{% set query = craft.app.request.getQueryParam('search') %}
+{% if query ?? false %}
+  <on-load @loaded="{{ vueString1 }} = '{{ query }}'"></on-load>
+  <div>
+    {% set elements = craft.entries.status(null).search(query).all() %}
+      
+    {# Table columns. Add more columns to show more entry data (such as the value of the field you are searching for). #}
+    {% set data = {
+      title: 'Search Results',
+      data: elements
+    } %}
+    
+    {# Display table #}
+    {% if elements|length %}
+      {{ self.table(data) }}
+    {% endif %}
+  </div>
+{% endif %}
+
+{# Use a macro to cut down on repeated code if you wanted to show more than one field at a time. #}
+{% macro table(data) %}
+  <table class="g-table">
+    <thead>
+      <tr>
+        <td>{{ data.title }}</td>
+        <td>Edit Page</td>
+      </tr>
+    </thead>
+    <tbody>
+    {% for row in data.data %}
+      <tr>
+        <td><a href="{{ row.url }}" target="_blank" rel="nofollow noopener" title="View element’s page in a new window."><span class="status {{ row.status }}"></span><span>{{ row.title }}</span></a></td>
+        <td><a class="btn icon edit" href="{{ row.cpEditUrl }}" target="_blank" rel="nofollow noopener" title="Go to element edit page.">Edit</a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endmacro %}`,
+    summary: `<p>Search for entries using Craft’s keyword search.</p>`,
+    documentation: `<p>Search for entries using Craft’s keyword search.</p>`,
+  },
+  {
+    title: 'Filled Out Fields',
+    group: 'snippets',
+    code: `{# Set the field’s handle. #}
+{% set handle = 'REPLACE_HANDLE' %}
+
+{# Set the field label for this guide. #}
+{% set label = 'REPLACE_LABEL' %}
+
+{# Set this to "true" to find elements with the field filled out, or "false" to find elements that are missing this field. #}
+{% set filledOut = true %}
+
+{# Import _self to use macro below #}
+{% import _self as self %}
+
+{# Start Snippet Display #}
+<div>
+  <h2>{{ label }}</h2>
+  {% set elements = craft.entries({
+    (handle): filledOut ? ':notempty:' : ':empty:',
+  }).all() %}
+    
+  {# Table columns. Add more columns to show more entry data (such as the value of the field you are searching for). #}
+  {% set data = {
+    title: 'Entries that ' ~ (filledOut ? 'include' : 'are missing') ~ ' the ' ~ label ~ ' field',
+    data: elements
+  } %}
+  
+  {# Display table #}
+  {{ self.table(data) }}
+</div>
+
+
+{# Use a macro to cut down on repeated code if you wanted to show more than one field at a time. #}
+{% macro table(data) %}
+  <table class="g-table">
+    <thead>
+      <tr>
+        <td>{{ data.title }}</td>
+        <td>Edit Page</td>
+      </tr>
+    </thead>
+    <tbody>
+    {% for row in data.data %}
+      <tr>
+        <td><a href="{{ row.url }}" target="_blank" rel="nofollow noopener" title="View element’s page in a new window.">{{ row.title }}</a></td>
+        <td><a class="btn icon edit" href="{{ row.cpEditUrl }}" target="_blank" rel="nofollow noopener" title="Go to element edit page.">Edit</a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endmacro %}`,
+    summary: `<p>Find elements where a field is either filled out or empty.</p>`,
+    documentation: `<p>Find elements where a field is either filled out or empty.</p>`,
   },
   {
     title: 'Low-Res Image Check',
     group: 'snippets',
     code: `{# Set the asset volume you would like to check for images in. #}
 {% set volume = 'REPLACE_VOLUME' %}
+
 {# Set the width to the smallest size that an image should be uploaded. #}
 {% set width = 300 %}
 
@@ -261,6 +416,41 @@ Content
 {% endif %}`,
     summary: `<p>Find images that would get upscaled if transformed.</p>`,
     documentation: `<p>Find images that would get upscaled if transformed.</p>`,
+  },
+  {
+    title: 'Missing Focal Points',
+    group: 'snippets',
+    code: `{# Find images within a specific asset volume. #}
+{% set assets = craft.assets.volume('guide').kind('image').all() %}
+        
+<h2>Images that need a focal point</h2>
+<p>These images are missing a focal point and might get cropped incorrectly. Click Edit to add a focal point to an image.</p>
+
+{# Display images that are missing focal points. #}
+{% for asset in assets %}
+  {% if not asset.hasFocalPoint %}
+    {% set relatedEntries = craft.entries.relatedTo(asset).all() %}
+    <div style="display: grid; grid-template-columns: 300px 1fr; gap: 10px; margin-top: 10px;">
+      <img loading="lazy" src="{{ asset.url }}" width="300" />
+      <div>
+        <a class="btn submit" href="{{ asset.cpEditUrl }}">Edit</a>
+        <p><strong>Title:</strong> {{ asset.title }}</p>
+        <p><strong>File name:</strong> {{ asset.filename }}</p>
+        <p><strong>Width:</strong> {{ asset.width }}px</p>
+        {% if relatedEntries|length %}
+          <p><strong>Appears in:</strong></p>
+          <ul>
+            {% for relatedEntry in relatedEntries %}
+                <li><a href="{{ relatedEntry.url }}">{{ relatedEntry.title }}</a></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+{% endfor %}`,
+    summary: `<p>Find images that are missing focal points.</p>`,
+    documentation: `<p>Find images that are missing focal points.</p>`,
   },
 ];
 
@@ -344,6 +534,14 @@ const utilityClassesBase: string[] = [
   'g-shadow-lg',
   'g-duration-150',
   'g-duration-300',
+  'g-cursor-grab',
+  'g-cursor-grabbing',
+  'g-scroll-snap-none',
+  'g-scroll-snap-x',
+  'g-scroll-snap-y',
+  'g-scroll-snap-start',
+  'g-scroll-snap-center',
+  'g-scroll-snap-end',
 ];
 
 if (import.meta.env.DEV) {

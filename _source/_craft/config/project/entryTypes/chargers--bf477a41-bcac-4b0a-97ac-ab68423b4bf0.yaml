@@ -45,6 +45,10 @@ fieldLayouts:
             warning: null
             width: 100
           -
+            type: wbrowar\guide\fieldlayoutelements\GuideDisplay
+            uiId: CQVhyeJRoFKGg5c
+            width: 100
+          -
             fieldUid: 5d7ab3e0-c350-472c-a7bd-7c6d899501e6 # Price
             instructions: null
             label: null

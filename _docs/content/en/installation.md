@@ -13,11 +13,15 @@ To install the plugin, you can find it in the [Craft Plugin Store](https://plugi
 
 1. Open your terminal and go to your Craft project:
 
-        cd /path/to/project
+    ```
+    cd /path/to/project
+    ```
 
 2. Then tell Composer to load the plugin:
 
-        composer require wbrowar/guide
+    ```
+    composer require wbrowar/guide
+    ```
 
 3. In the Control Panel, go to Settings → Plugins and click the “Install” button for Guide.
 

@@ -105,7 +105,7 @@ In addition to components, Guide provides a set of Twig variables:
 
 ## Context-Aware Guides
 
-When using guides on element edit pages and in UI Elements, context variables are available that represents the specific piece of content you are editing.
+When using guides on element edit pages and in UI elements, context variables are available that represents the specific piece of content you are editing.
 
 | Variable | Description |
 | --- | --- |

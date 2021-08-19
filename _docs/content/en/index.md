@@ -26,7 +26,7 @@ Guide was built to be a CMS manual, but Guide 3 is also a quick way to create wi
 
 ## Editions
 
-The PRO edition of Guide includes a code editor and Twig components that make it easy to place helpful information around the Craft CMS Control Panel (standalone CP pages, widgets, UI Elements, and any CP URL you specify).
+The PRO edition of Guide includes a code editor and Twig components that make it easy to place helpful information around the Craft CMS Control Panel (standalone CP pages, widgets, UI elements, and any CP URL you specify).
 
 The LITE edition is offered for developers who prefer to write their own guide templates and to display them in the Guide CP section.
 

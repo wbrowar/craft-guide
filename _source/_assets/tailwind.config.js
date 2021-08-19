@@ -1,3 +1,5 @@
+const plugin = require('tailwindcss/plugin');
+
 module.exports = {
   mode: 'jit',
   prefix: 'g-',
@@ -61,14 +63,61 @@ module.exports = {
     },
   },
   plugins: [
+    // Add custom utilities
+    plugin(function ({ addUtilities, theme }) {
+      const newUtilities = {
+        '.cursor-grab': {
+          cursor: 'grab',
+        },
+        '.cursor-grabbing': {
+          cursor: 'grabbing',
+        },
+        '.scroll-snap-none': {
+          scrollSnapType: 'none',
+        },
+        '.scroll-snap-x': {
+          scrollSnapType: 'x mandatory',
+        },
+        '.scroll-snap-y': {
+          scrollSnapType: 'y mandatory',
+        },
+        '.scroll-snap-start': {
+          scrollSnapAlign: 'start',
+        },
+        '.scroll-snap-center': {
+          scrollSnapAlign: 'center',
+        },
+        '.scroll-snap-end': {
+          scrollSnapAlign: 'end',
+        },
+      };
+
+      const transitionDuration = theme('transitionDuration');
+      Object.keys(transitionDuration).forEach((key) => {
+        newUtilities[`.animate-duration-${key}`] = {
+          '--duration': transitionDuration[key],
+        };
+        newUtilities[`.animate-delay-${key}`] = {
+          '--delay': transitionDuration[key],
+        };
+      });
+      const transitionTimingFunction = theme('transitionTimingFunction');
+      Object.keys(transitionTimingFunction).forEach((key) => {
+        newUtilities[`.animate-ease-${key}`] = {
+          '--ease': transitionTimingFunction[key],
+        };
+      });
+
+      addUtilities(newUtilities);
+    }),
     // Hide content and replace it with a summary
-    function ({ addVariant, e }) {
+    plugin(function ({ addVariant, e }) {
       addVariant('tldr', ({ modifySelectors, separator }) => {
         modifySelectors(({ className }) => {
           return `.guide-tldr .${e(`tldr${separator}${className}`)}`;
         });
       });
-    },
+    }),
   ],
   corePlugins: {
     preflight: false,

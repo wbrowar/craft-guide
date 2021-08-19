@@ -16,7 +16,7 @@
       <button class="btn submit" type="button" @click="onSaveClicked">Save</button>
     </div>
     <div v-else>
-      <p>No guides have been created yet. Create a guide and then return here to select it for this UI Element.</p>
+      <p>No guides have been created yet. Create a guide and then return here to select it for this UI element.</p>
     </div>
   </div>
 </template>
@@ -115,7 +115,7 @@ export default defineComponent({
           this.placementSaved = true;
 
           if (response.status === 'success') {
-            window.Craft?.cp?.displayNotice('Guide UI Element updated');
+            window.Craft?.cp?.displayNotice('Guide UI element updated');
           } else {
             window.Craft?.cp?.displayError(response.data.error);
           }

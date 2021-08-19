@@ -1,8 +1,8 @@
 ---
 title: Markdown in Twig and Twig in Markdown
-description: 'Overview of Guide for Craft CMS'
-position: 300
+description: 'Overview of Guide for Craft CMS
 category: Tips and Tricks
+position: 300
 version: 3.0.0
 fullscreen: false
 ---

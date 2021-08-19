@@ -68,6 +68,11 @@ class Guide extends Plugin
     /**
      * @var bool
      */
+    public static $craft37 = false;
+
+    /**
+     * @var bool
+     */
     public static $pro;
 
     /**
@@ -107,6 +112,7 @@ class Guide extends Plugin
     public function init()
     {
         parent::init();
+        self::$craft37 = version_compare(Craft::$app->getVersion(), '3.7', '>=');
         self::$plugin = $this;
         self::$pro = self::$plugin->is(Guide::EDITION_PRO);
         self::$settings = $this->getSettings();

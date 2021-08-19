@@ -12,7 +12,7 @@
 
 {% if proEdition %}
   {% if guide ?? false %}
-    {% include 'guide/_partials/guide_display.twig' with { displayId: 'widget', guides: [guide] } only %}
+    {% include 'guide/_partials/guide_display.twig' with { displayId: 'widget-' ~ widgetId, guides: [guide] } only %}
   {% else %}
     <p>The guide that was displayed here is no longer available. Select another guide in this widget’s settings.</p>
   {% endif %}

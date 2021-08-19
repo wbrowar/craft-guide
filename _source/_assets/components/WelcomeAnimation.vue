@@ -40,7 +40,15 @@ import { assetPath, devMode, log } from '../globals';
 import gsap from 'gsap';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { Camera, ColorRepresentation, DirectionalLight, HemisphereLight, Object3D, Scene, WebGLRenderer } from 'three';
+import {
+  ColorRepresentation,
+  DirectionalLight,
+  HemisphereLight,
+  Object3D,
+  PerspectiveCamera,
+  Scene,
+  WebGLRenderer,
+} from 'three';
 
 interface SceneSettings {
   animation: {
@@ -101,7 +109,7 @@ interface SceneSettings {
 
 let ambientLight: HemisphereLight;
 let container: HTMLElement;
-let camera: Camera;
+let camera: PerspectiveCamera;
 let mainLight: DirectionalLight;
 let object: any;
 let renderer: WebGLRenderer;
@@ -111,7 +119,7 @@ let book: Object3D;
 let bookTop: Object3D;
 let bookLoose: Object3D;
 let bookLoose2: Object3D;
-let timeline;
+let timeline: GSAPTimeline;
 
 export default defineComponent({
   name: 'WelcomeAnimation',
@@ -294,7 +302,7 @@ export default defineComponent({
         }, 5000);
       }
     },
-    debugButtonPressed(action) {
+    debugButtonPressed(action: string) {
       if (camera) {
         switch (action) {
           case 'xUp':

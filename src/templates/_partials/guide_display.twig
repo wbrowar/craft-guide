@@ -42,17 +42,32 @@
         <div {% if inlineEditorId ?? false %}v-else{% endif %}>
           {% if guides|length %}
             {% for guide in guides %}
+              {% set vueBoolean1 = "data['" ~ guide.slug ~ "'].boolean1" %}
+              {% set vueBoolean2 = "data['" ~ guide.slug ~ "'].boolean2" %}
+              {% set vueBoolean3 = "data['" ~ guide.slug ~ "'].boolean3" %}
+              {% set vueBoolean4 = "data['" ~ guide.slug ~ "'].boolean4" %}
+              {% set vueBoolean5 = "data['" ~ guide.slug ~ "'].boolean5" %}
+              {% set vueNumber1 = "data['" ~ guide.slug ~ "'].number1" %}
+              {% set vueNumber2 = "data['" ~ guide.slug ~ "'].number2" %}
+              {% set vueNumber3 = "data['" ~ guide.slug ~ "'].number3" %}
+              {% set vueNumber4 = "data['" ~ guide.slug ~ "'].number4" %}
+              {% set vueNumber5 = "data['" ~ guide.slug ~ "'].number5" %}
+              {% set vueString1 = "data['" ~ guide.slug ~ "'].string1" %}
+              {% set vueString2 = "data['" ~ guide.slug ~ "'].string2" %}
+              {% set vueString3 = "data['" ~ guide.slug ~ "'].string3" %}
+              {% set vueString4 = "data['" ~ guide.slug ~ "'].string4" %}
+              {% set vueString5 = "data['" ~ guide.slug ~ "'].string5" %}
               {% if teleportMap['id-' ~ guide.id] ?? false %}<teleport to="{{ teleportMap['id-' ~ guide.id] }}">{% endif %}
               <div
                 class="guide guide-{{ guide.slug }} g-relative"
                 :class="[showTldr ? 'guide-tldr' : null]"
                 {% if not (teleportMap['id-' ~ guide.id] ?? false) and (guideNav|length > 1) %}v-if="currentGuide === '{{ guide.slug }}'"{% endif %}
               >
-                {{ include('guide/_partials/render_content', { guide: guide }) }}
-                <div class="guide-edit-button g-space-x-1 g-absolute g-top-0 g-right-0">
+                <div class="guide-edit-button g-ml-3 g-space-x-1 g-duration-150" v-if="enableInlineEditor || enableTldr">
                   <button class="btn small g-duration-150" :class="[showTldr ? 'submit' : null]" type="button" @click="showTldr ? toggleTldr(false) : toggleTldr(true)" v-if="enableTldr">TL;DR</button>
                   <button class="btn small g-duration-150" type="button" @click="showInlineEditor = true" v-if="enableInlineEditor"><svg-settings class="g-h-4 g-w-4"></svg-settings></button>
                 </div>
+                {{ include('guide/_partials/render_content', { guide: guide }) }}
               </div>
               {% if teleportMap['id-' ~ guide.id] ?? false %}</teleport>{% endif %}
             {% endfor %}

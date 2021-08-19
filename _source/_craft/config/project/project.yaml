@@ -1,4 +1,4 @@
-dateModified: 1629163537
+dateModified: 1629320344
 email:
   fromEmail: email@example.com
   fromName: 'Craft Plugin'
@@ -50,6 +50,7 @@ plugins:
 system:
   edition: pro
   live: true
-  name: 'Craft Plugin'
+  name: 'EV Chargers Unlimited'
+  retryDuration: null
   schemaVersion: 3.7.7
   timeZone: America/Los_Angeles

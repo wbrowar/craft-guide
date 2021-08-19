@@ -4,6 +4,7 @@ namespace wbrowar\guide\migrations;
 
 use Craft;
 use craft\db\Migration;
+use craft\helpers\UrlHelper;
 
 /**
  * m210729_002113_version_2_to_3 migration.
@@ -31,6 +32,21 @@ class m210729_002113_version_2_to_3 extends Migration
         if ($this->createTables()) {
             $this->removeColumns();
             $this->removeTables();
+        }
+
+        // Show announcement for new features
+        if (version_compare(Craft::$app->getVersion(), '3.7', '>=')) {
+            Craft::$app->announcements->push(
+                function ($language) {
+                    return Craft::t('guide', 'Guide Upgraded', [], $language);
+                },
+                function ($language) {
+                    return Craft::t('guide', 'Guides have a new look and can be added to more places around the Craft CMS Control Panel. Head to the [Guide CP section]({guideUrl}) to take a look.', [
+                        'guideUrl' => UrlHelper::cpUrl('guide'),
+                    ], $language);
+                },
+                'guide'
+            );
         }
     }
 

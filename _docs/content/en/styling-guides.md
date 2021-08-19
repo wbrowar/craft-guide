@@ -1,7 +1,7 @@
 ---
 title: Styling Guides
 description: 'Overview of Guide for Craft CMS'
-position: 400
+position: 204
 category: Using Guide
 version: 3.0.0
 fullscreen: false

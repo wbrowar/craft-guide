@@ -1,19 +1,19 @@
 ---
-title: UI Elements
+title: UI elements
 description: 'Overview of Guide for Craft CMS'
-position: 300
+position: 203
 category: Using Guide
 version: 3.0.0
 fullscreen: false
 ---
 
-All guides can be added to Guide UI Elements, however, this is not done within the Guide Organizer. To add a guide to a page that allows for UI Elements, follow these instructions:
+All guides can be added to Guide UI elements, however, this is not done within the Guide Organizer. To add a guide to a page that allows for UI elements, follow these instructions:
 
-1. Use Craft’s Field Layout Designer to add a Guide UI Element to your field layout.
-2. A unique ID needs to be saved to your UI element to identify. Click on the Settings icon on the UI Element. Here you can make up your own unique ID or use the one generated. Save the UI element to continue.
-   <alert type="info">This is set up because of how Craft currently works with UI Element settings. Hopefully this step 2 can be removed in a future release.</alert>
+1. Use Craft’s Field Layout Designer to add a Guide UI element to your field layout.
+2. A unique ID needs to be saved to your UI element to identify. Click on the Settings icon on the UI element. Here you can make up your own unique ID or use the one generated. Save the UI element to continue.
+   <alert type="info">This is set up because of how Craft currently works with UI element settings. Hopefully this step 2 can be removed in a future release.</alert>
 3. Save your field layout. If you are using Project Config, push your config files and apply them to your desired environment.
 4. When you visit the page for the field layout, you’ll find a dropdown input with a list of all available guides. Select the guide you would like to appear and click the Save button.
-5. In order to avoid changing any content on the page, you will need to finish up any content changes and refresh the page to see the guide appear in the UI Element.
+5. In order to avoid changing any content on the page, you will need to finish up any content changes and refresh the page to see the guide appear in the UI element.
 
-If you would like to select a new guide for a Guide UI Element hover over the guide content and look for a gear icon to appear in the top-right corner of the guide. Click the icon to return to the guide selection dropdown and select a new guide. If you do not select a guide, the original selection will appear next time you come back to the edit page.
+If you would like to select a new guide for a Guide UI element hover over the guide content and look for a gear icon to appear in the top-right corner of the guide. Click the icon to return to the guide selection dropdown and select a new guide. If you do not select a guide, the original selection will appear next time you come back to the edit page.

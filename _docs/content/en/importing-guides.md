@@ -1,8 +1,8 @@
 ---
 title: Re-Using Guides Across Projects
 description: 'Overview of Guide for Craft CMS'
-position: 203
 category: Tips and Tricks
+position: 300
 version: 3.0.0
 fullscreen: false
 ---
