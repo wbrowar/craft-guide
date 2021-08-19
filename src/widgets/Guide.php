@@ -47,9 +47,17 @@ class Guide extends Widget
     /**
      * @inheritdoc
      */
+    public function getTitle(): string
+    {
+        // Remove title
+        return '';
+    }
+
+    /**
+     * @inheritdoc
+     */
     public static function icon()
     {
-
         return Craft::getAlias('@wbrowar/guide/assetbundles/static/icon-mask.svg');
     }
 
@@ -108,10 +116,19 @@ class Guide extends Widget
         return Craft::$app->getView()->renderTemplate(
             'guide/widgets/guide_body',
             [
-                'guide' => GuidePlugin::$plugin->guide->getGuides(['id' => $this->guideId], 'one'),
+                'guide' => $this->_getGuideFromGuideId(),
                 'proEdition' => GuidePlugin::$pro,
                 'widgetId' => $this->id,
             ]
         );
+    }
+
+
+    /**
+     * @inheritdoc
+     */
+    public function _getGuideFromGuideId()
+    {
+        return GuidePlugin::$plugin->guide->getGuides(['id' => $this->guideId], 'one');
     }
 }
