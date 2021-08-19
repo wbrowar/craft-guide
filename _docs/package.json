@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "ci:build": "nuxt build",
+    "ci:build": "nuxt generate",
     "dev": "nuxt",
-    "prod": "nuxt build",
+    "prod": "nuxt generate",
     "start": "nuxt start"
   },
   "dependencies": {
+    "@nuxt/components": "^2.2.1",
     "@nuxt/content-theme-docs": "^0.9.0",
     "nuxt": "^2.15.2"
   }
