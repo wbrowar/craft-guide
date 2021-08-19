@@ -50,4 +50,8 @@ If you need to adjust the layout when TL;DR is turned on you can use the `tldr` 
 
 In this example, the second column is hidden by `.tldr-hide`, so the `tldr` variant changes from a two-column grid to a one-column grid.
 
-<alert type="info">TL;DR will stay on for the reader when they return to the guide and across all guides until they turn it off.</alert>
+<alert type="info">
+
+TL;DR will stay on for the reader when they return to the guide and across all guides until they turn it off.
+
+</alert>

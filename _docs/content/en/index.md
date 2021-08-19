@@ -30,7 +30,11 @@ The PRO edition of Guide includes a code editor and Twig components that make it
 
 The LITE edition is offered for developers who prefer to write their own guide templates and to display them in the Guide CP section.
 
-<alert type="info">Guide’s edition can be upgraded to PRO at any time.</alert>
+<alert type="info">
+
+Guide’s edition can be upgraded to PRO at any time.
+
+</alert>
 
 Guide can be purchased in the [Craft Plugin Store](https://plugins.craftcms.com/guide).
 

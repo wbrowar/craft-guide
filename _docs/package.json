@@ -5,7 +5,7 @@
   "scripts": {
     "ci:build": "nuxt generate",
     "dev": "nuxt",
-    "prod": "nuxt build",
+    "prod": "nuxt generate",
     "start": "nuxt start"
   },
   "dependencies": {

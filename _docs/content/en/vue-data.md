@@ -14,7 +14,11 @@ Guides are all rendered in the following order:
 
 Because Vue is already in use, Guide includes a set of variables that can be used for some limited interactivity.
 
-<alert type="warning">This feature is on the advanced side and having some knowledge of how Twig and Vue work together is recommended.</alert>
+<alert type="warning">
+
+This feature is on the advanced side and having some knowledge of how Twig and Vue work together is recommended.
+
+</alert>
 
 ## Using Vue in Guide Templates
 
@@ -40,7 +44,11 @@ However, since that can lead to some pretty verbose code, Twig shortcuts have be
 <p>String 1’s value</p>
 ```
 
-<alert>Notice we're using `{{` inside of `${`? This is because the Twig variable will get rendered to HTML, then Vue will see this: `${ data['guide-slug'].string1 }`.</alert>
+<alert type="info">
+
+Notice we're using `{{` inside of `${`? This is because the Twig variable will get rendered to HTML, then Vue will see this: `${ data['guide-slug'].string1 }`.
+
+</alert>
 
 All of Vue’s directives can be used with your variables, but since we’re writing in Twig first, to do a `v-if` you could write something like this:
 
@@ -55,7 +63,11 @@ Vue’s component events—such as `v-on:click`, which can also be written as `@
 <p>${ {{ vueNumber1 }} }</p>
 ```
 
-<alert>Again we're using `{{` inside of the click event because Twig will have already rendered this out to the format Vue needs it in.</alert>
+<alert type="info">
+
+Again we're using `{{` inside of the click event because Twig will have already rendered this out to the format Vue needs it in.
+
+</alert>
 
 ## Setting Variable Values on Load
 
@@ -72,7 +84,11 @@ When setting a string, be sure to add quotes around the value:
 <input form="guide" type="text" v-model="{{ vueString1 }}" />
 ```
 
-<alert>When adding `input` elements into a guide, setting a `form` attribute to something arbitrary, like "guide" in this example, will make it safe to use this input on edit pages.</alert>
+<alert type="info">
+
+When adding `input` elements into a guide, setting a `form` attribute to something arbitrary, like "guide" in this example, will make it safe to use this input on edit pages.
+
+</alert>
 
 ## List of Variables
 

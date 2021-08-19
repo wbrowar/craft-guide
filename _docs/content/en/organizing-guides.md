@@ -55,7 +55,11 @@ Dragging a guide to the Widgets area of the Organizer allows that guide to be ad
 
 Guides can be added to any other page in the CP by providing the page URI and a CSS selector in a guide dragged to the Control Panel Pages area.
 
-<alert type="info">The page URI should not include the `cpTrigger` segment. In most Craft sites this is set to `admin`, unless it has been changed in the General config. For example, if you want add a guide to the Field Settings page at `/admin/settings/fields`, enter `settings/fields` as the Page URI.</alert>
+<alert type="info">
+
+The page URI should not include the `cpTrigger` segment. In most Craft sites this is set to `admin`, unless it has been changed in the General config. For example, if you want add a guide to the Field Settings page at `/admin/settings/fields`, enter `settings/fields` as the Page URI.
+
+</alert>
 
 For the CSS Selector field, enter valid CSS selector (a class, id, or `data` attribute) of the element where the guide should be added to. The guide content will be appended to the bottom of the element and custom CSS in the guide can help you position it or style it to fit in with its surroundings.
 

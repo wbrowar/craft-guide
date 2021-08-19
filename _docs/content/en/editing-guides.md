@@ -146,4 +146,8 @@ Selecting `External Page` from the Content Source guide option will let you disp
 
 ![The Craft Docs in an iframe](https://assets.wbrowar.com/guide/img/guide-iframe.png)
 
-<alert type="warning">Some websites don’t allow for their pages to appear in iframes. The owner of a website may be able to confgure their server to allow for their content to appear in an iframe, however, this is usually set up this way for security reasons.</alert>
+<alert type="warning">
+
+Some websites don’t allow for their pages to appear in iframes. The owner of a website may be able to confgure their server to allow for their content to appear in an iframe, however, this is usually set up this way for security reasons.
+
+</alert>

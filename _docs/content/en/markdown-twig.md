@@ -1,6 +1,6 @@
 ---
 title: Markdown in Twig and Twig in Markdown
-description: 'Overview of Guide for Craft CMS
+description: 'Overview of Guide for Craft CMS'
 category: Tips and Tricks
 position: 300
 version: 3.0.0
@@ -50,4 +50,8 @@ The Craft CMS docs can be found here:
 {% endfilter %}
 ```
 
-<alert>The newline rules of Markdown apply in Markdown blocks. In the example above, the rendered button would appear within a `<p>` tag.</alert>
+<alert type="info">
+
+The newline rules of Markdown apply in Markdown blocks. In the example above, the rendered button would appear within a `<p>` tag.
+
+</alert>

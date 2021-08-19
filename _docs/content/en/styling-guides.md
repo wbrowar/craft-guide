@@ -77,7 +77,11 @@ The final code should look something like this:
 {% endcss %}
 ```
 
-<alert type="warning">While it’s infrequent, Craft CMS’s styles, classes, and ids may change from time to time. Doing a quick check around the CP and being on the lookout for broken guides whenever you update Craft is recommended.</alert>
+<alert type="warning">
+
+While it’s infrequent, Craft CMS’s styles, classes, and ids may change from time to time. Doing a quick check around the CP and being on the lookout for broken guides whenever you update Craft is recommended.
+
+</alert>
 
 ## Utility Classes
 
