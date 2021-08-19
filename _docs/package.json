@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "ci:build": "nuxt generate",
+    "ci:build": "nuxt build",
     "dev": "nuxt",
-    "prod": "nuxt generate",
+    "prod": "nuxt build",
     "start": "nuxt start"
   },
   "dependencies": {
