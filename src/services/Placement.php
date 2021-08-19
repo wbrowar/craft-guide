@@ -32,7 +32,7 @@ class Placement extends Component
      *
      * @return mixed
      */
-    public function formatUri($uri): mixed
+    public function formatUri($uri)
     {
         $cpTrigger = Craft::$app->getConfig()->getGeneral()->cpTrigger ?? '';
 

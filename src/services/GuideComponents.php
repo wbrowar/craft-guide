@@ -11,6 +11,7 @@
 namespace wbrowar\guide\services;
 
 use craft\elements\Asset;
+use craft\helpers\Template;
 use wbrowar\guide\Guide;
 
 use Craft;
@@ -101,11 +102,14 @@ class GuideComponents extends Component
             $options['attrs']['class'] = $class;
             $options['element'] = $options['element'] ?? 'div';
 
+            $oldMode = Guide::$view->getTemplateMode();
+            Guide::$view->setTemplateMode(Guide::$view::TEMPLATE_MODE_CP);
             if (Craft::$app->getView()->doesTemplateExist('guide/components/' . $handle . '.twig')) {
-                return Craft::$app->getView()->renderTemplate('guide/components/' . $handle . '.twig', $options);
+                $renderedTemplate = Craft::$app->getView()->renderTemplate('guide/components/' . $handle . '.twig', $options);
             }
+            Guide::$view->setTemplateMode($oldMode);
 
-            return '<p class="fpo">A component couldn’t be found for this component handle: ' . $handle . '</p>';
+            return $renderedTemplate ?? '<p class="fpo">A component couldn’t be found for this component handle: ' . $handle . '</p>';
         }
 
         return '<p class="fpo">Guide Components are available in the PRO edition Guide. Upgrading to PRO will render this component.</p>';

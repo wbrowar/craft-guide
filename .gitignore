@@ -7,6 +7,7 @@ _source/_craft/storage/*
 !_source/_craft/storage/.gitkeep
 _source/_craft/web/cpresources
 _source/_craft/vendor
+_source/_craft/.env
 
 # NODE ENVIRONMENT
 _source/_assets/node_modules/*
