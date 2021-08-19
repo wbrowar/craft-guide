@@ -63,4 +63,35 @@ The page URI should not include the `cpTrigger` segment. In most Craft sites thi
 
 For the CSS Selector field, enter valid CSS selector (a class, id, or `data` attribute) of the element where the guide should be added to. The guide content will be appended to the bottom of the element and custom CSS in the guide can help you position it or style it to fit in with its surroundings.
 
-See [Styling Guides](/styling-guides) for some tips to help your guides fit in when added to the Control Panel Pages area.
+See [Styling Guides](/styling-guides#adding-guides-via-css-selector) for some tips to help your guides fit in when added to the Control Panel Pages area.
+
+## Display Area Helpers
+
+Since guides can be added to multiple places at once a variable, called `guideDisplayArea`, can be used to make changes to your guide based on where it has been placed in the Organizer.
+
+For example, you can add this to your guide to add some custom CSS when you know your guide has been added to a widget:
+
+```twig
+<p>My guide content</p>
+
+{% if guideDisplayArea == 'widget' %}
+  {% css %}
+    .p { font-size: 2rem }
+  {% endcss %}
+{% endif %}
+```
+
+Here is a list of all of the current values that `guideDisplayArea` can be set to.
+
+| Area Handles | Description |
+| --- | --- |
+| `elementEdit` | An asset, category, entry, or user edit page |
+| `guide` | The Guide CP homepage |
+| `page` | An individual guide page |
+| `widget` | A Dashboard widget |
+| `uiElement` | A UI element on an edit page |
+| `uri` | A guide added via URI. This value is the default. |
+
+
+
+

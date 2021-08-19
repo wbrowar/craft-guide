@@ -10,7 +10,18 @@
  * @since     3.0.0
  */ #}
 
+{#
+  Display Areas:
+  elementEdit: An asset, category, entry, or user edit page
+  guide: The Guide CP homepage
+  page: An individual guide page
+  widget: A Dashboard widget
+  uiElement: A UI element on an edit page
+  uri: A guide added via URI
+#}
+
 {% if guides|length or (inlineEditorId ?? false) %}
+  {% set guideDisplayArea = guideDisplayArea|default('uri') %}
   {% set displaySlug = 'guide-' ~ (displayId ?? 'display') %}
 
   {% set guideNav = [] %}

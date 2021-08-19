@@ -15,6 +15,7 @@
     {% set displayId = 'uiElement-' ~ uiId %}
 
     {% include 'guide/_partials/guide_display.twig' with {
+      guideDisplayArea: 'uiElement',
       displayId: displayId,
       element: element ?? null,
       guides: guide ?? false ? [guide] : null,

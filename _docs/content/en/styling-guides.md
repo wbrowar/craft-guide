@@ -140,9 +140,26 @@ g-block
 g-inline-block
 g-flex
 g-inline-flex
+g-flex-wrap
+g-flex-nowrap
+g-flex-wrap-reverse
+g-flex-grow-0
+g-flex-grow
+g-flex-shrink-0
+g-flex-shrink
 g-grid
+g-inline-grid
 g-items-center
+g-items-start
+g-items-end
+g-items-baseline
+g-items-stretch
+g-justify-start
+g-justify-end
 g-justify-center
+g-justify-between
+g-justify-around
+g-justify-evenly
 g-grid-cols-2
 g-grid-cols-3
 g-grid-cols-4
@@ -214,6 +231,14 @@ g-cursor-pointer
 g-shadow-lg
 g-duration-150
 g-duration-300
+g-cursor-grab
+g-cursor-grabbing
+g-scroll-snap-none
+g-scroll-snap-x
+g-scroll-snap-y
+g-scroll-snap-start
+g-scroll-snap-center
+g-scroll-snap-end
 ```
 
 If you would like to see a utility class added to this list, add a [Pull Request](https://github.com/wbrowar/craft-guide/pulls) or [talk about it in a Discussion](https://github.com/wbrowar/craft-guide/discussions) in the Guide GitHub repo.

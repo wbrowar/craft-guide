@@ -14,6 +14,7 @@
 
 {% if guides|length %}
   {% include 'guide/_partials/guide_display.twig' with {
+    guideDisplayArea: 'elementEdit',
     displayId: 'page',
     element: element ?? null,
     guides: guides,
