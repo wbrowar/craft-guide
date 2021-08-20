@@ -36,5 +36,5 @@
 {% endblock %}
 
 {% set content %}
-  {% include 'guide/_partials/guide_display.twig' with { displayId: 'page', guides: [guide] } only %}
+  {% include 'guide/_partials/guide_display.twig' with { guideDisplayArea: 'page', displayId: 'page', guides: [guide] } only %}
 {% endset %}

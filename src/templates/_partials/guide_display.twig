@@ -41,7 +41,7 @@
     {% if teleportContainerClass ?? false %}data-teleport-container-class="{{ teleportContainerClass }}"{% endif %}
     {% if teleportMethod ?? false %}data-teleport-method="{{ teleportMethod }}"{% endif %}
     {% if teleportSelector ?? false %}data-teleport-selector="{{ teleportSelector }}"{% endif %}
-  ></div>
+  >{{ placeholderText|default('') }}</div>
   <template id="{{ displaySlug }}">
     <teleport :to="teleportTarget" :disabled="!teleportTarget">
       <div{% if guideNav|length > 1 %} class="g-grid g-grid-cols-[var(--grid-cols)] g-gap-6 g-relative" style="--grid-cols: 1fr 200px;"{% endif %}>

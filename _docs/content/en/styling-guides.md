@@ -89,6 +89,12 @@ Guide uses a small subset of prefixed [Tailwind CSS classes](https://tailwindcss
 
 The current list of supported utility classes can be found [below](#list-of-utility-classes). When using the code editor to edit a guide utility classes will autocomplete when you begin typing `g-`.
 
+<alert type="info">
+
+The [Tailwind Typography](https://github.com/tailwindlabs/tailwindcss-typography) plugin, written as `g-prose`, has been included to help add some additional styling to content blocks when necessary. The `g-prose g-prose-sm` combination is closer to Craft’s default font size, but the other sizes are included if a larger base font size is needed.
+
+</alert>
+
 ### Variants
 
 [Tailwind’s utility variants](https://tailwindcss.com/docs/responsive-design) can be used to change your layout based on screen size or other state changes. Guide currently only uses a few responsive variants:
@@ -135,6 +141,12 @@ For example, if you wanted to set content to a custom three-column grid at the `
 Here is the current list of supported utility classes in Guide:
 
 ```
+g-prose
+g-prose-sm
+g-prose-md
+g-prose-lg
+g-prose-xl
+g-prose-2xl
 g-hidden
 g-block
 g-inline-block

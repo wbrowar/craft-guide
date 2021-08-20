@@ -11,8 +11,12 @@
 }
 
 /* Wrapper */
-.guide {
-  @apply g-space-y-6;
+.guide {}
+/* Same as `g-space-y-6` with .guide-edit-button included */
+.guide > :not([hidden]):not(.guide-edit-button) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
 }
 
 /* Elements */

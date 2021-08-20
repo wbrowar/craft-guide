@@ -96,13 +96,15 @@ export const editorData: EditorComponent[] = [
   {
     title: 'Markdown',
     group: 'components',
-    code: `{% filter markdown('gfm') %}
+    code: `<div class="g-prose g-prose-sm">
+{% filter markdown('gfm') %}
 
 ## Heading
 
 Content
 
-{% endfilter %}`,
+{% endfilter %}
+</div>`,
     summary: `<p>Render Markdown in your guide.</p>`,
     documentation: `<p>Use Craft’s "markdown" Twig filter to render markdown content.</p>`,
   },
@@ -455,6 +457,12 @@ Content
 ];
 
 const utilityClassesBase: string[] = [
+  'g-prose',
+  'g-prose-sm',
+  'g-prose-md',
+  'g-prose-lg',
+  'g-prose-xl',
+  'g-prose-2xl',
   'g-hidden',
   'g-block',
   'g-inline-block',
@@ -573,6 +581,30 @@ if (import.meta.env.DEV) {
 }
 
 const utilityClassesWithVariants: string[] = [
+  'sm:g-prose',
+  'md:g-prose',
+  'lg:g-prose',
+  'tldr:g-prose',
+  'sm:g-prose-sm',
+  'md:g-prose-sm',
+  'lg:g-prose-sm',
+  'tldr:g-prose-sm',
+  'sm:g-prose-md',
+  'md:g-prose-md',
+  'lg:g-prose-md',
+  'tldr:g-prose-md',
+  'sm:g-prose-lg',
+  'md:g-prose-lg',
+  'lg:g-prose-lg',
+  'tldr:g-prose-lg',
+  'sm:g-prose-xl',
+  'md:g-prose-xl',
+  'lg:g-prose-xl',
+  'tldr:g-prose-xl',
+  'sm:g-prose-2xl',
+  'md:g-prose-2xl',
+  'lg:g-prose-2xl',
+  'tldr:g-prose-2xl',
   'sm:g-hidden',
   'md:g-hidden',
   'lg:g-hidden',

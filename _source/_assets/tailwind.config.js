@@ -118,6 +118,8 @@ module.exports = {
         });
       });
     }),
+    // Add Tailwind Typography
+    require('@tailwindcss/typography'),
   ],
   corePlugins: {
     preflight: false,
