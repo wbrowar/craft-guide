@@ -75,8 +75,8 @@
                 {% if not (teleportMap['id-' ~ guide.id] ?? false) and (guideNav|length > 1) %}v-if="currentGuide === '{{ guide.slug }}'"{% endif %}
               >
                 <div class="guide-edit-button g-ml-3 g-space-x-1 g-duration-150" v-if="enableInlineEditor || enableTldr">
-                  <button class="btn small g-duration-150" :class="[showTldr ? 'submit' : null]" type="button" @click="showTldr ? toggleTldr(false) : toggleTldr(true)" v-if="enableTldr">TL;DR</button>
-                  <button class="btn small g-duration-150" type="button" @click="showInlineEditor = true" v-if="enableInlineEditor"><svg-settings class="g-h-4 g-w-4"></svg-settings></button>
+                  <button class="btn small g-duration-150" :class="[showTldr ? 'submit' : null]" type="button" title="Hide some of the content in this guide to read a summarized version." @click="showTldr ? toggleTldr(false) : toggleTldr(true)" v-if="enableTldr">TL;DR</button>
+                  <button class="btn small g-duration-150" type="button" title="Select a new guide for this area." @click="showInlineEditor = true" v-if="enableInlineEditor"><svg-settings class="g-h-4 g-w-4"></svg-settings></button>
                 </div>
                 {{ include('guide/_partials/render_content', { guide: guide }) }}
               </div>

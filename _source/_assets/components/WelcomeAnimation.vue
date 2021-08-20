@@ -514,7 +514,7 @@ export default defineComponent({
     },
     playCameraLoop() {
       if (camera) {
-        const animations = [];
+        const animations: string[] = [];
         // timeline = gsap.timeline({ repeat: -1, repeatDelay: 1 });
         timeline = gsap.timeline({
           onComplete: function () {

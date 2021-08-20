@@ -141,7 +141,7 @@ Content
   {
     title: 'TL;DR Hide',
     group: 'components',
-    code: `<div class="tldr-hide">
+    code: `<div class="tldr-hide g-space-y-6">
   
 </div>`,
     summary: `<p>Show a <strong>TL;DR</strong> button on your guide and hide this content when <strong>TL;DR</strong> is active.</p>`,
@@ -150,7 +150,7 @@ Content
   {
     title: 'TL;DR Show',
     group: 'components',
-    code: `<div class="tldr-show">
+    code: `<div class="tldr-show g-space-y-6">
   
 </div>`,
     summary: `<p>Show a <strong>TL;DR</strong> button on your guide, hide this content and show it when <strong>TL;DR</strong> is active.</p>`,

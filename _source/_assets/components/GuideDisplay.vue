@@ -126,7 +126,9 @@ export default defineComponent({
 .guide .guide-edit-button {
   float: right;
   margin-top: 0 !important;
+  position: relative;
   opacity: 0.3;
+  z-index: 50;
 }
 .guide:hover .guide-edit-button {
   opacity: 1;
