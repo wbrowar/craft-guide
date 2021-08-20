@@ -124,7 +124,7 @@
             />
             <OrganizerDropZone
               :class="{
-                'g-col-span-3': gridView === 'grid',
+                'g-col-span-4': gridView === 'grid',
                 'g-col-start-1 g-col-span-3': gridView === 'list',
               }"
               :header-size="3"
