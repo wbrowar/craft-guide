@@ -233,6 +233,7 @@ g-space-x-1
 g-space-x-2
 g-space-x-3
 g-space-x-6
+g-max-w-prose
 g-text-left
 g-text-center
 g-text-right

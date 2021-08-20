@@ -15,7 +15,7 @@
     <input type="hidden" :name="pageForm.csrf?.split('|')?.[0]" :value="pageForm.csrf?.split('|')?.[1]" />
     <div
       class="
-        g-grid g-grid-rows-[60px,1fr] g-relative g-bg-white g-rounded-l-lg g-min-h-[850px] g-h-[70vh] g-overflow-x-auto
+        g-grid g-grid-rows-[60px,1fr] g-relative g-bg-white g-rounded-l-lg g-min-h-[650px] g-h-[70vh] g-overflow-x-auto
       "
     >
       <div class="g-sticky g-top-0 g-bg-white">
@@ -190,11 +190,11 @@
         </ul>
       </div>
     </div>
-    <div class="g-min-h-[850px] g-h-[70vh] g-bg-matrix-block g-rounded-r-lg g-relative g-overflow-hidden">
+    <div class="g-min-h-[650px] g-h-[70vh] g-bg-matrix-block g-rounded-r-lg g-relative g-overflow-hidden">
       <VAceEditor
         ref="editor"
         v-model:value="editorContent"
-        class="g-min-h-[850px] g-h-[70vh] g-rounded-r-lg"
+        class="g-min-h-[650px] g-h-[70vh] g-rounded-r-lg"
         wrap
         lang="twig"
         :options="{
