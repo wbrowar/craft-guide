@@ -218,26 +218,33 @@ Content
     title: 'Content Stats',
     group: 'snippets',
     code: `{# Set the type of element to be displayed. Options: assets, categories, entries, users #}
-{% set type = 'entries' %}
+{% set elementType = 'entries' %}
 
-{% if type == 'assets' %}
-  {% set title = 'Assets' %}
+{# If showing content stats for entries, specifcy the section; for assets, the volume, or for categories, the group. #}
+{# Leave this as null to get all entries, assets, or category groups. #}
+{% set subType = null %}
+
+{# Set a label that sits under the total number. Leave this as blank to default to the element type. #}
+{% set label = 'Entries' %}
+
+{% if elementType == 'assets' %}
+  {% set labelDefault = 'Assets' %}
   {% set statuses = ['live'] %}
-  {% set live = craft.assets.limit(null).status('live').count() %}
-{% elseif type == 'categories' %}
-  {% set title = 'Categories' %}
+  {% set live = craft.assets.limit(null).volume(subType ?? null).status('live').count() %}
+{% elseif elementType == 'categories' %}
+  {% set labelDefault = 'Categories' %}
   {% set statuses = ['live', 'disabled'] %}
-  {% set live = craft.categories.limit(null).status('enabled').count() %}
-  {% set disabled = craft.categories.limit(null).status('disabled').count() %}
-{% elseif type == 'entries' %}
-  {% set title = 'Entries' %}
+  {% set live = craft.categories.limit(null).group(subType ?? null).status('enabled').count() %}
+  {% set disabled = craft.categories.limit(null).group(subType ?? null).status('disabled').count() %}
+{% elseif elementType == 'entries' %}
+  {% set labelDefault = 'Entries' %}
   {% set statuses = ['live', 'disabled', 'pending', 'expired'] %}
-  {% set live = craft.entries.limit(null).status('live').count() %}
-  {% set disabled = craft.entries.limit(null).status('disabled').count() %}
-  {% set pending = craft.entries.limit(null).status('pending').count() %}
-  {% set expired = craft.entries.limit(null).status('expired').count() %}
-{% elseif type == 'users' %}
-  {% set title = 'Users' %}
+  {% set live = craft.entries.limit(null).section(subType ?? null).status('live').count() %}
+  {% set disabled = craft.entries.limit(null).section(subType ?? null).status('disabled').count() %}
+  {% set pending = craft.entries.limit(null).section(subType ?? null).status('pending').count() %}
+  {% set expired = craft.entries.limit(null).section(subType ?? null).status('expired').count() %}
+{% elseif elementType == 'users' %}
+  {% set labelDefault = 'Users' %}
   {% set statuses = ['live', 'disabled'] %}
   {% set live = craft.users.limit(null).status('enabled').count() %}
   {% set disabled = craft.users.limit(null).status('disabled').count() %}
@@ -245,7 +252,7 @@ Content
 
 <div class="g-text-center g-mt-6">
   <p class="g-mb-0" style="font-size: 3rem"><b>{{ live|default('') }}</b></p>
-  <h2>{{ title|default('') }}</h2>
+  <h2>{{ label|default(labelDefault) }}</h2>
 </div>
 
 <div class="g-grid g-grid-cols-2 g-w-full">

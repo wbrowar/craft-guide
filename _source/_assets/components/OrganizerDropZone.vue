@@ -59,7 +59,7 @@
               @click="onDeletePlacementClicked(placement)"
               v-if="confirmDelete"
             >
-              Delete</button
+              Remove</button
             ><button class="btn small" type="button" @click="confirmDelete = false" v-if="confirmDelete">Cancel</button>
           </div>
         </div>

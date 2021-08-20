@@ -44,7 +44,7 @@ export default defineComponent({
 
 <style scoped>
 .guide-modal {
-  background-color: rgba(228, 237, 246, 0.75);
+  background-color: rgba(228, 237, 246, 0.3);
   backdrop-filter: blur(10px);
 }
 </style>
