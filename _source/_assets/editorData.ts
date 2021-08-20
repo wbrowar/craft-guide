@@ -353,6 +353,7 @@ Content
 {% import _self as self %}
 
 {# Start Snippet Display #}
+{% cache %}
 <div>
   <h2>{{ label }}</h2>
   {% set elements = craft.entries({
@@ -368,6 +369,7 @@ Content
   {# Display table #}
   {{ self.table(data) }}
 </div>
+{% endcache %}
 
 
 {# Use a macro to cut down on repeated code if you wanted to show more than one field at a time. #}
@@ -409,6 +411,7 @@ Content
   <h2>Images that are too small (less than {{ width }}px wide)</h2>
   <p>These images should be replaced with a .jpg that is at least {{ width }}px wide.</p>
   
+  {% cache %}
   <div class="g-space-y-2">
     {% for asset in assets %}
       <div class="g-grid g-grid-cols-[var(--grid-cols)] g-gap-2" style="--grid-cols: 300px 1fr;">
@@ -422,6 +425,7 @@ Content
       </div>
     {% endfor %}
   </div>
+  {% endcache %}
 {% endif %}`,
     summary: `<p>Find images that would get upscaled if transformed.</p>`,
     documentation: `<p>Find images that would get upscaled if transformed.</p>`,
@@ -436,6 +440,7 @@ Content
 <p>These images are missing a focal point and might get cropped incorrectly. Click Edit to add a focal point to an image.</p>
 
 {# Display images that are missing focal points. #}
+{% cache %}
 {% for asset in assets %}
   {% if not asset.hasFocalPoint %}
     {% set relatedEntries = craft.entries.relatedTo(asset).all() %}
@@ -457,7 +462,8 @@ Content
       </div>
     </div>
   {% endif %}
-{% endfor %}`,
+{% endfor %}
+{% endcache %}`,
     summary: `<p>Find images that are missing focal points.</p>`,
     documentation: `<p>Find images that are missing focal points.</p>`,
   },
