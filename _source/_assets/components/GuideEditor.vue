@@ -18,7 +18,7 @@
         g-grid g-grid-rows-[60px,1fr] g-relative g-bg-white g-rounded-l-lg g-min-h-[650px] g-h-[70vh] g-overflow-x-auto
       "
     >
-      <div class="g-sticky g-top-0 g-bg-white">
+      <div class="g-sticky g-top-0 g-bg-white g-z-50">
         <ul class="g-flex g-flex-nowrap">
           <li class="g-flex-grow" :class="currentTab === 'publishing' ? 'g-bg-select-dark' : 'g-bg-select-light'">
             <button

@@ -110,6 +110,14 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Tailwind Typography overrides */
+body.ltr .g-prose ol {
+  padding-left: 0;
+}
+.g-prose ol li {
+  list-style: none;
+}
+
 /* Hide scrollbar for Chrome, Safari and Opera */
 .g-scoll-hide::-webkit-scrollbar {
   display: none;

@@ -38,7 +38,8 @@
         >
           <h4 class="g-mb-0">
             {{ guideForPlacement(placement.guideId).title
-            }}<span class="g-ml-2 g-font-normal g-opacity-40" v-if="placement.selector">{{ placement.selector }}</span>
+            }}<span class="g-ml-2 g-font-normal g-opacity-60" v-if="placement.uri">{{ placement.uri }}</span
+            ><span class="g-ml-2 g-font-normal g-opacity-40" v-if="placement.selector">{{ placement.selector }}</span>
           </h4>
           <div class="g-inline-flex g-flex-nowrap g-gap-1 g-opacity-0 group-hover:g-opacity-100">
             <button
@@ -51,7 +52,7 @@
               <SvgEdit class="g-w-3 g-h-3" /><span class="g-sr-only">Edit</span>
             </button>
             <button class="btn small" title="Delete" type="button" @click="confirmDelete = true" v-if="!confirmDelete">
-              <SvgClose class="g-w-3 g-h-3" /><span class="g-sr-only">Delete</span>
+              <SvgClose class="g-w-3 g-h-3" /><span class="g-sr-only">Remove</span>
             </button>
             <button
               class="btn submit small"
