@@ -7,7 +7,7 @@ version: 3.0.0
 fullscreen: false
 ---
 
-![Guide Organizer](https://assets.wbrowar.com/guide/img/guide-organizer.png)
+![Guide Organizer](https://wbrowar.us-east-1.linodeobjects.com/static/guide-docs/guide-organizer-grid.png?mtime=20210821151849&focal=none)
 
 When a guide is first created, it will appear in the left-hand side of the Organizer (the Organizer link in the Guide CP section). To the right of that column you’ll see a list of areas around the Guide CP. Use drag and drop to move a guide to one or more of these locations.
 
@@ -33,13 +33,13 @@ When guides are dropped into a CP area they will be listed in alphabetical order
 
 ### Guide CP Section
 
-![Guide CP page](https://assets.wbrowar.com/guide/img/guide-overview.png)
+![Guide CP page](https://wbrowar.us-east-1.linodeobjects.com/static/guide-docs/guide-cp-section.png?mtime=20210821152523&focal=none)
 
 Guides dragged into the Guide area of the Organizer will appear in the Guide CP Section’s Guide link. This page can be considered a traditional CMS user manual and it's available to users of the LITE edition of Guide.
 
 ### Content Edit Pages
 
-![Guide modal](https://assets.wbrowar.com/guide/img/guide-modal.png)
+![Guide modal](https://wbrowar.us-east-1.linodeobjects.com/static/guide-docs/guide-edit-page.png?mtime=20210821153804&focal=none)
 
 Guides can be dragged to the Entries area to appear on all entry edit pages. Guides can also be added to the edit pages of specific entry sections. This works the same way for Asset, Category, Global edit pages. Guides added to the Users area will appear on all user edit pages.
 
@@ -47,11 +47,13 @@ By default, guides that are added to edit pages are embedded above the edit page
 
 ### Dashboard Widgets
 
-![Guide widget](https://assets.wbrowar.com/guide/img/guide-dashboard.png)
+![Guide widget](https://wbrowar.us-east-1.linodeobjects.com/static/guide-docs/guide-widget.png?mtime=20210821151907&focal=none)
 
 Dragging a guide to the Widgets area of the Organizer allows that guide to be added to a Guide widget. From there, a user can add a Guide widget to their dashboard and select this guide from the list of all guides in the Widget area.
 
 ### Control Panel Pages
+
+![Placing guides by URI](https://wbrowar.us-east-1.linodeobjects.com/static/guide-docs/guide-area-uri.png?mtime=20210821151855&focal=none)
 
 Guides can be added to any other page in the CP by providing the page URI and a CSS selector in a guide dragged to the Control Panel Pages area.
 

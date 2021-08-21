@@ -15,7 +15,7 @@ Guide was built to be a CMS manual, but Guide 3 is also a quick way to create wi
 
 ## Guide 3 for Craft CMS 3
 
-![Guide in the Control Panel](https://assets.wbrowar.com/guide/img/guide-overview.png)
+![Guide in the Control Panel](https://wbrowar.us-east-1.linodeobjects.com/static/guide-docs/guide-cp-section.png?mtime=20210821152523&focal=none)
 
 
 ## Requirements

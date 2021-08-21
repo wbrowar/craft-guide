@@ -9,7 +9,7 @@ fullscreen: false
 
 A guide can be written in the built-in code editor, imported as a template, or embedded as an iframe. All guides are created and configured in the Guide Editor.
 
-![Guide Editor](https://assets.wbrowar.com/guide/img/guide-editor.png)
+![Guide Editor](https://wbrowar.us-east-1.linodeobjects.com/static/guide-docs/guide-editor-settings.png?mtime=20210821151823&focal=none)
 
 To create a new guide, go to the Organizer tab in the Guide CP section and click on the `+ New Guide` button.
 
@@ -24,7 +24,7 @@ When setting up a guide, you’ll set the following options under the Settings t
 
 ## Components
 
-![Guide Component](https://assets.wbrowar.com/guide/img/guide-component.png)
+![Guide Component](https://wbrowar.us-east-1.linodeobjects.com/static/guide-docs/guide-editor-components.png?mtime=20210821151814&focal=none)
 
 When using the code editor to create a guide you’ll see a row of tabs in the top-left of the editor. Each tab contains a list of components that can be added to your guide. Some components are simple shorthand for HTML markup where other components provide examples of things you can do within your guides. To see what a component does, and what arguments are available to it, click on the component’s Documentation button.
 
@@ -54,6 +54,8 @@ In this case, we're passing in a full image asset and the URL of the image will 
 ```
 
 ## Snippets
+
+![Guide Snippets](https://wbrowar.us-east-1.linodeobjects.com/static/guide-docs/guide-editor-snippets.png?mtime=20210821152939&focal=none)
 
 The components in the Snippets tab are chunks of Twig code that can provide dynamically updated information to project authors. For example, you could create a widget using the Low-Res Image Check snippet—making it easy for editors to spot images that don't meet the minimum resolution needed for images in a specific asset volume.
 
@@ -144,7 +146,7 @@ This will allow you to move the Template Path to a different location without br
 
 Selecting `External Page` from the Content Source guide option will let you display an external page in an iframe.
 
-![The Craft Docs in an iframe](https://assets.wbrowar.com/guide/img/guide-iframe.png)
+![The Craft Docs in an iframe](https://wbrowar.us-east-1.linodeobjects.com/static/guide-docs/guide-page-iframe.png?mtime=20210821151714&focal=none)
 
 <alert type="warning">
 

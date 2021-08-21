@@ -72,6 +72,16 @@
   height: auto;
   line-height: 0;
 }
+@media (max-width: 1199px) {
+  .guide .g-iframe {
+    aspect-ratio: var(--aspect-ratio, 1 / 1);
+  }
+}
+@media (max-width: 699px) {
+  .guide .g-iframe {
+    aspect-ratio: var(--aspect-ratio, 3 / 5);
+  }
+}
 
 .guide .g-table {
   width: 100%;

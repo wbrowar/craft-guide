@@ -398,35 +398,42 @@ Content
     title: 'Low-Res Image Check',
     group: 'snippets',
     code: `{# Set the asset volume you would like to check for images in. #}
-{% set volume = 'REPLACE_VOLUME' %}
+{% set volume = null %}
 
 {# Set the width to the smallest size that an image should be uploaded. #}
-{% set width = 300 %}
-
-{# Find all images within the targeted asset volume that are not wider than the "width" value. #}
-{% set assets = craft.assets.volume(volume).width('< ' ~ width).kind('image').all() %}
+{% set width = 500 %}
 
 {# Display a list of invalid images and instruct authors on what size is recommended. #}
-{% if assets|length %}
-  <h2>Images that are too small (less than {{ width }}px wide)</h2>
-  <p>These images should be replaced with a .jpg that is at least {{ width }}px wide.</p>
-  
-  {% cache %}
-  <div class="g-space-y-2">
-    {% for asset in assets %}
-      <div class="g-grid g-grid-cols-[var(--grid-cols)] g-gap-2" style="--grid-cols: 300px 1fr;">
-        <img loading="lazy" src="{{ asset.url }}" width="300" />
-        <div>
-          {{ craft.guide.component('button', { attrs: { class: ['submit'] }, label: 'Edit Image', url: asset.cpEditUrl }) }}
-          <p><strong>Title</strong><br>{{ asset.title }}</p>
-          <p><strong>File name</strong><br>{{ asset.filename }}</p>
-          <p><strong>Width</strong><br>{{ asset.width }}px</p>
+{% cache %}
+  {# Find all images within the targeted asset volume that are not wider than the "width" value. #}
+  {% set assets = craft.assets.volume(volume ?? null).width('< ' ~ width).kind('image').all() %}
+
+  {% if assets|length %}
+<div class="g-prose g-prose-sm">
+{% filter markdown('gfm') %}
+
+## Images that are too small (less than {{ width }}px wide)
+
+These images should be replaced with a .jpg that is at least {{ width }}px wide.
+
+{% endfilter %}
+</div>
+    
+    <div class="g-space-y-2">
+      {% for asset in assets %}
+        <div class="g-grid g-grid-cols-[var(--grid-cols)] g-gap-2" style="--grid-cols: 300px 1fr;">
+          <img loading="lazy" src="{{ asset.url }}" width="300" />
+          <div>
+            {{ craft.guide.component('button', { attrs: { class: ['submit'] }, label: 'Edit Image', url: asset.cpEditUrl }) }}
+            <p><strong>Title</strong><br>{{ asset.title }}</p>
+            <p><strong>File name</strong><br>{{ asset.filename }}</p>
+            <p><strong>Width</strong><br>{{ asset.width }}px</p>
+          </div>
         </div>
-      </div>
-    {% endfor %}
-  </div>
-  {% endcache %}
-{% endif %}`,
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endcache %}`,
     summary: `<p>Find images that would get upscaled if transformed.</p>`,
     documentation: `<p>Find images that would get upscaled if transformed.</p>`,
   },
@@ -434,13 +441,22 @@ Content
     title: 'Missing Focal Points',
     group: 'snippets',
     code: `{# Find images within a specific asset volume. #}
-{% set assets = craft.assets.volume('guide').kind('image').all() %}
-        
-<h2>Images that need a focal point</h2>
-<p>These images are missing a focal point and might get cropped incorrectly. Click Edit to add a focal point to an image.</p>
+{% set volume = null %}
+
+<div class="g-prose g-prose-sm">
+{% filter markdown('gfm') %}
+
+## Images that need a focal point
+
+These images are missing a focal point and might get cropped incorrectly.
+
+{% endfilter %}
+</div>
 
 {# Display images that are missing focal points. #}
 {% cache %}
+{% set assets = craft.assets.volume(volume ?? null).kind('image').all() %}
+
 {% for asset in assets %}
   {% if not asset.hasFocalPoint %}
     {% set relatedEntries = craft.entries.relatedTo(asset).all() %}

@@ -547,7 +547,7 @@ export default defineComponent({
     };
     this.$refs.editor._editor.completers = [...this.$refs.editor._editor.completers, staticWordCompleter];
 
-    if (this.proEdition && localStorage.getItem('guide:edit:tab') && this.contentSource === 'field') {
+    if (this.isNew && this.proEdition && localStorage.getItem('guide:edit:tab') && this.contentSource === 'field') {
       this.currentTab = localStorage.getItem('guide:edit:tab');
     }
 

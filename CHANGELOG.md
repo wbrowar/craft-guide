@@ -14,6 +14,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Fixed
 
 
+### Removed
+
+
 ## 2.2.1 - 2020-10-31
 ### Fixed
 - Composer 2 compatibility [#34](https://github.com/wbrowar/craft-guide/issues/34)
