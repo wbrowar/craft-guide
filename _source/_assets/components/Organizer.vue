@@ -176,7 +176,7 @@
               >
                 <input
                   :id="`group-filter-${filter.value}`"
-                  class="g-mt-0.5 g-w-4 g-h-4"
+                  class="guide-accent-primary g-mt-0.5 g-w-4 g-h-4"
                   :checked="selectedGroupFilters.includes(filter.value)"
                   type="checkbox"
                   @change="toggleSelectedGroupFilter(filter.value)"
@@ -371,7 +371,11 @@ export default defineComponent({
         return placement.group === group && (groupId ? placement.groupId === groupId : true);
       });
     },
-    async savePlacement(placement) {
+    async savePlacement(placement: Placement) {
+      if (placement.group !== 'uri') {
+        placement.uri = null;
+      }
+
       await window.Craft?.postActionRequest(
         'guide/placement/save-placement',
         { data: JSON.stringify(placement) },

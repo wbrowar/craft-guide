@@ -1,6 +1,6 @@
 {
   "guide-admin.ts": {
-    "file": "assets/guide-admin.0aa8c1aa.js",
+    "file": "assets/guide-admin.355b6437.js",
     "src": "guide-admin.ts",
     "isEntry": true,
     "imports": [
@@ -12,7 +12,7 @@
     ]
   },
   "guide-display.ts": {
-    "file": "assets/guide-display.e5b16bf7.js",
+    "file": "assets/guide-display.f8ee4bd4.js",
     "src": "guide-display.ts",
     "isEntry": true,
     "imports": [
@@ -20,7 +20,7 @@
       "_SvgSettings.acb64152.js"
     ],
     "css": [
-      "assets/guide-display.ae148a37.css"
+      "assets/guide-display.a106203c.css"
     ]
   },
   "guide-welcome.ts": {

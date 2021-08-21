@@ -9,6 +9,9 @@
   outline: rgba(255, 0, 255, 0.9) solid 4px;
   color: white !important;
 }
+.guide-accent-primary {
+  accent-color: #E12D39;
+}
 
 /* Wrapper */
 .guide {}
