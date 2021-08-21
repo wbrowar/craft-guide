@@ -9,6 +9,8 @@ fullscreen: false
 
 If you find yourself writing a complicated guide that includes lots of detail, you can give readers the choice between reading the entire thing or being presented with a summarized version.
 
+<video src="https://wbrowar.us-east-1.linodeobjects.com/static/guide-docs/guide-tldr.mov?mtime=20210821161901&focal=none" autoplay controls loop></video
+
 ## TL;DR Classes
 
 A pair of classes, `.tldr-hide` and `.tldr-show`, can be used to hide or show content. When either classes are included in your guide a "TL;DR" button will appear in the top-right corner when the mouse is over your guide content. Clicking the TL;DR button will toggle TL;DR on and off. Depending on what class you are using, your content will show or hide itself.
