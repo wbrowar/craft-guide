@@ -72,17 +72,17 @@ export const editorData: EditorComponent[] = [
     summary: `<p>A custom CSS grid example.</p>`,
     documentation: `<p>An example using utility classes to lay out content using CSS Custom Properties to define the grid’s columns.</p>`,
   },
-  {
-    title: 'Heading',
-    group: 'components',
-    code: `{{ craft.guide.component('heading', { level: 1, text: 'REPLACE_TEXT' }) }}`,
-    summary: `<p>A section heading wrapped in an anchor link.</p>`,
-    documentation: `<p>A section heading wrapped in an anchor link.</p>`,
-    props: {
-      level: `A number that defines the wrapper tag. For example, the value of <strong>2</strong> would set the wrapper tag to <strong>h2</strong>.`,
-      text: `The text displayed in the header.`,
-    },
-  },
+  // {
+  //   title: 'Heading',
+  //   group: 'components',
+  //   code: `{{ craft.guide.component('heading', { level: 2, text: 'REPLACE_TEXT' }) }}`,
+  //   summary: `<p>A section heading wrapped in an anchor link.</p>`,
+  //   documentation: `<p>A section heading wrapped in an anchor link.</p>`,
+  //   props: {
+  //     level: `A number that defines the wrapper tag. For example, the value of <strong>2</strong> would set the wrapper tag to <strong>h2</strong>.`,
+  //     text: `The text displayed in the header.`,
+  //   },
+  // },
   {
     title: 'Image',
     group: 'components',
@@ -225,7 +225,7 @@ Content
 {% set subType = null %}
 
 {# Set a label that sits under the total number. Leave this as blank to default to the element type. #}
-{% set label = 'Entries' %}
+{% set label = null %}
 
 {% if elementType == 'assets' %}
   {% set labelDefault = 'Assets' %}
@@ -311,6 +311,8 @@ Content
     {# Display table #}
     {% if elements|length %}
       {{ self.table(data) }}
+    {% else %}
+      <p>There are no results for the search: <strong>{{ query }}</strong></p>
     {% endif %}
   </div>
 {% endif %}
@@ -359,8 +361,7 @@ Content
   {% set elements = craft.entries({
     (handle): filledOut ? ':notempty:' : ':empty:',
   }).all() %}
-    
-  {# Table columns. Add more columns to show more entry data (such as the value of the field you are searching for). #}
+
   {% set data = {
     title: 'Entries that ' ~ (filledOut ? 'include' : 'are missing') ~ ' the ' ~ label ~ ' field',
     data: elements

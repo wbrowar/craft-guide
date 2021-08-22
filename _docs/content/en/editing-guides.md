@@ -55,7 +55,7 @@ In this case, we're passing in a full image asset and the URL of the image will 
 
 ## Snippets
 
-![Guide Snippets](https://wbrowar.us-east-1.linodeobjects.com/static/guide-docs/guide-editor-snippets.png?mtime=20210821152939&focal=none)
+<video src="https://wbrowar.us-east-1.linodeobjects.com/static/guide-docs/guide-snippets-demo.mov?mtime=20210822102027&focal=none" autoplay controls poster="https://wbrowar.us-east-1.linodeobjects.com/static/guide-docs/guide-editor-snippets.png?mtime=20210821152939&focal=none"></video>
 
 The components in the Snippets tab are chunks of Twig code that can provide dynamically updated information to project authors. For example, you could create a widget using the Low-Res Image Check snippet—making it easy for editors to spot images that don't meet the minimum resolution needed for images in a specific asset volume.
 

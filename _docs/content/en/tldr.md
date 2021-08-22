@@ -9,7 +9,7 @@ fullscreen: false
 
 If you find yourself writing a complicated guide that includes lots of detail, you can give readers the choice between reading the entire thing or being presented with a summarized version.
 
-<video src="https://wbrowar.us-east-1.linodeobjects.com/static/guide-docs/guide-tldr.mov?mtime=20210821161901&focal=none" autoplay controls loop></video
+<video src="https://wbrowar.us-east-1.linodeobjects.com/static/guide-docs/guide-tldr.mov?mtime=20210821161901&focal=none" autoplay controls></video>
 
 ## TL;DR Classes
 
