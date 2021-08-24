@@ -10,22 +10,24 @@
 
 namespace wbrowar\guide;
 
+use craft\events\DefineFieldLayoutElementsEvent;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\events\RegisterUserPermissionsEvent;
 use craft\fields\data\ColorData;
 use craft\helpers\FileHelper;
 use craft\helpers\UrlHelper;
+use craft\models\FieldLayout;
 use craft\services\UserPermissions;
 use craft\web\View;
-use wbrowar\guide\assetbundles\Guide\GuideAsset;
+use wbrowar\guide\assetbundles\guide\GuideAsset;
+use wbrowar\guide\fieldlayoutelements\GuideInclude;
+use wbrowar\guide\models\Settings;
 use wbrowar\guide\services\Guide as GuideService;
 use wbrowar\guide\services\GuideComponents as GuideComponentsService;
 use wbrowar\guide\services\Organizer as OrganizerService;
+use wbrowar\guide\twigextensions\GuideTwigExtension;
 use wbrowar\guide\utilities\ImportExport;
 use wbrowar\guide\variables\GuideVariable;
-use wbrowar\guide\twigextensions\GuideTwigExtension;
-use wbrowar\guide\models\Settings;
-use wbrowar\guide\utilities\ImportExport as ExportGuideTemplateUtility;
 use wbrowar\guide\widgets\Guide as GuideWidget;
 
 use Craft;
@@ -215,6 +217,15 @@ class Guide extends Plugin
             );
         }
 
+        // Add our utilities
+        Event::on(
+            Utilities::class,
+            Utilities::EVENT_REGISTER_UTILITY_TYPES,
+            function (RegisterComponentTypesEvent $event) {
+                $event->types[] = ImportExport::class;
+            }
+        );
+
         // Register Pro features
         if (self::$pro) {
             // Add custom permissions
@@ -230,6 +241,18 @@ class Guide extends Plugin
             }
 
             // Add CP Buttons
+            Craft::$app->view->hook('cp.assets.edit.details', function(&$context) {
+                if ($context['element']->volumeId ?? false) {
+                    // Render sidebar template
+                    return self::$view->renderTemplate('guide/sidebar/sidebar', [
+                        'guides' => self::$plugin->guide->getGuidesForUser(['parentUid' => $context['element']->volume->uid, 'parentType' => 'sidebar']),
+                        'settings' => self::$settings,
+                        'userOperations' => self::$userOperations,
+                    ]);
+                }
+
+                return false;
+            });
             Craft::$app->view->hook('cp.categories.edit.details', function(&$context) {
                 if ($context['category'] ?? false) {
                     // Render sidebar template
@@ -267,46 +290,57 @@ class Guide extends Plugin
                 return false;
             });
 
+            // Add custom field UI elements
+            Event::on(
+                FieldLayout::class,
+                FieldLayout::EVENT_DEFINE_UI_ELEMENTS,
+                function(DefineFieldLayoutElementsEvent $event) {
+                    $event->elements[] = GuideInclude::class;
+                }
+            );
+
             // Add modal template to footer
             Event::on(View::class, View::EVENT_END_BODY, function(Event $event) {
-                if (Craft::$app->controller->actionParams['entryId'] ?? false) {
-                    $element = Craft::$app->getSections()->getSectionByHandle(Craft::$app->controller->actionParams['section']);
+                if ((Craft::$app ?? false) && (Craft::$app->requestedAction ?? false) && (Craft::$app->requestedAction->id ?? false)) {
+                    if (Craft::$app->requestedAction->id == 'edit-asset' && Craft::$app->controller->actionParams['assetId'] ?? false) {
+                        $element = Craft::$app->getAssets()->getAssetById(Craft::$app->controller->actionParams['assetId']);
+                        $volume = Craft::$app->getVolumes()->getVolumeById($element->volumeId);
 
-                    if ($element ?? false) {
+                        if ($element ?? false) {
+                            $guides = self::$plugin->guide->getGuides([
+                                'parentType' => 'sidebar',
+                                'parentUid' => $volume->uid,
+                            ]);
+                        }
+                    } else if (Craft::$app->requestedAction->id == 'edit-category' && Craft::$app->controller->actionParams['groupHandle'] ?? false) {
+                        $element = Craft::$app->getCategories()->getGroupByHandle(Craft::$app->controller->actionParams['groupHandle']);
+
+                        if ($element ?? false) {
+                            $guides = self::$plugin->guide->getGuides([
+                                'parentType' => 'sidebar',
+                                'parentUid' => $element->uid,
+                            ]);
+                        }
+                    } else if (Craft::$app->requestedAction->id == 'edit-entry' && Craft::$app->controller->actionParams['section'] ?? false) {
+                        $element = Craft::$app->getSections()->getSectionByHandle(Craft::$app->controller->actionParams['section']);
+
+                        if ($element ?? false) {
+                            $guides = self::$plugin->guide->getGuides([
+                                'parentType' => 'sidebar',
+                                'parentUid' => $element->uid,
+                            ]);
+                        }
+                    } else if (Craft::$app->requestedAction->id == 'edit-user') {
                         $guides = self::$plugin->guide->getGuides([
-                            'parentType' => 'sidebar',
-                            'parentUid' => $element->uid,
+                            'parentType' => 'user',
                         ]);
                     }
-                } else if (Craft::$app->controller->actionParams['categoryId'] ?? false) {
-                    $element = Craft::$app->getCategories()->getGroupByHandle(Craft::$app->controller->actionParams['groupHandle']);
-                    
-                    if ($element ?? false) {
-                        $guides = self::$plugin->guide->getGuides([
-                            'parentType' => 'sidebar',
-                            'parentUid' => $element->uid,
-                        ]);
-                    }
-                } else if (Craft::$app->controller->actionParams['userId'] ?? false) {
-                    $guides = self::$plugin->guide->getGuides([
-                        'parentType' => 'user',
-                    ]);
                 }
 
                 if ($guides ?? false) {
                     echo self::$view->renderTemplate('guide/_partials/render_guide_modals', ['guides' => $guides]);
                 }
             });
-
-            // Add our utilities
-            // @TODO Utilities
-            Event::on(
-                Utilities::class,
-                Utilities::EVENT_REGISTER_UTILITY_TYPES,
-                function (RegisterComponentTypesEvent $event) {
-                    $event->types[] = ImportExport::class;
-                }
-            );
 
             // Add our widgets
             Event::on(
@@ -318,6 +352,7 @@ class Guide extends Plugin
             );
         }
 
+        // Display welcome message on install
         Event::on(
             Plugins::class,
             Plugins::EVENT_AFTER_INSTALL_PLUGIN,
@@ -412,6 +447,7 @@ class Guide extends Plugin
             'gridGap' => 'grid-gap',
             'headerIconWidth' => 'header-icon-width',
             'headerIconHeight' => 'header-icon-height',
+            'maxWidthWrapper' => 'max-width-wrapper',
             'maxWidthText' => 'max-width-text',
         ];
 
@@ -464,17 +500,20 @@ class Guide extends Plugin
      */
     private function _getTemplatesFromUserTemplatePath():array
     {
-        $templates = ['__none__' => 'Select a Template'];
+        $templates = [
+            'filenames' => ['__none__' => 'Select a Template'],
+            'contents' => ['__none__' => ''],
+        ];
 
         $oldMode = Craft::$app->getView()->getTemplateMode();
         Craft::$app->getView()->setTemplateMode(View::TEMPLATE_MODE_SITE);
-        $userTemplatePath = Craft::$app->getView()->getTemplatesPath() . '/' . self::$settings->templatePath;
+        $userTemplatePath = Craft::$app->getView()->getTemplatesPath() . DIRECTORY_SEPARATOR . self::$settings->templatePath;
 
         if (is_dir($userTemplatePath) ?? false) {
-            $filesInDirectory = FileHelper::findFiles(Craft::$app->getView()->getTemplatesPath() . '/' . self::$settings->templatePath, ['only' => ['*.html', '*.md', '*.twig']]);
+            $filesInDirectory = FileHelper::findFiles(Craft::$app->getView()->getTemplatesPath() . DIRECTORY_SEPARATOR . self::$settings->templatePath, ['only' => ['*.html', '*.md', '*.twig']]);
 
             foreach ($filesInDirectory as $item) {
-                $template = str_replace($userTemplatePath . '/', '', $item);
+                $template = str_replace($userTemplatePath . DIRECTORY_SEPARATOR, '', $item);
                 $templates['filenames'][$template] = $template;
                 $templates['contents'][$template] = file_get_contents($item);
             }

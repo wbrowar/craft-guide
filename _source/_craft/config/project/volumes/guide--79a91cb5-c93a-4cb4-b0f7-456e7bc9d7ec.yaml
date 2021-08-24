@@ -1,0 +1,40 @@
+fieldLayouts:
+  410c5ad3-b3b0-4c18-a41c-ac33fad1b692:
+    tabs:
+      -
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\AssetTitleField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+handle: guide
+hasUrls: true
+name: Guide
+settings:
+  path: '@baseAssetPath/guide'
+sortOrder: 1
+titleTranslationKeyFormat: null
+titleTranslationMethod: null
+type: craft\volumes\Local
+url: '@baseAssetUrl/guide'

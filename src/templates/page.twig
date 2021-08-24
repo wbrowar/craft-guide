@@ -52,7 +52,7 @@
 
     {% set sidebar %}
         {% if (navGuides ?? false) %}
-            <nav>
+            <nav class="guide_page__sidebar__nav">
                 <ul>
                     {% for id in cpNav %}
                         {% for item in navGuides %}
@@ -63,7 +63,7 @@
                                     <a{% if currentPage %} class="sel"{% endif %} href="{{ url('guide/page/' ~ item.slug) }}"{% if item.summary %} title="{{ item.summary }}"{% endif %}>{{ item.title }}</a>
                                     {% if currentPage %}
                                         {% if guide.contentSource == 'iframe' and (guide.contentUrl) %}
-                                            <button class="guide_page__sidebar__button" onclick="window.open('{{ guide.contentUrl }}', '_blank')">Open in New Tab</button>
+                                            <button class="guide_page__sidebar__button guide_page__sidebar__button--iframe" onclick="window.open('{{ guide.contentUrl }}', '_blank')">Open in New Tab</button>
                                         {% else %}
                                             <nav data-guide-page-nav v-cloak>
                                                 <button class="guide_page__sidebar__button" :class="'guide_page__sidebar__button--' + item.level" @click="navItemClicked(index === 0 ? 'first' : item.slug)" v-for="(item, index) in nav" v-if="nav.length > 0">${ item.title }</button>

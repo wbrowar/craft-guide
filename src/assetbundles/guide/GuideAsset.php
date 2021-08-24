@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2019 Will Browar
  */
 
-namespace wbrowar\guide\assetbundles\Guide;
+namespace wbrowar\guide\assetbundles\guide;
 
 use Craft;
 use craft\web\AssetBundle;
@@ -36,11 +36,11 @@ class GuideAsset extends AssetBundle
         ];
 
         $this->js = [
-            'js/guide.2.0.0.js',
+            'js/guide.2.2.0.js',
         ];
 
         $this->css = [
-            'css/guide.2.0.0.css',
+            'css/guide.2.2.0.css',
         ];
 
         parent::init();

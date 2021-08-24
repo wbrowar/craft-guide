@@ -1,16 +1,21 @@
 # CRAFT ENVIRONMENT
-.env.php
-.env.sh
 .env
-
-# COMPOSER
-/vendor
+/_source/_craft/composer.lock
+/_source/_craft/config/license.key
+/_source/_craft/storage/*
+!/_source/_craft/storage/.gitkeep
+/_source/_craft/web/cpresources
+/_source/_craft/vendor
 
 # BUILD FILES
-/bower_components/*
 /node_modules/*
-/build/*
-/yarn-error.log
+
+# DDEV
+.ddev/*
+!.ddev/scripts
+!.ddev/config.yaml
+!.ddev/config.*.yaml
+!.ddev/commands/web/craft-clean
 
 # MISC FILES
 .cache

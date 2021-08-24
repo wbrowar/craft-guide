@@ -4,12 +4,97 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.2.1 - 2020-10-31
+### Fixed
+- Composer 2 compatibility [#34](https://github.com/wbrowar/craft-guide/issues/34)
+
+## 2.2.0 - 2020-08-04
+### Added
+- Add guides to element edit pages using a Guide IU element in the Craft 3.5 field layout designer.
+- Add guides to asset edit pages.
+- In situations where guides can get lost due to project config changes, a new Guide Recovery button in the Guide Utility can reset all guides to the Available Guides column of the Guide Organizer.
+
+### Changed
+- Guide now requires Craft 3.5+
+- Deprecated Header icon asset field and added a header icon text input in Guide Settings.
+- Minor CSS changes.
+- Documentation has been moved to a [separate URL](https://guide.wbrowar.com).
+
+### Fixed
+- Fixed some style issues after upgrading to Craft 3.5.
+
+
+## 2.1.5 - 2020-07-26
+### Fixed
+- Fixed an issue saving guides when using Postgres [#31](https://github.com/wbrowar/craft-guide/issues/31)
+
+
+## 2.1.4 - 2020-04-25
+### Added
+- A new max-width setting has been added to the main wrapper of all guide content.
+- A warning is displayed when the `{ craft.guide.component() }` Twig variable is used in the LITE edition of Guide.
+
+### Changed
+- Twig image components now display a message when a valid asset or image URL has not been passed in.
+- Twig image components now use the native `loading` attribute to lazy load images. All existing Twig image components will use native lazy loading, and the `lazyLoad` argument will be ignored.
+- New Markdown image components will have the `loading` attribute added to them by default.
+
+### Fixed
+- Fixed an error that occurs on some pages in the CP [#27](https://github.com/wbrowar/craft-guide/issues/27#issue-587394637).
+- Fixed an error when adding template guides in a Windows environment [#29](https://github.com/wbrowar/craft-guide/issues/29).
+- Fixed an error that prevented guides templates from being imported when an Organizer hadn’t been created yet [#30](https://github.com/wbrowar/craft-guide/issues/30).
+
+
+## 2.1.3.3 - 2020-01-29
+### Changed
+- Bumped required version of Craft to 3.4.0.
+
+### Fixed
+- Fixed style bug on Guide Dashboard widgets based on a change from Craft 3.4 RC to 3.4 release.
+
+
+## 2.1.3.2 - 2020-01-16
+### Fixed
+- Fixed style bug on Guide Dashboard widgets.
+
+
+## 2.1.3.1 - 2020-01-15
+### Fixed
+- Fixed issue preventing plugin Javascript from loading.
+
+
+## 2.1.3 - 2020-01-15
+### Added
+- Added drop targets to make it easier to drag-and-drop guides in the Organizer [#25](https://github.com/wbrowar/craft-guide/issues/25).
+
+### Changed
+- Bumped minimum Craft version to `^3.4.0-RC1`.
+- Updated styles for Craft 3.4.
+  - _NOTE: This involved making some changes to Guide’s default styles and custom styles may need to be adjusted._
+- Changed the label of "Unused Guides" to "Available Guides" in the Organizer [#23](https://github.com/wbrowar/craft-guide/issues/23).
+- Images loaded through the Twig component are now lazy loaded via the native lazy attribute.
+
+### Fixed
+- Fixed a bug that didn't display guides when creating a new category.
+- Fixed path to Widget icon.
+
+
+## 2.1.2 - 2019-08-25
+### Fixed
+- Fixed a bug that occurred when templates were removed from the Templates Path directory.
+
+
+## 2.1.1 - 2019-08-16
+### Fixed
+- Fixed a bug where the Guide utility wasn’t available in the FREE edition.
+
+
 ## 2.1.0 - 2019-08-13
 ### Added
 - File contents in guide templates can be moved to the Content Field in one click—making it easier to go from importing templates to editing their content in the Guide Editor.
 - A Guide utility has been added to the Utilities CP section.
   - Guides can be imported from [Craft Guide Templates](https://github.com/wbrowar/craft-guide-templates)
-  - Guide data stored in the database can be exported from one environment (dev, staging, etc...) then imported into another development.
+  - Guide data stored in the database can be exported from one environment (dev, staging, etc...) then imported into another environment.
   - The layout of guides in the Organizer are exported and imported, too.
 - Guides can now be duplicated from the Guide Organizer via a new action button found on each guide (click on the gear to see guide actions).
 
