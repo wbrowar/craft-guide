@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from 'vue';
-import { log, proEdition } from '../globals';
+import { log, proEdition, userOperations } from '../globals';
 import OnLoad from './OnLoad.vue';
 import PlacementInlineEditor from './PlacementInlineEditor.vue';
 import SvgSettings from './SvgSettings.vue';
@@ -32,6 +32,7 @@ export default defineComponent({
       proEdition,
       showInlineEditor: false,
       showTldr: false,
+      userOperations,
     });
 
     if (state.proEdition) {

@@ -4,26 +4,28 @@
       <p v-if="guideValue === '__none__'">Guide removed. Please reload this page and select another guide.</p>
       <p v-else>Guide added. Please reload this page to see the guide displayed here.</p>
     </div>
-    <div v-else-if="guides.length">
-      <CraftFieldSelect
-        ref="guideField"
-        instructions="Select a guide to be displayed here."
-        label="Guide"
-        name="guide"
-        :options="guideFieldOptions"
-        @value-changed="onGroupChanged"
-      />
-      <button class="btn submit" type="button" @click="onSaveClicked">Save</button>
-    </div>
-    <div v-else>
-      <p>No guides have been created yet. Create a guide and then return here to select it for this UI element.</p>
+    <div v-if="userOperations.useOrganizer">
+      <div v-if="guides.length">
+        <CraftFieldSelect
+          ref="guideField"
+          instructions="Select a guide to be displayed here."
+          label="Guide"
+          name="guide"
+          :options="guideFieldOptions"
+          @value-changed="onGroupChanged"
+        />
+        <button class="btn submit" type="button" @click="onSaveClicked">Save</button>
+      </div>
+      <div v-else>
+        <p>No guides have been created yet. Create a guide and then return here to select it for this UI element.</p>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from 'vue';
-import { guides, log } from '../globals';
+import { guides, log, userOperations } from '../globals';
 import CraftFieldSelect from './CraftFieldSelect.vue';
 import { Placement } from '../types/plugins';
 
@@ -42,6 +44,7 @@ export default defineComponent({
       guideValue: null,
       placement: null as Placement,
       placementSaved: false,
+      userOperations,
     });
 
     state.placement = {

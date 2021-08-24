@@ -248,9 +248,8 @@ class Guide extends Plugin
                 Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
                     $event->permissions[Craft::t('guide', 'Guide')] = [
                         'editGuides' => ['label' => Craft::t('guide', 'Edit Guides')],
-                        'setAccessPermissions' => ['label' => Craft::t('guide', 'Set Guide Access Permissions')],
                         'deleteGuides' => ['label' => Craft::t('guide', 'Delete Guides')],
-                        'useOrganizer' => ['label' => Craft::t('guide', 'Use Placement')],
+                        'useOrganizer' => ['label' => Craft::t('guide', 'Use Organizer and UI Element Selector')],
                     ];
                 });
             }
@@ -622,12 +621,10 @@ class Guide extends Plugin
 
             $operations['deleteGuides'] = $user->admin || $user->can('deleteGuides');
             $operations['editGuides'] = $user->admin || $user->can('editGuides');
-            $operations['setAccessPermissions'] = $user->admin || $user->can('setAccessPermissions');
             $operations['useOrganizer'] = $user->admin || $user->can('useOrganizer');
         } else {
             $operations['deleteGuides'] = false;
             $operations['editGuides'] = false;
-            $operations['setAccessPermissions'] = false;
             $operations['useOrganizer'] = false;
         }
 
