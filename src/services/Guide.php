@@ -11,7 +11,7 @@
 namespace wbrowar\guide\services;
 
 use craft\elements\User;
-use craft\helpers\Json;
+use wbrowar\guide\Guide as GuidePlugin;
 use wbrowar\guide\models\Guide as GuideModel;
 
 use Craft;
@@ -39,6 +39,10 @@ class Guide extends Component
      */
     public function getGuides(array $params = [], string $queryType = 'all')
     {
+        if (!GuidePlugin::$pro) {
+            $params['contentSource'] = 'template';
+        }
+
         if ($params['limit'] ?? false) {
             $limit = $params['limit'];
             unset($params['limit']);
@@ -50,60 +54,68 @@ class Guide extends Component
             $orderBy = $params['orderBy'];
             unset($params['orderBy']);
         } else {
-            $orderBy = 'dateCreated';
+            $orderBy = 'title';
         }
 
         switch ($queryType) {
             case 'all':
-                $userGuides = Guides::find()->where($params)->limit($limit)->orderBy($orderBy)->all();
+                $guides = Guides::find()->where($params)->limit($limit)->orderBy($orderBy)->all();
                 break;
             case 'new':
-                $userGuides = new Guides([]);
+                $guides = new Guides([]);
                 break;
             case 'one':
-                $userGuides = Guides::find()->where($params)->orderBy($orderBy)->one();
+                $guides = Guides::find()->where($params)->orderBy($orderBy)->one();
                 break;
             case 'count':
-                $userGuides = Guides::find()->where($params)->count();
+                $guides = Guides::find()->where($params)->count();
+                break;
+            case 'ids':
+                $guideData = Guides::find()->where($params)->select(['id'])->all();
+                $guides = [];
+                foreach ($guideData as $data) {
+                    $guides[] = $data->id;
+                }
                 break;
         }
 
-        return $userGuides ?? null;
+        return $guides ?? null;
     }
 
     /**
      * Finds Guides based on the supplied parameters that the current user has permission to view.
      *
-     *     Guide::$plugin->guide->getGuidesForUser()
+     *     Guide::$plugin->guide->getGuidesForUserFromPlacements()
      *
-     * @param $params array Parameters passed into query builder to filter down records
-     * @param $queryType string Change the expected query results
+     * @param $placements Placement
      * @param $user User The user to check access against
-     * @return Guides|array|null
+     *                   
+     * @return Guides | array | null
      */
-    public function getGuidesForUser(array $params = [], string $queryType = 'all', User $user = null)
+    public function getGuidesForUserFromPlacements(array $placements, User $user = null)
     {
-        $guides = $this->getGuides($params, $queryType);
         $user = $user ?? Craft::$app->getUser()->getIdentity();
 
+        $guidesIds = [];
+        $authorOnlyIds = [];
+        foreach ($placements as $placement) {
+            if (
+                $placement->access == 'all'
+                || $placement->access == 'admins' && $user->admin
+                || $placement->access == 'author'
+            ) {
+                $guidesIds[] = $placement->guideId;
+            }
+        }
+        
+        $guides = $this->getGuides(['id' => $guidesIds]);
         $guidesForUser = [];
         foreach ($guides as $guide) {
-            $addGuide = false;
-
-            if ($guide->access == 'all') {
-                $addGuide = true;
-            } else if ($guide->access == 'admins' && $user->admin) {
-                $addGuide = true;
-            } else if ($guide->access == 'permissions' && $guide->permissions ?? false) {
-                $permissions = Json::decodeIfJson($guide->permissions);
-                foreach ($permissions as $permission) {
-                    if ($user->can($permission)) {
-                        $addGuide = true;
-                    }
+            if (in_array($guide->id, $authorOnlyIds)) {
+                if ($guide->authorId == $user->id) {
+                    $guidesForUser[] = $guide;
                 }
-            }
-
-            if ($addGuide) {
+            } else {
                 $guidesForUser[] = $guide;
             }
         }
@@ -128,15 +140,10 @@ class Guide extends Component
             $record = new Guides();
         }
 
-        $record->access = $model->access;
         $record->authorId = $model->authorId;
         $record->content = $model->content;
         $record->contentSource = $model->contentSource;
         $record->contentUrl = $model->contentUrl;
-        $record->format = $model->format;
-        $record->parentType = $model->parentType;
-        $record->parentUid = $model->parentUid;
-        $record->permissions = $model->permissions;
         $record->summary = $model->summary;
         $record->slug = $this->_getUniqueSlug($model->slug, $id ?? 0);
         $record->template = $model->template;

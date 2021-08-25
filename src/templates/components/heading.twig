@@ -1,0 +1,11 @@
+{% extends 'guide/_partials/render_component.twig' %}
+
+{% set attributes = {
+  id: 'guide-' ~ text|kebab,
+} %}
+
+{% set content %}
+  <a href='#guide-{{ text|kebab }}'>{{ text }}</a>
+{% endset %}
+
+{% set element = 'h' ~ level|default('2') %}

@@ -47,10 +47,18 @@ class Guide extends Widget
     /**
      * @inheritdoc
      */
+    public function getTitle(): string
+    {
+        // Remove title
+        return '';
+    }
+
+    /**
+     * @inheritdoc
+     */
     public static function icon()
     {
-
-        return Craft::getAlias("@wbrowar/guide/assetbundles/guide/dist/icon/icon-mask.svg");
+        return Craft::getAlias('@wbrowar/guide/assetbundles/static/icon-mask.svg');
     }
 
     /**
@@ -84,14 +92,20 @@ class Guide extends Widget
      */
     public function getSettingsHtml()
     {
-        return Craft::$app->getView()->renderTemplate(
-            'guide/widgets/guide_settings',
-            [
-                'selectableGuides' => GuidePlugin::$plugin->guide->getGuidesForUser(['parentType' => 'widget']),
-                'userOperations' => GuidePlugin::$userOperations,
-                'widget' => $this,
-            ]
-        );
+        if (GuidePlugin::$pro) {
+            $placements = GuidePlugin::$plugin->placement->getPlacements(['group' => 'widget']);
+
+            return Craft::$app->getView()->renderTemplate(
+                'guide/widgets/guide_settings',
+                [
+                    'selectableGuides' => GuidePlugin::$plugin->guide->getGuidesForUserFromPlacements($placements),
+                    'userOperations' => GuidePlugin::$userOperations,
+                    'widget' => $this,
+                ]
+            );
+        }
+
+        return null;
     }
 
     /**
@@ -102,10 +116,19 @@ class Guide extends Widget
         return Craft::$app->getView()->renderTemplate(
             'guide/widgets/guide_body',
             [
-                'guide' => GuidePlugin::$plugin->guide->getGuidesForUser(['id' => $this->guideId, 'parentType' => 'widget']),
+                'guide' => $this->_getGuideFromGuideId(),
                 'proEdition' => GuidePlugin::$pro,
-                'settings' => GuidePlugin::$settings,
+                'widgetId' => $this->id,
             ]
         );
+    }
+
+
+    /**
+     * @inheritdoc
+     */
+    public function _getGuideFromGuideId()
+    {
+        return GuidePlugin::$plugin->guide->getGuides(['id' => $this->guideId], 'one');
     }
 }

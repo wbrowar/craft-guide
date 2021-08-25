@@ -10,9 +10,6 @@
 
 namespace wbrowar\guide\records;
 
-use wbrowar\guide\Guide;
-
-use Craft;
 use craft\db\ActiveRecord;
 
 /**

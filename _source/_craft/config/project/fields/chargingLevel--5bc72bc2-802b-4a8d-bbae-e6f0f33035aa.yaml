@@ -1,0 +1,45 @@
+columnSuffix: zphaogqe
+contentColumnType: string
+fieldGroup: 609d6436-d5b0-4f19-a3e3-9915dee9e01a # Products
+handle: chargingLevel
+instructions: ''
+name: 'Charging Level'
+searchable: false
+settings:
+  options:
+    -
+      __assoc__:
+        -
+          - label
+          - 'Level 1'
+        -
+          - value
+          - level1
+        -
+          - default
+          - ''
+    -
+      __assoc__:
+        -
+          - label
+          - 'Level 2'
+        -
+          - value
+          - level2
+        -
+          - default
+          - ''
+    -
+      __assoc__:
+        -
+          - label
+          - 'DC Fast Charger'
+        -
+          - value
+          - dcFastCharger
+        -
+          - default
+          - ''
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\RadioButtons

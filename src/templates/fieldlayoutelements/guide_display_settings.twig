@@ -1,0 +1,22 @@
+{# /**
+ * Guide plugin for Craft CMS
+ *
+ * UI element field
+ *
+ * @author    Will Browar
+ * @copyright Copyright (c) 2021 Will Browar
+ * @link      https://wbrowar.com
+ * @package   Guide
+ * @since     3.0.0
+ */ #}
+
+{% import "_includes/forms" as forms %}
+
+{{ forms.textField({
+  label: 'UI Element ID',
+  tip: 'A unique ID required to place guides into this UI element',
+  id: 'uiId',
+  name: 'uiId',
+  required: true,
+  value: uiId ?? randomString,
+}) }}

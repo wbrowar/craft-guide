@@ -4,6 +4,48 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.0.0 - 2021-08-25
+### Added
+- The Organizer has been rewritten so a single guide can be displayed in multiple areas around the CP.
+- Guides can be placed in unique places, based on CSS selector.
+- Guides can be added to a specific page in the CP, based on page URI and CSS selector.
+- Guides can be placed on Global edit pages.
+- A variable, `guideDisplayArea`, can be used to modify guides based on what area they are placed in.
+- When grouped together, guides can be navigated via a menu in the top-right side of the guide display.
+- A new Guide Variable setting has been for Project Name and it can be rendered using `{{ craft.guide.var('projectName') }}`.
+- A button, labeled `TL;DR`, has been added to let you hide or show portions of guides.
+- The guide editor groups components by tabs when using the code editor.
+- Snippet components have been added to the Editor.
+- Tailwind CSS-based utility classes have been added to assist in styling.
+- Vue 3 variables—along with Twig helpers—have been added so that guides can make some template-based state changes.
+- An `on-load` Vue component has been added to set Vue variables upon guide render.
+
+### Changed
+- Guides no longer need to be selected for UI elements when in an environment where `allowAdminChanges` is enabled.
+  - A Guide UI element can be placed in the field layout designer, then the guide that is populated there can be picked from within one of pages that use that field layout.
+- Guides added to the Guide CP area now live together at `/guide`, instead of the Guide CP Section starting at the first guide’s individual page URI.
+- When added to element edit pages, guides now live above or below the edit fields, instead of in the sidebar as buttons that open up modals.
+- All guides are in the Twig format and the guide format setting has been removed.
+  - You can use the `{% filter markdown('gfm') %}` filter around markdown content to render it in a guide.
+- Tip Callout guide component has been replaced by Tip and Warning components that look more like native Craft info boxes.
+- Guides are now rendered in Vue 3.
+- Guide now welcomes you in three dimensions.
+
+### Fixed
+- Guide template syntax errors are now caught in try/catch blocks and throw an error.
+- Fixed times where the Guide code editor sometimes didn’t load correctly.
+- Fixed some Guide 2 UI styling issues.
+
+### Removed
+- See [Upgrading from Guide 2](https://guide.wbrowar.com/upgrading) for suggestions around removed features.
+- Rebrand settings have been removed.
+- Per-guide user permissions have been removed.
+- The `<grid>` tag has been removed.
+  - To eventually be replaced by container query utility variants.
+- Removed the `craft.guide.getAllForUser()` Twig variable.
+- Guide no longer supports using `.md` templates.
+- Guides no longer imports guide data and assets from an external repo.
+
 ## 2.2.1 - 2020-10-31
 ### Fixed
 - Composer 2 compatibility [#34](https://github.com/wbrowar/craft-guide/issues/34)

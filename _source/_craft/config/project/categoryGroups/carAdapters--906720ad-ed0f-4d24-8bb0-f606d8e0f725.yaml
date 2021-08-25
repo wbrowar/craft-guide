@@ -1,0 +1,41 @@
+defaultPlacement: end
+fieldLayouts:
+  95f1017b-3ac5-4136-940f-4666a91b8a65:
+    tabs:
+      -
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\TitleField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+handle: carAdapters
+name: 'Car Adapters'
+siteSettings:
+  11ace5e4-2164-419f-aa8c-14a6ccb74727:
+    hasUrls: true
+    template: null
+    uriFormat: 'car-adapters/{slug}'
+structure:
+  maxLevels: null
+  uid: 81859d6e-d49b-4690-8e07-fcb1a20903f5

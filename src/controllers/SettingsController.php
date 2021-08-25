@@ -52,18 +52,14 @@ class SettingsController extends Controller
 
         switch ($params['page']) {
             case 'general':
-                $settings['templatePath'] = $this->_removeSlashFromEnd($params['templatePath']);
                 $settings['assetVolume'] = $params['assetVolume'];
+                $settings['defaultTeleportMethod'] = $params['defaultTeleportMethod'];
+                $settings['templatePath'] = $this->_removeSlashFromEnd($params['templatePath']);
                 break;
             case 'variables':
                 $settings['clientName'] = $params['clientName'];
                 $settings['myCompanyName'] = $params['myCompanyName'];
-                break;
-            case 'components':
-                $settings['components'] = $params['components'];
-                break;
-            case 'rebrand':
-                $settings['rebrand'] = $params['rebrand'];
+                $settings['projectName'] = $params['projectName'];
                 break;
         }
         

@@ -1,27 +1,17 @@
 {% if guide.contentSource == 'iframe' and (guide.contentUrl ?? false) %}
-    <iframe class="guide_content__iframe" src="{{ guide.contentUrl }}" frameborder="0"></iframe>
+  <iframe class="g-iframe" src="{{ guide.contentUrl }}"></iframe>
 {% else %}
-    <div class="guide_content" data-guide-content>
-        {% if guide.contentSource == 'template' and (guide.template ?? false) %}
-            {% if craft.app.view.resolveTemplate('guide_template_path/' ~ guide.template) %}
-                {% if (guide.template|lower ends with '.md') or (guide.template|lower ends with '.txt') %}
-                    {{ include('guide_template_path/' ~ guide.template)|guideshortcodes|md('gfm') }}
-                {% else %}
-                    {{ include('guide_template_path/' ~ guide.template) }}
-                {% endif %}
-            {% else %}
-                <p>This guide seems to have moved.</p>
-                <a class="btn submit" href="{{ url('guide/organizer') }}">Return to Organizer</a>
-            {% endif %}
-        {% elseif guide.content ?? false %}
-            {% if guide.format == 'markdown' %}
-                {{ guide.content|guideshortcodes|md('gfm') }}
-            {% elseif guide.format == 'twig' %}
-                {{ include(template_from_string(guide.content)) }}
-            {% endif %}
-        {% else %}
-            <p>This guide seems to have moved.</p>
-            <a class="btn submit" href="{{ url('guide/organizer') }}">Return to Organizer</a>
-        {% endif %}
-    </div>
+  {% if guide.contentSource == 'template' and (guide.template ?? false) %}
+    {% if craft.app.view.resolveTemplate('guide_template_path/' ~ guide.template) %}
+      {{ craft.guide.render('guide_template_path/' ~ guide.template, guide.slug, _context, 'path')|raw }}
+    {% else %}
+      <p>This guide seems to have moved.</p>
+      <a class="btn submit" href="{{ url('guide/organizer') }}">Return to Organizer</a>
+    {% endif %}
+  {% elseif guide.content ?? false %}
+    {{ craft.guide.render(guide.content, guide.slug, _context, 'string')|raw }}
+  {% else %}
+    <p>This guide seems to have moved.</p>
+    <a class="btn submit" href="{{ url('guide/organizer') }}">Return to Organizer</a>
+  {% endif %}
 {% endif %}

@@ -10,9 +10,6 @@
 
 namespace wbrowar\guide\models;
 
-use wbrowar\guide\Guide;
-
-use Craft;
 use craft\base\Model;
 
 /**
@@ -26,20 +23,18 @@ class Settings extends Model
     // =========================================================================
 
     // Path to Guide CP Section templates
-    public $templatePath = '_guide';
+    public $assetVolume = '';
 
     // Path to Guide CP Section templates
-    public $assetVolume = '';
+    public $defaultTeleportMethod = 'prepend';
+
+    // Path to Guide CP Section templates
+    public $templatePath = '_guide';
 
     // Twig variables
     public $clientName = '';
+    public $projectName = '';
     public $myCompanyName = '';
-
-    // Components settings
-    public $components = [];
-
-    // Rebrand settings
-    public $rebrand = [];
 
     // Public Methods
     // =========================================================================
@@ -50,12 +45,11 @@ class Settings extends Model
     public function rules()
     {
         return [
-            [['assetVolume', 'templatePath'], 'required'],
+            [['assetVolume', 'defaultTeleportMethod', 'templatePath'], 'required'],
 
-            [['assetVolume', 'templatePath'], 'string'],
+            [['assetVolume', 'defaultTeleportMethod', 'templatePath'], 'string'],
 
-            ['components', 'default', 'value' => []],
-            ['rebrand', 'default', 'value' => []],
+            ['defaultTeleportMethod', 'default', 'value' => 'prepend'],
             ['templatePath', 'default', 'value' => '_guide'],
         ];
     }

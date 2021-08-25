@@ -1,12 +1,9 @@
 {% extends 'guide/_partials/render_component.twig' %}
 
-{# Variables #}
-{% set controls = controls ?? true %}
-{% set lazyLoad = lazyLoad ?? true %}
-{% set loop = loop ?? false %}
-{% set url = url %}
+{% set attributes = {
+  controls: controls ?? true,
+  loop: loop ?? true,
+  src: src ?? url ?? null,
+} %}
 
-{% block content -%}
-    <audio {% if lazyLoad %}data-lazy-load data-{% endif %}src="{{ url }}"{% if loop %} loop{% endif %}{% if controls %} controls{% endif %}></audio>
-    <noscript><audio src="{{ url }}"{{ loop ? ' loop' : '' }}{% if controls %} controls{% endif %}></audio></noscript>
-{%- endblock %}
+{% set element = 'audio' %}

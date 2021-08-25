@@ -41,15 +41,7 @@ class GuideInclude extends BaseUiElement
      */
     protected function selectorLabel(): string
     {
-        if (($this->guideId ?? false) && strval($this->guideId) != '0') {
-            $guide = Guide::$plugin->guide->getGuides(['id' => $this->guideId], 'one');
-
-            if ($guide ?? false) {
-                return $guide->title;
-            }
-        }
-
-        return Craft::t('guide', 'Guide');
+        return Craft::t('guide', 'Guide 2 – REMOVE');
     }
 
     /**
@@ -57,54 +49,7 @@ class GuideInclude extends BaseUiElement
      */
     protected function selectorIcon()
     {
-        return '@wbrowar/guide/assetbundles/guide/dist/icon/icon-mask.svg';
-    }
-
-    /**
-     * @inheritdoc
-     */
-//    protected function selectorLabelAttributes(): array
-//    {
-//        $attr = parent::selectorLabelAttributes();
-//        if ($this->template) {
-//            $attr['class'][] = 'code';
-//        }
-//        return $attr;
-//    }
-
-    /**
-     * @inheritdoc
-     */
-    public function hasCustomWidth(): bool
-    {
-        return true;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function settingsHtml()
-    {
-        return Craft::$app->getView()->renderTemplate(
-            'guide/fieldlayoutelements/guide_include_settings',
-            [
-                'displayGuideUi' => $this->displayGuideUi,
-                'guideId' => $this->guideId,
-                'selectableGuides' => Guide::$plugin->guide->getGuides([]),
-                'userOperations' => Guide::$userOperations,
-            ]
-        );
-//        return Craft::$app->getView()->renderTemplateMacro('_includes/forms', 'textField', [
-//            [
-//                'label' => Craft::t('guide', 'Guide'),
-////                'instructions' => Craft::t('guide', 'The path to a template file within your `templates/` folder.'),
-//                'tip' => Craft::t('guide', 'An `element` variable will be passed into the selected guide.'),
-//                'class' => 'code',
-//                'id' => 'guide',
-//                'name' => 'guide',
-//                'value' => $this->template,
-//            ]
-//        ]);
+        return Craft::getAlias('@wbrowar/guide/assetbundles/static/icon-mask.svg');
     }
 
     /**
@@ -112,44 +57,9 @@ class GuideInclude extends BaseUiElement
      */
     public function formHtml(ElementInterface $element = null, bool $static = false)
     {
+        Craft::$app->getDeprecator()->log('wbrowar\guide\fieldlayoutelements\GuideInclude' . Craft::$app->getRequest()->getFullUri(), '`Guide 2` UI Element was found on `' . Craft::$app->getRequest()->getAbsoluteUrl() . '` is deprecated and should be replaced with a `Guide 3` UI Element.');
 
-
-//        if ($guide ?? false) {
-//            $oldMode = Guide::$view->getTemplateMode();
-//            Guide::$view->setTemplateMode(Guide::$view::TEMPLATE_MODE_CP);
-//            $renderedTemplate = Template::raw(Guide::$view->renderTemplate('guide/field/ui_element.twig', ['element' => $element, 'guide' => $guide, 'settings' => Guide::$plugin->getSettings(), 'ui' => $ui]));
-//            Guide::$view->setTemplateMode($oldMode);
-//            return $renderedTemplate;
-//        }
-//
-//        return '';
-
-
-
-
-        if (!$this->guideId) {
-            return $this->_error(Craft::t('guide', 'No guide has been chosen yet.'), 'warning');
-        }
-
-        try {
-            $guide = Guide::$plugin->guide->getGuides(['id' => $this->guideId], 'one');
-
-            $content = Template::raw(Guide::$view->renderTemplate('guide/fieldlayoutelements/guide_include_body.twig', [
-                'element' => $element,
-                'guide' => $guide,
-                'settings' => Guide::$plugin->getSettings(),
-                'static' => $static,
-                'ui' => $this->displayGuideUi ?? false
-            ]));
-        } catch (\Throwable $e) {
-            return $this->_error($e->getMessage(), 'error');
-        }
-
-        if ($content === '') {
-            return null;
-        }
-
-        return Html::tag('div', $content, $this->containerAttributes($element, $static));
+        return $this->_error(Craft::t('guide', 'Guide 2 Element UIs have been removed and cannot be removed automatically in Craft. Please replace this with a new Guide UI Element.'), 'warning');
     }
 
     /**

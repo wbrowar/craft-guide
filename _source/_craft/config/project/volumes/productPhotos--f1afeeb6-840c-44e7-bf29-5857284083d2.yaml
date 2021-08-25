@@ -1,0 +1,40 @@
+fieldLayouts:
+  2449d3cd-3779-4f97-b9a1-1e385bb6762f:
+    tabs:
+      -
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\AssetTitleField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+handle: productPhotos
+hasUrls: true
+name: 'Product Photos'
+settings:
+  path: '@baseAssetPath/products'
+sortOrder: 3
+titleTranslationKeyFormat: null
+titleTranslationMethod: null
+type: craft\volumes\Local
+url: '@baseAssetUrl/products'

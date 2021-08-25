@@ -48,7 +48,7 @@ class ImportExport extends Utility
      */
     public static function iconPath()
     {
-        return Craft::getAlias("@wbrowar/guide/assetbundles/guide/dist/icon/icon-mask.svg");
+        return Craft::getAlias('@wbrowar/guide/assetbundles/static/icon-mask.svg');
     }
 
     /**

@@ -1,34 +1,22 @@
-{% set newAttrs = {
-    class: [classPrefix ~ '_' ~ class],
-} %}
+{% set containerAttributes = {} %}
 
-{% set attrs = (attrs ?? false) ? attrs|merge(newAttrs) : newAttrs %}
+{% if attributes ?? false %}
+  {% set containerAttributes = containerAttributes|merge(attributes) %}
+{% endif %}
+
+{% if attrs ?? false %}
+  {% set containerAttributes = containerAttributes|merge(attrs) %}
+{% endif %}
 
 {% if classes ?? false %}
-    {% set newClasses = attrs.class|merge(classes) %}
-    {% set attrs = attrs|merge({ class: newClasses }) %}
-{% endif %}
-
-{% if id ?? false %}
-    {% set attrs = attrs|merge({ id: id }) %}
-{% endif %}
-
-{% if modifiers ?? false %}
-    {% set modifierClasses = [] %}
-
-    {% for item in modifiers %}
-        {% set modifierClasses = modifierClasses|merge([rootClass ~ '--' ~ item]) %}
-    {% endfor %}
-
-    {% set newClasses = attrs.class|merge(modifierClasses) %}
-    {% set attrs = attrs|merge({ class: newClasses }) %}
-{% endif %}
-
-{% if styles ?? false %}
-    {% set newStyles = (attrs.style ?? false) ? attrs.style|merge(styles) : styles %}
-    {% set attrs = attrs|merge({ style: newStyles }) %}
+  {% if containerAttributes.class %}
+    {% set newClasses = classes|merge(containerAttributes.class) %}
+    {% set containerAttributes = containerAttributes|merge({class: newClasses}) %}
+  {% else %}
+    {% set containerAttributes = containerAttributes|merge({class: classes}) %}
+  {% endif %}
 {% endif %}
 
 {% block before %}{{ before ?? null }}{% endblock %}
-<{{ element }} {{ attrs|guidehtmlattr }}>{% block content %}{{ content ?? null }}{% endblock %}</{{ element }}>
+<{{ element }} {{ attr(containerAttributes) }}>{% block content %}{{ content ?? null }}{% endblock %}</{{ element }}>
 {% block after %}{{ after ?? null }}{% endblock %}

@@ -20,13 +20,14 @@
 {% set selectedSubnavItem = 'organizer' %}
 
 {% block actionButton %}
-    <a class="btn add icon submit" href="{{ url('guide/new') }}">New Guide</a>
+  <div id="guide-action-buttons"></div>
 {% endblock %}
 
 {% set content %}
-    <input type="hidden" name="action" value="guide/organizer/save">
-
-    <div id="guide__organizer" class="guide__organizer">
-        <organizer organizer-config="{{ organizerConfig|json_encode }}"></organizer>
-    </div>
+  <div
+    id="guide-organizer"
+    data-action-url-get-all-placements="{{ actionUrl('guide/placement/get-all-placements') }}"
+    data-cp-trigger="{{ craft.app.config.general.cpTrigger }}"
+    data-groups-data="{{ groupsData|json_encode }}"
+  ></div>
 {% endset %}

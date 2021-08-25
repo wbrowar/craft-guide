@@ -1,21 +1,21 @@
-![Guide 2](resources/img/guide-header.png)
 
-# Guide 2 for Craft CMS 3
+# **Work in Progress** Guide 3 is in development, but it will be released soon! If you would like to test out this version, please consider this a public Alpha until this message disappears. [Here is a preview of the docs for Guide 3.](https://3-x--guide-docs.netlify.app)
 
-Craft CMS is intuitive. Marketing plans and organizational workflows—not so much. Guide lets you create a user manual within Craft CMS so clients don‘t need to go far to get the answers they need.
+![Guide 3](resources/img/guide-3-header.png)
 
-Guide is made up of two parts:
-- [The commercial plugin for Craft 3](https://plugins.craftcms.com/guide)
-- [The open source user guide template](https://github.com/wbrowar/craft-guide-templates)
+Craft CMS is intuitive. Marketing plans and organizational workflows—not so much. Guide lets you create a user manual throughout Craft CMS so clients don‘t need to go far to get the answers they need.
 
-*Note: The license fee for the PRO edition this plugin is $49 via the [Craft Plugin Store](https://plugins.craftcms.com/guide). A LITE edition is offered for free.*
+Guide was built to be a CMS manual, but Guide 3 is also a quick way to create widgets and unique Craft CP pages, without the use of a custom module or knowledge of PHP.
 
-![Guide in the Control Panel](resources/img/guide-overview.png)
+## Guide 3 for Craft CMS 3
+
+![Guide in the Control Panel](https://assets.wbrowar.com/guide/img/guide-overview.png)
+
 
 ## Requirements
 
-- This plugin requires Craft CMS 3.5 or later.
-- A browser that support CSS Grid Layout and CSS Custom Properties.
+- This plugin requires Craft CMS 3.7 or later.
+- An evergreen browser that support CSS `aspect-ratio`.
 
 ## Installation
 
@@ -23,20 +23,24 @@ To install the plugin, you can find it in the [Craft Plugin Store](https://plugi
 
 1. Open your terminal and go to your Craft project:
 
-        cd /path/to/project
+    ```
+    cd /path/to/project
+    ```
 
 2. Then tell Composer to load the plugin:
 
-        composer require wbrowar/guide
+    ```
+    composer require wbrowar/guide
+    ```
 
 3. In the Control Panel, go to Settings → Plugins and click the “Install” button for Guide.
 
+
 ## Setup
 
-1. Visit the Guide settings page to configure a couple of setup options. The new `Template Path` and `Asset Path` settings are required for guides to be displayed.
-2. Create your CMS guide using the built-in editor, by importing guides from [Craft Guide Templates](https://github.com/wbrowar/craft-guide-templates), or by selecting templates added to your Guide Template Path.
-3. Use the Organizer to place your guides in the Guide CP section, on content edit pages, and on dashboard widgets.
-4. Use Guide’s Rebrand settings page to style the look and feel of guides throughout the CMS.
+1. Visit the Guide settings page to configure a couple of setup options. The `Template Path` setting is required for guides to be displayed. The `Asset Volume` setting is recommended when screenshots and other images are used in your guide content.
+2. Create your guides using the built-in editor or by selecting templates added to your Guide Template Path.
+3. Use the Organizer to place your guides around the Craft CMS Control Panel.
 
 ---
 
@@ -47,3 +51,12 @@ To install the plugin, you can find it in the [Craft Plugin Store](https://plugi
 ---
 
 Brought to you by [Will Browar](https://wbrowar.com)
+
+Here are some great open source projects that were used to help create this plugin:
+- [DDEV Local](https://ddev.readthedocs.io/)
+- [Nuxt.js](https://nuxtjs.org)
+- [Tailwind CSS](https://tailwindcss.com)
+- [Vite.js](https://vitejs.dev)
+- [Vue.js](https://vuejs.org)
+
+Thanks to the maintainers for doing what you do to make things like this possible. 💚

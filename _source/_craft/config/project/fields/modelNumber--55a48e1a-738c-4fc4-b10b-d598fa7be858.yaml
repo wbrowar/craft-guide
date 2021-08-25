@@ -1,0 +1,19 @@
+columnSuffix: iromkjng
+contentColumnType: text
+fieldGroup: 609d6436-d5b0-4f19-a3e3-9915dee9e01a # Products
+handle: modelNumber
+instructions: ''
+name: 'Model Number'
+searchable: false
+settings:
+  byteLimit: null
+  charLimit: null
+  code: ''
+  columnType: null
+  initialRows: '4'
+  multiline: ''
+  placeholder: null
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\PlainText

@@ -1,0 +1,19 @@
+columnSuffix: krpdlvvi
+contentColumnType: string(640)
+fieldGroup: 609d6436-d5b0-4f19-a3e3-9915dee9e01a # Products
+handle: productOverview
+instructions: 'Used as SEO description'
+name: 'Product Overview'
+searchable: false
+settings:
+  byteLimit: null
+  charLimit: 160
+  code: ''
+  columnType: null
+  initialRows: '4'
+  multiline: ''
+  placeholder: null
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\PlainText

@@ -1,0 +1,26 @@
+{# /**
+ * Guide plugin for Craft CMS
+ *
+ * Guide Widget Body
+ *
+ * @author    Will Browar
+ * @copyright Copyright (c) 2019 Will Browar
+ * @link      https://wbrowar.com
+ * @package   Guide
+ * @since     2.0.0
+ */ #}
+
+{% set teleportMethod = teleportMethod ?? 'prepend' %}
+
+{% if guides|length %}
+  {% include 'guide/_partials/guide_display.twig' with {
+    guideDisplayArea: 'elementEdit',
+    displayId: 'page',
+    element: element ?? null,
+    guides: guides,
+    teleportContainerClass: 'content-pane ' ~ (teleportMethod == 'prepend' ? 'g-mb-3' : 'g-mt-3'),
+    teleportMap: teleportMap ?? false,
+    teleportMethod: teleportMethod,
+    teleportSelector: '#content-container'
+  } only %}
+{% endif %}
