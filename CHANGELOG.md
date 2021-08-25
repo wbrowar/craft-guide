@@ -46,9 +46,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Guide no longer supports using `.md` templates.
 - Guides no longer imports guide data and assets from an external repo.
 
+
 ## 2.2.1 - 2020-10-31
 ### Fixed
 - Composer 2 compatibility [#34](https://github.com/wbrowar/craft-guide/issues/34)
+
 
 ## 2.2.0 - 2020-08-04
 ### Added
