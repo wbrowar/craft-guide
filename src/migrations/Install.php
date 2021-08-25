@@ -42,10 +42,8 @@ class Install extends Migration
         $this->driver = Craft::$app->getConfig()->getDb()->driver;
         if ($this->createTables()) {
             $this->createIndexes();
-            $this->addForeignKeys();
             // Refresh the db schema caches
             Craft::$app->db->schema->refresh();
-            $this->insertDefaultData();
         }
 
         return true;
@@ -70,11 +68,12 @@ class Install extends Migration
      */
     protected function createTables()
     {
-        $tablesCreated = false;
+        $tablesCreatedForGuides = false;
+        $tablesCreatedForPlacements = false;
 
         $tableSchema = Craft::$app->db->schema->getTableSchema('{{%guide_guides}}');
         if ($tableSchema === null) {
-            $tablesCreated = true;
+            $tablesCreatedForGuides = true;
             $this->createTable(
                 '{{%guide_guides}}',
                 [
@@ -82,12 +81,7 @@ class Install extends Migration
                     'dateCreated' => $this->dateTime()->notNull(),
                     'dateUpdated' => $this->dateTime()->notNull(),
                     'uid' => $this->uid(),
-                    'access' => $this->string(11)->notNull(),
                     'authorId' => $this->integer()->notNull(),
-                    'format' => $this->string(11)->notNull(),
-                    'parentUid' => $this->string(36),
-                    'parentType' => $this->string(11),
-                    'permissions' => $this->text(),
                     'slug' => $this->string(255)->notNull(),
                     'template' => $this->string(255),
                     'contentSource' => $this->string(255),
@@ -99,78 +93,29 @@ class Install extends Migration
             );
         }
 
-        $tableSchema = Craft::$app->db->schema->getTableSchema('{{%guide_organizers}}');
+        $tableSchema = Craft::$app->db->schema->getTableSchema('{{%guide_placements}}');
         if ($tableSchema === null) {
-            $tablesCreated = true;
+            $tablesCreatedForPlacements = true;
             $this->createTable(
-                '{{%guide_organizers}}',
+                '{{%guide_placements}}',
                 [
                     'id' => $this->primaryKey(),
                     'dateCreated' => $this->dateTime()->notNull(),
                     'dateUpdated' => $this->dateTime()->notNull(),
                     'uid' => $this->uid(),
-                    'cpNav' => $this->text(),
+                    'guideId' => $this->integer()->notNull(),
+                    'access' => $this->string(255),
+                    'group' => $this->string(255),
+                    'groupId' => $this->string(255),
+                    'portalMethod' => $this->string(255),
+                    'selector' => $this->string(255),
+                    'theme' => $this->string(255),
+                    'uri' => $this->string(255),
                 ]
             );
         }
 
-        return $tablesCreated;
-    }
-
-    /**
-     * @return void
-     */
-    protected function createIndexes()
-    {
-//        $this->createIndex(
-//            $this->db->getIndexName(
-//                '{{%guide_guides}}',
-//                'some_field',
-//                true
-//            ),
-//            '{{%guide_guides}}',
-//            'some_field',
-//            true
-//        );
-        // Additional commands depending on the db driver
-//        switch ($this->driver) {
-//            case DbConfig::DRIVER_MYSQL:
-//                break;
-//            case DbConfig::DRIVER_PGSQL:
-//                break;
-//        }
-
-//        $this->createIndex(
-//            $this->db->getIndexName(
-//                '{{%guide_organizers}}',
-//                'some_field',
-//                true
-//            ),
-//            '{{%guide_organizers}}',
-//            'some_field',
-//            true
-//        );
-        // Additional commands depending on the db driver
-//        switch ($this->driver) {
-//            case DbConfig::DRIVER_MYSQL:
-//                break;
-//            case DbConfig::DRIVER_PGSQL:
-//                break;
-//        }
-    }
-
-    /**
-     * @return void
-     */
-    protected function addForeignKeys()
-    {
-    }
-
-    /**
-     * @return void
-     */
-    protected function insertDefaultData()
-    {
+        return $tablesCreatedForGuides && $tablesCreatedForPlacements;
     }
 
     /**
@@ -180,6 +125,6 @@ class Install extends Migration
     {
         $this->dropTableIfExists('{{%guide_guides}}');
 
-        $this->dropTableIfExists('{{%guide_organizers}}');
+        $this->dropTableIfExists('{{%guide_placements}}');
     }
 }

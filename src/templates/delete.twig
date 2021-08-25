@@ -17,34 +17,34 @@
 {% set selectedSubnavItem = 'organizer' %}
 
 {% if (guideId ?? false) %}
-    {% set guide = craft.guide.getOne({ id: guideId }) %}
+  {% set guide = craft.guide.getOne({ id: guideId }) %}
 
-    {% if guide ?? false %}
-        {% set title = "Delete " ~ guide.title %}
-    {% else %}
-        {% redirect 'guide/organizer' %}
-    {% endif %}
-{% else %}
+  {% if guide ?? false %}
+    {% set title = "Delete " ~ guide.title %}
+  {% else %}
     {% redirect 'guide/organizer' %}
+  {% endif %}
+{% else %}
+  {% redirect 'guide/organizer' %}
 {% endif %}
 
 {% set content %}
-    <form method="post">
-        {{ csrfInput() }}
-        <input type="hidden" name="action" value="guide/guide/delete-guide">
-        <input type="hidden" name="id" value="{{ guideId }}">
+  <form method="post">
+    {{ csrfInput() }}
+    <input type="hidden" name="action" value="guide/guide/delete-guide">
+    <input type="hidden" name="id" value="{{ guideId }}">
 
-        {% if craft.app.request.param('return') ?? false %}
-            <input type="hidden" name="redirect" value="{{ craft.app.request.param('return') }}">
-        {% endif %}
+    {% if craft.app.request.param('return') ?? false %}
+      <input type="hidden" name="redirect" value="{{ craft.app.request.param('return') }}">
+    {% endif %}
 
-        <p><b>Are you sure you want to delete this guide?</b></p>
+    <p><b>Are you sure you want to delete this guide?</b></p>
 
-        <p>The guide content stored in the database will be deleted. No template files will be deleted.</p>
+    <p>The guide content stored in the database will be deleted. No template files will be deleted.</p>
 
-        <div class="buttons">
-            <input class="btn submit" type="submit" value="Delete">
-            <a class="btn" href="{{ url('guide/organizer') }}">Back to Organizer</a>
-        </div>
-    </form>
+    <div class="buttons">
+      <input class="btn submit" type="submit" value="Delete">
+      <a class="btn" href="{{ url('guide/organizer') }}">Back to Organizer</a>
+    </div>
+  </form>
 {% endset %}

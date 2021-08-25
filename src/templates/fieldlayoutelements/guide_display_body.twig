@@ -1,0 +1,30 @@
+{# /**
+ * Guide plugin for Craft CMS
+ *
+ * UI element field
+ *
+ * @author    Will Browar
+ * @copyright Copyright (c) 2019 Will Browar
+ * @link      https://wbrowar.com
+ * @package   Guide
+ * @since     3.0.0
+ */ #}
+
+{% if proEdition %}
+  {% if uiId ?? false %}
+    {% set displayId = 'uiElement-' ~ uiId %}
+
+    {% include 'guide/_partials/guide_display.twig' with {
+      guideDisplayArea: 'uiElement',
+      displayId: displayId,
+      element: element ?? null,
+      guides: guide ?? false ? [guide] : null,
+      inlineEditorId: displayId,
+      placementId: placementId ?? false,
+    } only %}
+  {% else %}
+    <p>A UI element ID is required to place guides in this UI element. Please update the settings for this UI element to add guides here.</p>
+  {% endif %}
+{% else %}
+  <p>Guide UI elements are available in the PRO edition of Guide. <a href="{{ url('plugin-store/guide') }}">Please upgrade the Guide plugin</a> to add guides to UI elements.</p>
+{% endif %}

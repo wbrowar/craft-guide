@@ -11,8 +11,6 @@
  */ #}
 
 {% extends "_layouts/cp" %}
-{% import "_includes/forms" as forms %}
-{% from _self import permissionList %}
 
 {# The title of this CP section #}
 {% set title = title ?? "Guide Edit" %}
@@ -21,268 +19,43 @@
 {% set selectedSubnavItem = 'organizer' %}
 
 {% if not (guide is defined) %}
-    {% if (guideId ?? false) %}
-        {% set guide = craft.guide.getOne({ id: guideId }) %}
-    {% else %}
-        {% set title = "New Guide" %}
-        {% set guide = craft.guide.getAll([], 'new') %}
-    {% endif %}
+  {% if (guideId ?? false) %}
+    {% set guide = craft.guide.getOne({ id: guideId }) %}
+    {% set isNew = false %}
+  {% else %}
+    {% set title = "New Guide" %}
+    {% set guide = craft.guide.getAll([], 'new') %}
+    {% set isNew = true %}
+  {% endif %}
 {% endif %}
-
-{% set guideEditorConfig = {
-    content: guide.content ?? '',
-    format: guide.format,
-    templates: {},
-} %}
-{% if templates ?? false and templates.contents ?? false %}
-    {% set guideEditorConfig = guideEditorConfig|merge({ templates: templates.contents }) %}
-{% endif %}
-{% js %}var guideEditorConfig = {{ guideEditorConfig|json_encode|raw }}{% endjs %}
-
-{% set fullPageForm = true %}
 
 {% block actionButton %}
-    <input class="btn submit" type="submit" value="Save">
+  <div id="guide-action-buttons"></div>
 {% endblock %}
-
-{% set tabs = {
-    'general': { label: 'Editor', url: '#editor' },
-} %}
-{% if proEdition and userOperations.setAccessPermissions %}
-    {% set tabs = tabs|merge({ 'variables': { label: 'Permissions', url: '#access-permissions' } }) %}
-{% endif %}
 
 {% set content %}
-    <input type="hidden" name="action" value="guide/guide/save-guide">
-    <input type="hidden" name="authorId" value="{{ guide.authorId ?? currentUser.id }}">
-    <input type="hidden" name="parentType" value="{{ guide.parentType }}">
-    <input type="hidden" name="parentUid" value="{{ guide.parentUid }}">
+  {% set formData = {
+    action: 'guide/guide/save-guide',
+    authorId: guide.authorId ?? currentUser.id,
+    redirect: craft.app.request.param('return') ?? false ? craft.app.request.param('return') : null,
+    csrf: craft.app.config.general.csrfTokenName ~ '|' ~ craft.app.request.csrfToken,
+  } %}
 
-    <div id="guide_editor" data-guide-editor-page>
-        {% if guide.id ?? false %}
-            <input type="hidden" name="id" value="{{ guide.id }}">
-        {% endif %}
+  {% set guideData = {
+    content: guide.content ?? '',
+    contentSource: guide.contentSource ?? 'field',
+    contentUrl: guide.contentUrl ?? '',
+    id: guide.id ?? -1,
+    slug: guide.slug ?? '',
+    summary: guide.summary ?? '',
+    template: guide.template ?? '__none__',
+    title: guide.title ?? '',
+  } %}
 
-        {% if craft.app.request.param('return') ?? false %}
-            <input type="hidden" name="redirect" value="{{ craft.app.request.param('return') }}">
-        {% endif %}
-
-        <div id="editor" class="guide_editor__editor" :class="{ 'guide_editor__editor--sidebar': contentSource == 'field' }" :style="editorStyles">
-            {% if components|length %}
-                <div class="guide_editor__sidebar" v-if="contentSource == 'field'" v-cloak>
-                    {% if components|length %}
-                        <div class="field guide_editor__components__header">
-                            <div class="heading">
-                                <label id="content-label" for="content">Components</label>
-                                <div class="instructions">
-                                    <p>Drag components onto the text editor to add them to your guide.</p>
-                                </div>
-                            </div>
-                        </div>
-                        {% for item in components %}
-                            {% set languages = item.code|keys %}
-
-                            {% if languages|length %}
-                                <drag class="guide_editor__components__item" title="{{ item.description ?? '' }}" :transfer-data="{ code: {
-                                    markdown: {{ (item.code.markdown ?? false) ? item.code.markdown|json_encode : 'false' }},
-                                    twig: {{ (item.code.twig ?? false) ? item.code.twig|json_encode : 'false' }},
-                                } }" v-if="['{{ languages|join("','")|raw }}'].includes(format)"><span @click="componentClicked({{ item|json_encode }})">{{ item.name }}</span></drag>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% if assetComponents|length %}
-                        {% for item in assetComponents %}
-                            <drag class="guide_editor__components__item guide_editor__components__item--asset" title="{{ item.description ?? '' }}" :transfer-data="{ code: {
-                                markdown: {{ item.code.markdown|json_encode }},
-                                twig: {{ item.code.twig|json_encode }},
-                            } }"><span @click="componentClicked({{ item|json_encode }})">{% if (item.thumbnail1x ?? false) and (item.thumbnail2x ?? false) %}<span><img srcset="{{ item.thumbnail1x }} 1x, {{ item.thumbnail2x }} 2x" alt="Image preview"></span>{% endif %}{{ item.name }}</span></drag>
-                        {% endfor %}
-                    {% endif %}
-                </div>
-            {% endif %}
-
-            <div class="guide_editor__main">
-                <div v-show="contentSource == 'field'" v-cloak>
-                    <drop @drop="componentDroppedToTextField(...arguments)" id="content-field" class="field">
-                        <editor v-model="content" @init="editorInit" :lang="format" :theme="editorTheme" width="100%" :height="editorHeight" ref="guideEditor"></editor>
-                        <input type="hidden" id="content" name="content" :value="content">
-                    </drop>
-                </div>
-                <div v-show="contentSource == 'iframe'" v-cloak>
-                    <div class="guide_editor__main__section">
-                        {{ forms.textField({
-                            label: 'Page URL',
-                            id: 'contentUrl',
-                            name: 'contentUrl',
-                            maxlength: 255,
-                            value: guide.contentUrl,
-                            instructions: 'A URL that is loaded in an iframe.',
-                        }) }}
-                    </div>
-                </div>
-                <div v-show="contentSource == 'template'" v-cloak>
-                    {% if templates|length %}
-                        <div class="guide_editor__main__section">
-                            {{ forms.selectField({
-                                label: 'Template',
-                                id: 'template',
-                                name: 'template',
-                                value: guide.template,
-                                options: templates.filenames,
-                                instructions: 'Load a template found in your *' ~ settings.templatePath ~ '* directory.',
-                            }) }}
-
-                            {% if proEdition %}
-                                <div v-if="template != '__none__'">
-                                    <hr>
-                                    <div class="field">
-                                        <div class="heading">
-                                            <label id="content-label" for="content">Copy Template Content to Content Field</label>
-                                            <div class="instructions">
-                                                <p>Copy the code from the selected template and place it into the Content field. The field content will be stored in the database and the template file will not be modified.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="btn submit" @click="convertTemplateToFieldContent">Update Content with ${ template }</div>
-                                </div>
-                            {% endif %}
-                        </div>
-                    {% else %}
-                        <div class="guide_editor__main__section">
-                            <p>No templates exist in your Guide Template Path. Add a template to your <b>{{ settings.templatePath }}</b> directory then return here to continue.</p>
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-
-        <div id="access-permissions" class="hidden guide_editor__container">
-            {% if userOperations.setAccessPermissions %}
-                {% do view.registerAssetBundle("craft\\web\\assets\\userpermissions\\UserPermissionsAsset") %}
-
-                {% for category, catPermissions in craft.app.userPermissions.getAssignablePermissions(currentUser) %}
-                    <div class="user-permissions">
-                        <h3>{{ category }}</h3>
-
-                        {{ permissionList(_context, catPermissions) }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        </div>
-    </div>
+  <div
+    id="guide-editor"
+    {% if isNew %}data-is-new{% endif %}
+    data-form-data="{{ formData|json_encode }}"
+    data-guide-data="{{ guideData|json_encode }}"
+  ></div>
 {% endset %}
-
-{% block details %}
-    <div class="guide_editor__details meta">
-        {{ forms.textField({
-            label: 'Title',
-            id: 'title',
-            name: 'title',
-            placeholder: 'Title',
-            value: guide.title,
-        }) }}
-
-        {{ forms.textField({
-            label: 'Slug',
-            id: 'slug',
-            name: 'slug',
-            placeholder: 'slug-from-title',
-            value: guide.slug,
-        }) }}
-
-        {% if proEdition %}
-            {{ forms.selectField({
-                label: 'Content Source',
-                id: 'contentSource',
-                name: 'contentSource',
-                value: guide.contentSource,
-                options: {
-                    field: 'Content Field',
-                    template: 'Page Template',
-                    iframe: 'External Page (iframe)',
-                }
-            }) }}
-        {% else %}
-            <input type="hidden" id="contentSource" name="contentSource" value="template">
-        {% endif %}
-
-        {{ forms.selectField({
-            label: 'Format <span class="info">The language of the guide content can be set to Twig or Markdown (GitHub flavor)</span>',
-            id: 'format',
-            name: 'format',
-            value: guide.format,
-            options: {
-                markdown: 'Markdown',
-                twig: 'Twig',
-            }
-        }) }}
-
-        {% if proEdition %}
-            {{ forms.selectField({
-                label: 'Access <span class="info">Who can view this guide?</span>',
-                id: 'access',
-                name: 'access',
-                value: guide.access,
-                options: {
-                    all: 'Everyone',
-                    admins: 'Admins Only',
-                    permissions: 'Restrict to permissions',
-                }
-            }) }}
-        {% else %}
-            <input type="hidden" id="access" name="access" value="all">
-        {% endif %}
-
-        {% if proEdition %}
-            {{ forms.textField({
-                label: 'Summary <span class="info">Describes the guide in the Organizer.</span>',
-                id: 'summary',
-                name: 'summary',
-                maxlength: 300,
-                showCharsLeft: true,
-                value: guide.summary,
-            }) }}
-        {% else %}
-            <input type="hidden" id="summary" name="summary" value="">
-        {% endif %}
-
-        {% if (guide.id ?? false) and userOperations.deleteGuides %}
-            <div class="guide_editor__details__buttons">
-                <a class="btn delete icon" href="{{ url('guide/delete/' ~ guide.id) }}">Delete</a>
-            </div>
-        {% endif %}
-    </div>
-{% endblock %}
-
-
-{% macro permissionList(context, permissions, id, disabled) %}
-    {% from "_includes/forms" import checkbox %}
-    {% from _self import permissionList %}
-
-    <ul{% if id %} id="{{ id|replace(':', '-') }}"{% endif %}>
-        {% for permissionName, props in permissions %}
-            <li>
-                {% set checked = permissionName in context.guide.permissions %}
-
-                {{ checkbox({
-                    label: props.label|e,
-                    name: 'permissions[]',
-                    value: permissionName,
-                    checked: checked,
-                }) }}
-
-                {% if props.info ?? false %}
-                    <div class="info">{{ props.info }}</div>
-                {% endif %}
-
-                {% if props.warning ?? false %}
-                    <div class="info warning">{{ props.warning }}</div>
-                {% endif %}
-
-                {% if props.nested ?? false %}
-                    {{ permissionList(context, props.nested, permissionName~'-nested', not checked) }}
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
-{% endmacro %}

@@ -8,48 +8,33 @@
  * @see \craft\config\GeneralConfig
  */
 
+if (class_exists('Dotenv\Dotenv') && file_exists('/var/www/html/assembly-line.env')) {
+    Dotenv\Dotenv::create('/var/www/html/', 'assembly-line.env')->load();
+}
+
 return [
-    // Global settings
     '*' => [
-        // Default Week Start Day (0 = Sunday, 1 = Monday...)
+        'allowUpdates' => false,
         'defaultWeekStartDay' => 1,
-
-        // Whether generated URLs should omit "index.php"
         'omitScriptNameInUrls' => true,
-
-        // Control Panel trigger word
         'cpTrigger' => 'admin',
-
-        // The secure key Craft will use for hashing and encrypting data
         'securityKey' => getenv('SECURITY_KEY'),
-
-        // Whether to save the project config out to config/project.yaml
-        // (see https://docs.craftcms.com/v3/project-config.html)
         'useProjectConfigFile' => true,
 
         'aliases' => [
-            '@basePath' => getenv('BASE_PATH'),
-            '@baseUrl' => getenv('DEFAULT_SITE_URL'),
-            '@baseAssetPath' => getenv('BASE_ASSET_PATH'),
-            '@baseAssetUrl' => getenv('BASE_ASSET_URL'),
+            '@basePath' => "/var/www/html/_source/_craft",
+            '@baseUrl' => getenv('CRAFT_SITE_URL'),
+            '@baseAssetPath' => "/var/www/html/_source/_craft/web/uploads",
+            '@baseAssetUrl' => getenv('CRAFT_SITE_URL') . "/uploads",
         ],
     ],
-
-    // Dev environment settings
     'dev' => [
-        // Dev Mode (see https://craftcms.com/guides/what-dev-mode-does)
         'devMode' => true,
     ],
-
-    // Staging environment settings
     'staging' => [
-        // Set this to `false` to prevent administrative changes from being made on staging
         'allowAdminChanges' => true,
     ],
-
-    // Production environment settings
     'production' => [
-        // Set this to `false` to prevent administrative changes from being made on production
         'allowAdminChanges' => true,
     ],
 ];

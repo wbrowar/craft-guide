@@ -10,24 +10,28 @@
  * @since     2.0.0
  */ #}
 
-{% if not (settings.templatePath ?? false) or not (settings.assetVolume ?? false) %}
-    {% redirect 'guide/settings/general' %}
-{% elseif organizer.cpNav ?? false %}
-    {% set cpNav = organizer.cpNav|json_decode %}
+{% extends "_layouts/cp" %}
 
-    {% if cpNav|length %}
-        {% set firstNavGuide = craft.guide.getOne({ id: cpNav[0] }) %}
-    {% endif %}
+{# The title of this CP section #}
+{% set title = "Guide" %}
 
-    {% if firstNavGuide ?? false %}
-        {% redirect 'guide/page/' ~ firstNavGuide.slug %}
-    {% elseif userOperations.useOrganizer %}
-        {% redirect 'guide/organizer' %}
-    {% else %}
-        {% redirect 'guide/settings/general' %}
-    {% endif %}
-{% elseif userOperations.useOrganizer %}
-    {% redirect 'guide/organizer' %}
-{% else %}
-    {% redirect 'guide/settings/general' %}
+{# The URL to this plugin's base CP section #}
+{% set pluginCpUrl = url('guide') %}
+
+{% if cpNavPlacements ?? false %}
+  {% set guides = craft.guide.getAll({ id: cpNavPlacements }) %}
 {% endif %}
+
+{% set content %}
+  {% if not settings.templatePath ?? false %}
+    {% redirect 'guide/settings/general' %}
+  {% elseif guides ?? false %}
+    {% include 'guide/_partials/guide_display.twig' with { guideDisplayArea: 'guide', displayId: 'nav', guides: guides } only %}
+  {% elseif userOperations.useOrganizer %}
+    {% redirect 'guide/organizer' %}
+  {% elseif craft.app.config.general.allowAdminChanges %}
+    {% redirect 'guide/settings/general' %}
+  {% else %}
+    Guide needs to be set up before it can be used. Return here in an environment where "allowAdminChanges" is set to "true" to begin.
+  {% endif %}
+{% endset %}

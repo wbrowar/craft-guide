@@ -1,6 +1,6 @@
 {
     "require": {
-        "craftcms/cms": "^3.6.0-RC1",
+        "craftcms/cms": "3.7.5",
         "vlucas/phpdotenv": "^3.4.0",
         "wbrowar/guide": "@dev"
     },
@@ -17,6 +17,13 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "path",
+            "url": "/var/www/html/.assembly-cache/setup/plugin/",
+            "symlink": true
+        }
+    ]
 }
 
