@@ -41,6 +41,7 @@ class Guide extends Widget
      */
     public static function displayName(): string
     {
+        // todo make this the widget title (even in parens)
         return Craft::t('guide', 'Guide');
     }
 

@@ -215,6 +215,79 @@ Content
   // todo add snippet: Logged in users – List of currently logged in users.
   // todo add snippet: Changelog
   {
+    title: 'Changelog',
+    group: 'snippets',
+    code: `{# Set empty versions array to be filled in later. #}
+{% set versions = [] %}
+
+
+{# VERSION START – For each version copy this block and fill it out. #}
+{% set version %}
+<div class="version g-space-y-6">
+  <h2><span>1.0.0</span> Aug 27, 2021</h3>
+<div class="g-prose g-prose-sm">
+{% filter markdown('gfm') %}
+
+### &#x1F680; Added
+
+- Features that have been added.
+
+### &#x1F527; Changed
+
+- Things that have changed.
+
+### &#x1F6A7; Fixed
+
+- Bugs that have been fixed.
+
+### &#x1F525; Deleted
+
+- Features that have been removed.
+
+{% endfilter %}
+</div>
+</div>
+{% endset %}
+{% set versions = versions|merge([version]) %}
+{# VERSION END #}
+
+
+{# -------------------------------------------------------------------------- #}
+
+{# Display changelog #}
+<div class="g-prose g-prose-sm">
+{% filter markdown('gfm') %}
+
+## Changelog
+
+{% endfilter %}
+</div>
+
+<div class="g-space-y-6">
+  {% if guideDisplayArea == 'widget' %}
+    {{ versions[0] }}
+    {{ craft.guide.component('button', { label: 'See all changes', url: url('guide/page/' ~ guide.slug) }) }}
+  {% else %}
+    {% for version in versions %}
+      {{ version }}
+    {% endfor %}
+  {% endif %}
+</div>
+
+{% css %}
+.guide-changelog .version + .version {
+  margin-top: 3rem;
+  padding-top: 3rem;
+  border-top: 1px solid rgba(0,0,0,0.2);
+}
+.guide-changelog .version h2 span {
+  font-size: 2rem;
+}
+{% endcss %}`,
+    summary: `<p>Display updates to your Craft project.</p>`,
+    documentation: `<p>Display updates to your Craft project.</p>`,
+  },
+  {
     title: 'Content Stats',
     group: 'snippets',
     code: `{# Set the type of element to be displayed. Options: assets, categories, entries, users #}

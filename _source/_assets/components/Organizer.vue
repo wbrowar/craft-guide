@@ -1,6 +1,6 @@
 <template>
   <div class="g-grid g-grid-cols-[minmax(200px,300px),minmax(250px,1fr)] g-relative g-overflow-hidden">
-    <div class="g-bg-white g-rounded-l-lg g-min-h-[650px] g-h-[70vh] g-overflow-x-auto">
+    <div class="g-bg-white g-rounded-l-lg g-min-h-[650px] g-h-admin-window g-overflow-x-auto">
       <div class="g-p-6">
         <h2>Guides</h2>
         <p>
@@ -75,7 +75,7 @@
         <a class="btn add icon submit" :href="cpUrl('guide/new')">New Guide</a>
       </div>
     </div>
-    <div class="g-min-h-[650px] g-h-[70vh] g-relative g-bg-select-dark g-rounded-r-lg g-overflow-x-auto">
+    <div class="g-min-h-[650px] g-h-admin-window g-relative g-bg-select-dark g-rounded-r-lg g-overflow-x-auto">
       <div class="g-p-6">
         <div class="g-text-select-light">
           <h2>Craft CP</h2>

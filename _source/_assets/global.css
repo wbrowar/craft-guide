@@ -97,6 +97,7 @@
   font-weight: 500;
   color: #FFFFFF;
 }
+/* todo fix this*/
 .guide .g-table th:first-child, .guide .g-table td:first-child {
   border-radius: calc(5px * .5) 0 0 0;
 }
