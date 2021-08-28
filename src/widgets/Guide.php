@@ -33,6 +33,11 @@ class Guide extends Widget
      */
     public $guideId = '';
 
+    /**
+     * @var bool
+     */
+    public $showTitle = false;
+
     // Static Methods
     // =========================================================================
 
@@ -41,7 +46,6 @@ class Guide extends Widget
      */
     public static function displayName(): string
     {
-        // todo make this the widget title (even in parens)
         return Craft::t('guide', 'Guide');
     }
 
@@ -50,7 +54,15 @@ class Guide extends Widget
      */
     public function getTitle(): string
     {
-        // Remove title
+        $guide = $this->_getGuideFromGuideId();
+
+        if ($this->showTitle) {
+            if ($guide ?? false) {
+                return $guide->title;
+            } else {
+                return Craft::t('guide', 'Guide');
+            }
+        }
         return '';
     }
 

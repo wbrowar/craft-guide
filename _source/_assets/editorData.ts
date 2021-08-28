@@ -28,7 +28,7 @@ export const editorData: EditorComponent[] = [
     title: 'CSS',
     group: 'components',
     code: `{% css %}
-.guide REPLACE_SELECTOR {
+.guide-{{ guide.slug }} {
   
 }
 {% endcss %}`,
@@ -213,18 +213,13 @@ Content
   // todo add snippet: GraphQL Helper - Checklist to make sure sections are in graphql schema.
   // todo add snippet: User Role Helper - Table of sections and their user roles (flagging any that don't have a user role).
   // todo add snippet: Logged in users – List of currently logged in users.
-  // todo add snippet: Changelog
   {
     title: 'Changelog',
     group: 'snippets',
-    code: `{# Set empty versions array to be filled in later. #}
-{% set versions = [] %}
-
-
-{# VERSION START – For each version copy this block and fill it out. #}
+    code: `{# VERSION START – For each version, make a copy of this block and place it at the top of this guide. #}
 {% set version %}
-<div class="version g-space-y-6">
-  <h2><span>1.0.0</span> Aug 27, 2021</h3>
+<div class="version">
+  <h2 class="g-mb-6"><span>1.0.0</span> Aug 27, 2021</h2>
 <div class="g-prose g-prose-sm">
 {% filter markdown('gfm') %}
 
@@ -248,25 +243,15 @@ Content
 </div>
 </div>
 {% endset %}
-{% set versions = versions|merge([version]) %}
+{% set versions = versions is defined ? versions|merge([version]) : [version] %}
 {# VERSION END #}
-
 
 {# -------------------------------------------------------------------------- #}
 
-{# Display changelog #}
-<div class="g-prose g-prose-sm">
-{% filter markdown('gfm') %}
-
-## Changelog
-
-{% endfilter %}
-</div>
-
-<div class="g-space-y-6">
+{# Display changelog versions #}
+<div>
   {% if guideDisplayArea == 'widget' %}
     {{ versions[0] }}
-    {{ craft.guide.component('button', { label: 'See all changes', url: url('guide/page/' ~ guide.slug) }) }}
   {% else %}
     {% for version in versions %}
       {{ version }}
@@ -274,13 +259,17 @@ Content
   {% endif %}
 </div>
 
+{% if guideDisplayArea == 'widget' %}
+  {{ craft.guide.component('button', { label: 'See all changes', url: url('guide/page/' ~ guide.slug) }) }}
+{% endif %}
+
 {% css %}
-.guide-changelog .version + .version {
+.guide-{{ guide.slug }} .version + .version {
   margin-top: 3rem;
   padding-top: 3rem;
   border-top: 1px solid rgba(0,0,0,0.2);
 }
-.guide-changelog .version h2 span {
+.guide-{{ guide.slug }} .version h2 span {
   font-size: 2rem;
 }
 {% endcss %}`,

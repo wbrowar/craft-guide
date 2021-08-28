@@ -26,8 +26,9 @@ export default defineComponent({
   setup: (props) => {
     const state = reactive({
       currentGuide: '',
-      data: {},
+      data: {} as Record<string, any>,
       guideNav: (props.guideNavData ? JSON.parse(props.guideNavData) : []) as GuideNavItem[],
+      hash: '',
       enableTldr: false,
       proEdition,
       showInlineEditor: false,
@@ -65,6 +66,9 @@ export default defineComponent({
     },
   },
   methods: {
+    onHashUpdated() {
+      this.hash = window.location.hash.substr(1);
+    },
     toggleTldr(on: boolean) {
       log(`Turning TLDR: ${on ? 'on' : 'off'}`);
       this.showTldr = on;
@@ -110,7 +114,12 @@ export default defineComponent({
     this.updateEnableTldr();
     this.toggleTldr(localStorage.getItem('guide:display:tldr') === 'true');
 
+    window.addEventListener('hashchange', this.onHashUpdated);
+
     log('GuideDisplay loaded');
+  },
+  beforeUnmount() {
+    window.removeEventListener('hashchange', this.onHashUpdated);
   },
   watch: {
     currentGuide() {
