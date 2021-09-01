@@ -8,15 +8,20 @@
     </p>
     <hr />
     <p><b>Step 1.</b> Select Guides to export.</p>
-    <div v-for="option in exportGuideOptions" :key="option.slug">
-      <input
-        :id="`export-option-${option.slug}`"
-        v-model="option.checked"
-        class="checkbox"
-        type="checkbox"
-        :name="option.slug"
-      />
-      <label :for="`export-option-${option.slug}`">{{ option.title }}</label>
+    <div v-if="exportGuideOptions.length">
+      <div v-for="option in exportGuideOptions" :key="option.slug">
+        <input
+          :id="`export-option-${option.slug}`"
+          v-model="option.checked"
+          class="checkbox"
+          type="checkbox"
+          :name="option.slug"
+        />
+        <label :for="`export-option-${option.slug}`">{{ option.title }}</label>
+      </div>
+    </div>
+    <div v-else>
+      <p>No guides have been created yet!</p>
     </div>
     <p><b>Step 2.</b> Copy Guide data by clicking this button.</p>
     <button class="btn submit" type="button" @click="copyExportData">Copy Guide Data</button>
@@ -24,6 +29,7 @@
     <p><b>Step 4.</b> In that environment, paste the JSON into this field and click "Import"</p>
     <CraftFieldText
       ref="importField"
+      :autofocus="false"
       :field-attributes="{ rows: 4 }"
       field-type="textarea"
       label="Import Data"

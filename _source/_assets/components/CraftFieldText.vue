@@ -12,7 +12,7 @@
         v-model="fieldValue"
         class="text fullwidth"
         :name="name"
-        autofocus=""
+        :autofocus="autofocus"
         autocomplete="off"
         :placeholder="placeholder ? placeholder : null"
         :aria-describedby="instructions ? `${name}-instructions` : null"
@@ -26,7 +26,7 @@
         class="text fullwidth"
         :type="fieldType"
         :name="name"
-        autofocus=""
+        :autofocus="autofocus"
         autocomplete="off"
         :placeholder="placeholder ? placeholder : null"
         :aria-describedby="instructions ? `${name}-instructions` : null"
@@ -45,6 +45,7 @@ export default defineComponent({
   name: 'ComponentListItem',
   components: {},
   props: {
+    autofocus: { type: Boolean, default: true },
     fieldAttributes: Object,
     fieldType: { type: String, default: 'text' },
     instructions: String,
