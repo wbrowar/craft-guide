@@ -1,46 +1,46 @@
 {
   "guide-admin.ts": {
-    "file": "assets/guide-admin.519513e5.js",
+    "file": "assets/guide-admin.4b350c48.js",
     "src": "guide-admin.ts",
     "isEntry": true,
     "imports": [
-      "_globals.a6fc57ea.js",
-      "_SvgSettings.acb64152.js"
+      "_globals.779c1e1a.js",
+      "_SvgSettings.59a4c035.js"
     ],
     "css": [
       "assets/guide-admin.ea571cbd.css"
     ]
   },
   "guide-display.ts": {
-    "file": "assets/guide-display.13a859f2.js",
+    "file": "assets/guide-display.1a3f2e4d.js",
     "src": "guide-display.ts",
     "isEntry": true,
     "imports": [
-      "_globals.a6fc57ea.js",
-      "_SvgSettings.acb64152.js"
+      "_globals.779c1e1a.js",
+      "_SvgSettings.59a4c035.js"
     ],
     "css": [
       "assets/guide-display.bbdbc24e.css"
     ]
   },
   "guide-welcome.ts": {
-    "file": "assets/guide-welcome.aa2ed3ad.js",
+    "file": "assets/guide-welcome.b6726970.js",
     "src": "guide-welcome.ts",
     "isEntry": true,
     "imports": [
-      "_globals.a6fc57ea.js"
+      "_globals.779c1e1a.js"
     ],
     "css": [
       "assets/guide-welcome.6d867880.css"
     ]
   },
-  "_globals.a6fc57ea.js": {
-    "file": "assets/globals.a6fc57ea.js"
+  "_globals.779c1e1a.js": {
+    "file": "assets/globals.779c1e1a.js"
   },
-  "_SvgSettings.acb64152.js": {
-    "file": "assets/SvgSettings.acb64152.js",
+  "_SvgSettings.59a4c035.js": {
+    "file": "assets/SvgSettings.59a4c035.js",
     "imports": [
-      "_globals.a6fc57ea.js"
+      "_globals.779c1e1a.js"
     ]
   }
 }
