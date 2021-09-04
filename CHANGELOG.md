@@ -4,7 +4,27 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## 3.0.0 - 2021-08-25
+## 3.1.0 - 2021-09-04
+
+### Added
+- Added new Changelog snippet.
+  - Spiritual successor to the Changelog widget from the Communicator plugin.
+- Added new Incorrect File Type snippet.
+  - Find Assets in a volume that don’t match the desired file extensions.
+- The current page hash is now tracked and available in guide templates as a Vue data variable, called `hash`.
+- Individual guides can be selected when exporting guides in the Guide utility.
+- A new widget option allows you to display the Guide title as the widget header.
+
+### Changed
+- The Organizer has a new responsive layout—making it easier to use on smaller screen sizes.
+- Low-Res Image Check and Missing Focal Points snippets now display as tables.
+- Minor UI changes.
+
+### Fixed
+- Fixed an issue where migrations between Guide 2 and 3 could have errored out when upgrading via the CP.
+
+
+## 3.0.0 - 2021-08-22
 ### Added
 - The Organizer has been rewritten so a single guide can be displayed in multiple areas around the CP.
 - Guides can be placed in unique places, based on CSS selector.
@@ -205,7 +225,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Added
 - Added a new `Edit Guide Navigation` permission
 - Added Guide 2.0 deprecation warnings for widget features
-  - Guide 2.0 is in the works! The Email Support, Website Updates, and Welcome Widget will all be removed from Guide in 2.0, but a new plugin, called Communicator, is available for free and includes all of these widgets. You can download it in the Craft Plugin Store: https://plugins.craftcms.com/communicator 
+  - Guide 2.0 is in the works! The Email Support, Website Updates, and Welcome Widget will all be removed from Guide in 2.0, but a new plugin, called Communicator, is available for free and includes all of these widgets. You can download it in the Craft Plugin Store: https://plugins.craftcms.com/communicator
 
 ### Changed
 - Bumped the minimum required version of Craft to `3.1.20.1`
@@ -290,7 +310,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 1.1.4 - 2018-02-16
 ### Added
 - You can now store custom `guideVar()` variables by setting their keys and values in Guide Plugin Settings
-  - You can store plain strings, as well as encrypted strings for displaying passwords and sensitive information in your CMS guide 
+  - You can store plain strings, as well as encrypted strings for displaying passwords and sensitive information in your CMS guide
 
 ### Changed
 - Modified the style of the Sections dropdown to show hierarchy based on element types (`h1, h2, h3, and h4`)
