@@ -402,6 +402,56 @@ Content
     documentation: `<p>Search for entries using Craft’s keyword search.</p>`,
   },
   {
+    title: 'Incorrect File Type',
+    group: 'snippets',
+    code: `{# Set the asset volume you would like to check for images in. #}
+{% set volume = null %}
+
+{# Set file types that should assets should be uplaoded as. #}
+{% set acceptedExtensions = ['jpg', 'jpeg'] %}
+
+{# Display a list of invalid assets and instruct authors on what extension is required. #}
+{% cache %}
+  {% set assets = craft.assets.volume(volume ?? null).all() %}
+
+  {% if assets|length %}
+<div class="g-prose g-prose-sm">
+{% filter markdown('gfm') %}
+
+These assets should be replaced with files using the extension: {{ acceptedExtensions|join(', ') }}
+
+{% endfilter %}
+</div>
+  <table class="g-table">
+    <thead>
+      <tr>
+        <th>Preview</th>
+        <th>Title</th>
+        <th>File name</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for asset in assets %}
+        {% if asset.extension|lower not in acceptedExtensions %}
+          <tr>
+            <td>
+              {% if asset.kind == 'image' %}
+                <a href="{{ asset.cpEditUrl }}" style="display: block; max-width: 300px" title="Edit image">{{ craft.guide.component('image', { url: asset.url }) }}</a>
+              {% endif %}
+            </td>
+            <td><a href="{{ asset.cpEditUrl }}">{{ asset.title }}</a></td>
+            <td>{{ asset.filename }}</td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+{% endcache %}`,
+    summary: `<p>Find assets that have the wrong file type for a given volume.</p>`,
+    documentation: `<p>Find assets that have the wrong file type for a given volume.</p>`,
+  },
+  {
     title: 'Filled Out Fields',
     group: 'snippets',
     code: `{# Set the field’s handle. #}
@@ -468,33 +518,40 @@ Content
 
 {# Display a list of invalid images and instruct authors on what size is recommended. #}
 {% cache %}
-  {# Find all images within the targeted asset volume that are not wider than the "width" value. #}
   {% set assets = craft.assets.volume(volume ?? null).width('< ' ~ width).kind('image').all() %}
 
   {% if assets|length %}
 <div class="g-prose g-prose-sm">
 {% filter markdown('gfm') %}
 
-## Images that are too small (less than {{ width }}px wide)
-
 These images should be replaced with a .jpg that is at least {{ width }}px wide.
 
 {% endfilter %}
 </div>
-    
-    <div class="g-space-y-2">
+  <table class="g-table">
+    <thead>
+      <tr>
+        <th>Preview</th>
+        <th>Title</th>
+        <th>Width</th>
+        <th>File name</th>
+      </tr>
+    </thead>
+    <tbody>
       {% for asset in assets %}
-        <div class="g-grid g-grid-cols-[var(--grid-cols)] g-gap-2" style="--grid-cols: 300px 1fr;">
-          <img loading="lazy" src="{{ asset.url }}" width="300" />
-          <div>
-            {{ craft.guide.component('button', { attrs: { class: ['submit'] }, label: 'Edit Image', url: asset.cpEditUrl }) }}
-            <p><strong>Title</strong><br>{{ asset.title }}</p>
-            <p><strong>File name</strong><br>{{ asset.filename }}</p>
-            <p><strong>Width</strong><br>{{ asset.width }}px</p>
-          </div>
-        </div>
+        <tr>
+          <td>
+            {% if asset.kind == 'image' %}
+              <a href="{{ asset.cpEditUrl }}" style="display: block; max-width: 300px" title="Edit image">{{ craft.guide.component('image', { url: asset.url }) }}</a>
+            {% endif %}
+          </td>
+          <td><a href="{{ asset.cpEditUrl }}">{{ asset.title }}</a></td>
+          <td>{{ asset.width }}px</td>
+          <td>{{ asset.filename }}</td>
+        </tr>
       {% endfor %}
-    </div>
+    </tbody>
+  </table>
   {% endif %}
 {% endcache %}`,
     summary: `<p>Find images that would get upscaled if transformed.</p>`,
@@ -503,45 +560,45 @@ These images should be replaced with a .jpg that is at least {{ width }}px wide.
   {
     title: 'Missing Focal Points',
     group: 'snippets',
-    code: `{# Find images within a specific asset volume. #}
+    code: `{# Set the asset volume you would like to check for images in. #}
 {% set volume = null %}
 
+{# Display a list of invalid images that are missing focal points. #}
+{% cache %}
+  {% set assets = craft.assets.volume(volume ?? null).kind('image').all() %}
+
+
+  {% if assets|length %}
 <div class="g-prose g-prose-sm">
 {% filter markdown('gfm') %}
-
-## Images that need a focal point
 
 These images are missing a focal point and might get cropped incorrectly.
 
 {% endfilter %}
 </div>
-
-{# Display images that are missing focal points. #}
-{% cache %}
-{% set assets = craft.assets.volume(volume ?? null).kind('image').all() %}
-
-{% for asset in assets %}
-  {% if not asset.hasFocalPoint %}
-    {% set relatedEntries = craft.entries.relatedTo(asset).all() %}
-    <div style="display: grid; grid-template-columns: 300px 1fr; gap: 10px; margin-top: 10px;">
-      <img loading="lazy" src="{{ asset.url }}" width="300" />
-      <div>
-        <a class="btn submit" href="{{ asset.cpEditUrl }}">Edit</a>
-        <p><strong>Title:</strong> {{ asset.title }}</p>
-        <p><strong>File name:</strong> {{ asset.filename }}</p>
-        <p><strong>Width:</strong> {{ asset.width }}px</p>
-        {% if relatedEntries|length %}
-          <p><strong>Appears in:</strong></p>
-          <ul>
-            {% for relatedEntry in relatedEntries %}
-                <li><a href="{{ relatedEntry.url }}">{{ relatedEntry.title }}</a></li>
-            {% endfor %}
-          </ul>
+  <table class="g-table">
+    <thead>
+      <tr>
+        <th>Preview</th>
+        <th>Title</th>
+        <th>File name</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for asset in assets %}
+        {% if not asset.hasFocalPoint %}
+          <tr>
+            <td>
+              <a href="{{ asset.cpEditUrl }}" style="display: block; max-width: 300px" title="Edit image">{{ craft.guide.component('image', { url: asset.url }) }}</a>
+            </td>
+            <td><a href="{{ asset.cpEditUrl }}">{{ asset.title }}</a></td>
+            <td>{{ asset.filename }}</td>
+          </tr>
         {% endif %}
-      </div>
-    </div>
+      {% endfor %}
+    </tbody>
+  </table>
   {% endif %}
-{% endfor %}
 {% endcache %}`,
     summary: `<p>Find images that are missing focal points.</p>`,
     documentation: `<p>Find images that are missing focal points.</p>`,
