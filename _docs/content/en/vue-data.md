@@ -101,6 +101,7 @@ For reference, here are the variables that are build into each guide:
 | `boolean3` | `false` | `{{ vueBoolean3 }}` | `data['{{ guide.slug }}'].boolean3` |
 | `boolean4` | `false` | `{{ vueBoolean4 }}` | `data['{{ guide.slug }}'].boolean4` |
 | `boolean5` | `false` | `{{ vueBoolean5 }}` | `data['{{ guide.slug }}'].boolean5` |
+| `hash` | `''` |  | `hash` |
 | `number1` | `0` | `{{ vueNumber1 }}` | `data['{{ guide.slug }}'].number1` |
 | `number2` | `0` | `{{ vueNumber2 }}` | `data['{{ guide.slug }}'].number2` |
 | `number3` | `0` | `{{ vueNumber3 }}` | `data['{{ guide.slug }}'].number3` |

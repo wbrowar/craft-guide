@@ -10,7 +10,7 @@
   color: white !important;
 }
 .guide-accent-primary {
-  accent-color: #E12D39;
+  accent-color: #7e9fc3;
 }
 
 /* Wrapper */
@@ -97,10 +97,11 @@
   font-weight: 500;
   color: #FFFFFF;
 }
-.guide .g-table th:first-child, .guide .g-table td:first-child {
+/* todo fix this*/
+.guide .g-table th:first-child {
   border-radius: calc(5px * .5) 0 0 0;
 }
-.guide .g-table th:last-child, .guide .g-table td:last-child {
+.guide .g-table td:last-child {
   border-radius: 0 calc(5px * .5) 0 0;
 }
 

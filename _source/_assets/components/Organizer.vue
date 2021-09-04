@@ -1,6 +1,6 @@
 <template>
-  <div class="g-grid g-grid-cols-[minmax(200px,300px),minmax(250px,1fr)] g-relative g-overflow-hidden">
-    <div class="g-bg-white g-rounded-l-lg g-min-h-[650px] g-h-[70vh] g-overflow-x-auto">
+  <div class="g-grid g-grid-cols-[minmax(150px,300px),minmax(400px,1fr)] g-relative g-overflow-hidden">
+    <div class="g-bg-white g-rounded-l-lg g-min-h-[650px] g-h-admin-window g-overflow-x-auto">
       <div class="g-p-6">
         <h2>Guides</h2>
         <p>
@@ -52,7 +52,7 @@
             >
             <a
               class="btn small"
-              title="View guide on a seperate page"
+              title="View guide on a separate page"
               type="button"
               :href="cpUrl(`guide/page/${guide.slug}`)"
               v-if="proEdition"
@@ -75,18 +75,18 @@
         <a class="btn add icon submit" :href="cpUrl('guide/new')">New Guide</a>
       </div>
     </div>
-    <div class="g-min-h-[650px] g-h-[70vh] g-relative g-bg-select-dark g-rounded-r-lg g-overflow-x-auto">
+    <div class="g-min-h-[650px] g-h-admin-window g-relative g-bg-select-dark g-rounded-r-lg g-overflow-x-auto">
       <div class="g-p-6">
         <div class="g-text-select-light">
           <h2>Craft CP</h2>
           <p>Drag guides to different areas around the Craft CP or add a guide to a specific Control Panel page.</p>
         </div>
         <div class="g-grid g-grid-cols-[1fr,150px] g-gap-4 g-mt-6">
-          <div class="g-grid g-grid-cols-2 g-gap-5 md:g-grid-cols-4">
+          <div class="g-grid g-gap-5 xl:g-grid-cols-4">
             <OrganizerDropZone
               :class="{
-                'g-col-span-3': gridView === 'grid',
-                'g-col-start-1 g-col-span-3': gridView === 'list',
+                'xl:g-col-span-3': gridView === 'grid',
+                'xl:g-col-start-1 xl:g-col-span-4': gridView === 'list',
               }"
               :header-size="3"
               description="The Guide CP Section"
@@ -105,9 +105,9 @@
               v-for="group in filteredDropZones"
               :key="group.name"
               :class="{
-                'g-col-span-3': group.columns === 3 && gridView === 'grid',
-                'g-col-span-2': group.columns === 2 && gridView === 'grid',
-                'g-col-start-1 g-col-span-3': gridView === 'list',
+                'xl:g-col-span-3': group.columns === 3 && gridView === 'grid',
+                'xl:g-col-span-2': group.columns === 2 && gridView === 'grid',
+                'xl:g-col-start-1 xl:g-col-span-4': gridView === 'list',
               }"
               :header-size="group.headerSize"
               :description="group.description || null"
@@ -124,11 +124,11 @@
             />
             <OrganizerDropZone
               :class="{
-                'g-col-span-4': gridView === 'grid',
-                'g-col-start-1 g-col-span-3': gridView === 'list',
+                'xl:g-col-span-4': gridView === 'grid',
+                'xl:g-col-start-1 xl:g-col-span-4': gridView === 'list',
               }"
               :header-size="3"
-              description="Individual pages in the CP"
+              description="Individual pages in the Control Panel"
               header="Control Panel Pages"
               group="uri"
               :guides="guides"
@@ -143,7 +143,7 @@
             />
           </div>
           <div class="g-relative g-text-select-light" v-if="proEdition">
-            <div class="g-space-x-1">
+            <div class="g-space-x-1 g-hidden xl:g-block">
               <button
                 class="g-my-2 g-mr-1 g-text-white"
                 :class="[gridView === 'grid' ? 'g-opacity-100' : 'g-opacity-70']"

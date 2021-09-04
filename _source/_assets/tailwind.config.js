@@ -55,8 +55,12 @@ module.exports = {
       sm: '500px',
       md: '768px',
       lg: '1200px',
+      xl: '1600px',
     },
     extend: {
+      height: {
+        'admin-window': 'calc(100vh - 150px)',
+      },
       outline: {
         thick: '4px solid currentColor',
       },

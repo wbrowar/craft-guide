@@ -19,7 +19,7 @@
       >
         {{ header }}
       </h3>
-      <p class="g-m-0 g-leading-none g-text-right g-text-text g-text-xs" v-if="description">{{ description }}</p>
+      <p class="info g-m-0 g-leading-none" v-if="description">{{ description }}</p>
     </div>
     <ul>
       <li

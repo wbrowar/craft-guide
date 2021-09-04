@@ -22,12 +22,19 @@
   {% endfor %}
 
   {{ forms.selectField({
-    label: 'Guide',
+    label: 'Guide'|t('guide'),
     id: 'guideId',
     name: 'guideId',
     options: guideOptions,
     required: true,
     value: widget.guideId,
+  }) }}
+
+  {{ forms.lightswitchField({
+    label: 'Show Widget Title?'|t('guide'),
+    id: 'showTitle',
+    name: 'showTitle',
+    on: widget.showTitle,
   }) }}
 {% else %}
   No guides are available for widgets right now.{% if userOperations.useOrganizer %}
