@@ -10,7 +10,7 @@
     "gsap": "^3.7.1",
     "tailwindcss": "^2.2.7",
     "@tailwindcss/typography": "^0.4.1",
-    "three": "^0.131.3",
+    "three": "^0.137.0",
     "vue": "^3.2.3"
   },
   "devDependencies": {
