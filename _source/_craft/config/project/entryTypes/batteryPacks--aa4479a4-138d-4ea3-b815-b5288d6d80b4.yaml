@@ -31,7 +31,7 @@ fieldLayouts:
 handle: batteryPacks
 hasTitleField: true
 name: 'Battery Packs'
-section: f7e1c238-5540-41fb-90d6-535844c622fb
+section: f7e1c238-5540-41fb-90d6-535844c622fb # Products
 sortOrder: 2
 titleFormat: null
 titleTranslationKeyFormat: null

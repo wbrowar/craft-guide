@@ -13,8 +13,7 @@ then
     if [ -f "$ENV_FILE" ]
     then
         echo "Running Craft tasks."
-        php ./craft migrate/all
-        php ./craft project-config/apply
+        php ./craft up
         php ./craft cache/flush-all
     else
         echo "No .env file, not running Craft tasks."

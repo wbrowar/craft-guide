@@ -2,6 +2,7 @@
 .assebly-cache
 
 # CRAFT ENVIRONMENT
+vendor
 _source/_craft/config/license.key
 _source/_craft/storage/*
 !_source/_craft/storage/.gitkeep

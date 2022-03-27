@@ -1,10 +1,11 @@
-dateModified: 1629320344
+dateModified: 1646586403
 email:
   fromEmail: email@example.com
   fromName: 'Craft Plugin'
   transportType: craft\mail\transportadapters\Sendmail
 meta:
   __names__:
+    2c1c8945-6af0-4a7a-a75f-6b5ede2f8919: Home # Home
     4c761429-91aa-474f-85b1-d9c5b6bfa0a0: 'Product Overview' # Product Overview
     4ceb2b2e-b080-410c-b994-4b6ac1e42c48: 'Main Nav' # Main Nav
     5bc72bc2-802b-4a8d-bbae-e6f0f33035aa: 'Charging Level' # Charging Level
@@ -12,10 +13,12 @@ meta:
     5ef974bc-0dc4-4b00-807a-3bd224be6a06: News # News
     7c46a49e-c31d-4362-aeaf-8756478b2bef: 'Custom Text' # Custom Text
     9bd13089-c7ca-49c7-804b-018daf9c1c26: 'Features List' # Features List
+    11ace5e4-2164-419f-aa8c-14a6ccb74727: 'Craft Plugin' # Craft Plugin
     22fb86f7-b3fe-4f11-b624-25c67fb9c682: 'Content Authors' # Content Authors
     48d1d89f-7a6a-4c1a-8232-605cfcab8457: 'Plug Types' # Plug Types
     55a48e1a-738c-4fc4-b10b-d598fa7be858: 'Model Number' # Model Number
     211a41db-f9aa-4a81-8117-576cfd9cb3e1: 'Featured Image' # Featured Image
+    346b8645-38bb-4052-a8bc-3af36ddecd3b: Common # Common
     535ddbac-f2c5-4e1f-8a30-051e3e68f19d: 'Product Admins' # Product Admins
     553c6b66-d999-458b-9b4d-d941cc28b6dd: 'Site Settings' # Site Settings
     609d6436-d5b0-4f19-a3e3-9915dee9e01a: Products # Products
@@ -23,17 +26,20 @@ meta:
     1018adb1-c88f-4e8c-9a8a-2f3a868a8ea0: Default # Default
     5629b286-3d10-4a84-9e90-098164c8f595: 'Custom Text' # Custom Text
     09219f54-94b2-4757-96cf-c62bf35232da: Features # Features
+    9235fe32-0e30-448b-b762-6ffbb0e4dee7: Home # Home
     906720ad-ed0f-4d24-8bb0-f606d8e0f725: 'Car Adapters' # Car Adapters
     a8a7384d-21c3-4958-87a2-7076995cf447: 'Custom Text' # Custom Text
     aa4479a4-138d-4ea3-b815-b5288d6d80b4: 'Battery Packs' # Battery Packs
     b7a8bec3-5e77-4455-837c-d879aca946c3: About # About
     bf477a41-bcac-4b0a-97ac-ab68423b4bf0: Chargers # Chargers
     d65bd547-333e-464c-a99a-2badd5d23c4d: 'Content Tabs' # Content Tabs
+    debb8d54-bd28-4df4-8bd4-f537a08dff58: 'Craft Plugin' # Craft Plugin
     e03c6114-e35e-41a6-a292-6b06bbb963fa: 'Video Tutorials' # Video Tutorials
     e9d60878-217d-40a9-8c04-a3bc825949b2: About # About
     e377ed68-cba4-4d8c-9ea4-44634bc5c8eb: 'Public Schema' # Public Schema
     ed720951-b494-41a0-995c-e0df715e1ffb: 'Specifications Table' # Specifications Table
     f1afeeb6-840c-44e7-bf29-5857284083d2: 'Product Photos' # Product Photos
+    f7e1c238-5540-41fb-90d6-535844c622fb: Products # Products
 plugins:
   guide:
     edition: pro
@@ -52,5 +58,5 @@ system:
   live: true
   name: 'EV Chargers Unlimited'
   retryDuration: null
-  schemaVersion: 3.7.7
+  schemaVersion: 3.7.33
   timeZone: America/Los_Angeles

@@ -98,7 +98,7 @@ fieldLayouts:
 handle: chargers
 hasTitleField: true
 name: Chargers
-section: f7e1c238-5540-41fb-90d6-535844c622fb
+section: f7e1c238-5540-41fb-90d6-535844c622fb # Products
 sortOrder: 1
 titleFormat: null
 titleTranslationKeyFormat: null

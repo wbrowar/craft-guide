@@ -1,6 +1,6 @@
 {
     "require": {
-        "craftcms/cms": "3.7.5",
+        "craftcms/cms": "3.7.36",
         "vlucas/phpdotenv": "^3.4.0",
         "wbrowar/guide": "@dev"
     },

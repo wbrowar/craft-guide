@@ -94,6 +94,9 @@ fi
 echo "Installing Craft"
 ./craft install --interactive=0 --email="email@example.com" --username="admin" --password="password" --siteName="Craft Plugin" --siteUrl="\$CRAFT_SITE_URL" --language="en"
 
+echo "Performing Craft migrations and applying project config"
+./craft up
+
 
 # Begin Vite and Node installation
 cd /var/www/html/_source/_assets/
