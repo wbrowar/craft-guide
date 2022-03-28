@@ -12,10 +12,12 @@ namespace wbrowar\guide\services;
 
 use craft\elements\User;
 use wbrowar\guide\Guide as GuidePlugin;
+use wbrowar\guide\helpers\GuideHelpers;
 use wbrowar\guide\models\Guide as GuideModel;
 
 use Craft;
 use craft\base\Component;
+use LitEmoji\LitEmoji;
 use wbrowar\guide\records\Guides;
 
 /**
@@ -60,12 +62,22 @@ class Guide extends Component
         switch ($queryType) {
             case 'all':
                 $guides = Guides::find()->where($params)->limit($limit)->orderBy($orderBy)->all();
+
+                foreach ($guides as $guide) {
+                    if (!is_int($guide) && $guide->content) {
+                        $guide->content = GuideHelpers::decodeEmoji($guide->content);
+                    }
+                }
+
                 break;
             case 'new':
                 $guides = new Guides([]);
                 break;
             case 'one':
                 $guides = Guides::find()->where($params)->orderBy($orderBy)->one();
+
+                $guides->content = GuideHelpers::decodeEmoji($guides->content);
+
                 break;
             case 'count':
                 $guides = Guides::find()->where($params)->count();
@@ -141,7 +153,7 @@ class Guide extends Component
         }
 
         $record->authorId = $model->authorId;
-        $record->content = $model->content;
+        $record->content = GuideHelpers::encodeEmoji($model->content);
         $record->contentSource = $model->contentSource;
         $record->contentUrl = $model->contentUrl;
         $record->summary = $model->summary;

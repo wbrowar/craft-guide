@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.1.1 - 2021-03-27
+
+### Added
+- Guides now support emoji 👀
+
+### Fixed
+- Removed unused function that was causing install to fail (thanks, @internetztube) [#49](https://github.com/wbrowar/craft-guide/issues/49)
+- Fixed an issue where you couldn’t copy Guide export data [#59](https://github.com/wbrowar/craft-guide/issues/59)
+  - A new textarea includes your export data, so you can choose to copy it out of the textarea or use the button to copy it to your clipboard (when available).
+
+
 ## 3.1.0 - 2021-09-04
 
 ### Added

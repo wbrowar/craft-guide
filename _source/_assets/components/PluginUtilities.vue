@@ -1,3 +1,116 @@
+<script setup lang="ts">
+import type { Guide } from '~/types/plugins';
+import { computed, defineProps, onMounted, ref, watchEffect } from 'vue';
+import { log } from '../globals';
+import CraftFieldText from './CraftFieldText.vue';
+
+// Props
+const props = defineProps({
+  exportData: String,
+});
+
+// Variables
+const checkedGuides = ref<string[]>([]);
+const dataImported = ref(false);
+const exportGuides = ref(props.exportData ? JSON.parse(props.exportData) : {});
+const importData = ref('');
+
+// Template Refs
+const exportField = ref(null);
+
+/**
+ * Checks to see if navigator.clipboard is available for use.
+ */
+const clipboardEnabled = computed(() => {
+  return navigator.clipboard && window.isSecureContext;
+});
+
+/**
+ * The formatted string of exported guide data. Matched to the guide import expected format.
+ */
+const exportDataString = computed(() => {
+  const selectedData: string[] = [];
+  exportGuideOptions.value.forEach((option: { checked: boolean; slug: string; title: string }) => {
+    if (checkedGuides.value.includes(option.slug)) {
+      selectedData.push(option.slug);
+    }
+  });
+
+  const filteredGuides = exportGuides.value?.guides?.length
+    ? exportGuides.value.guides.filter((guide: Guide) => {
+        return selectedData.includes(guide.slug);
+      })
+    : [];
+
+  const data = {
+    guides: filteredGuides,
+  };
+
+  const exportDataString = JSON.stringify(data);
+
+  if (exportDataString) {
+    return exportDataString;
+  }
+
+  return '';
+});
+
+/**
+ * Data and state of guides that can be selected for export.
+ */
+const exportGuideOptions = computed(() => {
+  return exportGuides.value?.guides?.length
+    ? exportGuides.value.guides.map((guide: Record<string, any>) => {
+        return {
+          checked: false,
+          slug: guide.slug,
+          title: guide.title,
+        };
+      })
+    : [];
+});
+
+function copyText(text: string, notification: string) {
+  navigator.clipboard.writeText(text).then(() => {
+    window.Craft?.cp?.displayNotice(notification);
+  });
+}
+function copyExportData() {
+  if (clipboardEnabled.value && exportDataString.value) {
+    copyText(exportDataString.value, 'Data copied');
+  }
+}
+function onImportDataChanged(newValue: string) {
+  importData.value = newValue;
+}
+async function importPluginData() {
+  await window.Craft?.postActionRequest(
+    'guide/import-export/import-json',
+    { guideData: importData.value },
+    (response, textStatus, request) => {
+      log('Saving placement', response, textStatus, request);
+      dataImported.value = true;
+
+      if (response.status === 'success') {
+        window.Craft?.cp?.displayNotice('Guide Data Imported');
+      } else {
+        window.Craft?.cp?.displayError(response.data.error);
+      }
+    }
+  );
+}
+
+onMounted(() => {
+  log('PluginUtilities loaded');
+});
+
+watchEffect(() => {
+  if (exportField.value) {
+    exportField.value.setFieldValue(exportDataString.value);
+  }
+});
+</script>
+
 <template>
   <div>
     <h1>Export/Import Guides</h1>
@@ -12,10 +125,11 @@
       <div v-for="option in exportGuideOptions" :key="option.slug">
         <input
           :id="`export-option-${option.slug}`"
-          v-model="option.checked"
+          v-model="checkedGuides"
           class="checkbox"
           type="checkbox"
           :name="option.slug"
+          :value="option.slug"
         />
         <label :for="`export-option-${option.slug}`">{{ option.title }}</label>
       </div>
@@ -23,111 +137,28 @@
     <div v-else>
       <p>No guides have been created yet!</p>
     </div>
-    <p><b>Step 2.</b> Copy Guide data by clicking this button.</p>
-    <button class="btn submit" type="button" @click="copyExportData">Copy Guide Data</button>
-    <p><b>Step 3.</b> Log into another environment and visit this <b>Utilities → Guide</b> page</p>
-    <p><b>Step 4.</b> In that environment, paste the JSON into this field and click "Import"</p>
+    <p><b>Step 2.</b> Copy Guide export data.</p>
     <CraftFieldText
-      ref="importField"
+      ref="exportField"
       :autofocus="false"
-      :field-attributes="{ rows: 4 }"
+      :field-attributes="{ readonly: true, rows: 4 }"
+      field-type="textarea"
+      label="Export Data"
+      name="export"
+    />
+    <button class="btn submit" type="button" @click="copyExportData" v-if="clipboardEnabled">
+      Copy Guide Export Data to Clipboard
+    </button>
+    <p><b>Step 3.</b> Log into another environment and visit this <b>Utilities → Guide</b> page</p>
+    <p><b>Step 4.</b> In that environment, paste the JSON into this field and click "Import Data into Guide"</p>
+    <CraftFieldText
+      :autofocus="false"
+      :field-attributes="{ placeholder: `Paste Guide data here.`, rows: 4 }"
       field-type="textarea"
       label="Import Data"
       name="import"
       @value-changed="onImportDataChanged"
     />
-    <button class="btn submit" type="button" @click="importPluginData">Import</button>
+    <button class="btn submit" type="button" @click="importPluginData">Import Data into Guide</button>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
-import { log } from '../globals';
-import CraftFieldText from './CraftFieldText.vue';
-import { Guide } from '~/types/plugins';
-
-export default defineComponent({
-  name: 'PluginUtilities',
-  components: {
-    CraftFieldText,
-  },
-  props: {
-    exportData: String,
-  },
-  setup: (props) => {
-    const state = reactive({
-      dataImported: false,
-      exportGuides: JSON.parse(props.exportData),
-      importData: '',
-    });
-
-    return { ...toRefs(state) };
-  },
-  computed: {
-    exportGuideOptions() {
-      return this.exportGuides?.guides?.length
-        ? this.exportGuides.guides.map((guide) => {
-            return {
-              checked: false,
-              slug: guide.slug,
-              title: guide.title,
-            };
-          })
-        : [];
-    },
-  },
-  methods: {
-    copyText(text, notification) {
-      navigator.clipboard.writeText(text).then(() => {
-        window.Craft?.cp?.displayNotice(notification);
-      });
-    },
-    copyExportData() {
-      const selectedData: string[] = [];
-      this.exportGuideOptions.forEach((option: { checked: boolean; slug: string; title: string }) => {
-        if (option.checked) {
-          selectedData.push(option.slug);
-        }
-      });
-
-      const filteredGuides = this.exportGuides?.guides?.length
-        ? this.exportGuides.guides.filter((guide: Guide) => {
-            return selectedData.includes(guide.slug);
-          })
-        : [];
-
-      const data = {
-        guides: filteredGuides,
-      };
-
-      const exportDataString = JSON.stringify(data);
-
-      if (exportDataString) {
-        this.copyText(exportDataString, 'Data copied');
-      }
-    },
-    onImportDataChanged(newValue) {
-      this.importData = newValue;
-    },
-    async importPluginData() {
-      await window.Craft?.postActionRequest(
-        'guide/import-export/import-json',
-        { guideData: this.importData },
-        (response, textStatus, request) => {
-          log('Saving placement', response, textStatus, request);
-          this.dataImported = true;
-
-          if (response.status === 'success') {
-            window.Craft?.cp?.displayNotice('Guide Data Imported');
-          } else {
-            window.Craft?.cp?.displayError(response.data.error);
-          }
-        }
-      );
-    },
-  },
-  mounted() {
-    log('PluginUtilities loaded');
-  },
-});
-</script>
