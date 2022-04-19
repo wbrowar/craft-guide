@@ -106,7 +106,7 @@ class Guide extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '3.0.0';
+    public string $schemaVersion = '3.0.0';
 
     // Public Methods
     // =========================================================================
@@ -378,7 +378,7 @@ class Guide extends Plugin
     /**
      * @inheritdoc
      */
-    public function getCpNavItem()
+    public function getCpNavItem(): ?array
     {
         $navItem = parent::getCpNavItem();
         $user = Craft::$app->getUser()->getIdentity();
@@ -417,7 +417,7 @@ class Guide extends Plugin
     /**
      * @inheritdoc
      */
-    protected function createSettingsModel()
+    protected function createSettingsModel(): ?\craft\base\Model
     {
         return new Settings();
     }

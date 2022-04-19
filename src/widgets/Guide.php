@@ -52,7 +52,7 @@ class Guide extends Widget
     /**
      * @inheritdoc
      */
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
         $guide = $this->_getGuideFromGuideId();
 
@@ -69,7 +69,7 @@ class Guide extends Widget
     /**
      * @inheritdoc
      */
-    public static function icon()
+    public static function icon(): ?string
     {
         return Craft::getAlias('@wbrowar/guide/assetbundles/static/icon-mask.svg');
     }
@@ -77,7 +77,7 @@ class Guide extends Widget
     /**
      * @inheritdoc
      */
-    public static function maxColspan()
+    public static function maxColspan(): ?int
     {
         return null;
     }
@@ -88,7 +88,7 @@ class Guide extends Widget
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         $rules = parent::rules();
         $rules = array_merge(
@@ -103,7 +103,7 @@ class Guide extends Widget
     /**
      * @inheritdoc
      */
-    public function getSettingsHtml()
+    public function getSettingsHtml(): ?string
     {
         if (GuidePlugin::$pro) {
             $placements = GuidePlugin::$plugin->placement->getPlacements(['group' => 'widget']);
@@ -124,7 +124,7 @@ class Guide extends Widget
     /**
      * @inheritdoc
      */
-    public function getBodyHtml()
+    public function getBodyHtml(): ?string
     {
         return Craft::$app->getView()->renderTemplate(
             'guide/widgets/guide_body',

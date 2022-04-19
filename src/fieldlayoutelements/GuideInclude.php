@@ -47,7 +47,7 @@ class GuideInclude extends BaseUiElement
     /**
      * @inheritdoc
      */
-    protected function selectorIcon()
+    protected function selectorIcon(): ?string
     {
         return Craft::getAlias('@wbrowar/guide/assetbundles/static/icon-mask.svg');
     }
@@ -55,7 +55,7 @@ class GuideInclude extends BaseUiElement
     /**
      * @inheritdoc
      */
-    public function formHtml(ElementInterface $element = null, bool $static = false)
+    public function formHtml(ElementInterface $element = null, bool $static = false): ?string
     {
         Craft::$app->getDeprecator()->log('wbrowar\guide\fieldlayoutelements\GuideInclude' . Craft::$app->getRequest()->getFullUri(), '`Guide 2` UI Element was found on `' . Craft::$app->getRequest()->getAbsoluteUrl() . '` is deprecated and should be replaced with a `Guide 3` UI Element.');
 
