@@ -1,30 +1,5 @@
-# ASSEMBLY LINE
-.assebly-cache
-
-# CRAFT ENVIRONMENT
-vendor
-_source/_craft/config/license.key
-_source/_craft/storage/*
-!_source/_craft/storage/.gitkeep
-_source/_craft/web/cpresources
-_source/_craft/vendor
-_source/_craft/.env
-
 # NODE ENVIRONMENT
 _source/_assets/node_modules/*
-
-# DDEV
-.ddev/*
-!.ddev/commands/db/clean-craft-db
-!.ddev/commands/web/clean-craft
-!.ddev/commands/web/clean-node
-!.ddev/commands/web/composer
-!.ddev/commands/web/craft
-!.ddev/commands/web/npm
-!.ddev/scripts
-!.ddev/web-build/Dockerfile
-!.ddev/config.yaml
-!.ddev/docker-compose.front-end.yaml
 
 # MISC FILES
 .cache

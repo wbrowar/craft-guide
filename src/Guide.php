@@ -447,10 +447,9 @@ class Guide extends Plugin
             'js' => '',
         ];
 
-        if (Craft::parseEnv('$PLUGIN_HMR') == 'true') {
+        if (Craft::parseEnv('$VITE_GUIDE_HMR') == 'true') {
             return [
-//                'css' => 'https://craft-guide.test:3000/_source/_css/app.css',
-                'js' => 'https://craft-guide.test:3000/' . $filename,
+                'js' => 'http://localhost:3000/' . $filename,
             ];
         }
 
