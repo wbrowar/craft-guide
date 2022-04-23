@@ -86,7 +86,7 @@ class Guide extends Model
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['authorId', 'slug', 'title'], 'required'],

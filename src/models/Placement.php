@@ -88,7 +88,7 @@ class Placement extends Model
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             ['guideId', 'required'],
