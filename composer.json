@@ -2,13 +2,18 @@
     "name": "wbrowar/guide",
     "description": "A CMS Guide for Craft CMS.",
     "type": "craft-plugin",
-    "version": "3.1.1",
+    "version": "3.2.0-beta.1",
     "keywords": [
         "craft",
         "cms",
         "craftcms",
         "craft-plugin",
-        "guide"
+        "guide",
+        "manual",
+        "snippets",
+        "twig",
+        "widget",
+        "vue"
     ],
     "support": {
         "docs": "https://github.com/wbrowar/craft-guide/blob/master/README.md",
@@ -22,7 +27,7 @@
         }
     ],
     "require": {
-        "craftcms/cms": "^3.7.0"
+        "craftcms/cms": "^4.0.0-beta.4"
     },
     "autoload": {
         "psr-4": {
@@ -32,6 +37,7 @@
     "extra": {
         "name": "Guide",
         "handle": "guide",
+        "developer": "Will Browar",
         "hasCpSettings": true,
         "hasCpSection": true,
         "changelogUrl": "https://raw.githubusercontent.com/wbrowar/craft-guide/master/CHANGELOG.md",
