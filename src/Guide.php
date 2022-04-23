@@ -449,7 +449,7 @@ class Guide extends Plugin
 
         if (Craft::parseEnv('$VITE_GUIDE_HMR') == 'true') {
             return [
-                'js' => 'http://localhost:3000/' . $filename,
+                'js' => 'http://localhost:3100/' . $filename,
             ];
         }
 

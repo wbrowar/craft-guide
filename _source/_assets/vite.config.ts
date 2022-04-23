@@ -21,4 +21,7 @@ export default defineConfig({
   },
   plugins: [vue()],
   resolve: { alias: { vue: 'vue/dist/vue.esm-bundler.js' } },
+  server: {
+    port: 3100,
+  },
 });
