@@ -10,6 +10,11 @@
 
 namespace wbrowar\guide;
 
+use craft\controllers\ElementsController;
+use craft\elements\Asset;
+use craft\elements\Category;
+use craft\elements\Entry;
+use craft\events\DefineElementEditorHtmlEvent;
 use craft\events\DefineFieldLayoutElementsEvent;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\events\RegisterUserPermissionsEvent;
@@ -17,6 +22,7 @@ use craft\helpers\FileHelper;
 use craft\helpers\Json;
 use craft\helpers\UrlHelper;
 use craft\models\FieldLayout;
+use craft\services\Globals;
 use craft\services\UserPermissions;
 use craft\web\View;
 use wbrowar\guide\fieldlayoutelements\GuideDisplay;
@@ -63,12 +69,7 @@ class Guide extends Plugin
     const EDITION_PRO = 'pro';
 
     // Static Properties
-    // =========================================================================
-
-    /**
-     * @var bool
-     */
-    public static $craft37 = false;
+    // =========================================================================;
 
     /**
      * @var bool
@@ -117,7 +118,6 @@ class Guide extends Plugin
     public function init()
     {
         parent::init();
-        self::$craft37 = version_compare(Craft::$app->getVersion(), '3.7', '>=');
         self::$plugin = $this;
         self::$pro = self::$plugin->is(Guide::EDITION_PRO);
         self::$schemaReady = $this->_getSchemaReady();
@@ -252,84 +252,157 @@ class Guide extends Plugin
             // Add custom permissions
             if (Craft::$app->getEdition() > 0) {
                 Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
-                    $event->permissions[Craft::t('guide', 'Guide')] = [
-                        'editGuides' => ['label' => Craft::t('guide', 'Edit Guides')],
-                        'deleteGuides' => ['label' => Craft::t('guide', 'Delete Guides')],
-                        'useOrganizer' => ['label' => Craft::t('guide', 'Use Organizer and UI Element Selector')],
+                    $event->permissions[] = [
+                        'heading' => Craft::t('guide', 'Guide'),
+                        'permissions' => [
+                            'editGuides' => ['label' => Craft::t('guide', 'Edit Guides')],
+                            'deleteGuides' => ['label' => Craft::t('guide', 'Delete Guides')],
+                            'useOrganizer' => ['label' => Craft::t('guide', 'Use Organizer and UI Element Selector')],
+                        ]
                     ];
                 });
             }
 
             // Add Guides to CP Groups
-            Craft::$app->view->hook('cp.assets.edit.content', function(&$context) {
-                $queries = [[
-                    'group' => 'asset',
-                    'groupId' => null,
-                ]];
+            Event::on(
+                ElementsController::class,
+                ElementsController::EVENT_DEFINE_EDITOR_CONTENT,
+                function (DefineElementEditorHtmlEvent $event) {
+//                    if (get_class($event->element)) {
+//                        Craft::dd(get_class($event->element));
+//                    }
+                    switch (get_class($event->element)) {
+                        case Asset::class:
+                            $queries = [[
+                                'group' => 'asset',
+                                'groupId' => null,
+                            ]];
 
-                if ($context['element']->volumeId ?? false) {
-                    $volume = Craft::$app->getVolumes()->getVolumeById($context['element']->volumeId);
-                    
-                    if ($volume) {
-                        $queries[] = [
-                            'group' => 'assetVolume',
-                            'groupId' => $volume->uid,
-                        ];
+                            if ($context['element']->volumeId ?? false) {
+                                $volume = Craft::$app->getVolumes()->getVolumeById($context['element']->volumeId);
+
+                                if ($volume) {
+                                    $queries[] = [
+                                        'group' => 'assetVolume',
+                                        'groupId' => $volume->uid,
+                                    ];
+                                }
+                            }
+                            $event->html .= $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['element'] ?? null);
+                            break;
+                        case Category::class:
+                            $queries = [[
+                                'group' => 'category',
+                                'groupId' => null,
+                            ]];
+
+                            if ($context['group']->id ?? false) {
+                                $queries[] = [
+                                    'group' => 'categoryGroup',
+                                    'groupId' => $context['group']->uid,
+                                ];
+                            }
+                            $event->html .= $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['element'] ?? null);
+                            break;
+                        case Entry::class:
+                            $queries = [[
+                                'group' => 'entry',
+                                'groupId' => null,
+                            ]];
+
+                            if ($context['entry']->section->id ?? false) {
+                                $queries[] = [
+                                    'group' => 'section',
+                                    'groupId' => $context['entry']->section->uid,
+                                ];
+                            }
+                            $event->html .= $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['element'] ?? null);
+                            break;
+                        case Globals::class:
+                            $queries = [[
+                                'group' => 'global',
+                                'groupId' => null,
+                            ]];
+
+                            if ($context['globalSet']->id ?? false) {
+                                $queries[] = [
+                                    'group' => 'globalSet',
+                                    'groupId' => $context['globalSet']->uid,
+                                ];
+                            }
+                            $event->html .= $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['element'] ?? null);
+                            break;
                     }
-                }
-                return $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['element'] ?? null);
-            });
-            Craft::$app->view->hook('cp.categories.edit.content', function(&$context) {
-                $queries = [[
-                    'group' => 'category',
-                    'groupId' => null,
-                ]];
-
-                if ($context['group']->id ?? false) {
-                    $queries[] = [
-                        'group' => 'categoryGroup',
-                        'groupId' => $context['group']->uid,
-                    ];
-                }
-                return $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['element'] ?? null);
-            });
-            Craft::$app->view->hook('cp.entries.edit.content', function(&$context) {
-                $queries = [[
-                    'group' => 'entry',
-                    'groupId' => null,
-                ]];
-
-                if ($context['entry']->section->id ?? false) {
-                    $queries[] = [
-                        'group' => 'section',
-                        'groupId' => $context['entry']->section->uid,
-                    ];
-                }
-                return $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['element'] ?? null);
-            });
-            Craft::$app->view->hook('cp.globals.edit.content', function(&$context) {
-                $queries = [[
-                    'group' => 'global',
-                    'groupId' => null,
-                ]];
-
-                if ($context['globalSet']->id ?? false) {
-                    $queries[] = [
-                        'group' => 'globalSet',
-                        'groupId' => $context['globalSet']->uid,
-                    ];
-                }
-
-                return $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries);
-            });
-            Craft::$app->view->hook('cp.users.edit.content', function(&$context) {
-                $queries = [[
-                    'group' => 'user',
-                    'groupId' => null,
-                ]];
-
-                return $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['user'] ?? null);
-            });
+                });
+//            Craft::$app->view->hook('cp.assets.edit.content', function(&$context) {
+//                $queries = [[
+//                    'group' => 'asset',
+//                    'groupId' => null,
+//                ]];
+//
+//                if ($context['element']->volumeId ?? false) {
+//                    $volume = Craft::$app->getVolumes()->getVolumeById($context['element']->volumeId);
+//
+//                    if ($volume) {
+//                        $queries[] = [
+//                            'group' => 'assetVolume',
+//                            'groupId' => $volume->uid,
+//                        ];
+//                    }
+//                }
+//                return $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['element'] ?? null);
+//            });
+//            Craft::$app->view->hook('cp.categories.edit.content', function(&$context) {
+//                $queries = [[
+//                    'group' => 'category',
+//                    'groupId' => null,
+//                ]];
+//
+//                if ($context['group']->id ?? false) {
+//                    $queries[] = [
+//                        'group' => 'categoryGroup',
+//                        'groupId' => $context['group']->uid,
+//                    ];
+//                }
+//                return $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['element'] ?? null);
+//            });
+//            Craft::$app->view->hook('cp.entries.edit.content', function(&$context) {
+//                $queries = [[
+//                    'group' => 'entry',
+//                    'groupId' => null,
+//                ]];
+//
+//                if ($context['entry']->section->id ?? false) {
+//                    $queries[] = [
+//                        'group' => 'section',
+//                        'groupId' => $context['entry']->section->uid,
+//                    ];
+//                }
+//                return $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['element'] ?? null);
+//            });
+//            Craft::$app->view->hook('cp.globals.edit.content', function(&$context) {
+//                $queries = [[
+//                    'group' => 'global',
+//                    'groupId' => null,
+//                ]];
+//
+//                if ($context['globalSet']->id ?? false) {
+//                    $queries[] = [
+//                        'group' => 'globalSet',
+//                        'groupId' => $context['globalSet']->uid,
+//                    ];
+//                }
+//
+//                return $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries);
+//            });
+//            Craft::$app->view->hook('cp.users.edit.content', function(&$context) {
+//                $queries = [[
+//                    'group' => 'user',
+//                    'groupId' => null,
+//                ]];
+//
+//                return $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['user'] ?? null);
+//            });
 
             // Add custom field UI elements
             Event::on(
@@ -425,10 +498,10 @@ class Guide extends Plugin
     /**
      * @inheritdoc
      */
-    public function getSettingsResponse()
+    public function getSettingsResponse(): \craft\web\Response|\yii\console\Response
     {
         // Just redirect to the plugin settings page
-        Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('guide/settings/general'));
+        return Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('guide/settings/general'));
     }
 
     // Private Methods
@@ -629,18 +702,18 @@ class Guide extends Plugin
      */
     private function _getUserOperations():array
     {
-        $operations = [];
+        $operations = [
+            'deleteGuides' => false,
+            'editGuides' => false,
+            'useOrganizer' => false,
+        ];
 
-        if (Craft::$app->getUser()->getIdentity()) {
-            $user = Craft::$app->getUser()->getIdentity();
+        $user = Craft::$app->getUser();
 
-            $operations['deleteGuides'] = $user->admin || $user->can('deleteGuides');
-            $operations['editGuides'] = $user->admin || $user->can('editGuides');
-            $operations['useOrganizer'] = $user->admin || $user->can('useOrganizer');
-        } else {
-            $operations['deleteGuides'] = false;
-            $operations['editGuides'] = false;
-            $operations['useOrganizer'] = false;
+        if ($user) {
+            $operations['deleteGuides'] = $user->getIsAdmin() || $user->checkPermission('deleteGuides');
+            $operations['editGuides'] = $user->getIsAdmin() || $user->checkPermission('editGuides');
+            $operations['useOrganizer'] = $user->getIsAdmin() || $user->checkPermission('useOrganizer');
         }
 
         return $operations;
