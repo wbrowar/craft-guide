@@ -322,30 +322,55 @@ class Guide extends Plugin
                             }
                             $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element ?? null);
                             break;
-                        case GlobalSet::class:
-                            $queries = [[
-                                'group' => 'global',
-                                'groupId' => null,
-                            ]];
-
-                            if ($context['globalSet']->id ?? false) {
-                                $queries[] = [
-                                    'group' => 'globalSet',
-                                    'groupId' => $context['globalSet']->uid,
-                                ];
-                            }
-                            $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element ?? null);
-                            break;
-                        case User::class:
-                            $queries = [[
-                                'group' => 'user',
-                                'groupId' => null,
-                            ]];
-
-                            $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element ?? null);
-                            break;
+//                        case GlobalSet::class:
+//                            $queries = [[
+//                                'group' => 'global',
+//                                'groupId' => null,
+//                            ]];
+//
+//                            if ($context['globalSet']->id ?? false) {
+//                                $queries[] = [
+//                                    'group' => 'globalSet',
+//                                    'groupId' => $context['globalSet']->uid,
+//                                ];
+//                            }
+//                            $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element ?? null);
+//                            break;
+//                        case User::class:
+//                            $queries = [[
+//                                'group' => 'user',
+//                                'groupId' => null,
+//                            ]];
+//
+//                            $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element ?? null);
+//                            break;
                     }
                 });
+
+            // TODO: when `ElementsController::EVENT_DEFINE_EDITOR_CONTENT` includes support for GlobalSet or User elements, move these into switch above.
+            Craft::$app->view->hook('cp.globals.edit.content', function(&$context) {
+                $queries = [[
+                    'group' => 'global',
+                    'groupId' => null,
+                ]];
+
+                if ($context['globalSet']->id ?? false) {
+                    $queries[] = [
+                        'group' => 'globalSet',
+                        'groupId' => $context['globalSet']->uid,
+                    ];
+                }
+
+                return $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries);
+            });
+            Craft::$app->view->hook('cp.users.edit.content', function(&$context) {
+                $queries = [[
+                    'group' => 'user',
+                    'groupId' => null,
+                ]];
+
+                return $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['user'] ?? null);
+            });
 
             // Add custom field UI elements
             Event::on(
