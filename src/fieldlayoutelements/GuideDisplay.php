@@ -58,12 +58,12 @@ class GuideDisplay extends BaseUiElement
     /**
      * @inheritdoc
      */
-    public function settingsHtml()
+    public function settingsHtml(): null|string
     {
         return Craft::$app->getView()->renderTemplate(
             'guide/fieldlayoutelements/guide_display_settings',
             [
-                'randomString' => $this->_generateRandomString(15),
+                'randomString' => $this->generateRandomString(15),
                 'uiId' => $this->uiId,
             ]
         );
@@ -90,7 +90,7 @@ class GuideDisplay extends BaseUiElement
                 'uiId' => $this->uiId,
             ]));
         } catch (\Throwable $e) {
-            return $this->_error($e->getMessage(), 'error');
+            return $this->error($e->getMessage(), 'error');
         }
 
         if ($content === '') {
@@ -107,7 +107,7 @@ class GuideDisplay extends BaseUiElement
      * @param string $errorClass
      * @return string
      */
-    private function _error(string $error, string $errorClass): string
+    private function error(string $error, string $errorClass): string
     {
         $icon = Html::tag('span', '', [
             'data' => [
@@ -123,7 +123,8 @@ class GuideDisplay extends BaseUiElement
         ]);
     }
 
-    private function _generateRandomString($length = 10) {
+    private function generateRandomString($length = 10):string
+    {
         return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
     }
 }

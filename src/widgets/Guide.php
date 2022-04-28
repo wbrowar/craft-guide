@@ -54,7 +54,7 @@ class Guide extends Widget
      */
     public function getTitle(): ?string
     {
-        $guide = $this->_getGuideFromGuideId();
+        $guide = $this->getGuideFromGuideId();
 
         if ($this->showTitle) {
             if ($guide ?? false) {
@@ -112,7 +112,7 @@ class Guide extends Widget
                 'guide/widgets/guide_settings',
                 [
                     'selectableGuides' => GuidePlugin::$plugin->guide->getGuidesForUserFromPlacements($placements),
-                    'userOperations' => GuidePlugin::$userOperations,
+                    'userOperations' => GuidePlugin::$plugin->getUserOperations(),
                     'widget' => $this,
                 ]
             );
@@ -129,7 +129,7 @@ class Guide extends Widget
         return Craft::$app->getView()->renderTemplate(
             'guide/widgets/guide_body',
             [
-                'guide' => $this->_getGuideFromGuideId(),
+                'guide' => $this->getGuideFromGuideId(),
                 'proEdition' => GuidePlugin::$pro,
                 'widgetId' => $this->id,
             ]
@@ -140,7 +140,7 @@ class Guide extends Widget
     /**
      * @inheritdoc
      */
-    public function _getGuideFromGuideId()
+    public function getGuideFromGuideId()
     {
         return GuidePlugin::$plugin->guide->getGuides(['id' => $this->guideId], 'one');
     }

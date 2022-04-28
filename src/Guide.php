@@ -14,10 +14,13 @@ use craft\controllers\ElementsController;
 use craft\elements\Asset;
 use craft\elements\Category;
 use craft\elements\Entry;
+use craft\elements\GlobalSet;
+use craft\elements\User;
 use craft\events\DefineElementEditorHtmlEvent;
 use craft\events\DefineFieldLayoutElementsEvent;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\events\RegisterUserPermissionsEvent;
+use craft\helpers\App;
 use craft\helpers\FileHelper;
 use craft\helpers\Json;
 use craft\helpers\UrlHelper;
@@ -92,11 +95,6 @@ class Guide extends Plugin
     public static $settings;
 
     /**
-     * @var array
-     */
-    public static $userOperations;
-
-    /**
      * @var View
      */
     public static $view;
@@ -120,9 +118,8 @@ class Guide extends Plugin
         parent::init();
         self::$plugin = $this;
         self::$pro = self::$plugin->is(Guide::EDITION_PRO);
-        self::$schemaReady = $this->_getSchemaReady();
+        self::$schemaReady = $this->getSchemaReady();
         self::$settings = $this->getSettings();
-        self::$userOperations = $this->_getUserOperations();
         self::$view = Craft::$app->getView();
 
         // Add our services
@@ -150,7 +147,7 @@ class Guide extends Plugin
 
             if (!Craft::$app->getRequest()->isConsoleRequest && self::$schemaReady) {
                 // Load our JavaScript
-                $assets = self::$plugin->_getPathsToAssetFiles('guide-display.ts');
+                $assets = self::$plugin->getPathsToAssetFiles('guide-display.ts');
                 if ($assets['css'] ?? false) {
                     Craft::$app->getView()->registerCssFile($assets['css']);
                 }
@@ -159,12 +156,11 @@ class Guide extends Plugin
                 }
 
                 // Admin-specific JavaScript
-//                Craft::dd(Craft::$app->getRequest()->getSegment(1));
                 $routeIsGuideAdmin = Craft::$app->getRequest()->getSegment(1) == 'guide' && in_array(Craft::$app->getRequest()->getSegment(2), ['edit', 'new', 'organizer']);
                 $routeIsGuideUtilities = Craft::$app->getRequest()->getSegment(1) == 'utilities' && Craft::$app->getRequest()->getSegment(2) == 'guide-export-import';
                 $routeIsGuideWelcome = Craft::$app->getRequest()->getSegment(1) == 'guide' && Craft::$app->getRequest()->getSegment(2) == 'welcome';
                 if ($routeIsGuideAdmin || $routeIsGuideUtilities) {
-                    $assets = self::$plugin->_getPathsToAssetFiles('guide-admin.ts');
+                    $assets = self::$plugin->getPathsToAssetFiles('guide-admin.ts');
                     if ($assets['css'] ?? false) {
                         Craft::$app->getView()->registerCssFile($assets['css']);
                     }
@@ -172,7 +168,7 @@ class Guide extends Plugin
                         Craft::$app->getView()->registerJsFile($assets['js'], ['position' => Craft::$app->getView()::POS_BEGIN, 'type' => 'module']);
                     }
                 } else if ($routeIsGuideWelcome) {
-                    $assets = self::$plugin->_getPathsToAssetFiles('guide-welcome.ts');
+                    $assets = self::$plugin->getPathsToAssetFiles('guide-welcome.ts');
                     if ($assets['css'] ?? false) {
                         Craft::$app->getView()->registerCssFile($assets['css']);
                     }
@@ -184,10 +180,10 @@ class Guide extends Plugin
                 // Add guides to the bottom of the page
                 Event::on(View::class, View::EVENT_END_BODY, function(Event $event) {
                     // Add global settings to end body
-                    $this->_renderAdminGlobals();
+                    $this->renderAdminGlobals();
 
                     // Get and display guides for the given page
-                    $this->_renderGuideDisplaysForPage();
+                    $this->renderGuideDisplaysForPage();
                 });
             }
 
@@ -212,14 +208,16 @@ class Guide extends Plugin
                 UrlManager::class,
                 UrlManager::EVENT_REGISTER_CP_URL_RULES,
                 function (RegisterUrlRulesEvent $event) {
+                    $userOperations = $this->getUserOperations();
+
                     // Templates
-                    $event->rules['guide'] = ['template' => 'guide/index', 'variables' => ['cpNavPlacements' => self::$plugin->placement->getPlacements([ 'group' => 'nav' ], 'guideId'), 'settings' => self::$settings, 'userOperations' => self::$userOperations]];
+                    $event->rules['guide'] = ['template' => 'guide/index', 'variables' => ['cpNavPlacements' => self::$plugin->placement->getPlacements([ 'group' => 'nav' ], 'guideId'), 'settings' => self::$settings, 'userOperations' => $userOperations]];
                     $event->rules['guide/welcome'] = ['template' => 'guide/welcome', 'variables' => ['settings' => self::$settings]];
-                    $event->rules['guide/page/<slug:(.*)>'] = ['template' => 'guide/page', 'variables' => ['proEdition' => self::$pro, 'settings' => self::$settings, 'userOperations' => self::$userOperations]];
+                    $event->rules['guide/page/<slug:(.*)>'] = ['template' => 'guide/page', 'variables' => ['proEdition' => self::$pro, 'settings' => self::$settings, 'userOperations' => $userOperations]];
                     $event->rules['guide/settings/general'] = ['template' => 'guide/settings', 'variables' => ['proEdition' => self::$pro, 'selectedTab' => 'general', 'settings' => self::$settings]];
                     $event->rules['guide/settings/variables'] = ['template' => 'guide/settings', 'variables' => ['proEdition' => self::$pro, 'selectedTab' => 'variables', 'settings' => self::$settings]];
-
-                    if (self::$userOperations['editGuides']) {
+                    
+                    if ($userOperations['editGuides']) {
                         $editVariables = [];
 
                         $editVariables['title'] = 'New Guide';
@@ -228,10 +226,10 @@ class Guide extends Plugin
                         $editVariables['title'] = 'Edit Guide';
                         $event->rules['guide/edit/<guideId:\d{1,}>'] = ['template' => 'guide/edit', 'variables' => $editVariables];
                     }
-                    if (self::$userOperations['deleteGuides']) {
-                        $event->rules['guide/delete/<guideId:\d{1,}>'] = ['template' => 'guide/delete', 'variables' => ['userOperations' => self::$userOperations]];
+                    if ($userOperations['deleteGuides']) {
+                        $event->rules['guide/delete/<guideId:\d{1,}>'] = ['template' => 'guide/delete', 'variables' => ['userOperations' => $userOperations]];
                     }
-                    if (self::$userOperations['useOrganizer']) {
+                    if ($userOperations['useOrganizer']) {
                         $event->rules['guide/organizer'] = ['template' => 'guide/organizer', 'variables' => ['groupsData' => self::$plugin->placement->getPlacementGroups()]];
                     }
                 }
@@ -268,9 +266,6 @@ class Guide extends Plugin
                 ElementsController::class,
                 ElementsController::EVENT_DEFINE_EDITOR_CONTENT,
                 function (DefineElementEditorHtmlEvent $event) {
-//                    if (get_class($event->element)) {
-//                        Craft::dd(get_class($event->element));
-//                    }
                     switch (get_class($event->element)) {
                         case Asset::class:
                             $queries = [[
@@ -278,8 +273,8 @@ class Guide extends Plugin
                                 'groupId' => null,
                             ]];
 
-                            if ($context['element']->volumeId ?? false) {
-                                $volume = Craft::$app->getVolumes()->getVolumeById($context['element']->volumeId);
+                            if ($event->element->volumeId ?? false) {
+                                $volume = Craft::$app->getVolumes()->getVolumeById($event->element->volumeId);
 
                                 if ($volume) {
                                     $queries[] = [
@@ -288,7 +283,7 @@ class Guide extends Plugin
                                     ];
                                 }
                             }
-                            $event->html .= $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['element'] ?? null);
+                            $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element ?? null);
                             break;
                         case Category::class:
                             $queries = [[
@@ -296,29 +291,38 @@ class Guide extends Plugin
                                 'groupId' => null,
                             ]];
 
-                            if ($context['group']->id ?? false) {
-                                $queries[] = [
-                                    'group' => 'categoryGroup',
-                                    'groupId' => $context['group']->uid,
-                                ];
+                            if ($event->element->groupId ?? false) {
+                                $group = Craft::$app->getCategories()->getGroupById($event->element['groupId']);
+
+                                if ($group->uid) {
+                                    $queries[] = [
+                                        'group' => 'categoryGroup',
+                                        'groupId' => $group->uid,
+                                    ];
+                                }
                             }
-                            $event->html .= $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['element'] ?? null);
+                            $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element ?? null);
                             break;
                         case Entry::class:
                             $queries = [[
                                 'group' => 'entry',
                                 'groupId' => null,
                             ]];
+                            
 
-                            if ($context['entry']->section->id ?? false) {
-                                $queries[] = [
-                                    'group' => 'section',
-                                    'groupId' => $context['entry']->section->uid,
-                                ];
+                            if ($event->element['sectionId'] ?? false) {
+                                $section = Craft::$app->getSections()->getSectionById($event->element['sectionId']);
+
+                                if ($section->uid ?? false) {
+                                    $queries[] = [
+                                        'group' => 'section',
+                                        'groupId' => $section->uid,
+                                    ];
+                                }
                             }
-                            $event->html .= $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['element'] ?? null);
+                            $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element ?? null);
                             break;
-                        case Globals::class:
+                        case GlobalSet::class:
                             $queries = [[
                                 'group' => 'global',
                                 'groupId' => null,
@@ -330,79 +334,18 @@ class Guide extends Plugin
                                     'groupId' => $context['globalSet']->uid,
                                 ];
                             }
-                            $event->html .= $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['element'] ?? null);
+                            $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element ?? null);
+                            break;
+                        case User::class:
+                            $queries = [[
+                                'group' => 'user',
+                                'groupId' => null,
+                            ]];
+
+                            $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element ?? null);
                             break;
                     }
                 });
-//            Craft::$app->view->hook('cp.assets.edit.content', function(&$context) {
-//                $queries = [[
-//                    'group' => 'asset',
-//                    'groupId' => null,
-//                ]];
-//
-//                if ($context['element']->volumeId ?? false) {
-//                    $volume = Craft::$app->getVolumes()->getVolumeById($context['element']->volumeId);
-//
-//                    if ($volume) {
-//                        $queries[] = [
-//                            'group' => 'assetVolume',
-//                            'groupId' => $volume->uid,
-//                        ];
-//                    }
-//                }
-//                return $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['element'] ?? null);
-//            });
-//            Craft::$app->view->hook('cp.categories.edit.content', function(&$context) {
-//                $queries = [[
-//                    'group' => 'category',
-//                    'groupId' => null,
-//                ]];
-//
-//                if ($context['group']->id ?? false) {
-//                    $queries[] = [
-//                        'group' => 'categoryGroup',
-//                        'groupId' => $context['group']->uid,
-//                    ];
-//                }
-//                return $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['element'] ?? null);
-//            });
-//            Craft::$app->view->hook('cp.entries.edit.content', function(&$context) {
-//                $queries = [[
-//                    'group' => 'entry',
-//                    'groupId' => null,
-//                ]];
-//
-//                if ($context['entry']->section->id ?? false) {
-//                    $queries[] = [
-//                        'group' => 'section',
-//                        'groupId' => $context['entry']->section->uid,
-//                    ];
-//                }
-//                return $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['element'] ?? null);
-//            });
-//            Craft::$app->view->hook('cp.globals.edit.content', function(&$context) {
-//                $queries = [[
-//                    'group' => 'global',
-//                    'groupId' => null,
-//                ]];
-//
-//                if ($context['globalSet']->id ?? false) {
-//                    $queries[] = [
-//                        'group' => 'globalSet',
-//                        'groupId' => $context['globalSet']->uid,
-//                    ];
-//                }
-//
-//                return $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries);
-//            });
-//            Craft::$app->view->hook('cp.users.edit.content', function(&$context) {
-//                $queries = [[
-//                    'group' => 'user',
-//                    'groupId' => null,
-//                ]];
-//
-//                return $this->_renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['user'] ?? null);
-//            });
 
             // Add custom field UI elements
             Event::on(
@@ -455,6 +398,7 @@ class Guide extends Plugin
     {
         $navItem = parent::getCpNavItem();
         $user = Craft::$app->getUser()->getIdentity();
+        $userOperations = $this->getUserOperations();
 
         if ((self::$settings->templatePath ?? false) && (self::$settings->assetVolume ?? false)) {
             $navItem['subnav'] = [
@@ -462,7 +406,7 @@ class Guide extends Plugin
             ];
         }
 
-        if (self::$userOperations['useOrganizer']) {
+        if ($userOperations['useOrganizer']) {
             $navItem['subnav']['organizer'] = ['label' => 'Organizer', 'url' => 'guide/organizer'];
         }
 
@@ -504,6 +448,28 @@ class Guide extends Plugin
         return Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('guide/settings/general'));
     }
 
+    /**
+     * @return array
+     */
+    public function getUserOperations():array
+    {
+        $operations = [
+            'deleteGuides' => false,
+            'editGuides' => false,
+            'useOrganizer' => false,
+        ];
+
+        $user = Craft::$app->getUser();
+
+        if ($user) {
+            $operations['deleteGuides'] = $user->getIsAdmin() || $user->checkPermission('deleteGuides');
+            $operations['editGuides'] = $user->getIsAdmin() || $user->checkPermission('editGuides');
+            $operations['useOrganizer'] = $user->getIsAdmin() || $user->checkPermission('useOrganizer');
+        }
+
+        return $operations;
+    }
+
     // Private Methods
     // =========================================================================
 
@@ -513,14 +479,14 @@ class Guide extends Plugin
      * @param string $filename the name of the Vite entry file, usually 'main.ts'
      * @return array
      */
-    public function _getPathsToAssetFiles(string $filename): array
+    public function getPathsToAssetFiles(string $filename): array
     {
         $assetPaths = [
             'css' => '',
             'js' => '',
         ];
 
-        if (Craft::parseEnv('$VITE_GUIDE_HMR') == 'true') {
+        if (App::parseEnv('$VITE_GUIDE_HMR') == 'true') {
             return [
                 'js' => 'http://localhost:3100/' . $filename,
             ];
@@ -557,7 +523,7 @@ class Guide extends Plugin
      *
      * @return bool
      */
-    public function _getSchemaReady(): bool
+    public function getSchemaReady(): bool
     {
         return Craft::$app->db->schema->getTableSchema('{{%guide_guides}}') !== null && Craft::$app->db->schema->getTableSchema('{{%guide_placements}}') !== null;
     }
@@ -565,7 +531,7 @@ class Guide extends Plugin
     /**
      * Render admin globals used by Guide and Organizer editors
      */
-    public function _renderAdminGlobals()
+    public function renderAdminGlobals()
     {
         $guidesData = [];
         $guides = self::$plugin->guide->getGuides([
@@ -588,8 +554,8 @@ class Guide extends Plugin
             'guides' => $guidesData,
             'proEdition' => self::$pro,
             'settings' => self::$settings,
-            'templates' => $this->_getTemplatesFromUserTemplatePath(),
-            'userOperations' => self::$userOperations,
+            'templates' => $this->getTemplatesFromUserTemplatePath(),
+            'userOperations' => $this->getUserOperations(),
         ];
         echo self::$view->renderTemplate('guide/_partials/admin_globals', $adminGlobalsVariables);
     }
@@ -597,7 +563,7 @@ class Guide extends Plugin
     /**
      * Render admin globals used by Guide and Organizer editors
      */
-    public function _renderGuideDisplaysForPage()
+    public function renderGuideDisplaysForPage()
     {
         $uri = self::$plugin->placement->formatUri(Craft::$app->getRequest()->getFullUri());
 
@@ -636,7 +602,7 @@ class Guide extends Plugin
      *
      * @return string
      */
-    private function _renderGuidesForTemplateHook(string $template, $queries, $element = null): string
+    private function renderGuidesForTemplateHook(string $template, $queries, $element = null): string
     {
         $guideIds = [];
         $teleportMap = [];
@@ -671,7 +637,7 @@ class Guide extends Plugin
     /**
      * @return array
      */
-    private function _getTemplatesFromUserTemplatePath():array
+    private function getTemplatesFromUserTemplatePath():array
     {
         $templates = [
             'filenames' => ['__none__' => 'Select a Template'],
@@ -695,27 +661,5 @@ class Guide extends Plugin
         Craft::$app->getView()->setTemplateMode($oldMode);
 
         return $templates;
-    }
-
-    /**
-     * @return array
-     */
-    private function _getUserOperations():array
-    {
-        $operations = [
-            'deleteGuides' => false,
-            'editGuides' => false,
-            'useOrganizer' => false,
-        ];
-
-        $user = Craft::$app->getUser();
-
-        if ($user) {
-            $operations['deleteGuides'] = $user->getIsAdmin() || $user->checkPermission('deleteGuides');
-            $operations['editGuides'] = $user->getIsAdmin() || $user->checkPermission('editGuides');
-            $operations['useOrganizer'] = $user->getIsAdmin() || $user->checkPermission('useOrganizer');
-        }
-
-        return $operations;
     }
 }

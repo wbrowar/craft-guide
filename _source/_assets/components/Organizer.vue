@@ -143,7 +143,7 @@
             />
           </div>
           <div class="g-relative g-text-select-light" v-if="proEdition">
-            <div class="g-space-x-1 g-hidden xl:g-block">
+            <div class="g-space-x-1 g-mb-3 g-hidden g-border-b g-border-b-white/30 xl:g-block">
               <button
                 class="g-my-2 g-mr-1 g-text-white"
                 :class="[gridView === 'grid' ? 'g-opacity-100' : 'g-opacity-70']"
@@ -151,7 +151,7 @@
                 type="button"
                 @click="setGridView('grid')"
               >
-                <SvgGrid class="g-py-2 g-w-5 g-h-5" />
+                <SvgGrid class="g-w-6 g-h-6" />
               </button>
               <button
                 class="g-my-2 g-mr-1 g-text-white"
@@ -160,7 +160,7 @@
                 type="button"
                 @click="setGridView('list')"
               >
-                <SvgList class="g-py-2 g-w-5 g-h-5" />
+                <SvgList class="g-w-6 g-h-6" />
               </button>
             </div>
             <ul class="g-space-y-2">

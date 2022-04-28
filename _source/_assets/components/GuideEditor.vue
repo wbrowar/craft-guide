@@ -27,7 +27,7 @@
               type="button"
               @click="selectTab('publishing')"
             >
-              <SvgSettings class="g-w-6 g-h-6" :class="[currentTab === 'publishing' ? 'g-text-select-light' : null]" />
+              <SvgSettings class="g-mx-auto g-w-6 g-h-6" :class="[currentTab === 'publishing' ? 'g-text-select-light' : null]" />
             </button>
           </li>
           <li
@@ -41,7 +41,7 @@
               type="button"
               @click="selectTab('components')"
             >
-              <SvgPuzzle class="g-w-6 g-h-6" :class="[currentTab === 'components' ? 'g-text-select-light' : null]" />
+              <SvgPuzzle class="g-mx-auto g-w-6 g-h-6" :class="[currentTab === 'components' ? 'g-text-select-light' : null]" />
             </button>
           </li>
           <li
@@ -55,7 +55,7 @@
               type="button"
               @click="selectTab('images')"
             >
-              <SvgPhotograph class="g-w-6 g-h-6" :class="[currentTab === 'images' ? 'g-text-select-light' : null]" />
+              <SvgPhotograph class="g-mx-auto g-w-6 g-h-6" :class="[currentTab === 'images' ? 'g-text-select-light' : null]" />
             </button>
           </li>
           <li
@@ -69,7 +69,7 @@
               type="button"
               @click="selectTab('guides')"
             >
-              <SvgGuide class="g-w-6 g-h-6" :class="[currentTab === 'guides' ? 'g-text-select-light' : null]" />
+              <SvgGuide class="g-mx-auto g-w-6 g-h-6" :class="[currentTab === 'guides' ? 'g-text-select-light' : null]" />
             </button>
           </li>
           <li
@@ -83,7 +83,7 @@
               type="button"
               @click="selectTab('snippets')"
             >
-              <SvgAnnotation class="g-w-6 g-h-6" :class="[currentTab === 'snippets' ? 'g-text-select-light' : null]" />
+              <SvgAnnotation class="g-mx-auto g-w-6 g-h-6" :class="[currentTab === 'snippets' ? 'g-text-select-light' : null]" />
             </button>
           </li>
         </ul>

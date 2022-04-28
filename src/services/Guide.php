@@ -157,7 +157,7 @@ class Guide extends Component
         $record->contentSource = $model->contentSource;
         $record->contentUrl = $model->contentUrl;
         $record->summary = $model->summary;
-        $record->slug = $this->_getUniqueSlug($model->slug, $id ?? 0);
+        $record->slug = $this->getUniqueSlug($model->slug, $id ?? 0);
         $record->template = $model->template;
         $record->title = $model->title;
 
@@ -176,7 +176,7 @@ class Guide extends Component
      * @param $id int The ID of a guide that is being saved
      * @return string
      */
-    private function _getUniqueSlug(string $slug, int $id):string
+    private function getUniqueSlug(string $slug, int $id):string
     {
         // Get all current slugs
         $allGuideSlugs = Guides::find()->select(['slug', 'id'])->all();

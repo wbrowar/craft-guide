@@ -71,7 +71,7 @@ class GuideController extends Controller
 
         $title = !empty($params['title']) ? $params['title'] : 'Guide saved on ' . Date('F jS \a\t g:ia');
 
-        $slug = ($params['slug'] ?? false) ? $params['slug'] : $this->_generateSlugFromTitle($title);
+        $slug = ($params['slug'] ?? false) ? $params['slug'] : $this->generateSlugFromTitle($title);
 
         $guide = new GuideModel([
             'authorId' => $params['authorId'],
@@ -103,7 +103,7 @@ class GuideController extends Controller
      * @title string The text that is converted into the slug
      * @return string
      */
-    private function _generateSlugFromTitle(string $title):string
+    private function generateSlugFromTitle(string $title):string
     {
         return StringHelper::toKebabCase($title);
     }

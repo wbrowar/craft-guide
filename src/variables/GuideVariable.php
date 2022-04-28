@@ -80,7 +80,7 @@ class GuideVariable
                 $content = Template::raw(Guide::$view->renderString($templateString, $variables));
             }
         } catch (\Throwable $e) {
-            return $this->_error($e->getMessage() . ' in guide with the slug: ' . $slug, 'error');
+            return $this->error($e->getMessage() . ' in guide with the slug: ' . $slug, 'error');
         }
 
         if ($content ?? false) {
@@ -119,7 +119,7 @@ class GuideVariable
      * @param string $errorClass
      * @return string
      */
-    private function _error(string $error, string $errorClass): string
+    private function error(string $error, string $errorClass): string
     {
         $icon = Html::tag('span', '', [
             'data' => [

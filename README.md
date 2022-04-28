@@ -4,15 +4,14 @@ Craft CMS is intuitive. Marketing plans and organizational workflows—not so mu
 
 Guide was built to be a CMS manual, but Guide 3 is also a quick way to create widgets and unique Craft CP pages, without the use of a custom module or knowledge of PHP.
 
-## Guide 3 for Craft CMS 3
+## Guide 3 for Craft CMS 4
 
 ![Guide in the Control Panel](https://assets.wbrowar.com/guide/img/guide-overview.png)
 
 
 ## Requirements
 
-- This plugin requires Craft CMS 3.7 or later.
-- An evergreen browser that support CSS `aspect-ratio`.
+- This plugin requires Craft CMS 4.0 or later.
 
 ## Installation
 

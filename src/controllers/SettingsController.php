@@ -54,7 +54,7 @@ class SettingsController extends Controller
             case 'general':
                 $settings['assetVolume'] = $params['assetVolume'];
                 $settings['defaultTeleportMethod'] = $params['defaultTeleportMethod'];
-                $settings['templatePath'] = $this->_removeSlashFromEnd($params['templatePath']);
+                $settings['templatePath'] = $this->removeSlashFromEnd($params['templatePath']);
                 break;
             case 'variables':
                 $settings['clientName'] = $params['clientName'];
@@ -74,7 +74,7 @@ class SettingsController extends Controller
     /**
      * @return string
      */
-    private function _removeSlashFromEnd($path):string
+    private function removeSlashFromEnd($path):string
     {
         return preg_replace('{/$}', '', $path);
     }

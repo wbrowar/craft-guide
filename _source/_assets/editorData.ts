@@ -97,13 +97,13 @@ export const editorData: EditorComponent[] = [
     title: 'Markdown',
     group: 'components',
     code: `<div class="g-prose g-prose-sm">
-{% filter markdown('gfm') %}
+{% apply markdown('gfm') %}
 
 ## Heading
 
 Content
 
-{% endfilter %}
+{% endapply %}
 </div>`,
     summary: `<p>Render Markdown in your guide.</p>`,
     documentation: `<p>Use Craft’s "markdown" Twig filter to render markdown content.</p>`,
@@ -221,7 +221,7 @@ Content
 <div class="version">
   <h2 class="g-mb-6"><span>1.0.0</span> Aug 27, 2021</h2>
 <div class="g-prose g-prose-sm">
-{% filter markdown('gfm') %}
+{% apply markdown('gfm') %}
 
 ### &#x1F680; Added
 
@@ -239,7 +239,7 @@ Content
 
 - Features that have been removed.
 
-{% endfilter %}
+{% endapply %}
 </div>
 </div>
 {% endset %}
@@ -416,11 +416,11 @@ Content
 
   {% if assets|length %}
 <div class="g-prose g-prose-sm">
-{% filter markdown('gfm') %}
+{% apply markdown('gfm') %}
 
 These assets should be replaced with files using the extension: {{ acceptedExtensions|join(', ') }}
 
-{% endfilter %}
+{% endapply %}
 </div>
   <table class="g-table">
     <thead>
@@ -522,11 +522,11 @@ These assets should be replaced with files using the extension: {{ acceptedExten
 
   {% if assets|length %}
 <div class="g-prose g-prose-sm">
-{% filter markdown('gfm') %}
+{% apply markdown('gfm') %}
 
 These images should be replaced with a .jpg that is at least {{ width }}px wide.
 
-{% endfilter %}
+{% endapply %}
 </div>
   <table class="g-table">
     <thead>
@@ -570,11 +570,11 @@ These images should be replaced with a .jpg that is at least {{ width }}px wide.
 
   {% if assets|length %}
 <div class="g-prose g-prose-sm">
-{% filter markdown('gfm') %}
+{% apply markdown('gfm') %}
 
 These images are missing a focal point and might get cropped incorrectly.
 
-{% endfilter %}
+{% endapply %}
 </div>
   <table class="g-table">
     <thead>

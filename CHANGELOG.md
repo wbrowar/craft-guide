@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.2.0 - 2022-04-30
+
+### Added
+- Added support for Craft 4 [#70](https://github.com/wbrowar/craft-guide/issues/70)
+
+### Changed
+- Updated components to use `apply` tags instead of `filter`.
+
+### Removed
+- Removed depreceated UI Element class, `wbrowar\guide\fieldlayoutelements\GuideInclude`.
+
+
 ## 3.1.1 - 2022-03-27
 
 ### Added
