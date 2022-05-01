@@ -49,7 +49,6 @@ To install the plugin, you can find it in the [Craft Plugin Store](https://plugi
 Brought to you by [Will Browar](https://wbrowar.com)
 
 Here are some great open source projects that were used to help create this plugin:
-- [DDEV Local](https://ddev.readthedocs.io/)
 - [Nuxt.js](https://nuxtjs.org)
 - [Tailwind CSS](https://tailwindcss.com)
 - [Vite.js](https://vitejs.dev)

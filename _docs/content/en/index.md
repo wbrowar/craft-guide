@@ -13,7 +13,7 @@ Craft CMS is intuitive. Marketing plans and organizational workflows—not so mu
 
 Guide was built to be a CMS manual, but Guide 3 is also a quick way to create widgets and unique Craft CP pages, without the use of a custom module or the need for PHP.
 
-## Guide 3 for Craft CMS 3
+## Guide 3 for Craft CMS 4
 
 ![Guide in the Control Panel](https://wbrowar.us-east-1.linodeobjects.com/static/guide-docs/guide-cp-section.png?mtime=20210821152523&focal=none)
 

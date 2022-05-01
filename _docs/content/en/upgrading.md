@@ -1,5 +1,5 @@
 ---
-title: Upgrading from Guide 2
+title: Upgrading Guide
 description: 'Installing Guide'
 position: 103
 category: Getting started
@@ -10,13 +10,15 @@ fullscreen: false
 ## Upgrading from Craft 3 to Craft 4
 
 - Change any use of the `filter` tag (mostly in `{% filter markdown('gfm') %}`) to the `apply` tag.
-  - All components have been updated to use the `filter` tag.
+  - All component snippets have been updated to use the `filter` tag.
 
 ---
 
+## Upgrading from Guide 2 to Guide 3 in Craft 3
+
 Templates built for Guide 2 will mostly be compatible, however, Guide 3 introduces some breaking changes. Here are some things that need to be updated to convert a Guide 2 template for Guide 3:
 
-- All guides in Guide 3 are based in the Twig format. Markdown guides from Guide 2 should be wrapped in a `{% filter markdown('gfm') %}` twig tag, like this:
+- All guides in Guide 3 are based in the Twig format. Markdown guides from Guide 2 should be wrapped in a `{% apply markdown('gfm') %}` twig tag, like this:
     ```twig
     {% apply markdown('gfm') %}
     
