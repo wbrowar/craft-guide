@@ -40,7 +40,7 @@
   {%- endif %}
 {%- endblock %}
 
-{% macro getSrcSetFromObject(options) %}{% spaceless %}
+{% macro getSrcSetFromObject(options) %}{% apply spaceless %}
   {% set image = options.image ?? null %}
   {% set transforms = options.transforms ?? {} %}
   {% set suffix = options.suffix ?? null %}
@@ -48,4 +48,4 @@
   {% if (image ?? false) and (transforms|length) %}
     {% for transform in transforms %}{% if not loop.first %}, {% endif %}{{ image.getUrl(transform) }}{{ suffix }}{{ (transform.width ?? false) ? ' ' ~ transform.width ~ 'w' : '' }}{% endfor %}
   {% endif %}
-{% endspaceless %}{% endmacro %}
+{% endapply %}{% endmacro %}
