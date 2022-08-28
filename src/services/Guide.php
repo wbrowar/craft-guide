@@ -76,7 +76,9 @@ class Guide extends Component
             case 'one':
                 $guides = Guides::find()->where($params)->orderBy($orderBy)->one();
 
-                $guides->content = GuideHelpers::decodeEmoji($guides->content);
+                if ($guide ?? false) {
+                    $guides->content = GuideHelpers::decodeEmoji($guides->content);
+                }
 
                 break;
             case 'count':
