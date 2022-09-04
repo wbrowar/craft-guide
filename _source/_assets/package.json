@@ -7,30 +7,30 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "gsap": "^3.7.1",
-    "tailwindcss": "^2.2.7",
-    "@tailwindcss/typography": "^0.4.1",
-    "three": "^0.131.3",
-    "vue": "^3.2.3"
+    "gsap": "^3.11.1",
+    "tailwindcss": "^3.1.8",
+    "@tailwindcss/typography": "^0.5.7",
+    "three": "^0.144.0",
+    "vue": "^3.2.38"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.25.0",
-    "@typescript-eslint/parser": "^4.25.0",
-    "@types/node": "^16.4.13",
-    "@types/three": "^0.131.0",
-    "@vitejs/plugin-vue": "^1.2.5",
-    "@vue/compiler-sfc": "^3.1.5",
-    "@vue/eslint-config-prettier": "^6.0.0",
-    "@vue/eslint-config-typescript": "^7.0.0",
-    "autoprefixer": "^10.3.1",
-    "dotenv": "^8.2.0",
-    "eslint": "^7.31.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^3.4.0",
-    "eslint-plugin-vue": "^7.10.0",
-    "prettier": "^2.3.2",
-    "typescript": "^4.3.5",
-    "vite": "^2.5.0",
-    "vue3-ace-editor": "^2.0.2"
+    "@babel/types": "^7.18.13",
+    "@typescript-eslint/eslint-plugin": "^5.36.1",
+    "@typescript-eslint/parser": "^5.36.1",
+    "@types/node": "^18.7.14",
+    "@types/three": "^0.144.0",
+    "@vitejs/plugin-vue": "^3.0.3",
+    "@vue/eslint-config-prettier": "^7.0.0",
+    "@vue/eslint-config-typescript": "^11.0.0",
+    "autoprefixer": "^10.4.8",
+    "dotenv": "^16.0.2",
+    "eslint": "^8.23.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-vue": "^9.4.0",
+    "prettier": "^2.7.1",
+    "typescript": "^4.8.2",
+    "vite": "^3.0.9",
+    "vue3-ace-editor": "^2.2.2"
   }
 }

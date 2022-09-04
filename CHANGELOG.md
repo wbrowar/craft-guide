@@ -7,6 +7,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 3.2.1 - 2022-08-28
 
 ### Fixed
+- Fixed a Twig syntax error in Image components (thanks to @davidhellmann for the fix) [#78](https://github.com/wbrowar/craft-guide/pull/78)
+
+
+## 3.2.1 - 2022-08-28
+
+### Fixed
 - Fixes an error that occurs when a guide query doesn’t return a guide [#82](https://github.com/wbrowar/craft-guide/issues/82)
 
 

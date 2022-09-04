@@ -12,7 +12,8 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["./*"],
-    }
+    },
+    "skipLibCheck": true
   },
   "include": [
     "./*.ts", "./*.d.ts", "./*.vue", "./components/*.vue", "./types/*.d.ts"

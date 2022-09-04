@@ -1,46 +1,58 @@
 {
   "guide-admin.ts": {
-    "file": "assets/guide-admin.a89b3813.js",
+    "file": "assets/guide-admin.1b9d7044.js",
     "src": "guide-admin.ts",
     "isEntry": true,
     "imports": [
-      "_globals.30e98e7d.js",
-      "_SvgSettings.855fd4fd.js"
+      "__plugin-vue_export-helper.82d9560c.js",
+      "_SvgSettings.6e3e9d3c.js"
     ],
     "css": [
-      "assets/guide-admin.ea571cbd.css"
+      "assets/guide-admin.a93abe65.css"
     ]
   },
   "guide-display.ts": {
-    "file": "assets/guide-display.1cd71431.js",
+    "file": "assets/guide-display.cf80f541.js",
     "src": "guide-display.ts",
     "isEntry": true,
     "imports": [
-      "_globals.30e98e7d.js",
-      "_SvgSettings.855fd4fd.js"
+      "__plugin-vue_export-helper.82d9560c.js",
+      "_SvgSettings.6e3e9d3c.js"
     ],
     "css": [
-      "assets/guide-display.00ee3296.css"
+      "assets/guide-display.7c0ba033.css"
     ]
   },
   "guide-welcome.ts": {
-    "file": "assets/guide-welcome.81067b20.js",
+    "file": "assets/guide-welcome.ef139a14.js",
     "src": "guide-welcome.ts",
     "isEntry": true,
     "imports": [
-      "_globals.30e98e7d.js"
+      "__plugin-vue_export-helper.82d9560c.js"
     ],
     "css": [
-      "assets/guide-welcome.6d867880.css"
+      "assets/guide-welcome.80ac2d41.css"
     ]
   },
-  "_globals.30e98e7d.js": {
-    "file": "assets/globals.30e98e7d.js"
+  "__plugin-vue_export-helper.82d9560c.js": {
+    "file": "assets/_plugin-vue_export-helper.82d9560c.js"
   },
-  "_SvgSettings.855fd4fd.js": {
-    "file": "assets/SvgSettings.855fd4fd.js",
+  "_SvgSettings.6e3e9d3c.js": {
+    "file": "assets/SvgSettings.6e3e9d3c.js",
     "imports": [
-      "_globals.30e98e7d.js"
+      "__plugin-vue_export-helper.82d9560c.js"
     ]
+  },
+  "guide-admin.css": {
+    "file": "assets/guide-admin.a93abe65.css",
+    "src": "guide-admin.css"
+  },
+  "guide-welcome.css": {
+    "file": "assets/guide-welcome.80ac2d41.css",
+    "src": "guide-welcome.css"
+  },
+  "guide-display.css": {
+    "file": "assets/guide-display.7c0ba033.css",
+    "src": "guide-display.css"
   }
 }
