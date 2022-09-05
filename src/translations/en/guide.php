@@ -14,5 +14,8 @@
  * @since     2.0.0
  */
 return [
+    'Add' => 'Add',
+    'Copy' => 'Copy',
+    'Documentation' => 'Documentation',
     'Guide plugin loaded' => 'Guide plugin loaded',
 ];

@@ -1,3 +1,131 @@
+<script lang="ts" setup>
+import {computed, nextTick, onMounted, PropType, ref} from 'vue';
+import { log } from '../globals';
+import CraftFieldSelect from './CraftFieldSelect.vue';
+import CraftFieldText from './CraftFieldText.vue';
+import type { Placement, PlacementEditorGroup, PlacementGroup } from '../types/plugins';
+
+const emit = defineEmits(['canceled', 'saved']);
+const props = defineProps({
+  groups: Array as PropType<PlacementEditorGroup[]>,
+  placement: Object as PropType<Placement>,
+});
+
+const groupValue = ref('');
+const selectorValue = ref('');
+const uriValue = ref('');
+
+// Template refs
+const groupField = ref<InstanceType<typeof CraftFieldSelect>>();
+const uriField = ref<InstanceType<typeof CraftFieldText>>();
+const selectorField = ref<InstanceType<typeof CraftFieldText>>();
+
+const formErrors = computed(() => {
+  const errors = [];
+
+  if (groupValue.value === '') {
+    errors.push(`A group must be selected.`);
+  }
+  if (groupValue.value === 'uri' && selectorValue.value === '') {
+    errors.push(`Selector cannot be empty.`);
+  }
+  if (groupValue.value === 'uri' && uriValue.value === '') {
+    errors.push(`Page URI cannot be empty.`);
+  }
+
+  return errors;
+});
+const groupFieldOptions = computed(() => {
+  const options = [{ label: 'Guide', value: 'nav' }];
+
+  props.groups?.forEach((group) => {
+    let header = group.header;
+    let name = group.name;
+
+    switch (group.name) {
+      case 'assetVolume':
+        header = `Asset Volume: ${group.header}`;
+        break;
+      case 'categoryGroup':
+        header = `Category Group: ${group.header}`;
+        break;
+      case 'globalSet':
+        header = `Global Set: ${group.header}`;
+        break;
+    }
+
+    if (group.groupId) {
+      name += `|${group.groupId}`;
+    }
+
+    options.push({ label: header, value: name });
+  });
+
+  options.push({ label: 'Control Panel Pages', value: 'uri' });
+
+  return options;
+});
+const isNew = computed(() => props.placement?.id === null);
+const selectorFieldInstructions = computed(() => groupValue.value === 'uri'
+    ? 'Enter a CSS selector that can be reached on the page the guide will be displayed on.'
+    : 'Move the guide to an element on the page by entering a CSS selector that can be reached on the page the guide will be displayed on. Leave this blank to display the guide in its default location.'
+);
+
+function cancelEdit() {
+  emit('canceled');
+};
+function onGroupChanged(newValue: string) {
+  groupValue.value = newValue;
+};
+function onSelectorChanged(newValue: string) {
+  selectorValue.value = newValue !== '' ? newValue : '';
+};
+function onUriChanged(newValue: string) {
+  uriValue.value = newValue !== '' ? newValue : '';
+};
+function resetFields() {
+  nextTick(() => {
+    groupField.value.setFieldValue(
+        props.placement?.group + (props.placement?.groupId ? `|${props.placement.groupId}` : '') || 'nav'
+    );
+    uriField.value.setFieldValue(props.placement?.uri || '');
+    selectorField.value.setFieldValue(props.placement?.selector || '');
+  });
+};
+function saveEdit() {
+  if (props.placement) {
+    const saveValue = props.placement;
+
+    if (groupValue.value) {
+      const groupSplit: string[] = groupValue.value.split('|');
+
+      if (groupSplit[0]) {
+        saveValue.group = groupSplit[0] as PlacementGroup;
+      }
+      if (groupSplit[1]) {
+        saveValue.groupId = groupSplit[1];
+      }
+    }
+    if (selectorValue.value !== '') {
+      saveValue.selector = selectorValue.value;
+    }
+    if (uriValue.value !== '') {
+      saveValue.uri = uriValue.value;
+    }
+
+    emit('saved', saveValue);
+  }
+};
+
+onMounted(() => {
+  log('PlacementEditor loaded');
+});
+
+defineExpose({
+  resetFields,
+})
+</script>
+
 <template>
   <div class="g-grid g-grid-rows-[auto,1fr] g-relative g-h-full g-rounded-lg g-bg-matrix-block" v-if="placement">
     <div class="g-p-3 g-flex g-flex-nowrap g-items-center g-justify-between g-rounded-t-lg g-bg-matrix-titlebar">
@@ -44,136 +172,3 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent, PropType, reactive, toRefs } from 'vue';
-import { log } from '../globals';
-import CraftFieldSelect from './CraftFieldSelect.vue';
-import CraftFieldText from './CraftFieldText.vue';
-import { Placement, PlacementGroup } from '../types/plugins';
-
-export default defineComponent({
-  name: 'PlacementEditor',
-  components: {
-    CraftFieldSelect,
-    CraftFieldText,
-  },
-  props: {
-    groups: Array,
-    placement: Object as PropType<Placement>,
-  },
-  emits: ['canceled', 'saved'],
-  setup: () => {
-    const state = reactive({
-      groupValue: '',
-      selectorValue: '',
-      uriValue: '',
-    });
-
-    return { ...toRefs(state) };
-  },
-  computed: {
-    formErrors() {
-      const errors = [];
-
-      if (this.groupValue === '') {
-        errors.push(`A group must be selected.`);
-      }
-      if (this.groupValue === 'uri' && this.selectorValue === '') {
-        errors.push(`Selector cannot be empty.`);
-      }
-      if (this.groupValue === 'uri' && this.uriValue === '') {
-        errors.push(`Page URI cannot be empty.`);
-      }
-
-      return errors;
-    },
-    groupFieldOptions() {
-      const options = [{ label: 'Guide', value: 'nav' }];
-
-      this.groups?.forEach((group) => {
-        let header = group.header;
-        let name = group.name;
-
-        switch (group.name) {
-          case 'assetVolume':
-            header = `Asset Volume: ${group.header}`;
-            break;
-          case 'categoryGroup':
-            header = `Category Group: ${group.header}`;
-            break;
-          case 'globalSet':
-            header = `Global Set: ${group.header}`;
-            break;
-        }
-
-        if (group.groupId) {
-          name += `|${group.groupId}`;
-        }
-
-        options.push({ label: header, value: name });
-      });
-
-      options.push({ label: 'Control Panel Pages', value: 'uri' });
-
-      return options;
-    },
-    isNew() {
-      return this.placement?.id === null;
-    },
-    selectorFieldInstructions() {
-      return this.groupValue === 'uri'
-        ? 'Enter a CSS selector that can be reached on the page the guide will be displayed on.'
-        : 'Move the guide to an element on the page by entering a CSS selector that can be reached on the page the guide will be displayed on. Leave this blank to display the guide in its default location.';
-    },
-  },
-  methods: {
-    cancelEdit() {
-      this.$emit('canceled');
-    },
-    onGroupChanged(newValue) {
-      this.groupValue = newValue;
-    },
-    onSelectorChanged(newValue) {
-      this.selectorValue = newValue !== '' ? newValue : '';
-    },
-    onUriChanged(newValue) {
-      this.uriValue = newValue !== '' ? newValue : '';
-    },
-    resetFields() {
-      this.$nextTick(() => {
-        this.$refs.groupField.setFieldValue(
-          this.placement?.group + (this.placement?.groupId ? `|${this.placement.groupId}` : '') || 'nav'
-        );
-        this.$refs.uriField.setFieldValue(this.placement?.uri || '');
-        this.$refs.selectorField.setFieldValue(this.placement?.selector || '');
-      });
-    },
-    saveEdit() {
-      const saveValue = this.placement;
-
-      if (this.groupValue) {
-        const groupSplit = this.groupValue.split('|');
-
-        if (groupSplit[0]) {
-          saveValue.group = groupSplit[0];
-        }
-        if (groupSplit[1]) {
-          saveValue.groupId = parseFloat(groupSplit[1]);
-        }
-      }
-      if (this.selectorValue !== '') {
-        saveValue.selector = this.selectorValue;
-      }
-      if (this.uriValue !== '') {
-        saveValue.uri = this.uriValue;
-      }
-
-      this.$emit('saved', saveValue);
-    },
-  },
-  mounted() {
-    log('PlacementEditor loaded');
-  },
-});
-</script>

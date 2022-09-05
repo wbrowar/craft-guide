@@ -1,3 +1,28 @@
+<script lang="ts" setup>
+import { ref } from 'vue';
+
+const emit = defineEmits(['closed', 'opened']);
+const props = defineProps({
+  teleportTo: { type: String, default: null },
+});
+
+const isOpen = ref(false);
+
+function close() {
+  isOpen.value = false;
+  emit('closed');
+};
+function open() {
+  isOpen.value = true;
+  emit('opened');
+};
+
+defineExpose({
+  close,
+  open,
+})
+</script>
+
 <template>
   <Teleport :disabled="!teleportTo" :to="teleportTo">
     <div
@@ -11,36 +36,6 @@
     </div>
   </Teleport>
 </template>
-
-<script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
-
-export default defineComponent({
-  name: 'Modal',
-  components: {},
-  props: {
-    teleportTo: { type: String, default: null },
-  },
-  emits: ['closed', 'opened'],
-  setup: () => {
-    const state = reactive({
-      isOpen: false,
-    });
-
-    return { ...toRefs(state) };
-  },
-  methods: {
-    close() {
-      this.isOpen = false;
-      this.$emit('closed');
-    },
-    open() {
-      this.isOpen = true;
-      this.$emit('opened');
-    },
-  },
-});
-</script>
 
 <style scoped>
 .guide-modal {

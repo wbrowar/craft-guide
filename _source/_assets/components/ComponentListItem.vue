@@ -1,3 +1,32 @@
+<script lang="ts" setup>
+import { t } from "../globals";
+
+const emit = defineEmits(['documentation-clicked', 'insert-clicked']);
+const props = defineProps({
+  code: { type: String, required: true },
+  docs: Object,
+  imageSrcset: String,
+  title: { type: String, required: true },
+});
+
+function onCopy() {
+  navigator.clipboard.writeText(props.code);
+};
+function onDocumentation() {
+  emit('documentation-clicked', {
+    code: props.code,
+    description: props.docs?.description || null,
+    imageSrcset: props.imageSrcset || null,
+    props: props.docs?.props || null,
+    summary: props.docs?.summary || null,
+    title: props.title,
+  });
+};
+function onInsert() {
+  emit('insert-clicked', props.code);
+};
+</script>
+
 <template>
   <div class="g-flex g-flex-nowrap g-bg-matrix-block g-duration-150 hover:g-bg-matrix-titlebar">
     <button type="button" @click="onDocumentation" v-if="imageSrcset">
@@ -7,46 +36,10 @@
       <h4>{{ title }}</h4>
       <p v-html="docs.summary" v-if="docs?.summary"></p>
       <div class="g-space-x-1">
-        <button class="btn small icon add g-mt-1" type="button" @click="onInsert">Add</button>
-        <button class="btn small icon copy g-mt-1" type="button" @click="onCopy">Copy</button>
-        <button class="btn small g-mt-1" type="button" @click="onDocumentation" v-if="docs">Documentation</button>
+        <button class="btn small icon add g-mt-1" type="button" @click="onInsert">{{ t['Add'] }}</button>
+        <button class="btn small icon copy g-mt-1" type="button" @click="onCopy">{{ t['Copy'] }}</button>
+        <button class="btn small g-mt-1" type="button" @click="onDocumentation" v-if="docs">{{ t['Documentation'] }}</button>
       </div>
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-  name: 'ComponentListItem',
-  components: {},
-  props: {
-    code: { type: String, required: true },
-    docs: Object,
-    imageSrcset: String,
-    title: { type: String, required: true },
-  },
-  emits: ['documentation-clicked', 'insert-clicked'],
-  computed: {},
-  methods: {
-    onCopy() {
-      navigator.clipboard.writeText(this.code);
-    },
-    onDocumentation() {
-      this.$emit('documentation-clicked', {
-        code: this.code,
-        description: this.docs?.description || null,
-        imageSrcset: this.imageSrcset || null,
-        props: this.docs?.props || null,
-        summary: this.docs?.summary || null,
-        title: this.title,
-      });
-    },
-    onInsert() {
-      this.$emit('insert-clicked', this.code);
-    },
-  },
-  // mounted() {},
-});
-</script>

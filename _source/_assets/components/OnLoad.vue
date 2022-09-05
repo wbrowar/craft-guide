@@ -1,12 +1,11 @@
-<template></template>
+<script lang="ts" setup>
+import { defineEmits, onBeforeMount } from 'vue';
 
-<script lang="ts">
-import { defineComponent, defineEmits, onMounted } from 'vue';
+const emit = defineEmits(['loaded']);
 
-export default defineComponent({
-  emits: ['loaded'],
-  created() {
-    this.$emit('loaded');
-  },
+onBeforeMount(() => {
+  emit('loaded');
 });
 </script>
+
+<template></template>

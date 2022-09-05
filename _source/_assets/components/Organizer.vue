@@ -1,3 +1,245 @@
+<script lang="ts" setup>
+import { computed, onBeforeMount, onMounted, ref } from 'vue';
+import { devMode, guides, log, proEdition, settings, userOperations } from '../globals';
+import Modal from './Modal.vue';
+import OrganizerDropZone from './OrganizerDropZone.vue';
+import PlacementEditor from './PlacementEditor.vue';
+import SvgGrid from './SvgGrid.vue';
+import SvgList from './SvgList.vue';
+import type {
+  Guide,
+  OrganizerGridView,
+  OrganizerGroup,
+  OrganizerGroupFilter,
+  Placement,
+  PlacementGroup,
+  PluginSettings,
+  PluginUserOperations,
+} from '~/types/plugins';
+
+declare global {
+  interface Window { Craft: any; }
+}
+
+const props = defineProps({
+  actionUrlGetAllPlacements: { type: String, required: true },
+  cpTrigger: String,
+  groupsData: { type: String, required: true },
+  isNew: { type: Boolean, default: false },
+});
+
+const currentEditPlacement = ref(null as Placement | null);
+const currentPreparingGuideId = ref(null as Placement | null);
+const gridView = ref<OrganizerGridView>('grid');
+const groups = ref<OrganizerGroup[]>(JSON.parse(props.groupsData));
+const groupFilters = ref<OrganizerGroupFilter[]>([]);
+const placements = ref<Placement[]>([]);
+const selectedGroupFilters = ref<PlacementGroup[]>([]);
+
+// Template refs
+const editModal = ref<InstanceType<typeof Modal>>();
+const placementEditor = ref<InstanceType<typeof PlacementEditor>>();
+
+const filteredDropZones = computed(() => proEdition
+    ? groups.value.filter((group) => {
+      return selectedGroupFilters.value.includes(group.name);
+    }) : []
+);
+
+function addPlacementForGuide(guide: Guide, group: PlacementGroup | null = null, groupId: string | null = null) {
+  const placement: Placement = {
+    access: 'all',
+    group: group,
+    groupId: groupId,
+    guideId: guide.id,
+    id: null,
+    portalMethod: 'append',
+    selector: null,
+    theme: 'default',
+    uri: null,
+  };
+
+  if (proEdition) {
+    if (group) {
+      log('Adding placement for guide', guide, group, groupId);
+      savePlacement(placement);
+    } else {
+      editPlacement(placement);
+    }
+  } else {
+    placement.group = 'nav';
+    placement.groupId = null;
+    savePlacement(placement);
+  }
+};
+async function deletePlacement(placement: Placement) {
+  await window.Craft?.postActionRequest(
+      'guide/placement/delete-placement',
+      { data: JSON.stringify(placement) },
+      (response: any, textStatus: any, request: any) => {
+        log('Deleting placement', response, textStatus, request);
+        getPlacementList();
+
+        if (response.status === 'success') {
+          window.Craft?.cp?.displayNotice('Organizer Saved');
+        } else {
+          window.Craft?.cp?.displayError(response.data.error);
+        }
+      }
+  );
+};
+function editPlacement(placement: Placement) {
+  if (placementEditor.value) {
+    editModal.value.open();
+    currentEditPlacement.value = {...placement};
+    placementEditor.value.resetFields();
+  }
+};
+function editPlacementClose(placement = null) {
+  if (placement) {
+    savePlacement(placement);
+  }
+  editModal.value.close();
+  currentEditPlacement.value = null;
+};
+async function getPlacementList() {
+  await window.Craft?.postActionRequest(
+      'guide/placement/get-all-placements',
+      null,
+      (response: any, textStatus: any, request: any) => {
+        log('Getting placements', response, textStatus, request);
+        placements.value = response;
+      }
+  );
+};
+function onDropOnDropZone(e: any, group: PlacementGroup, groupId = null) {
+  log('Dropping onto zone', group, groupId);
+  if (e.dataTransfer.getData('placementId') === 'new') {
+    const guide = guides.find((item) => {
+      return item.id === parseInt(e.dataTransfer.getData('guideId'));
+    });
+
+    if (guide) {
+      addPlacementForGuide(guide, group, groupId);
+    }
+  } else {
+    updatePlacement(parseInt(e.dataTransfer.getData('placementId')), group, groupId);
+  }
+};
+function onGuideDragStart(e: any, guideId: string) {
+  e.dataTransfer.dropEffect = 'move';
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('placementId', 'new');
+  e.dataTransfer.setData('guideId', guideId);
+};
+function placementsForGroup(group: string, groupId: string | null = null) {
+  return placements.value.filter((placement) => {
+    return placement.group === group && (groupId ? placement.groupId === groupId : true);
+  });
+};
+async function savePlacement(placement: Placement) {
+  if (placement.group !== 'uri') {
+    placement.uri = null;
+  }
+
+  await window.Craft?.postActionRequest(
+      'guide/placement/save-placement',
+      { data: JSON.stringify(placement) },
+      (response: any, textStatus: any, request: any) => {
+        log('Saving placement', response, textStatus, request);
+        getPlacementList();
+
+        if (response.status === 'success') {
+          window.Craft?.cp?.displayNotice('Organizer Saved');
+        } else {
+          window.Craft?.cp?.displayError(response.data.error);
+        }
+      }
+  );
+};
+function setGridView(view: OrganizerGridView) {
+  gridView.value = view;
+  localStorage.setItem('guide:organizer:gridView', view);
+};
+function toggleSelectedGroupFilter(value: PlacementGroup) {
+  const index = selectedGroupFilters.value.indexOf(value);
+
+  if (index === -1) {
+    selectedGroupFilters.value.push(value);
+  } else {
+    selectedGroupFilters.value.splice(index, 1);
+  }
+
+  localStorage.setItem('guide:organizer:selectedGroupFilters', JSON.stringify(selectedGroupFilters.value));
+};
+function updatePlacement(placementId: number, group: PlacementGroup, groupId = null) {
+  log(`Updating placement: ${placementId} group to: ${group}`);
+  placements.value.forEach((placement) => {
+    log(
+        'Updating placement?',
+        placement.groupId !== groupId,
+        placement.groupId,
+        typeof placement.groupId,
+        groupId,
+        typeof groupId
+    );
+    if (
+        placement.id === placementId &&
+        (!groupId ? placement.group !== group : true) &&
+        (groupId && placement.groupId ? parseInt(placement.groupId) !== groupId : true)
+    ) {
+      placement.group = group;
+      placement.groupId = groupId || null;
+      savePlacement(placement);
+    }
+  });
+};
+function cpUrl(uri: string) {
+  return props.cpTrigger ? `/${props.cpTrigger}/${uri}` : `/${uri}`;
+};
+
+onBeforeMount(() => {
+});
+
+onMounted(() => {
+  const contentEl = document.getElementById('content');
+  if (contentEl) {
+    contentEl.style.padding = '0px';
+  }
+
+  // Use group data to set filters
+  const userSelectedGroupFilters: PlacementGroup[] = [];
+  console.log(groups)
+  groups.value?.forEach((group) => {
+    const filter = { label: group.label, value: group.name };
+    if (!userSelectedGroupFilters.includes(group.name)) {
+      groupFilters.value.push(filter);
+      userSelectedGroupFilters.push(group.name);
+    }
+  });
+
+  // Set default filters based on user localstorage
+  if (localStorage.getItem('guide:organizer:selectedGroupFilters')) {
+    selectedGroupFilters.value = JSON.parse(localStorage.getItem('guide:organizer:selectedGroupFilters') as string);
+  } else {
+    selectedGroupFilters.value = userSelectedGroupFilters.filter((name) => {
+      return !(['assetVolume', 'categoryGroup', 'globalSet', 'user']).includes(name);
+    });
+  }
+
+  if (
+      localStorage.getItem('guide:organizer:gridView') === 'list' ||
+      localStorage.getItem('guide:organizer:gridView') === 'grid'
+  ) {
+    gridView.value = localStorage.getItem('guide:organizer:gridView') as 'list' | 'grid';
+  }
+
+  getPlacementList();
+
+  log('Organizer loaded');
+});
+</script>
+
 <template>
   <div class="g-grid g-grid-cols-[minmax(150px,300px),minmax(400px,1fr)] g-relative g-overflow-hidden">
     <div class="g-bg-white g-rounded-l-lg g-min-h-[650px] g-h-admin-window g-overflow-x-auto">
@@ -204,243 +446,3 @@
     <a class="btn add icon submit" :href="cpUrl('guide/new')" v-if="userOperations.editGuides">New Guide</a>
   </Teleport>
 </template>
-
-<script lang="ts">
-import { defineComponent, PropType, reactive, toRefs } from 'vue';
-import { devMode, guides, log, proEdition, settings, userOperations } from '../globals';
-import Modal from './Modal.vue';
-import OrganizerDropZone from './OrganizerDropZone.vue';
-import PlacementEditor from './PlacementEditor.vue';
-import SvgGrid from './SvgGrid.vue';
-import SvgList from './SvgList.vue';
-import { Guide, Placement, PlacementGroup, PluginSettings, PluginUserOperations } from '~/types/plugins';
-
-export default defineComponent({
-  name: 'Organizer',
-  components: {
-    Modal,
-    OrganizerDropZone,
-    PlacementEditor,
-    SvgGrid,
-    SvgList,
-  },
-  props: {
-    actionUrlGetAllPlacements: { type: String, required: true },
-    cpTrigger: String,
-    groupsData: { type: String, required: true },
-    isNew: { type: Boolean, default: false },
-  },
-  setup: (props) => {
-    const state = reactive({
-      currentEditPlacement: null as Placement | null,
-      currentPreparingGuideId: null as Placement | null,
-      devMode,
-      gridView: 'grid' as 'list' | 'grid',
-      groups: JSON.parse(props.groupsData),
-      groupFilters: [],
-      guides,
-      placements: [] as Placement[],
-      proEdition,
-      settings,
-      selectedGroupFilters: [] as PlacementGroup[],
-      userOperations,
-    });
-
-    // Use group data to set filters
-    const selectedGroupFilters: PlacementGroup[] = [];
-    state.groups?.forEach((group) => {
-      const filter = { label: group.label, value: group.name };
-      if (!selectedGroupFilters.includes(group.name)) {
-        state.groupFilters.push(filter);
-        selectedGroupFilters.push(group.name);
-      }
-    });
-
-    // Set default filters based on user localstorage
-    if (localStorage.getItem('guide:organizer:selectedGroupFilters')) {
-      state.selectedGroupFilters = JSON.parse(localStorage.getItem('guide:organizer:selectedGroupFilters'));
-    } else {
-      state.selectedGroupFilters = selectedGroupFilters.filter((name) => {
-        return !(['assetVolume', 'categoryGroup', 'globalSet', 'user'] as PlacementGroup).includes(name);
-      });
-    }
-
-    if (
-      localStorage.getItem('guide:organizer:gridView') === 'list' ||
-      localStorage.getItem('guide:organizer:gridView') === 'grid'
-    ) {
-      state.gridView = localStorage.getItem('guide:organizer:gridView') as 'list' | 'grid';
-    }
-
-    return { ...toRefs(state) };
-  },
-  computed: {
-    filteredDropZones() {
-      return this.proEdition
-        ? this.groups.filter((group) => {
-            return this.selectedGroupFilters.includes(group.name);
-          })
-        : [];
-    },
-  },
-  methods: {
-    addPlacementForGuide(guide, group: PlacementGroup = null, groupId: string = null) {
-      const placement: Placement = {
-        access: 'all',
-        group: group,
-        groupId: groupId,
-        guideId: guide.id,
-        id: null,
-        portalMethod: 'append',
-        selector: null,
-        theme: 'default',
-        uri: null,
-      };
-
-      if (this.proEdition) {
-        if (group) {
-          log('Adding placement for guide', guide, group, groupId);
-          this.savePlacement(placement);
-        } else {
-          this.editPlacement(placement);
-        }
-      } else {
-        placement.group = 'nav';
-        placement.groupId = null;
-        this.savePlacement(placement);
-      }
-    },
-    async deletePlacement(placement) {
-      await window.Craft?.postActionRequest(
-        'guide/placement/delete-placement',
-        { data: JSON.stringify(placement) },
-        (response, textStatus, request) => {
-          log('Deleting placement', response, textStatus, request);
-          this.getPlacementList();
-
-          if (response.status === 'success') {
-            window.Craft?.cp?.displayNotice('Organizer Saved');
-          } else {
-            window.Craft?.cp?.displayError(response.data.error);
-          }
-        }
-      );
-    },
-    editPlacement(placement) {
-      this.$refs.editModal.open();
-      this.currentEditPlacement = { ...placement };
-      this.$refs.placementEditor.resetFields();
-    },
-    editPlacementClose(placement = null) {
-      if (placement) {
-        this.savePlacement(placement);
-      }
-      this.$refs.editModal.close();
-      this.currentEditPlacement = null;
-    },
-    async getPlacementList() {
-      await window.Craft?.postActionRequest(
-        'guide/placement/get-all-placements',
-        null,
-        (response, textStatus, request) => {
-          log('Getting placements', response, textStatus, request);
-          this.placements = response;
-        }
-      );
-    },
-    onDropOnDropZone(e, group, groupId = null) {
-      log('Dropping onto zone', group, groupId);
-      if (e.dataTransfer.getData('placementId') === 'new') {
-        const guide = this.guides.find((item) => {
-          return item.id === parseInt(e.dataTransfer.getData('guideId'));
-        });
-
-        this.addPlacementForGuide(guide, group, groupId);
-      } else {
-        this.updatePlacement(parseInt(e.dataTransfer.getData('placementId')), group, groupId);
-      }
-    },
-    onGuideDragStart(e, guideId) {
-      e.dataTransfer.dropEffect = 'move';
-      e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('placementId', 'new');
-      e.dataTransfer.setData('guideId', guideId);
-    },
-    placementsForGroup(group: string, groupId: string | null = null) {
-      return this.placements.filter((placement) => {
-        return placement.group === group && (groupId ? placement.groupId === groupId : true);
-      });
-    },
-    async savePlacement(placement: Placement) {
-      if (placement.group !== 'uri') {
-        placement.uri = null;
-      }
-
-      await window.Craft?.postActionRequest(
-        'guide/placement/save-placement',
-        { data: JSON.stringify(placement) },
-        (response, textStatus, request) => {
-          log('Saving placement', response, textStatus, request);
-          this.getPlacementList();
-
-          if (response.status === 'success') {
-            window.Craft?.cp?.displayNotice('Organizer Saved');
-          } else {
-            window.Craft?.cp?.displayError(response.data.error);
-          }
-        }
-      );
-    },
-    setGridView(view) {
-      this.gridView = view;
-      localStorage.setItem('guide:organizer:gridView', view);
-    },
-    toggleSelectedGroupFilter(value) {
-      const index = this.selectedGroupFilters.indexOf(value);
-
-      if (index === -1) {
-        this.selectedGroupFilters.push(value);
-      } else {
-        this.selectedGroupFilters.splice(index, 1);
-      }
-
-      localStorage.setItem('guide:organizer:selectedGroupFilters', JSON.stringify(this.selectedGroupFilters));
-    },
-    updatePlacement(placementId, group, groupId = null) {
-      log(`Updating placement: ${placementId} group to: ${group}`);
-      this.placements.forEach((placement) => {
-        log(
-          'Updating placement?',
-          placement.groupId !== groupId,
-          placement.groupId,
-          typeof placement.groupId,
-          groupId,
-          typeof groupId
-        );
-        if (
-          placement.id === placementId &&
-          (!groupId ? placement.group !== group : true) &&
-          (groupId ? parseInt(placement.groupId) !== groupId : true)
-        ) {
-          placement.group = group;
-          placement.groupId = groupId || null;
-          this.savePlacement(placement);
-        }
-      });
-    },
-    cpUrl(uri) {
-      return this.cpTrigger ? `/${this.cpTrigger}/${uri}` : `/${uri}`;
-    },
-  },
-  mounted() {
-    const contentEl = document.getElementById('content');
-    if (contentEl) {
-      contentEl.style.padding = '0px';
-    }
-
-    this.getPlacementList();
-
-    log('Organizer loaded');
-  },
-});
-</script>

@@ -12,7 +12,11 @@ module.exports = {
     '@vue/prettier',
     '@vue/prettier/@typescript-eslint',
   ],
-  ignorePatterns: ['../_craft/**/*.js'],
+  overrides: [
+    {
+      "files": ["{**/*,*}.{js,ts,jsx,tsx,html,vue}"],
+    }
+    ],
   parserOptions: {
     ecmaVersion: 2021,
   },

@@ -1,10 +1,111 @@
+<script lang="ts" setup>
+import { computed, onMounted, ref } from 'vue';
+import { guides, log, userOperations } from '../globals';
+import CraftFieldSelect from './CraftFieldSelect.vue';
+import type { Placement } from '../types/plugins';
+
+const props = defineProps({
+  placementId: String,
+  placementInlineEditor: { type: String, required: true },
+});
+
+const guideValue = ref();
+const placement = ref<Placement>();
+const placementSaved = ref(false);
+
+placement.value = {
+  access: 'all',
+  group: 'uiElement',
+  groupId: props.placementInlineEditor,
+  guideId: null,
+  id: props.placementId ? parseFloat(props.placementId) : null,
+  portalMethod: 'append',
+  selector: null,
+  theme: 'default',
+  uri: null,
+};
+
+// Template refs
+const guideField = ref<InstanceType<typeof CraftFieldSelect>>();
+
+const guideFieldOptions = computed(() => {
+  const options = [{ label: 'Select One', value: '__none__' }];
+
+  guides.forEach((guide) => {
+    options.push({ label: guide.title, value: guide.slug });
+  });
+
+  return options;
+});
+
+
+async function deletePlacement() {
+  if (placement.value?.id) {
+    await window.Craft?.postActionRequest(
+        'guide/placement/delete-placement',
+        { data: JSON.stringify(placement.value) },
+        (response: any, textStatus: any, request: any) => {
+          log('Deleting placement', response, textStatus, request);
+          placementSaved.value = true;
+
+          if (response.status === 'success') {
+            window.Craft?.cp?.displayNotice('Guide removed');
+          } else {
+            window.Craft?.cp?.displayError(response.data.error);
+          }
+        }
+    );
+  }
+};
+function onGroupChanged(newValue: string) {
+  guideValue.value = newValue;
+};
+function onSaveClicked() {
+  if (guideValue.value === '__none__') {
+    deletePlacement();
+  } else {
+    savePlacement();
+  }
+};
+async function savePlacement() {
+  const selectedGuide = guides.find((guide) => {
+    return guide.slug === guideValue.value;
+  });
+
+  if (placement.value && selectedGuide) {
+    placement.value.guideId = selectedGuide.id;
+  }
+
+  await window.Craft?.postActionRequest(
+      'guide/placement/save-placement',
+      { data: JSON.stringify(placement.value) },
+      (response: any, textStatus: any, request: any) => {
+        log('Saving placement', response, textStatus, request);
+        placementSaved.value = true;
+
+        if (response.status === 'success') {
+          window.Craft?.cp?.displayNotice('Guide UI element updated');
+        } else {
+          window.Craft?.cp?.displayError(response.data.error);
+        }
+      }
+  );
+};
+
+onMounted(() => {
+  guideField.value.setFieldValue(guideFieldOptions.value[0].value);
+
+  log('PlacementInlineEditor loaded');
+})
+</script>
+
 <template>
   <div v-if="placementInlineEditor">
     <div v-if="placementSaved">
       <p v-if="guideValue === '__none__'">Guide removed. Please reload this page and select another guide.</p>
       <p v-else>Guide added. Please reload this page to see the guide displayed here.</p>
     </div>
-    <div v-if="userOperations.useOrganizer">
+    <div v-if="!placementSaved && userOperations.useOrganizer">
       <div v-if="guides.length">
         <CraftFieldSelect
           ref="guideField"
@@ -22,114 +123,3 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
-import { guides, log, userOperations } from '../globals';
-import CraftFieldSelect from './CraftFieldSelect.vue';
-import { Placement } from '../types/plugins';
-
-export default defineComponent({
-  name: 'PlacementInlineEditor',
-  components: {
-    CraftFieldSelect,
-  },
-  props: {
-    placementId: String,
-    placementInlineEditor: { type: String, required: true },
-  },
-  setup: (props) => {
-    const state = reactive({
-      guides,
-      guideValue: null,
-      placement: null as Placement,
-      placementSaved: false,
-      userOperations,
-    });
-
-    state.placement = {
-      access: 'all',
-      group: 'uiElement',
-      groupId: props.placementInlineEditor,
-      guideId: null,
-      id: parseFloat(props.placementId) || null,
-      portalMethod: 'append',
-      selector: null,
-      theme: 'default',
-      uri: null,
-    };
-
-    return { ...toRefs(state) };
-  },
-  computed: {
-    guideFieldOptions() {
-      const options = [{ label: 'Select One', value: '__none__' }];
-
-      this.guides.forEach((guide) => {
-        options.push({ label: guide.title, value: guide.slug });
-      });
-
-      return options;
-    },
-  },
-  methods: {
-    async deletePlacement() {
-      if (this.placement?.id) {
-        await window.Craft?.postActionRequest(
-          'guide/placement/delete-placement',
-          { data: JSON.stringify(this.placement) },
-          (response, textStatus, request) => {
-            log('Deleting placement', response, textStatus, request);
-            this.placementSaved = true;
-
-            if (response.status === 'success') {
-              window.Craft?.cp?.displayNotice('Guide removed');
-            } else {
-              window.Craft?.cp?.displayError(response.data.error);
-            }
-          }
-        );
-      }
-    },
-    onGroupChanged(newValue) {
-      this.guideValue = newValue;
-    },
-    onSaveClicked() {
-      if (this.guideValue === '__none__') {
-        this.deletePlacement();
-      } else {
-        this.savePlacement();
-      }
-    },
-    async savePlacement() {
-      const selectedGuide = this.guides.find((guide) => {
-        return guide.slug === this.guideValue;
-      });
-
-      if (selectedGuide) {
-        this.placement.guideId = selectedGuide.id;
-      }
-
-      await window.Craft?.postActionRequest(
-        'guide/placement/save-placement',
-        { data: JSON.stringify(this.placement) },
-        (response, textStatus, request) => {
-          log('Saving placement', response, textStatus, request);
-          this.placementSaved = true;
-
-          if (response.status === 'success') {
-            window.Craft?.cp?.displayNotice('Guide UI element updated');
-          } else {
-            window.Craft?.cp?.displayError(response.data.error);
-          }
-        }
-      );
-    },
-  },
-  mounted() {
-    this.$refs.guideField.setFieldValue(this.guideFieldOptions[0].value);
-
-    log('PlacementInlineEditor loaded');
-  },
-});
-</script>

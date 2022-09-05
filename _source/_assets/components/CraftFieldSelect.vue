@@ -1,3 +1,33 @@
+<script lang="ts" setup>
+import { ref, watch } from 'vue';
+
+const emit = defineEmits(['value-changed']);
+const props = defineProps({
+  fieldAttributes: Object,
+  instructions: String,
+  label: { type: String, required: true },
+  name: { type: String, required: true },
+  options: { type: Array, required: true },
+  placeholder: String,
+  required: { type: Boolean, default: false },
+  startingValue: { type: String, default: '' },
+});
+
+const fieldValue = ref(JSON.parse(JSON.stringify(props.startingValue)));
+
+function setFieldValue(newValue: string) {
+  fieldValue.value = newValue;
+};
+
+watch(fieldValue, (fieldValue) => {
+  emit('value-changed', fieldValue);
+})
+
+defineExpose({
+  setFieldValue,
+});
+</script>
+
 <template>
   <div :id="`${name}-field`" class="field">
     <div class="heading">
@@ -21,42 +51,3 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
-
-export default defineComponent({
-  name: 'ComponentListItem',
-  components: {},
-  props: {
-    fieldAttributes: Object,
-    instructions: String,
-    label: { type: String, required: true },
-    name: { type: String, required: true },
-    options: { type: Array, required: true },
-    placeholder: String,
-    required: { type: Boolean, default: false },
-    startingValue: { type: String, default: '' },
-  },
-  emits: ['value-changed'],
-  setup: (props) => {
-    const state = reactive({
-      fieldValue: '',
-    });
-
-    state.fieldValue = JSON.parse(JSON.stringify(props.startingValue));
-
-    return { ...toRefs(state) };
-  },
-  methods: {
-    setFieldValue(newValue) {
-      this.fieldValue = newValue;
-    },
-  },
-  watch: {
-    fieldValue() {
-      this.$emit('value-changed', this.fieldValue);
-    },
-  },
-});
-</script>

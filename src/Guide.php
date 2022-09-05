@@ -574,12 +574,15 @@ class Guide extends Plugin
             ];
         }
 
+        $translationsFile = require('translations/en/guide.php');
+
         $adminGlobalsVariables = [
             'assetComponents' => self::$plugin->guideComponents->getAssetComponents(),
             'guides' => $guidesData,
             'proEdition' => self::$pro,
             'settings' => self::$settings,
             'templates' => $this->getTemplatesFromUserTemplatePath(),
+            'translationKeys' => array_keys($translationsFile),
             'userOperations' => $this->getUserOperations(),
         ];
         echo self::$view->renderTemplate('guide/_partials/admin_globals', $adminGlobalsVariables);

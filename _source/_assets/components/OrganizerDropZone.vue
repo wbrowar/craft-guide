@@ -1,3 +1,46 @@
+<script lang="ts" setup>
+import { onMounted, PropType, ref } from 'vue';
+import { log, proEdition } from '../globals';
+import SvgClose from './SvgClose.vue';
+import SvgEdit from './SvgEdit.vue';
+import type { Guide, Placement } from '../types/plugins';
+
+const emit = defineEmits(['edit-placement-clicked', 'delete-placement-clicked']);
+const props = defineProps({
+  description: String,
+  header: String,
+  headerSize: { type: Number, default: 2 },
+  group: { type: String, required: true },
+  guides: { type: Array as PropType<Guide[]>, required: true },
+  placements: { type: Array as PropType<Placement[]>, required: true },
+});
+
+const confirmDelete = ref(false);
+
+
+function guideForPlacement(guideId: number): Guide | undefined {
+  return props.guides.find((item) => {
+    return item.id === guideId;
+  });
+};
+function onPlacementDragStart(e: any, placementId: string, guideId: string) {
+  e.dataTransfer.dropEffect = 'move';
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('placementId', placementId);
+  e.dataTransfer.setData('guideId', guideId);
+};
+function onDeletePlacementClicked(placement: Placement) {
+  emit('delete-placement-clicked', placement);
+};
+function onEditPlacementClicked(placement: Placement) {
+  emit('edit-placement-clicked', placement);
+};
+
+onMounted(() => {
+  log('OrganizerDropZone loaded');
+});
+</script>
+
 <template>
   <div class="g-rounded-lg g-border g-border-solid g-border-matrix-border g-bg-matrix-block">
     <div
@@ -68,58 +111,3 @@
     </ul>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent, PropType, reactive, toRefs } from 'vue';
-import { log, proEdition } from '../globals';
-import SvgClose from './SvgClose.vue';
-import SvgEdit from './SvgEdit.vue';
-import { Guide, Placement } from '../types/plugins';
-
-export default defineComponent({
-  name: 'OrganizerDropZone',
-  components: {
-    SvgClose,
-    SvgEdit,
-  },
-  props: {
-    description: String,
-    header: String,
-    headerSize: { type: Number, default: 2 },
-    group: { type: String, required: true },
-    guides: { type: Array as PropType<Guide[]>, required: true },
-    placements: { type: Array as PropType<Placement[]>, required: true },
-  },
-  emits: ['edit-placement-clicked', 'delete-placement-clicked'],
-  setup() {
-    const state = reactive({
-      confirmDelete: false,
-      proEdition,
-    });
-
-    return { ...toRefs(state) };
-  },
-  methods: {
-    guideForPlacement(guideId): Guide {
-      return this.guides.find((item) => {
-        return item.id === guideId;
-      });
-    },
-    onPlacementDragStart(e, placementId, guideId) {
-      e.dataTransfer.dropEffect = 'move';
-      e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('placementId', placementId);
-      e.dataTransfer.setData('guideId', guideId);
-    },
-    onDeletePlacementClicked(placement) {
-      this.$emit('delete-placement-clicked', placement);
-    },
-    onEditPlacementClicked(placement) {
-      this.$emit('edit-placement-clicked', placement);
-    },
-  },
-  mounted() {
-    log('OrganizerDropZone loaded');
-  },
-});
-</script>

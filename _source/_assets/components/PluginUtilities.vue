@@ -1,6 +1,6 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { Guide } from '~/types/plugins';
-import { computed, defineProps, onMounted, ref, watchEffect } from 'vue';
+import { computed, onMounted, ref, watchEffect } from 'vue';
 import { log } from '../globals';
 import CraftFieldText from './CraftFieldText.vue';
 
@@ -16,7 +16,7 @@ const exportGuides = ref(props.exportData ? JSON.parse(props.exportData) : {});
 const importData = ref('');
 
 // Template Refs
-const exportField = ref(null);
+const exportField = ref<InstanceType<typeof CraftFieldText>>(null);
 
 /**
  * Checks to see if navigator.clipboard is available for use.
@@ -87,7 +87,7 @@ async function importPluginData() {
   await window.Craft?.postActionRequest(
     'guide/import-export/import-json',
     { guideData: importData.value },
-    (response, textStatus, request) => {
+    (response: any, textStatus: any, request: any) => {
       log('Saving placement', response, textStatus, request);
       dataImported.value = true;
 

@@ -1,3 +1,34 @@
+<script lang="ts" setup>
+import { onMounted, ref } from 'vue';
+import { devMode, log } from '../globals';
+import SvgPause from './SvgPause.vue';
+import SvgPlay from './SvgPlay.vue';
+import WelcomeAnimation from './WelcomeAnimation.vue';
+
+const props = defineProps({
+  skipUrl: String,
+});
+
+const playing = ref(true);
+
+const animation = ref<InstanceType<typeof WelcomeAnimation>>();
+
+function pause() {
+  if (animation.value) {
+    animation.value.pause();
+  }
+};
+function play() {
+  if (animation.value) {
+    animation.value.play();
+  }
+};
+
+onMounted(() => {
+  log('GuideWelcome loaded');
+})
+</script>
+
 <template>
   <Teleport to="body">
     <div class="g-fixed g-inset-0 g-w-full g-h-screen g-bg-white g-z-[500]">
@@ -29,46 +60,6 @@
     </div>
   </Teleport>
 </template>
-
-<script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
-import { devMode, log } from '../globals';
-import WelcomeAnimation from './WelcomeAnimation.vue';
-import SvgPlay from './SvgPlay.vue';
-import SvgPause from './SvgPause.vue';
-
-export default defineComponent({
-  name: 'GuideWelcome',
-  components: {
-    SvgPlay,
-    SvgPause,
-    WelcomeAnimation,
-  },
-  props: {
-    skipUrl: String,
-  },
-  setup: () => {
-    const state = reactive({
-      devMode,
-      playing: true,
-    });
-
-    return { ...toRefs(state) };
-  },
-  computed: {},
-  methods: {
-    pause() {
-      this.$refs.animation.pause();
-    },
-    play() {
-      this.$refs.animation.play();
-    },
-  },
-  mounted() {
-    log('GuideWelcome loaded');
-  },
-});
-</script>
 
 <style scoped>
 .control-button,

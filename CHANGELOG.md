@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## 3.2.1 - 2022-08-28
 
+### Added
+- Added Craft translations for static strings throughout the Guide UI
+
 ### Fixed
 - Fixed a Twig syntax error in Image components (thanks to @davidhellmann for the fix) [#78](https://github.com/wbrowar/craft-guide/pull/78)
 

@@ -1,3 +1,228 @@
+<script lang="ts" setup>
+import { computed, onMounted, ref, watch} from 'vue';
+import type {ComponentPublicInstance} from "vue";
+import {
+  assetComponents,
+  devMode,
+  guides,
+  kebab,
+  log,
+  proEdition,
+  settings,
+  table,
+  templates,
+  userOperations,
+} from '../globals';
+import { editorData, utilityClasses } from '../editorData';
+import ComponentListItem from './ComponentListItem.vue';
+import CraftFieldSelect from './CraftFieldSelect.vue';
+import CraftFieldText from './CraftFieldText.vue';
+import SvgAnnotation from './SvgAnnotation.vue';
+import SvgGuide from './SvgGuide.vue';
+import SvgPuzzle from './SvgPuzzle.vue';
+import SvgPhotograph from './SvgPhotograph.vue';
+import SvgSettings from './SvgSettings.vue';
+import { VAceEditor } from 'vue3-ace-editor';
+import 'ace-builds/src-noconflict/ext-language_tools';
+import 'ace-builds/src-noconflict/mode-markdown';
+import 'ace-builds/src-noconflict/mode-twig';
+import 'ace-builds/src-noconflict/theme-tomorrow_night_bright';
+import type { Documentation, EditorComponent, EditorTabGroup, Guide, GuideContentSource } from '~/types/plugins';
+import type { VAceEditorInstance } from "vue3-ace-editor/types";
+
+const props = defineProps({
+  formData: { type: String, required: true },
+  guideData: { type: String, required: true },
+  isNew: { type: Boolean, default: false },
+});
+
+const assetComponentsTotal = ref(0);
+const contentSource = ref('field' as GuideContentSource);
+const contentUrl = ref('');
+const currentDocs = ref<Documentation | null>(null);
+const currentTab = ref('publishing' as EditorTabGroup);
+const editorComponents = ref(editorData as EditorComponent[]);
+const editorContent = ref('');
+const guide = ref(JSON.parse(props.guideData) as Guide);
+const guideComponentsTotal = ref(0);
+const guideTemplate = ref('__none__');
+const pageForm = ref(JSON.parse(props.formData));
+const slugFocused = ref(false);
+const slugValue = ref('');
+const templatesFieldOptions = ref([] as Record<string, string>[]);
+const titleValue = ref('');
+
+// Template refs
+const editor = ref<ComponentPublicInstance<VAceEditorInstance>>();
+const form = ref();
+const contentSourceField = ref<InstanceType<typeof CraftFieldSelect>>();
+const contentUrlField = ref<InstanceType<typeof CraftFieldText>>();
+const slugField = ref<InstanceType<typeof CraftFieldText>>();
+const summaryField = ref<InstanceType<typeof CraftFieldText>>();
+const templateField = ref<InstanceType<typeof CraftFieldText>>();
+const titleField = ref<InstanceType<typeof CraftFieldText>>();
+
+const guideComponents: EditorComponent[] = guides.map((guide: Guide) => {
+  return {
+    title: guide.title,
+    group: 'guides',
+    code: `{{ craft.guide.include({ slug: '${guide.slug}' }) }}`,
+    documentation: guide.summary || null,
+    props: {
+      slug: `The slug of the guide, as set in the Guide Editor.`,
+    },
+  } as EditorComponent;
+});
+editorComponents.value.push(...assetComponents);
+editorComponents.value.push(...guideComponents);
+assetComponentsTotal.value = assetComponents.length;
+guideComponentsTotal.value = guideComponents.length;
+
+templatesFieldOptions.value = Object.keys(templates.filenames).map((key) => {
+  return { label: templates.filenames[key], value: key };
+});
+
+const formErrors = computed(() => {
+  const errors = [];
+
+  if (titleValue.value === '') {
+    errors.push(`Title cannot be empty.`);
+  }
+  if (slugValue.value === '') {
+    errors.push(`Slug cannot be empty.`);
+  }
+  if (contentSource.value === 'iframe' && contentUrl.value === '') {
+    errors.push(`A template must be selected.`);
+  } else if (contentSource.value === 'template' && guideTemplate.value === '__none__') {
+    errors.push(`A template must be selected.`);
+  }
+
+  return errors;
+});
+const guideTemplateContent = computed(() => templates.contents[guideTemplate.value]);
+const tabComponents = computed(() => editorComponents.value.filter((component) => {
+  return component.group === currentTab.value;
+}));
+
+function copyText(text: string) {
+  navigator.clipboard.writeText(text);
+};
+function insertGuideTemplateIntoEditor() {
+  if (editor.value && guideTemplateContent.value) {
+    editor.value._editor.setValue(guideTemplateContent.value);
+    contentSourceField.value.setFieldValue('field');
+  }
+};
+function insertTextIntoEditor(text: string) {
+  if (editor.value) {
+    editor.value._editor.insert(text);
+    editor.value.focus();
+  }
+};
+function onContentSourceChanged(newValue: GuideContentSource) {
+  contentSource.value = proEdition ? newValue : 'template';
+};
+function onContentUrlChanged(newValue: string) {
+  contentUrl.value = newValue;
+};
+function onGuideTemplateChanged(newValue: string) {
+  guideTemplate.value = newValue;
+};
+function onSlugChanged(newValue: string) {
+  slugValue.value = newValue;
+};
+function onTitleChanged(newValue: string) {
+  titleValue.value = newValue;
+
+  if (props.isNew && !slugFocused.value) {
+    slugField.value.setFieldValue(kebab(newValue));
+  }
+};
+function selectTab(tab: EditorTabGroup) {
+  currentTab.value = tab;
+  localStorage.setItem('guide:edit:tab', tab);
+};
+function showDocumentation(payload: Documentation) {
+  currentDocs.value = currentDocs.value?.code === payload.code ? null : payload;
+};
+function submitForm() {
+  if (!formErrors.value.length) {
+    form.value.$el.submit();
+  }
+};
+
+onMounted(() => {
+  const contentEl = document.getElementById('content');
+  if (contentEl) {
+    contentEl.style.padding = '0px';
+  }
+
+  if (guide.value?.content) {
+    editorContent.value = guide.value.content;
+  }
+  if (guide.value?.contentSource) {
+    if (proEdition) {
+      contentSourceField.value.setFieldValue(guide.value.contentSource);
+    } else {
+      contentSourceField.value.setFieldValue('template');
+    }
+  }
+  if (guide.value?.contentUrl) {
+    contentUrlField.value.setFieldValue(guide.value.contentUrl);
+  }
+  if (guide.value?.template) {
+    templateField.value.setFieldValue(guide.value.template);
+  }
+  if (guide.value?.slug) {
+    slugField.value.setFieldValue(guide.value.slug);
+  }
+  if (guide.value?.title) {
+    titleField.value.setFieldValue(guide.value.title);
+  }
+  if (guide.value?.summary) {
+    summaryField.value.setFieldValue(guide.value.summary);
+  }
+
+  // Configure ACE Editor
+  // Bind saving shortcut
+  if (editor.value) {
+    editor.value._editor.commands.addCommand({
+      name: 'saveGuide',
+      bindKey: { win: 'Ctrl-S', mac: 'Command-S' },
+      exec: () => {
+        submitForm();
+      },
+    });
+  }
+
+  // Add utility classes to autocomplete
+  const staticWordCompleter = {
+    getCompletions: function (editor: any, session: any, pos: any, prefix: any, callback: Function) {
+      callback(
+          null,
+          utilityClasses.map(function (word) {
+            return {
+              caption: word,
+              value: word,
+              meta: 'Guide utility class',
+            };
+          })
+      );
+    },
+  };
+  if (editor.value) {
+    editor.value._editor.completers = [...editor.value._editor.completers, staticWordCompleter];
+  }
+
+  if (props.isNew && proEdition && localStorage.getItem('guide:edit:tab') && contentSource.value === 'field') {
+    currentTab.value = localStorage.getItem('guide:edit:tab') as EditorTabGroup;
+  }
+
+  log('Guide Editor loaded for guide');
+  table(guide.value);
+});
+</script>
+
 <template>
   <form
     ref="form"
@@ -320,242 +545,6 @@
     <button class="btn submit" type="button" @click="submitForm" v-else>Save</button>
   </Teleport>
 </template>
-
-<script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
-import {
-  assetComponents,
-  devMode,
-  guides,
-  kebab,
-  log,
-  proEdition,
-  settings,
-  table,
-  templates,
-  userOperations,
-} from '../globals';
-import { editorData, utilityClasses } from '../editorData';
-import ComponentListItem from './ComponentListItem.vue';
-import CraftFieldSelect from './CraftFieldSelect.vue';
-import CraftFieldText from './CraftFieldText.vue';
-import SvgAnnotation from './SvgAnnotation.vue';
-import SvgGuide from './SvgGuide.vue';
-import SvgPuzzle from './SvgPuzzle.vue';
-import SvgPhotograph from './SvgPhotograph.vue';
-import SvgSettings from './SvgSettings.vue';
-import { VAceEditor } from 'vue3-ace-editor';
-import 'ace-builds/src-noconflict/ext-language_tools';
-import 'ace-builds/src-noconflict/mode-markdown';
-import 'ace-builds/src-noconflict/mode-twig';
-import 'ace-builds/src-noconflict/theme-tomorrow_night_bright';
-import { EditorComponent, EditorTabGroup, Guide, GuideContentSource } from '~/types/plugins';
-
-export default defineComponent({
-  name: 'GuideEditor',
-  components: {
-    ComponentListItem,
-    CraftFieldSelect,
-    CraftFieldText,
-    SvgAnnotation,
-    SvgGuide,
-    SvgPhotograph,
-    SvgPuzzle,
-    SvgSettings,
-    VAceEditor,
-  },
-  props: {
-    formData: { type: String, required: true },
-    guideData: { type: String, required: true },
-    isNew: { type: Boolean, default: false },
-  },
-  setup: (props) => {
-    const state = reactive({
-      assetComponentsTotal: 0,
-      contentSource: 'field' as GuideContentSource,
-      contentUrl: '',
-      currentDocs: null,
-      currentTab: 'publishing' as EditorTabGroup,
-      devMode,
-      editorComponents: editorData as EditorComponent[],
-      editorContent: '',
-      guide: JSON.parse(props.guideData) as Guide,
-      guideComponentsTotal: 0,
-      guideTemplate: '__none__',
-      pageForm: JSON.parse(props.formData),
-      proEdition,
-      settings,
-      slugFocused: false,
-      slugValue: '',
-      templates,
-      templatesFieldOptions: [] as Record<string, string>[],
-      titleValue: '',
-      userOperations,
-    });
-
-    const guideComponents: EditorComponent[] = guides.map((guide: Guide) => {
-      return {
-        title: guide.title,
-        group: 'guides',
-        code: `{{ craft.guide.include({ slug: '${guide.slug}' }) }}`,
-        documentation: guide.summary || null,
-        props: {
-          slug: `The slug of the guide, as set in the Guide Editor.`,
-        },
-      } as EditorComponent;
-    });
-    state.editorComponents.push(...assetComponents);
-    state.editorComponents.push(...guideComponents);
-    state.assetComponentsTotal = assetComponents.length;
-    state.guideComponentsTotal = guideComponents.length;
-
-    state.templatesFieldOptions = Object.keys(templates.filenames).map((key) => {
-      return { label: templates.filenames[key], value: key };
-    });
-
-    return { ...toRefs(state) };
-  },
-  computed: {
-    formErrors() {
-      const errors = [];
-
-      if (this.titleValue === '') {
-        errors.push(`Title cannot be empty.`);
-      }
-      if (this.slugValue === '') {
-        errors.push(`Slug cannot be empty.`);
-      }
-      if (this.contentSource === 'iframe' && this.contentUrl === '') {
-        errors.push(`A template must be selected.`);
-      } else if (this.contentSource === 'template' && this.guideTemplate === '__none__') {
-        errors.push(`A template must be selected.`);
-      }
-
-      return errors;
-    },
-    guideTemplateContent() {
-      return this.templates.contents[this.guideTemplate];
-    },
-    tabComponents() {
-      return this.editorComponents.filter((component) => {
-        return component.group === this.currentTab;
-      });
-    },
-  },
-  methods: {
-    copyText(text) {
-      navigator.clipboard.writeText(text);
-    },
-    insertGuideTemplateIntoEditor() {
-      if (this.guideTemplateContent) {
-        this.$refs.editor._editor.setValue(this.guideTemplateContent);
-        this.$refs.contentSourceField.setFieldValue('field');
-      }
-    },
-    insertTextIntoEditor(text: string) {
-      this.$refs.editor._editor.insert(text);
-      this.$refs.editor.focus();
-    },
-    onContentSourceChanged(newValue) {
-      this.contentSource = this.proEdition ? newValue : 'template';
-    },
-    onContentUrlChanged(newValue) {
-      this.contentUrl = newValue;
-    },
-    onGuideTemplateChanged(newValue) {
-      this.guideTemplate = newValue;
-    },
-    onSlugChanged(newValue) {
-      this.slugValue = newValue;
-    },
-    onTitleChanged(newValue) {
-      this.titleValue = newValue;
-
-      if (this.isNew && !this.slugFocused) {
-        this.$refs.slugField.setFieldValue(kebab(newValue));
-      }
-    },
-    selectTab(tab) {
-      this.currentTab = tab;
-      localStorage.setItem('guide:edit:tab', tab);
-    },
-    showDocumentation(payload) {
-      this.currentDocs = this.currentDocs?.code === payload.code ? null : payload;
-    },
-    submitForm() {
-      if (!this.formErrors.length) {
-        this.$refs.form.submit();
-      }
-    },
-  },
-  mounted() {
-    const contentEl = document.getElementById('content');
-    if (contentEl) {
-      contentEl.style.padding = '0px';
-    }
-
-    if (this.guide?.content) {
-      this.editorContent = this.guide.content;
-    }
-    if (this.guide?.contentSource) {
-      if (this.proEdition) {
-        this.$refs.contentSourceField.setFieldValue(this.guide.contentSource);
-      } else {
-        this.$refs.contentSourceField.setFieldValue('template');
-      }
-    }
-    if (this.guide?.contentUrl) {
-      this.$refs.contentUrlField.setFieldValue(this.guide.contentUrl);
-    }
-    if (this.guide?.template) {
-      this.$refs.templateField.setFieldValue(this.guide.template);
-    }
-    if (this.guide?.slug) {
-      this.$refs.slugField.setFieldValue(this.guide.slug);
-    }
-    if (this.guide?.title) {
-      this.$refs.titleField.setFieldValue(this.guide.title);
-    }
-    if (this.guide?.summary) {
-      this.$refs.summaryField.setFieldValue(this.guide.summary);
-    }
-
-    // Configure ACE Editor
-    // Bind saving shortcut
-    this.$refs.editor._editor.commands.addCommand({
-      name: 'saveGuide',
-      bindKey: { win: 'Ctrl-S', mac: 'Command-S' },
-      exec: () => {
-        this.submitForm();
-      },
-    });
-
-    // Add utility classes to autocomplete
-    const staticWordCompleter = {
-      getCompletions: function (editor, session, pos, prefix, callback) {
-        callback(
-          null,
-          utilityClasses.map(function (word) {
-            return {
-              caption: word,
-              value: word,
-              meta: 'Guide utility class',
-            };
-          })
-        );
-      },
-    };
-    this.$refs.editor._editor.completers = [...this.$refs.editor._editor.completers, staticWordCompleter];
-
-    if (this.isNew && this.proEdition && localStorage.getItem('guide:edit:tab') && this.contentSource === 'field') {
-      this.currentTab = localStorage.getItem('guide:edit:tab');
-    }
-
-    log('Guide Editor loaded for guide');
-    table(this.guide);
-  },
-});
-</script>
 
 <style>
 .slide-docs-enter-active,

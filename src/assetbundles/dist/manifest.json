@@ -1,54 +1,51 @@
 {
   "guide-admin.ts": {
-    "file": "assets/guide-admin.1b9d7044.js",
+    "file": "assets/guide-admin.cad088d1.js",
     "src": "guide-admin.ts",
     "isEntry": true,
     "imports": [
-      "__plugin-vue_export-helper.82d9560c.js",
-      "_SvgSettings.6e3e9d3c.js"
+      "_globals.c01e0dc8.js",
+      "__plugin-vue_export-helper.cdc0426e.js"
     ],
     "css": [
-      "assets/guide-admin.a93abe65.css"
+      "assets/guide-admin.cdb984e8.css"
     ]
   },
   "guide-display.ts": {
-    "file": "assets/guide-display.cf80f541.js",
+    "file": "assets/guide-display.f3a069c1.js",
     "src": "guide-display.ts",
     "isEntry": true,
     "imports": [
-      "__plugin-vue_export-helper.82d9560c.js",
-      "_SvgSettings.6e3e9d3c.js"
+      "_globals.c01e0dc8.js"
     ],
     "css": [
       "assets/guide-display.7c0ba033.css"
     ]
   },
   "guide-welcome.ts": {
-    "file": "assets/guide-welcome.ef139a14.js",
+    "file": "assets/guide-welcome.33da719b.js",
     "src": "guide-welcome.ts",
     "isEntry": true,
     "imports": [
-      "__plugin-vue_export-helper.82d9560c.js"
+      "_globals.c01e0dc8.js",
+      "__plugin-vue_export-helper.cdc0426e.js"
     ],
     "css": [
-      "assets/guide-welcome.80ac2d41.css"
+      "assets/guide-welcome.c2d8d1c3.css"
     ]
   },
-  "__plugin-vue_export-helper.82d9560c.js": {
-    "file": "assets/_plugin-vue_export-helper.82d9560c.js"
+  "_globals.c01e0dc8.js": {
+    "file": "assets/globals.c01e0dc8.js"
   },
-  "_SvgSettings.6e3e9d3c.js": {
-    "file": "assets/SvgSettings.6e3e9d3c.js",
-    "imports": [
-      "__plugin-vue_export-helper.82d9560c.js"
-    ]
+  "__plugin-vue_export-helper.cdc0426e.js": {
+    "file": "assets/_plugin-vue_export-helper.cdc0426e.js"
   },
   "guide-admin.css": {
-    "file": "assets/guide-admin.a93abe65.css",
+    "file": "assets/guide-admin.cdb984e8.css",
     "src": "guide-admin.css"
   },
   "guide-welcome.css": {
-    "file": "assets/guide-welcome.80ac2d41.css",
+    "file": "assets/guide-welcome.c2d8d1c3.css",
     "src": "guide-welcome.css"
   },
   "guide-display.css": {
