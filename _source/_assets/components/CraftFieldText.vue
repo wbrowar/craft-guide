@@ -18,11 +18,11 @@ const fieldValue = ref(JSON.parse(JSON.stringify(props.startingValue)));
 
 function setFieldValue(newValue: string) {
   fieldValue.value = newValue;
-};
+}
 
 watch(fieldValue, (fieldValue) => {
   emit('value-changed', fieldValue);
-})
+});
 
 defineExpose({
   setFieldValue,

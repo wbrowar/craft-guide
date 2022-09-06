@@ -17,24 +17,23 @@ const props = defineProps({
 
 const confirmDelete = ref(false);
 
-
 function guideForPlacement(guideId: number): Guide | undefined {
   return props.guides.find((item) => {
     return item.id === guideId;
   });
-};
+}
 function onPlacementDragStart(e: any, placementId: string, guideId: string) {
   e.dataTransfer.dropEffect = 'move';
   e.dataTransfer.effectAllowed = 'move';
   e.dataTransfer.setData('placementId', placementId);
   e.dataTransfer.setData('guideId', guideId);
-};
+}
 function onDeletePlacementClicked(placement: Placement) {
   emit('delete-placement-clicked', placement);
-};
+}
 function onEditPlacementClicked(placement: Placement) {
   emit('edit-placement-clicked', placement);
-};
+}
 
 onMounted(() => {
   log('OrganizerDropZone loaded');
@@ -71,10 +70,7 @@ onMounted(() => {
         title="Drag guide to a different area of the Craft Control Panel"
       >
         <div
-          class="
-            g-group g-flex g-flex-nowrap g-items-center g-justify-between g-gap-3 g-p-3 g-duration-150 g-cursor-move
-            hover:g-bg-select-light
-          "
+          class="g-group g-flex g-flex-nowrap g-items-center g-justify-between g-gap-3 g-p-3 g-duration-150 g-cursor-move hover:g-bg-select-light"
           draggable="true"
           @dragstart="onPlacementDragStart($event, placement.id, placement.guideId)"
           @mouseleave="confirmDelete = false"

@@ -19,7 +19,9 @@ export const templates: {
   filenames: Record<string, string>;
   contents: Record<string, string>;
 } = globalsElement?.dataset?.templates ? JSON.parse(globalsElement.dataset.templates) : null;
-export const t: Record<string, string> = globalsElement?.dataset?.translations ? JSON.parse(globalsElement.dataset.translations) : null;
+export const t: Record<string, string> = globalsElement?.dataset?.translations
+  ? JSON.parse(globalsElement.dataset.translations)
+  : null;
 export const userOperations: PluginUserOperations = globalsElement?.dataset?.userOperations
   ? JSON.parse(globalsElement.dataset.userOperations)
   : null;
@@ -30,7 +32,7 @@ export const userOperations: PluginUserOperations = globalsElement?.dataset?.use
 //   useOrganizer: true,
 // };
 
-log(t)
+log(t);
 
 // LOGGING FUNCTIONS
 export function dir(...args: any[]) {

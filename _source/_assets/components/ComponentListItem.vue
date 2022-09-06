@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { t } from "../globals";
+import { t } from '../globals';
 
 const emit = defineEmits(['documentation-clicked', 'insert-clicked']);
 const props = defineProps({
@@ -11,7 +11,7 @@ const props = defineProps({
 
 function onCopy() {
   navigator.clipboard.writeText(props.code);
-};
+}
 function onDocumentation() {
   emit('documentation-clicked', {
     code: props.code,
@@ -21,10 +21,10 @@ function onDocumentation() {
     summary: props.docs?.summary || null,
     title: props.title,
   });
-};
+}
 function onInsert() {
   emit('insert-clicked', props.code);
-};
+}
 </script>
 
 <template>
@@ -38,7 +38,9 @@ function onInsert() {
       <div class="g-space-x-1">
         <button class="btn small icon add g-mt-1" type="button" @click="onInsert">{{ t['Add'] }}</button>
         <button class="btn small icon copy g-mt-1" type="button" @click="onCopy">{{ t['Copy'] }}</button>
-        <button class="btn small g-mt-1" type="button" @click="onDocumentation" v-if="docs">{{ t['Documentation'] }}</button>
+        <button class="btn small g-mt-1" type="button" @click="onDocumentation" v-if="docs">
+          {{ t['Documentation'] }}
+        </button>
       </div>
     </div>
   </div>

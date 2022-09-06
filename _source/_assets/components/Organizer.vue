@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, onBeforeMount, onMounted, ref } from 'vue';
-import { devMode, guides, log, proEdition, settings, userOperations } from '../globals';
+import { devMode, guides, log, proEdition, settings, t, userOperations } from '../globals';
 import Modal from './Modal.vue';
 import OrganizerDropZone from './OrganizerDropZone.vue';
 import PlacementEditor from './PlacementEditor.vue';
@@ -18,7 +18,9 @@ import type {
 } from '~/types/plugins';
 
 declare global {
-  interface Window { Craft: any; }
+  interface Window {
+    Craft: any;
+  }
 }
 
 const props = defineProps({
@@ -40,10 +42,12 @@ const selectedGroupFilters = ref<PlacementGroup[]>([]);
 const editModal = ref<InstanceType<typeof Modal>>();
 const placementEditor = ref<InstanceType<typeof PlacementEditor>>();
 
-const filteredDropZones = computed(() => proEdition
+const filteredDropZones = computed(() =>
+  proEdition
     ? groups.value.filter((group) => {
-      return selectedGroupFilters.value.includes(group.name);
-    }) : []
+        return selectedGroupFilters.value.includes(group.name);
+      })
+    : []
 );
 
 function addPlacementForGuide(guide: Guide, group: PlacementGroup | null = null, groupId: string | null = null) {
@@ -71,47 +75,47 @@ function addPlacementForGuide(guide: Guide, group: PlacementGroup | null = null,
     placement.groupId = null;
     savePlacement(placement);
   }
-};
+}
 async function deletePlacement(placement: Placement) {
   await window.Craft?.postActionRequest(
-      'guide/placement/delete-placement',
-      { data: JSON.stringify(placement) },
-      (response: any, textStatus: any, request: any) => {
-        log('Deleting placement', response, textStatus, request);
-        getPlacementList();
+    'guide/placement/delete-placement',
+    { data: JSON.stringify(placement) },
+    (response: any, textStatus: any, request: any) => {
+      log('Deleting placement', response, textStatus, request);
+      getPlacementList();
 
-        if (response.status === 'success') {
-          window.Craft?.cp?.displayNotice('Organizer Saved');
-        } else {
-          window.Craft?.cp?.displayError(response.data.error);
-        }
+      if (response.status === 'success') {
+        window.Craft?.cp?.displayNotice('Organizer Saved');
+      } else {
+        window.Craft?.cp?.displayError(response.data.error);
       }
+    }
   );
-};
+}
 function editPlacement(placement: Placement) {
   if (placementEditor.value) {
     editModal.value.open();
-    currentEditPlacement.value = {...placement};
+    currentEditPlacement.value = { ...placement };
     placementEditor.value.resetFields();
   }
-};
+}
 function editPlacementClose(placement = null) {
   if (placement) {
     savePlacement(placement);
   }
   editModal.value.close();
   currentEditPlacement.value = null;
-};
+}
 async function getPlacementList() {
   await window.Craft?.postActionRequest(
-      'guide/placement/get-all-placements',
-      null,
-      (response: any, textStatus: any, request: any) => {
-        log('Getting placements', response, textStatus, request);
-        placements.value = response;
-      }
+    'guide/placement/get-all-placements',
+    null,
+    (response: any, textStatus: any, request: any) => {
+      log('Getting placements', response, textStatus, request);
+      placements.value = response;
+    }
   );
-};
+}
 function onDropOnDropZone(e: any, group: PlacementGroup, groupId = null) {
   log('Dropping onto zone', group, groupId);
   if (e.dataTransfer.getData('placementId') === 'new') {
@@ -125,42 +129,42 @@ function onDropOnDropZone(e: any, group: PlacementGroup, groupId = null) {
   } else {
     updatePlacement(parseInt(e.dataTransfer.getData('placementId')), group, groupId);
   }
-};
+}
 function onGuideDragStart(e: any, guideId: string) {
   e.dataTransfer.dropEffect = 'move';
   e.dataTransfer.effectAllowed = 'move';
   e.dataTransfer.setData('placementId', 'new');
   e.dataTransfer.setData('guideId', guideId);
-};
+}
 function placementsForGroup(group: string, groupId: string | null = null) {
   return placements.value.filter((placement) => {
     return placement.group === group && (groupId ? placement.groupId === groupId : true);
   });
-};
+}
 async function savePlacement(placement: Placement) {
   if (placement.group !== 'uri') {
     placement.uri = null;
   }
 
   await window.Craft?.postActionRequest(
-      'guide/placement/save-placement',
-      { data: JSON.stringify(placement) },
-      (response: any, textStatus: any, request: any) => {
-        log('Saving placement', response, textStatus, request);
-        getPlacementList();
+    'guide/placement/save-placement',
+    { data: JSON.stringify(placement) },
+    (response: any, textStatus: any, request: any) => {
+      log('Saving placement', response, textStatus, request);
+      getPlacementList();
 
-        if (response.status === 'success') {
-          window.Craft?.cp?.displayNotice('Organizer Saved');
-        } else {
-          window.Craft?.cp?.displayError(response.data.error);
-        }
+      if (response.status === 'success') {
+        window.Craft?.cp?.displayNotice('Organizer Saved');
+      } else {
+        window.Craft?.cp?.displayError(response.data.error);
       }
+    }
   );
-};
+}
 function setGridView(view: OrganizerGridView) {
   gridView.value = view;
   localStorage.setItem('guide:organizer:gridView', view);
-};
+}
 function toggleSelectedGroupFilter(value: PlacementGroup) {
   const index = selectedGroupFilters.value.indexOf(value);
 
@@ -171,35 +175,32 @@ function toggleSelectedGroupFilter(value: PlacementGroup) {
   }
 
   localStorage.setItem('guide:organizer:selectedGroupFilters', JSON.stringify(selectedGroupFilters.value));
-};
+}
 function updatePlacement(placementId: number, group: PlacementGroup, groupId = null) {
   log(`Updating placement: ${placementId} group to: ${group}`);
   placements.value.forEach((placement) => {
     log(
-        'Updating placement?',
-        placement.groupId !== groupId,
-        placement.groupId,
-        typeof placement.groupId,
-        groupId,
-        typeof groupId
+      'Updating placement?',
+      placement.groupId !== groupId,
+      placement.groupId,
+      typeof placement.groupId,
+      groupId,
+      typeof groupId
     );
     if (
-        placement.id === placementId &&
-        (!groupId ? placement.group !== group : true) &&
-        (groupId && placement.groupId ? parseInt(placement.groupId) !== groupId : true)
+      placement.id === placementId &&
+      (!groupId ? placement.group !== group : true) &&
+      (groupId && placement.groupId ? parseInt(placement.groupId) !== groupId : true)
     ) {
       placement.group = group;
       placement.groupId = groupId || null;
       savePlacement(placement);
     }
   });
-};
+}
 function cpUrl(uri: string) {
   return props.cpTrigger ? `/${props.cpTrigger}/${uri}` : `/${uri}`;
-};
-
-onBeforeMount(() => {
-});
+}
 
 onMounted(() => {
   const contentEl = document.getElementById('content');
@@ -209,7 +210,6 @@ onMounted(() => {
 
   // Use group data to set filters
   const userSelectedGroupFilters: PlacementGroup[] = [];
-  console.log(groups)
   groups.value?.forEach((group) => {
     const filter = { label: group.label, value: group.name };
     if (!userSelectedGroupFilters.includes(group.name)) {
@@ -223,13 +223,13 @@ onMounted(() => {
     selectedGroupFilters.value = JSON.parse(localStorage.getItem('guide:organizer:selectedGroupFilters') as string);
   } else {
     selectedGroupFilters.value = userSelectedGroupFilters.filter((name) => {
-      return !(['assetVolume', 'categoryGroup', 'globalSet', 'user']).includes(name);
+      return !['assetVolume', 'categoryGroup', 'globalSet', 'user'].includes(name);
     });
   }
 
   if (
-      localStorage.getItem('guide:organizer:gridView') === 'list' ||
-      localStorage.getItem('guide:organizer:gridView') === 'grid'
+    localStorage.getItem('guide:organizer:gridView') === 'list' ||
+    localStorage.getItem('guide:organizer:gridView') === 'grid'
   ) {
     gridView.value = localStorage.getItem('guide:organizer:gridView') as 'list' | 'grid';
   }
@@ -244,28 +244,15 @@ onMounted(() => {
   <div class="g-grid g-grid-cols-[minmax(150px,300px),minmax(400px,1fr)] g-relative g-overflow-hidden">
     <div class="g-bg-white g-rounded-l-lg g-min-h-[650px] g-h-admin-window g-overflow-x-auto">
       <div class="g-p-6">
-        <h2>Guides</h2>
-        <p>
-          All guides have their own page. Click "➕&nbsp;Add" to make a guide visible around the Craft Control Panel.
-        </p>
+        <h2>{{ t['Guides'] }}</h2>
+        <p v-html="t['ORGANIZER_GUIDES_INSTRUCTIONS']"></p>
       </div>
 
       <ul>
         <li
           v-for="guide in guides"
           :key="guide.slug"
-          class="
-            g-group
-            g-p-3
-            g-bg-matrix-block
-            g-border-t
-            g-border-solid
-            g-border-matrix-border
-            g-duration-150
-            g-cursor-move
-            hover:g-bg-select-light
-            last:g-border-b
-          "
+          class="g-group g-p-3 g-bg-matrix-block g-border-t g-border-solid g-border-matrix-border g-duration-150 g-cursor-move hover:g-bg-select-light last:g-border-b"
           draggable="true"
           title="Drag guide to an area of the Craft Control Panel"
           @dragstart="onGuideDragStart($event, guide.id)"
@@ -320,8 +307,8 @@ onMounted(() => {
     <div class="g-min-h-[650px] g-h-admin-window g-relative g-bg-select-dark g-rounded-r-lg g-overflow-x-auto">
       <div class="g-p-6">
         <div class="g-text-select-light">
-          <h2>Craft CP</h2>
-          <p>Drag guides to different areas around the Craft CP or add a guide to a specific Control Panel page.</p>
+          <h2>{{ t['Craft CP'] }}</h2>
+          <p>{{ t['ORGANIZER_CP_INSTRUCTIONS'] }}</p>
         </div>
         <div class="g-grid g-grid-cols-[1fr,150px] g-gap-4 g-mt-6">
           <div class="g-grid g-gap-5 xl:g-grid-cols-4">

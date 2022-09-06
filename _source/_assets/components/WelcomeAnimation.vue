@@ -115,7 +115,6 @@ const aspect = computed(() => {
 
 const showDebugControls = computed(() => import.meta.env.DEV);
 
-
 function animateOpenBook() {
   if (bookTop && bookLoose && bookLoose2) {
     hasBeenInteractedWith.value = true;
@@ -141,7 +140,7 @@ function animateOpenBook() {
       ease: 'elastic.out(1, 0.3)',
     });
   }
-};
+}
 function animateCloseBook() {
   if (bookTop && bookLoose && bookLoose2) {
     hasBeenInteractedWith.value = true;
@@ -167,7 +166,7 @@ function animateCloseBook() {
       ease: 'power4.in',
     });
   }
-};
+}
 function animateSlideInBook() {
   if (book) {
     animationState.value = 'animating';
@@ -202,7 +201,7 @@ function animateSlideInBook() {
       playCameraLoop();
     }, 5000);
   }
-};
+}
 function debugButtonPressed(action: string) {
   if (camera) {
     switch (action) {
@@ -260,16 +259,16 @@ function debugButtonPressed(action: string) {
     debugCameraRotateZ.value = camera.rotation.z;
 
     log(
-        'Camera',
-        `position x: ${camera.position.x}`,
-        `position y: ${camera.position.y}`,
-        `position z: ${camera.position.z}`,
-        `rotation x: ${camera.rotation.x}`,
-        `rotation y: ${camera.rotation.y}`,
-        `rotation z: ${camera.rotation.z}`
+      'Camera',
+      `position x: ${camera.position.x}`,
+      `position y: ${camera.position.y}`,
+      `position z: ${camera.position.z}`,
+      `rotation x: ${camera.rotation.x}`,
+      `rotation y: ${camera.rotation.y}`,
+      `rotation z: ${camera.rotation.z}`
     );
   }
-};
+}
 function init() {
   // set container
   container = sceneContainer.value as HTMLElement;
@@ -280,14 +279,14 @@ function init() {
   const far = settings.value.camera.far; // the far clipping plane
   camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
   camera.position.set(
-      settings.value.camera.position.x,
-      settings.value.camera.position.y,
-      settings.value.camera.position.z
+    settings.value.camera.position.x,
+    settings.value.camera.position.y,
+    settings.value.camera.position.z
   );
   camera.rotation.set(
-      settings.value.camera.rotation.x,
-      settings.value.camera.rotation.y,
-      settings.value.camera.rotation.z
+    settings.value.camera.rotation.x,
+    settings.value.camera.rotation.y,
+    settings.value.camera.rotation.z
   );
   // create scene
   scene = new THREE.Scene();
@@ -297,18 +296,18 @@ function init() {
   }
   // add lights
   ambientLight = new THREE.HemisphereLight(
-      settings.value.lights.ambient.skyColor,
-      settings.value.lights.ambient.groundColor,
-      settings.value.lights.ambient.intensity
+    settings.value.lights.ambient.skyColor,
+    settings.value.lights.ambient.groundColor,
+    settings.value.lights.ambient.intensity
   );
   mainLight = new THREE.DirectionalLight(
-      settings.value.lights.directional.color,
-      settings.value.lights.directional.intensity
+    settings.value.lights.directional.color,
+    settings.value.lights.directional.intensity
   );
   mainLight.position.set(
-      settings.value.lights.directional.position.x,
-      settings.value.lights.directional.position.y,
-      settings.value.lights.directional.position.z
+    settings.value.lights.directional.position.x,
+    settings.value.lights.directional.position.y,
+    settings.value.lights.directional.position.z
   );
   scene.add(ambientLight, mainLight);
   // create renderer
@@ -324,41 +323,41 @@ function init() {
   renderer.setSize(container.clientWidth, container.clientHeight);
   const loader = new GLTFLoader();
   loader.load(
-      objectUrl.value,
-      (gltf) => {
-        object = gltf;
-        object.scene.scale.set(
-            settings.value.object.scale.x,
-            settings.value.object.scale.y,
-            settings.value.object.scale.z
-        );
-        object.scene.rotation.set(
-            settings.value.object.rotation.x,
-            settings.value.object.rotation.y,
-            settings.value.object.rotation.z
-        );
-        scene.add(object.scene);
+    objectUrl.value,
+    (gltf) => {
+      object = gltf;
+      object.scene.scale.set(
+        settings.value.object.scale.x,
+        settings.value.object.scale.y,
+        settings.value.object.scale.z
+      );
+      object.scene.rotation.set(
+        settings.value.object.rotation.x,
+        settings.value.object.rotation.y,
+        settings.value.object.rotation.z
+      );
+      scene.add(object.scene);
 
-        if (devMode) {
-          const children: any[] = [];
+      if (devMode) {
+        const children: any[] = [];
 
-          object.scene.traverse((child: any) => {
-            children.push(child);
-          });
-          log('Scened objects', children);
-        }
+        object.scene.traverse((child: any) => {
+          children.push(child);
+        });
+        log('Scened objects', children);
+      }
 
-        book = object.scene.getObjectByName('Scene');
-        bookTop = object.scene.getObjectByName('Top');
-        bookLoose = object.scene.getObjectByName('Loose');
-        bookLoose2 = object.scene.getObjectByName('Loose_2');
+      book = object.scene.getObjectByName('Scene');
+      bookTop = object.scene.getObjectByName('Top');
+      bookLoose = object.scene.getObjectByName('Loose');
+      bookLoose2 = object.scene.getObjectByName('Loose_2');
 
-        animateSlideInBook();
+      animateSlideInBook();
 
-        log('Objects from scene', bookTop, bookLoose, bookLoose2);
-      },
-      undefined,
-      undefined
+      log('Objects from scene', bookTop, bookLoose, bookLoose2);
+    },
+    undefined,
+    undefined
   );
   renderer.setAnimationLoop(() => {
     if (object) {
@@ -367,7 +366,7 @@ function init() {
   });
 
   resizeObserver.value = new ResizeObserver((entries) => {
-    for (let entry of entries) {
+    for (const entry of entries) {
       let width = container.clientWidth;
       let height = container.clientHeight;
 
@@ -387,32 +386,32 @@ function init() {
       renderer.setSize(window.innerWidth, window.innerHeight);
     }
 
-    console.log('Size changed');
+    log('Size changed');
   });
 
   if (resizeObserver.value && sceneContainer.value) {
     resizeObserver.value.observe(sceneContainer.value);
   }
-};
+}
 function onContainerClicked() {
   if (animationState.value === 'opened') {
     animateCloseBook();
   } else if (animationState.value === 'closed') {
     animateOpenBook();
   }
-};
+}
 function pause() {
   if (timeline) {
     timeline.pause();
     emit('paused');
   }
-};
+}
 function play() {
   if (timeline) {
     timeline.play();
     emit('played');
   }
-};
+}
 function playCameraLoop() {
   if (camera) {
     const animations: string[] = [];
@@ -438,244 +437,249 @@ function playCameraLoop() {
     if (animations.includes('leftToRight')) {
       const leftToRightDuration = 16;
       timeline
-          .add('leftToRight')
-          .set(
-              camera.position,
-              {
-                x: -15,
-                y: 0.7,
-                z: 5,
-              },
-              'leftToRight'
-          )
-          .set(
-              camera.rotation,
-              {
-                x: 0,
-                y: 0,
-                z: 0,
-              },
-              'leftToRight'
-          )
-          .to(
-              camera.position,
-              {
-                x: 15,
-                y: 0.7,
-                z: 5,
-                ease: 'power1.inOut',
-                duration: leftToRightDuration,
-              },
-              'leftToRight'
-          )
-          .to(
-              camera.rotation,
-              {
-                x: 0,
-                y: 0,
-                z: 0,
-                duration: leftToRightDuration,
-              },
-              'leftToRight'
-          );
+        .add('leftToRight')
+        .set(
+          camera.position,
+          {
+            x: -15,
+            y: 0.7,
+            z: 5,
+          },
+          'leftToRight'
+        )
+        .set(
+          camera.rotation,
+          {
+            x: 0,
+            y: 0,
+            z: 0,
+          },
+          'leftToRight'
+        )
+        .to(
+          camera.position,
+          {
+            x: 15,
+            y: 0.7,
+            z: 5,
+            ease: 'power1.inOut',
+            duration: leftToRightDuration,
+          },
+          'leftToRight'
+        )
+        .to(
+          camera.rotation,
+          {
+            x: 0,
+            y: 0,
+            z: 0,
+            duration: leftToRightDuration,
+          },
+          'leftToRight'
+        );
     }
 
     if (animations.includes('zoomFromTop')) {
       const zoomFromTopDuration = 15;
       timeline
-          .add('zoomFromTop')
-          .set(
-              camera.position,
-              {
-                x: 0,
-                y: 31,
-                z: 0,
-              },
-              'zoomFromTop'
-          )
-          .set(
-              camera.rotation,
-              {
-                x: 4.7,
-                y: 0,
-                z: 0,
-              },
-              'zoomFromTop'
-          )
-          .to(
-              camera.position,
-              {
-                x: 0,
-                y: 1,
-                z: 1.5,
-                ease: 'power4.out',
-                duration: zoomFromTopDuration,
-              },
-              'zoomFromTop'
-          )
-          .to(
-              camera.rotation,
-              {
-                x: 5.99,
-                y: 0,
-                z: 0,
-                ease: 'power1.in',
-                duration: zoomFromTopDuration,
-              },
-              'zoomFromTop'
-          );
+        .add('zoomFromTop')
+        .set(
+          camera.position,
+          {
+            x: 0,
+            y: 31,
+            z: 0,
+          },
+          'zoomFromTop'
+        )
+        .set(
+          camera.rotation,
+          {
+            x: 4.7,
+            y: 0,
+            z: 0,
+          },
+          'zoomFromTop'
+        )
+        .to(
+          camera.position,
+          {
+            x: 0,
+            y: 1,
+            z: 1.5,
+            ease: 'power4.out',
+            duration: zoomFromTopDuration,
+          },
+          'zoomFromTop'
+        )
+        .to(
+          camera.rotation,
+          {
+            x: 5.99,
+            y: 0,
+            z: 0,
+            ease: 'power1.in',
+            duration: zoomFromTopDuration,
+          },
+          'zoomFromTop'
+        );
     }
 
     if (animations.includes('downRightSide')) {
       const downRightSideDuration = 10;
       timeline
-          .add('downRightSide')
-          .set(
-              camera.position,
-              {
-                x: 6.3,
-                y: 1,
-                z: -13,
-              },
-              'downRightSide'
-          )
-          .set(
-              camera.rotation,
-              {
-                x: -6.66,
-                y: 1.499,
-                z: 0,
-              },
-              'downRightSide'
-          )
-          .to(
-              camera.position,
-              {
-                x: 4.3,
-                y: 1,
-                z: 4.447071,
-                ease: 'power1.inOut',
-                duration: downRightSideDuration,
-              },
-              'downRightSide'
-          )
-          .to(
-              camera.rotation,
-              {
-                x: -6.46,
-                y: 1.299,
-                z: 0,
-                ease: 'power1.inOut',
-                duration: downRightSideDuration,
-              },
-              'downRightSide'
-          );
+        .add('downRightSide')
+        .set(
+          camera.position,
+          {
+            x: 6.3,
+            y: 1,
+            z: -13,
+          },
+          'downRightSide'
+        )
+        .set(
+          camera.rotation,
+          {
+            x: -6.66,
+            y: 1.499,
+            z: 0,
+          },
+          'downRightSide'
+        )
+        .to(
+          camera.position,
+          {
+            x: 4.3,
+            y: 1,
+            z: 4.447071,
+            ease: 'power1.inOut',
+            duration: downRightSideDuration,
+          },
+          'downRightSide'
+        )
+        .to(
+          camera.rotation,
+          {
+            x: -6.46,
+            y: 1.299,
+            z: 0,
+            ease: 'power1.inOut',
+            duration: downRightSideDuration,
+          },
+          'downRightSide'
+        );
     }
 
     if (animations.includes('acrossFront')) {
       const acrossFrontDuration = 15;
       timeline
-          .add('acrossFront')
-          .set(
-              camera.position,
-              {
-                x: 0,
-                y: 2,
-                z: -5.5,
-              },
-              'acrossFront'
-          )
-          .set(
-              camera.rotation,
-              {
-                x: 4.7,
-                y: 0,
-                z: 0,
-              },
-              'acrossFront'
-          )
-          .to(
-              camera.position,
-              {
-                x: 0,
-                y: 2,
-                z: 5.5,
-                ease: 'power1.inOut',
-                duration: acrossFrontDuration,
-              },
-              'acrossFront'
-          )
-          .to(
-              camera.rotation,
-              {
-                x: 4.7,
-                y: 0,
-                z: 0,
-                ease: 'power1.inOut',
-                duration: acrossFrontDuration,
-              },
-              'acrossFront'
-          );
+        .add('acrossFront')
+        .set(
+          camera.position,
+          {
+            x: 0,
+            y: 2,
+            z: -5.5,
+          },
+          'acrossFront'
+        )
+        .set(
+          camera.rotation,
+          {
+            x: 4.7,
+            y: 0,
+            z: 0,
+          },
+          'acrossFront'
+        )
+        .to(
+          camera.position,
+          {
+            x: 0,
+            y: 2,
+            z: 5.5,
+            ease: 'power1.inOut',
+            duration: acrossFrontDuration,
+          },
+          'acrossFront'
+        )
+        .to(
+          camera.rotation,
+          {
+            x: 4.7,
+            y: 0,
+            z: 0,
+            ease: 'power1.inOut',
+            duration: acrossFrontDuration,
+          },
+          'acrossFront'
+        );
     }
 
     if (animations.includes('cornerUp')) {
       const cornerUpDuration = 15;
       timeline
-          .add('cornerUp')
-          .set(
-              camera.position,
-              {
-                x: 3.499,
-                y: 0,
-                z: 3.1,
-              },
-              'cornerUp'
-          )
-          .set(
-              camera.rotation,
-              {
-                x: 6.7,
-                y: 0.8,
-                z: -0.3,
-              },
-              'cornerUp'
-          )
-          .to(
-              camera.position,
-              {
-                x: 2.99,
-                y: 1.8,
-                z: 2.7,
-                ease: 'power1.inOut',
-                duration: cornerUpDuration,
-              },
-              'cornerUp'
-          )
-          .to(
-              camera.rotation,
-              {
-                x: 5.5,
-                y: 0.8,
-                z: 0.7,
-                ease: 'power1.inOut',
-                duration: cornerUpDuration,
-              },
-              'cornerUp'
-          );
+        .add('cornerUp')
+        .set(
+          camera.position,
+          {
+            x: 3.499,
+            y: 0,
+            z: 3.1,
+          },
+          'cornerUp'
+        )
+        .set(
+          camera.rotation,
+          {
+            x: 6.7,
+            y: 0.8,
+            z: -0.3,
+          },
+          'cornerUp'
+        )
+        .to(
+          camera.position,
+          {
+            x: 2.99,
+            y: 1.8,
+            z: 2.7,
+            ease: 'power1.inOut',
+            duration: cornerUpDuration,
+          },
+          'cornerUp'
+        )
+        .to(
+          camera.rotation,
+          {
+            x: 5.5,
+            y: 0.8,
+            z: 0.7,
+            ease: 'power1.inOut',
+            duration: cornerUpDuration,
+          },
+          'cornerUp'
+        );
     }
   }
-};
+}
 
 onMounted(() => {
   log(`WelcomeAnimation loaded`);
   init();
-})
+});
 
 onBeforeUnmount(() => {
   if (resizeObserver.value) {
     resizeObserver.value.disconnect();
   }
-})
+});
+
+defineExpose({
+  pause,
+  play,
+});
 </script>
 
 <template>

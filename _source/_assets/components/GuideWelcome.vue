@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
-import { devMode, log } from '../globals';
+import { devMode, log, t } from '../globals';
 import SvgPause from './SvgPause.vue';
 import SvgPlay from './SvgPlay.vue';
 import WelcomeAnimation from './WelcomeAnimation.vue';
@@ -17,16 +17,16 @@ function pause() {
   if (animation.value) {
     animation.value.pause();
   }
-};
+}
 function play() {
   if (animation.value) {
     animation.value.play();
   }
-};
+}
 
 onMounted(() => {
   log('GuideWelcome loaded');
-})
+});
 </script>
 
 <template>
@@ -44,17 +44,16 @@ onMounted(() => {
             <button type="button" @click="pause" v-if="playing">
               <SvgPause class="g-inline-block g-w-8 g-h-8" />
             </button>
-            <button type="button" @click="play()" v-else>
+            <button type="button" @click="play" v-else>
               <SvgPlay class="g-inline-block g-w-8 g-h-8" />
             </button>
           </div>
           <div>
-            <p>
-              Welcome to Guide! To get started you’ll need to head to Settings and configure a few things there. You can
-              then use the Organizer to create your guides and move them around Craft’s Control Panel.
-            </p>
+            <p>{{ t['WELCOME_MESSAGE'] }}</p>
           </div>
-          <a class="btn submit icon go" :href="skipUrl">Go to Guide</a>
+          <a class="btn submit icon go" :href="skipUrl" style="--ui-control-color: currentColor">{{
+            t['WELCOME_BUTTON_LABEL']
+          }}</a>
         </div>
       </div>
     </div>

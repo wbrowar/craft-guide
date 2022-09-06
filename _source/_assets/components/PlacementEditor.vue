@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import {computed, nextTick, onMounted, PropType, ref} from 'vue';
-import { log } from '../globals';
+import { computed, nextTick, onMounted, PropType, ref } from 'vue';
+import { log, t } from '../globals';
 import CraftFieldSelect from './CraftFieldSelect.vue';
 import CraftFieldText from './CraftFieldText.vue';
 import type { Placement, PlacementEditorGroup, PlacementGroup } from '../types/plugins';
@@ -66,32 +66,33 @@ const groupFieldOptions = computed(() => {
   return options;
 });
 const isNew = computed(() => props.placement?.id === null);
-const selectorFieldInstructions = computed(() => groupValue.value === 'uri'
-    ? 'Enter a CSS selector that can be reached on the page the guide will be displayed on.'
-    : 'Move the guide to an element on the page by entering a CSS selector that can be reached on the page the guide will be displayed on. Leave this blank to display the guide in its default location.'
+const selectorFieldInstructions = computed(() =>
+  groupValue.value === 'uri'
+    ? t['PLACEMENT_EDITOR_FIELD_INSTRUCTIONS_SELECTOR_URI']
+    : t['PLACEMENT_EDITOR_FIELD_INSTRUCTIONS_SELECTOR_NON_URI']
 );
 
 function cancelEdit() {
   emit('canceled');
-};
+}
 function onGroupChanged(newValue: string) {
   groupValue.value = newValue;
-};
+}
 function onSelectorChanged(newValue: string) {
   selectorValue.value = newValue !== '' ? newValue : '';
-};
+}
 function onUriChanged(newValue: string) {
   uriValue.value = newValue !== '' ? newValue : '';
-};
+}
 function resetFields() {
   nextTick(() => {
     groupField.value.setFieldValue(
-        props.placement?.group + (props.placement?.groupId ? `|${props.placement.groupId}` : '') || 'nav'
+      props.placement?.group + (props.placement?.groupId ? `|${props.placement.groupId}` : '') || 'nav'
     );
     uriField.value.setFieldValue(props.placement?.uri || '');
     selectorField.value.setFieldValue(props.placement?.selector || '');
   });
-};
+}
 function saveEdit() {
   if (props.placement) {
     const saveValue = props.placement;
@@ -115,7 +116,7 @@ function saveEdit() {
 
     emit('saved', saveValue);
   }
-};
+}
 
 onMounted(() => {
   log('PlacementEditor loaded');
@@ -123,7 +124,7 @@ onMounted(() => {
 
 defineExpose({
   resetFields,
-})
+});
 </script>
 
 <template>
@@ -144,8 +145,8 @@ defineExpose({
         <CraftFieldSelect
           ref="groupField"
           required
-          instructions="Select the area in the Craft Control Panel to place this guide."
-          label="Group"
+          :instructions="t['PLACEMENT_EDITOR_FIELD_INSTRUCTIONS_GROUP']"
+          :label="t['Group']"
           name="group"
           :options="groupFieldOptions"
           @value-changed="onGroupChanged"
@@ -153,8 +154,8 @@ defineExpose({
         <CraftFieldText
           ref="uriField"
           required
-          instructions="The URI of the page the guide will be displayed on. For example, the URI of this page is: `guide/organizer`"
-          label="Page URI"
+          :instructions="t['PLACEMENT_EDITOR_FIELD_INSTRUCTIONS_URI']"
+          :label="t['Page URI']"
           name="uri"
           @value-changed="onUriChanged"
           v-show="groupValue === 'uri'"
@@ -163,7 +164,7 @@ defineExpose({
           ref="selectorField"
           :required="groupValue === 'uri'"
           :instructions="selectorFieldInstructions"
-          label="CSS Selector"
+          :label="t['CSS Selector']"
           name="selector"
           @value-changed="onSelectorChanged"
           v-show="groupValue !== 'nav'"

@@ -11,16 +11,16 @@ const isOpen = ref(false);
 function close() {
   isOpen.value = false;
   emit('closed');
-};
+}
 function open() {
   isOpen.value = true;
   emit('opened');
-};
+}
 
 defineExpose({
   close,
   open,
-})
+});
 </script>
 
 <template>

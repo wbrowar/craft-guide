@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue';
-import { guides, log, userOperations } from '../globals';
+import { guides, log, t, userOperations } from '../globals';
 import CraftFieldSelect from './CraftFieldSelect.vue';
 import type { Placement } from '../types/plugins';
 
@@ -29,7 +29,7 @@ placement.value = {
 const guideField = ref<InstanceType<typeof CraftFieldSelect>>();
 
 const guideFieldOptions = computed(() => {
-  const options = [{ label: 'Select One', value: '__none__' }];
+  const options = [{ label: t['Select One'], value: '__none__' }];
 
   guides.forEach((guide) => {
     options.push({ label: guide.title, value: guide.slug });
@@ -38,35 +38,34 @@ const guideFieldOptions = computed(() => {
   return options;
 });
 
-
 async function deletePlacement() {
   if (placement.value?.id) {
     await window.Craft?.postActionRequest(
-        'guide/placement/delete-placement',
-        { data: JSON.stringify(placement.value) },
-        (response: any, textStatus: any, request: any) => {
-          log('Deleting placement', response, textStatus, request);
-          placementSaved.value = true;
+      'guide/placement/delete-placement',
+      { data: JSON.stringify(placement.value) },
+      (response: any, textStatus: any, request: any) => {
+        log('Deleting placement', response, textStatus, request);
+        placementSaved.value = true;
 
-          if (response.status === 'success') {
-            window.Craft?.cp?.displayNotice('Guide removed');
-          } else {
-            window.Craft?.cp?.displayError(response.data.error);
-          }
+        if (response.status === 'success') {
+          window.Craft?.cp?.displayNotice('Guide removed');
+        } else {
+          window.Craft?.cp?.displayError(response.data.error);
         }
+      }
     );
   }
-};
+}
 function onGroupChanged(newValue: string) {
   guideValue.value = newValue;
-};
+}
 function onSaveClicked() {
   if (guideValue.value === '__none__') {
     deletePlacement();
   } else {
     savePlacement();
   }
-};
+}
 async function savePlacement() {
   const selectedGuide = guides.find((guide) => {
     return guide.slug === guideValue.value;
@@ -77,48 +76,48 @@ async function savePlacement() {
   }
 
   await window.Craft?.postActionRequest(
-      'guide/placement/save-placement',
-      { data: JSON.stringify(placement.value) },
-      (response: any, textStatus: any, request: any) => {
-        log('Saving placement', response, textStatus, request);
-        placementSaved.value = true;
+    'guide/placement/save-placement',
+    { data: JSON.stringify(placement.value) },
+    (response: any, textStatus: any, request: any) => {
+      log('Saving placement', response, textStatus, request);
+      placementSaved.value = true;
 
-        if (response.status === 'success') {
-          window.Craft?.cp?.displayNotice('Guide UI element updated');
-        } else {
-          window.Craft?.cp?.displayError(response.data.error);
-        }
+      if (response.status === 'success') {
+        window.Craft?.cp?.displayNotice('Guide UI element updated');
+      } else {
+        window.Craft?.cp?.displayError(response.data.error);
       }
+    }
   );
-};
+}
 
 onMounted(() => {
   guideField.value.setFieldValue(guideFieldOptions.value[0].value);
 
   log('PlacementInlineEditor loaded');
-})
+});
 </script>
 
 <template>
   <div v-if="placementInlineEditor">
     <div v-if="placementSaved">
-      <p v-if="guideValue === '__none__'">Guide removed. Please reload this page and select another guide.</p>
-      <p v-else>Guide added. Please reload this page to see the guide displayed here.</p>
+      <p v-if="guideValue === '__none__'">{{ t['PLACEMENT_INLINE_EDITOR_CONFIRM_REMOVED'] }}</p>
+      <p v-else>{{ t['PLACEMENT_INLINE_EDITOR_CONFIRM_ADDED'] }}</p>
     </div>
     <div v-if="!placementSaved && userOperations.useOrganizer">
       <div v-if="guides.length">
         <CraftFieldSelect
           ref="guideField"
-          instructions="Select a guide to be displayed here."
-          label="Guide"
+          :instructions="t['PLACEMENT_INLINE_EDITOR_FIELD_INSTRUCTIONS_GUIDE']"
+          :label="t['Guide']"
           name="guide"
           :options="guideFieldOptions"
           @value-changed="onGroupChanged"
         />
-        <button class="btn submit" type="button" @click="onSaveClicked">Save</button>
+        <button class="btn submit" type="button" @click="onSaveClicked">{{ t['Save'] }}</button>
       </div>
       <div v-else>
-        <p>No guides have been created yet. Create a guide and then return here to select it for this UI element.</p>
+        <p>{{ t['PLACEMENT_INLINE_EDITOR_NO_GUIDES'] }}</p>
       </div>
     </div>
   </div>

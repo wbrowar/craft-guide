@@ -1,13 +1,5 @@
 <script lang="ts" setup>
-import {
-  computed,
-  nextTick,
-  onBeforeMount,
-  onBeforeUnmount,
-  onMounted,
-  ref,
-  watch,
-} from 'vue';
+import { computed, nextTick, onBeforeMount, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { log, proEdition, userOperations } from '../globals';
 import type { GuideNavItem } from '../types/plugins';
 
@@ -29,7 +21,7 @@ const hash = ref('');
 const showInlineEditor = ref(false);
 const showTldr = ref(false);
 
-const teleportTarget = computed(() => props.teleportSelector ? `#teleport-${props.guideDisplay}` : null);
+const teleportTarget = computed(() => (props.teleportSelector ? `#teleport-${props.guideDisplay}` : null));
 
 if (proEdition) {
   guideNav.value.forEach((guide) => {
@@ -55,7 +47,7 @@ if (proEdition) {
 
 function onHashUpdated() {
   hash.value = window.location.hash.substr(1);
-};
+}
 function toggleTldr(on: boolean) {
   log(`Turning TLDR: ${on ? 'on' : 'off'}`);
   showTldr.value = on;
@@ -79,16 +71,16 @@ function toggleTldr(on: boolean) {
   });
 
   localStorage.setItem('guide:display:tldr', on ? 'true' : 'false');
-};
+}
 function updateEnableTldr() {
   if (currentGuide.value) {
     const tldrEl = document.querySelector(
-        `.guide-${currentGuide.value} .tldr-hide, .guide-${currentGuide.value} .tldr-show, .guide-${currentGuide.value} [class^="tldr:"]`
+      `.guide-${currentGuide.value} .tldr-hide, .guide-${currentGuide.value} .tldr-show, .guide-${currentGuide.value} [class^="tldr:"]`
     );
     log(`.guide-${currentGuide.value}`, tldrEl);
     enableTldr.value = tldrEl !== null;
   }
-};
+}
 
 onBeforeMount(() => {
   if (guideNav.value?.length) {
@@ -132,7 +124,7 @@ export default defineComponent({
     OnLoad,
     PlacementInlineEditor,
     SvgSettings,
-  }
+  },
 });
 </script>
 

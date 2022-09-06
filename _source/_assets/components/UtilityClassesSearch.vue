@@ -8,19 +8,20 @@ const searchValue = ref('');
 
 classes.value = utilityClasses;
 
-const searchResults = computed(() => searchValue.value !== ''
+const searchResults = computed(() =>
+  searchValue.value !== ''
     ? classes.value.filter((item) => {
-      return item.includes(searchValue.value);
-    })
+        return item.includes(searchValue.value);
+      })
     : classes.value
 );
 
 function onCopy(text: string) {
   navigator.clipboard.writeText(text);
-};
+}
 function onSearch(newValue: string) {
   searchValue.value = newValue;
-};
+}
 </script>
 
 <template>

@@ -1,4 +1,4 @@
-import {ColorRepresentation} from "three";
+import { ColorRepresentation } from 'three';
 
 export interface Documentation {
   code: string;

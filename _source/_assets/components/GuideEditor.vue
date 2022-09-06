@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { computed, onMounted, ref, watch} from 'vue';
-import type {ComponentPublicInstance} from "vue";
+import { computed, onMounted, ref, watch } from 'vue';
+import type { ComponentPublicInstance } from 'vue';
 import {
   assetComponents,
   devMode,
@@ -9,6 +9,7 @@ import {
   log,
   proEdition,
   settings,
+  t,
   table,
   templates,
   userOperations,
@@ -28,7 +29,7 @@ import 'ace-builds/src-noconflict/mode-markdown';
 import 'ace-builds/src-noconflict/mode-twig';
 import 'ace-builds/src-noconflict/theme-tomorrow_night_bright';
 import type { Documentation, EditorComponent, EditorTabGroup, Guide, GuideContentSource } from '~/types/plugins';
-import type { VAceEditorInstance } from "vue3-ace-editor/types";
+import type { VAceEditorInstance } from 'vue3-ace-editor/types';
 
 const props = defineProps({
   formData: { type: String, required: true },
@@ -37,19 +38,19 @@ const props = defineProps({
 });
 
 const assetComponentsTotal = ref(0);
-const contentSource = ref('field' as GuideContentSource);
+const contentSource = ref<GuideContentSource>('field');
 const contentUrl = ref('');
 const currentDocs = ref<Documentation | null>(null);
-const currentTab = ref('publishing' as EditorTabGroup);
-const editorComponents = ref(editorData as EditorComponent[]);
+const currentTab = ref<EditorTabGroup>('publishing');
+const editorComponents = ref<EditorComponent[]>(editorData);
 const editorContent = ref('');
-const guide = ref(JSON.parse(props.guideData) as Guide);
+const guide = ref<Guide>(JSON.parse(props.guideData));
 const guideComponentsTotal = ref(0);
 const guideTemplate = ref('__none__');
 const pageForm = ref(JSON.parse(props.formData));
 const slugFocused = ref(false);
 const slugValue = ref('');
-const templatesFieldOptions = ref([] as Record<string, string>[]);
+const templatesFieldOptions = ref<Record<string, string>[]>([]);
 const titleValue = ref('');
 
 // Template refs
@@ -100,56 +101,58 @@ const formErrors = computed(() => {
   return errors;
 });
 const guideTemplateContent = computed(() => templates.contents[guideTemplate.value]);
-const tabComponents = computed(() => editorComponents.value.filter((component) => {
-  return component.group === currentTab.value;
-}));
+const tabComponents = computed(() =>
+  editorComponents.value.filter((component) => {
+    return component.group === currentTab.value;
+  })
+);
 
 function copyText(text: string) {
   navigator.clipboard.writeText(text);
-};
+}
 function insertGuideTemplateIntoEditor() {
   if (editor.value && guideTemplateContent.value) {
     editor.value._editor.setValue(guideTemplateContent.value);
     contentSourceField.value.setFieldValue('field');
   }
-};
+}
 function insertTextIntoEditor(text: string) {
   if (editor.value) {
     editor.value._editor.insert(text);
     editor.value.focus();
   }
-};
+}
 function onContentSourceChanged(newValue: GuideContentSource) {
   contentSource.value = proEdition ? newValue : 'template';
-};
+}
 function onContentUrlChanged(newValue: string) {
   contentUrl.value = newValue;
-};
+}
 function onGuideTemplateChanged(newValue: string) {
   guideTemplate.value = newValue;
-};
+}
 function onSlugChanged(newValue: string) {
   slugValue.value = newValue;
-};
+}
 function onTitleChanged(newValue: string) {
   titleValue.value = newValue;
 
   if (props.isNew && !slugFocused.value) {
     slugField.value.setFieldValue(kebab(newValue));
   }
-};
+}
 function selectTab(tab: EditorTabGroup) {
   currentTab.value = tab;
   localStorage.setItem('guide:edit:tab', tab);
-};
+}
 function showDocumentation(payload: Documentation) {
   currentDocs.value = currentDocs.value?.code === payload.code ? null : payload;
-};
+}
 function submitForm() {
   if (!formErrors.value.length) {
     form.value.$el.submit();
   }
-};
+}
 
 onMounted(() => {
   const contentEl = document.getElementById('content');
@@ -199,14 +202,14 @@ onMounted(() => {
   const staticWordCompleter = {
     getCompletions: function (editor: any, session: any, pos: any, prefix: any, callback: Function) {
       callback(
-          null,
-          utilityClasses.map(function (word) {
-            return {
-              caption: word,
-              value: word,
-              meta: 'Guide utility class',
-            };
-          })
+        null,
+        utilityClasses.map(function (word) {
+          return {
+            caption: word,
+            value: word,
+            meta: 'Guide utility class',
+          };
+        })
       );
     },
   };
@@ -239,20 +242,21 @@ onMounted(() => {
     <input type="hidden" name="redirect" :value="pageForm.redirect" v-if="pageForm.redirect" />
     <input type="hidden" :name="pageForm.csrf?.split('|')?.[0]" :value="pageForm.csrf?.split('|')?.[1]" />
     <div
-      class="
-        g-grid g-grid-rows-[60px,1fr] g-relative g-bg-white g-rounded-l-lg g-min-h-[650px] g-h-admin-window g-overflow-x-auto
-      "
+      class="g-grid g-grid-rows-[60px,1fr] g-relative g-bg-white g-rounded-l-lg g-min-h-[650px] g-h-admin-window g-overflow-x-auto"
     >
       <div class="g-sticky g-top-0 g-bg-white g-z-50">
         <ul class="g-flex g-flex-nowrap">
           <li class="g-flex-grow" :class="currentTab === 'publishing' ? 'g-bg-select-dark' : 'g-bg-select-light'">
             <button
               class="g-w-full g-h-[60px] g-cursor-pointer"
-              title="Settings"
+              :title="t['Settings']"
               type="button"
               @click="selectTab('publishing')"
             >
-              <SvgSettings class="g-mx-auto g-w-6 g-h-6" :class="[currentTab === 'publishing' ? 'g-text-select-light' : null]" />
+              <SvgSettings
+                class="g-mx-auto g-w-6 g-h-6"
+                :class="[currentTab === 'publishing' ? 'g-text-select-light' : null]"
+              />
             </button>
           </li>
           <li
@@ -262,11 +266,14 @@ onMounted(() => {
           >
             <button
               class="g-w-full g-h-[60px] g-cursor-pointer"
-              title="Components"
+              :title="t['Components']"
               type="button"
               @click="selectTab('components')"
             >
-              <SvgPuzzle class="g-mx-auto g-w-6 g-h-6" :class="[currentTab === 'components' ? 'g-text-select-light' : null]" />
+              <SvgPuzzle
+                class="g-mx-auto g-w-6 g-h-6"
+                :class="[currentTab === 'components' ? 'g-text-select-light' : null]"
+              />
             </button>
           </li>
           <li
@@ -276,11 +283,14 @@ onMounted(() => {
           >
             <button
               class="g-w-full g-h-[60px] g-cursor-pointer"
-              title="Images"
+              :title="t['Images']"
               type="button"
               @click="selectTab('images')"
             >
-              <SvgPhotograph class="g-mx-auto g-w-6 g-h-6" :class="[currentTab === 'images' ? 'g-text-select-light' : null]" />
+              <SvgPhotograph
+                class="g-mx-auto g-w-6 g-h-6"
+                :class="[currentTab === 'images' ? 'g-text-select-light' : null]"
+              />
             </button>
           </li>
           <li
@@ -290,11 +300,14 @@ onMounted(() => {
           >
             <button
               class="g-w-full g-h-[60px] g-cursor-pointer"
-              title="Guides"
+              :title="t['Guides']"
               type="button"
               @click="selectTab('guides')"
             >
-              <SvgGuide class="g-mx-auto g-w-6 g-h-6" :class="[currentTab === 'guides' ? 'g-text-select-light' : null]" />
+              <SvgGuide
+                class="g-mx-auto g-w-6 g-h-6"
+                :class="[currentTab === 'guides' ? 'g-text-select-light' : null]"
+              />
             </button>
           </li>
           <li
@@ -304,22 +317,25 @@ onMounted(() => {
           >
             <button
               class="g-w-full g-h-[60px] g-cursor-pointer"
-              title="Snippets"
+              :title="t['Snippets']"
               type="button"
               @click="selectTab('snippets')"
             >
-              <SvgAnnotation class="g-mx-auto g-w-6 g-h-6" :class="[currentTab === 'snippets' ? 'g-text-select-light' : null]" />
+              <SvgAnnotation
+                class="g-mx-auto g-w-6 g-h-6"
+                :class="[currentTab === 'snippets' ? 'g-text-select-light' : null]"
+              />
             </button>
           </li>
         </ul>
       </div>
       <div>
         <div class="g-p-6" v-show="currentTab === 'publishing'">
-          <h2>Settings</h2>
+          <h2>{{ t['Settings'] }}</h2>
           <CraftFieldText
             ref="titleField"
             required
-            label="Title"
+            :label="t['Title']"
             name="title"
             placeholder="Guide Title"
             @value-changed="onTitleChanged"
@@ -327,7 +343,7 @@ onMounted(() => {
           <CraftFieldText
             ref="slugField"
             required
-            label="Slug"
+            :label="t['Slug']"
             name="slug"
             placeholder="guide-title"
             @focused="slugFocused = true"
@@ -335,7 +351,7 @@ onMounted(() => {
           />
           <CraftFieldSelect
             ref="contentSourceField"
-            label="Content Source"
+            :label="t['Content Source']"
             name="contentSource"
             :options="[
               { label: 'Code Editor', value: 'field' },
@@ -348,8 +364,8 @@ onMounted(() => {
           <CraftFieldSelect
             ref="templateField"
             required
-            :instructions="`Load a template found in your <strong>${settings.templatePath}</strong> directory.`"
-            label="Template"
+            :instructions="`${t['EDITOR_SETTINGS_INSTRUCTIONS_TEMPLATE_FIELD_PREFIX']}<strong>${settings.templatePath}</strong>${t['EDITOR_SETTINGS_INSTRUCTIONS_TEMPLATE_FIELD_SUFFIX']}`"
+            :label="t['Template']"
             name="template"
             :options="templatesFieldOptions"
             @value-changed="onGuideTemplateChanged"
@@ -358,8 +374,8 @@ onMounted(() => {
           <CraftFieldText
             ref="contentUrlField"
             required
-            instructions="A URL that is loaded in an iframe."
-            label="Page URL"
+            :instructions="t['EDITOR_SETTINGS_INSTRUCTIONS_CONTENT_URL']"
+            :label="t['Page URL']"
             name="contentUrl"
             :field-attributes="{
               maxlength: 255,
@@ -369,30 +385,27 @@ onMounted(() => {
           />
           <CraftFieldText
             ref="summaryField"
-            instructions="Describes the guide in the Organizer."
-            label="Summary"
+            :instructions="t['EDITOR_SETTINGS_INSTRUCTIONS_SUMMARY']"
+            :label="t['Summary']"
             name="summary"
           />
         </div>
         <ul v-show="['components', 'guides', 'images', 'snippets'].includes(currentTab)">
           <div class="g-p-6" v-if="currentTab === 'components'">
-            <h2>Components</h2>
-            <p class="g-text-text">Add basic building blocks to your guide using Twig and Vue components.</p>
+            <h2>{{ t['Components'] }}</h2>
+            <p class="g-text-text">{{ t['EDITOR_TAB_INSTRUCTIONS_COMPONENTS'] }}</p>
           </div>
           <div class="g-p-6" v-if="currentTab === 'images'">
-            <h2>Images</h2>
-            <p class="g-text-text">Display screenshots and other images located in your Guide Asset Volume.</p>
+            <h2>{{ t['Images'] }}</h2>
+            <p class="g-text-text">{{ t['EDITOR_TAB_INSTRUCTIONS_IMAGES'] }}</p>
           </div>
           <div class="g-p-6" v-if="currentTab === 'guides'">
-            <h2>Guides</h2>
-            <p class="g-text-text">Include content from other guides into your guide.</p>
+            <h2>{{ t['Guides'] }}</h2>
+            <p class="g-text-text">{{ t['EDITOR_TAB_INSTRUCTIONS_GUIDES'] }}</p>
           </div>
           <div class="g-p-6" v-if="currentTab === 'snippets'">
-            <h2>Snippets</h2>
-            <p class="g-text-text">
-              Add these snippets to inform your authors of missing content and provide contextual tips. Edit them to fit
-              your project.
-            </p>
+            <h2>{{ t['Snippets'] }}</h2>
+            <p class="g-text-text">{{ t['EDITOR_TAB_INSTRUCTIONS_SNIPPETS'] }}</p>
           </div>
           <li v-for="(component, index) in tabComponents" :key="index">
             <ComponentListItem
@@ -435,26 +448,16 @@ onMounted(() => {
       <div class="g-w-full g-h-full g-relative g-overflow-hidden" v-if="contentSource === 'iframe'">
         <iframe class="g-w-full g-h-full g-rounded-r-lg" :src="contentUrl"></iframe>
         <div
-          class="
-            g-flex
-            g-items-center
-            g-justify-center
-            g-box-border
-            g-p-6
-            g-absolute
-            g-inset-0
-            g-bg-gradient-to-b
-            g-from-matrix-block/0
-            g-via-matrix-block
-            g-to-matrix-block
-          "
+          class="g-flex g-items-center g-justify-center g-box-border g-p-6 g-absolute g-inset-0 g-bg-gradient-to-b g-from-matrix-block/0 g-via-matrix-block g-to-matrix-block"
         >
           <p
             class="g-text-center"
-            v-html="`The url, <strong>${contentUrl}</strong>, will get loaded in an iframe.`"
+            v-html="
+              `${t['EDITOR_URL_LOADED_IN_IFRAME_PREFIX']}<strong>${contentUrl}</strong>${t['EDITOR_URL_LOADED_IN_IFRAME_SUFFIX']}`
+            "
             v-if="contentUrl !== ''"
           ></p>
-          <p v-html="`Enter a URL into the <strong>Page URL</strong> field.`" v-else></p>
+          <p v-html="t[`EDITOR_ADD_PAGE_URL`]" v-else></p>
         </div>
       </div>
       <div
@@ -465,64 +468,49 @@ onMounted(() => {
           class="g-w-full g-h-full"
         ><code class="g-w-full g-h-full" v-text='guideTemplateContent' v-if="guideTemplate !== '__none__'"></code></pre>
         <div
-          class="
-            g-flex
-            g-items-center
-            g-justify-center
-            g-box-border
-            g-p-6
-            g-absolute
-            g-inset-0
-            g-bg-gradient-to-b
-            g-from-matrix-block/0
-            g-via-matrix-block
-            g-to-matrix-block
-          "
+          class="g-flex g-items-center g-justify-center g-box-border g-p-6 g-absolute g-inset-0 g-bg-gradient-to-b g-from-matrix-block/0 g-via-matrix-block g-to-matrix-block"
         >
           <div class="g-text-center" v-if="guideTemplate !== '__none__'">
             <p
               v-html="
-                `The <strong>${guideTemplate}</strong> template will be loaded from the <strong>${settings.templatePath}</strong> directiory.`
+                `${t['EDITOR_TEMPLATE_LOAD_FROM_PREFIX']}<strong>${guideTemplate}</strong>${t['EDITOR_TEMPLATE_LOAD_FROM_MID']}<strong>${settings.templatePath}</strong>${t['EDITOR_TEMPLATE_LOAD_FROM_SUFFIX']}`
               "
             ></p>
             <div v-if="proEdition">
-              <p>
-                You can copy the contents of this file into the Code Editor (this will replace the current Code Editor
-                code).
-              </p>
+              <p>{{ t['EDITOR_TEMPLATE_COPY_INSTRUCTIONS'] }}</p>
               <button class="btn submit" type="button" @click="insertGuideTemplateIntoEditor">
-                Copy Template to Code Editor
+                {{ t['EDITOR_TEMPLATE_COPY_BUTTON_LABEL'] }}
               </button>
             </div>
           </div>
-          <p v-html="`Select a file from the <strong>Template</strong> field.`" v-else></p>
+          <p v-html="t['EDITOR_TEMPLATE_SELECT_FILE']" v-else></p>
         </div>
       </div>
     </div>
     <transition name="slide-docs">
       <div class="g-absolute g-inset-y-0 g-right-0 g-w-64 g-p-2 g-z-10 lg:g-w-96" v-if="currentDocs">
         <div
-          class="
-            g-box-border g-p-5 g-pt-14 g-w-full g-h-full g-bg-matrix-block g-rounded-sm g-shadow-lg g-overflow-auto
-          "
+          class="g-box-border g-p-5 g-pt-14 g-w-full g-h-full g-bg-matrix-block g-rounded-sm g-shadow-lg g-overflow-auto"
         >
           <h1 v-html="currentDocs.title" v-if="currentDocs.title"></h1>
           <div v-html="currentDocs.description" v-if="currentDocs.description"></div>
           <img class="g-mt-6" :srcset="currentDocs.imageSrcset" alt="image preview" v-if="currentDocs.imageSrcset" />
           <div class="g-mt-6" v-if="currentDocs.code">
-            <h2>Code</h2>
+            <h2>{{ t['Code'] }}</h2>
             <div class="g-bg-matrix-titlebar g-rounded g-border-matrix-border g-overflow-x-scroll">
               <pre class="g-p-3 g-select-all"><code>{{ currentDocs.code }}</code></pre>
             </div>
             <div class="g-space-x-1">
               <button class="btn small icon add g-mt-1" type="button" @click="insertTextIntoEditor(currentDocs.code)">
-                Add
+                {{ t['Add'] }}
               </button>
-              <button class="btn small g-mt-1" type="button" @click="copyText(currentDocs.code)">Copy</button>
+              <button class="btn small g-mt-1" type="button" @click="copyText(currentDocs.code)">
+                {{ t['Copy'] }}
+              </button>
             </div>
           </div>
           <div class="g-mt-6" v-if="currentDocs.props">
-            <h2>Arguments</h2>
+            <h2>{{ t['Arguments'] }}</h2>
             <table>
               <tbody>
                 <tr v-for="(prop, index) in currentDocs.props" :key="index">
@@ -535,14 +523,16 @@ onMounted(() => {
             </table>
           </div>
         </div>
-        <button class="btn g-absolute g-top-4 g-right-4" type="button" @click="currentDocs = null">Close</button>
+        <button class="btn g-absolute g-top-4 g-right-4" type="button" @click="currentDocs = null">
+          {{ t['Close'] }}
+        </button>
       </div>
     </transition>
   </form>
 
   <Teleport to="#guide-action-buttons">
-    <button class="btn disabled" :title="formErrors.join(' ')" v-if="formErrors.length > 0">Save</button>
-    <button class="btn submit" type="button" @click="submitForm" v-else>Save</button>
+    <button class="btn disabled" :title="formErrors.join(' ')" v-if="formErrors.length > 0">{{ t['Save'] }}</button>
+    <button class="btn submit" type="button" @click="submitForm" v-else>{{ t['Save'] }}</button>
   </Teleport>
 </template>
 
