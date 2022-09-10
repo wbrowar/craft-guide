@@ -32,7 +32,7 @@ export const userOperations: PluginUserOperations = globalsElement?.dataset?.use
 //   useOrganizer: true,
 // };
 
-log(t);
+log('translations', t);
 
 // LOGGING FUNCTIONS
 export function dir(...args: any[]) {

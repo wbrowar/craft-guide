@@ -31,13 +31,13 @@
   }) }}
 
   {{ forms.lightswitchField({
-    label: 'Show Widget Title?'|t('guide'),
+    label: 'WIDGET_SETTINGS_SHOW_TITLE_LABEL'|t('guide'),
     id: 'showTitle',
     name: 'showTitle',
     on: widget.showTitle,
   }) }}
 {% else %}
-  No guides are available for widgets right now.{% if userOperations.useOrganizer %}
-  <a href="{{ url('guide/organizer') }}">Use the Organizer</a> to enable guides for widgets.{% endif %}
+  {{ 'WIDGET_SETTINGS_NO_GUIDES'|t('guide') }}{% if userOperations.useOrganizer %}
+  <a href="{{ url('guide/organizer') }}">{{ 'WIDGET_SETTINGS_ENABLE_GUIDES'|t('guide') }}</a>{% endif %}
   <input type="hidden" name="guideId" value="0">
 {% endif %}

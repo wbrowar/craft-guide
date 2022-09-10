@@ -18,7 +18,7 @@
 {% endif %}
 
 {# The title of this CP section #}
-{% set title = "Guide Settings" %}
+{% set title = 'Guide Settings'|t('guide') %}
 
 {# The selected CP subnav item #}
 {% set selectedSubnavItem = 'settings' %}
@@ -44,12 +44,12 @@
   {% switch selectedTab %}
   {% case 'general' %}
     {{ forms.textField({
-      label: 'Template Path',
+      label: 'PLUGIN_SETTINGS_FIELD_TEMPLATE_PATH_LABEL'|t('guide'),
       id: 'templatePath',
       name: 'templatePath',
       required: true,
       value: settings.templatePath,
-      instructions: 'A path inside of the **templates** directory where Guide will look for templates.',
+      instructions: 'PLUGIN_SETTINGS_FIELD_TEMPLATE_PATH_INSTRUCTIONS'|t('guide'),
     }) }}
 
     {% set volumes = craft.app.volumes.allVolumes %}
@@ -59,19 +59,19 @@
     {% endfor %}
 
     {{ forms.selectField({
-      label: 'Asset Volume',
+      label: 'PLUGIN_SETTINGS_FIELD_ASSET_VOLUME_LABEL'|t('guide'),
       id: 'assetVolume',
       name: 'assetVolume',
       options: options,
       required: true,
       value: settings.assetVolume,
-      instructions: 'An asset volume that stores all images and videos used in guides.',
+      instructions: 'PLUGIN_SETTINGS_FIELD_ASSET_VOLUME_INSTRUCTIONS'|t('guide'),
     }) }}
 
     {% if settings.assetVolume == '0' %}
-      <p>An asset volume is required to view guides. Please create a new volume and select it here.</p>
+      <p>{{ 'PLUGIN_SETTINGS_ASSET_VOLUME_REQUIRED'|t('guide') }}</p>
       <p>
-        <a class="btn icon add" href="{{ url('settings/assets/volumes/new') }}">Create a New Volume</a>
+        <a class="btn icon add" href="{{ url('settings/assets/volumes/new') }}">{{ 'Create a New Volume'|t('guide') }}</a>
       </p>
     {% endif %}
 
@@ -81,13 +81,13 @@
         { label: 'Below edit fields', value: 'append' },
       ] %}
       {{ forms.selectField({
-        label: 'Edit Page Guide Location',
+        label: 'PLUGIN_SETTINGS_FIELD_DEFAULT_TELEPORT_METHOD_LABEL'|t('guide'),
         id: 'defaultTeleportMethod',
         name: 'defaultTeleportMethod',
         options: options,
         required: true,
         value: settings.defaultTeleportMethod,
-        instructions: 'Determine if guides should appear above or below content editing fields on element edit pages.',
+        instructions: 'PLUGIN_SETTINGS_FIELD_DEFAULT_TELEPORT_METHOD_INSTRUCTIONS'|t('guide'),
       }) }}
     {% else %}
       <input type="hidden" name="defaultTeleportMethod" value="prepend">
@@ -101,31 +101,31 @@
     ]) %}
 
     {{ forms.textField({
-      label: 'Project Name',
+      label: 'PLUGIN_SETTINGS_FIELD_PROJECT_NAME_LABEL'|t('guide'),
       id: 'projectName',
       name: 'projectName',
       value: settings.projectName,
-      instructions: 'The name of the project. Twig tag: **{{ craft.guide.var("projectName") }}**',
+      instructions: 'PLUGIN_SETTINGS_FIELD_PROJECT_NAME_INSTRUCTIONS'|t('guide'),
       placeholder: classicCompanies|last ~ '’s Website'
     }) }}
 
     {{ forms.textField({
-      label: 'Client Name',
+      label: 'PLUGIN_SETTINGS_FIELD_CLIENT_NAME_LABEL'|t('guide'),
       id: 'clientName',
       name: 'clientName',
       value: settings.clientName,
-      instructions: 'The name of the person or organization that the website is built for. Twig tag: **{{ craft.guide.var("clientName") }}**',
+      instructions: 'PLUGIN_SETTINGS_FIELD_CLIENT_NAME_INSTRUCTIONS'|t('guide'),
       placeholder: classicCompanies|last
     }) }}
 
     {% set classicCompaniesLast = classicCompanies|last %}
     {% set classicCompanies = classicCompanies|without(classicCompaniesLast) %}
     {{ forms.textField({
-      label: 'My Company Name',
+      label: 'PLUGIN_SETTINGS_FIELD_MY_COMPANY_NAME_LABEL'|t('guide'),
       id: 'myCompanyName',
       name: 'myCompanyName',
       value: settings.myCompanyName,
-      instructions: 'The name of the person or organization that built the website. Twig tag: **{{ craft.guide.var("myCompanyName") }}**',
+      instructions: 'PLUGIN_SETTINGS_FIELD_MY_COMPANY_NAME_INSTRUCTIONS'|t('guide'),
       placeholder: classicCompanies|last
     }) }}
   {% endswitch %}
@@ -134,10 +134,10 @@
     <hr>
     <div class="readable">
       <blockquote class="note tip">
-        <strong>Thanks for using the LITE edition of Guide!</strong>
-        <p>The PRO edition of Guide offers a drag-and-drop editor that includes snippets and components, lets you display guides—and contextually useful information—on content edit pages or on any page within the Craft CP, and makes it easy to create standalone CP pages, widgets, and UI elements.</p>
+        <strong>{{ 'PLUGIN_SETTINGS_GUIDE_PRO_1'|t('guide') }}</strong>
+        <p>{{ 'PLUGIN_SETTINGS_GUIDE_PRO_2'|t('guide') }}</p>
         <p>
-          <a class="btn submit" href="{{ url('plugin-store/guide') }}">Check out Guide PRO in the Plugin Store</a>
+          <a class="btn submit" href="{{ url('plugin-store/guide') }}">{{ 'PLUGIN_SETTINGS_GUIDE_PRO_3'|t('guide') }}</a>
         </p>
       </blockquote>
     </div>

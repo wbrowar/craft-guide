@@ -13,8 +13,8 @@
 {% import "_includes/forms" as forms %}
 
 {{ forms.textField({
-  label: 'UI Element ID',
-  tip: 'A unique ID required to place guides into this UI element',
+  label: 'CP_UI_ELEMENT_LABEL'|t('guide'),
+  tip: 'CP_UI_ELEMENT_TIP'|t('guide'),
   id: 'uiId',
   name: 'uiId',
   required: true,

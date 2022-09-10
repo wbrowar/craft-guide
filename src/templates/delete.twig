@@ -20,7 +20,7 @@
   {% set guide = craft.guide.getOne({ id: guideId }) %}
 
   {% if guide ?? false %}
-    {% set title = "Delete " ~ guide.title %}
+    {% set title = 'Delete'|t('guide') ~ " " ~ guide.title %}
   {% else %}
     {% redirect 'guide/organizer' %}
   {% endif %}
@@ -38,13 +38,13 @@
       <input type="hidden" name="redirect" value="{{ craft.app.request.param('return') }}">
     {% endif %}
 
-    <p><b>Are you sure you want to delete this guide?</b></p>
+    <p><b>{{ 'EDIT_GUIDE_DELETE_PAGE_ARE_YOU_SURE'|t('guide') }}</b></p>
 
-    <p>The guide content stored in the database will be deleted. No template files will be deleted.</p>
+    <p>{{ 'EDIT_GUIDE_DELETE_PAGE_NO_TEMPLATE_DELETED'|t('guide') }}</p>
 
     <div class="buttons">
       <input class="btn submit" type="submit" value="Delete">
-      <a class="btn" href="{{ url('guide/organizer') }}">Back to Organizer</a>
+      <a class="btn" href="{{ url('guide/organizer') }}">{{ 'Back to Organizer'|t('guide') }}</a>
     </div>
   </form>
 {% endset %}

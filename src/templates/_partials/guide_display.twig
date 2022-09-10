@@ -75,7 +75,7 @@
                 {% if not (teleportMap['id-' ~ guide.id] ?? false) and (guideNav|length > 1) %}v-if="currentGuide === '{{ guide.slug }}'"{% endif %}
               >
                 <div class="guide-edit-button g-ml-3 g-space-x-1 g-duration-150" v-if="enableInlineEditor || enableTldr">
-                  <button class="btn small g-duration-150" :class="[showTldr ? 'submit' : null]" type="button" title="Hide some of the content in this guide to read a summarized version." @click="showTldr ? toggleTldr(false) : toggleTldr(true)" v-if="enableTldr">TL;DR</button>
+                  <button class="btn small g-duration-150" :class="[showTldr ? 'submit' : null]" type="button" title="Hide some of the content in this guide to read a summarized version." @click="showTldr ? toggleTldr(false) : toggleTldr(true)" v-if="enableTldr">{{ 'TL;DR'|t('guide') }}</button>
                   <button class="btn small g-duration-150" type="button" title="Select a new guide for this area." @click="showInlineEditor = true" v-if="enableInlineEditor && userOperations.useOrganizer"><svg-settings class="g-h-4 g-w-4"></svg-settings></button>
                 </div>
                 {{ include('guide/_partials/render_content', { guide: guide }) }}
@@ -87,7 +87,7 @@
         {% if guideNav|length > 1 %}
           <div>
             <div class="g-sticky g-top-16">
-              <h2>Guides</h2>
+              <h2>{{ 'Guides'|t('guide') }}</h2>
               <div class="g-space-y-2">
                 {% for link in guideNav %}
                   <button class="g-block g-text-left g-text-sm g-cursor-pointer g-duration-150" :class="{ 'g-font-bold g-text-primary': currentGuide === '{{ link.slug }}' }" type="button" @click="currentGuide = '{{ link.slug }}'">{{ link.title }}</button>

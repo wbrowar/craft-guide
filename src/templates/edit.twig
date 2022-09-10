@@ -13,7 +13,7 @@
 {% extends "_layouts/cp" %}
 
 {# The title of this CP section #}
-{% set title = title ?? "Guide Edit" %}
+{% set title = title ?? 'Guide Edit'|t('guide') %}
 
 {# The selected CP subnav item #}
 {% set selectedSubnavItem = 'organizer' %}
@@ -23,7 +23,7 @@
     {% set guide = craft.guide.getOne({ id: guideId }) %}
     {% set isNew = false %}
   {% else %}
-    {% set title = "New Guide" %}
+    {% set title = 'New Guide'|t('guide') %}
     {% set guide = craft.guide.getAll([], 'new') %}
     {% set isNew = true %}
   {% endif %}

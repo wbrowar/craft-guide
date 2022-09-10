@@ -10,7 +10,6 @@
 {% for key in translationKeys %}
   {% set translations = translations|merge({(key): key|t('guide')}) %}
 {% endfor %}
-
 <div
   id="guide-admin-globals"
   data-asset-components="{{ assetComponents|json_encode }}"

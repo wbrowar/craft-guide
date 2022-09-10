@@ -23,8 +23,8 @@
       placementId: placementId ?? false,
     } only %}
   {% else %}
-    <p>A UI element ID is required to place guides in this UI element. Please update the settings for this UI element to add guides here.</p>
+    <p>{{ 'UI_ELEMENT_MISSING_ELEMENT_ID'|t('guide') }}</p>
   {% endif %}
 {% else %}
-  <p>Guide UI elements are available in the PRO edition of Guide. <a href="{{ url('plugin-store/guide') }}">Please upgrade the Guide plugin</a> to add guides to UI elements.</p>
+  <p>{{ 'UI_ELEMENT_PRO_UPGRADE_1'|t('guide') }} <a href="{{ url('plugin-store/guide') }}">{{ 'UI_ELEMENT_PRO_UPGRADE_2'|t('guide') }}</a> {{ 'UI_ELEMENT_PRO_UPGRADE_3'|t('guide') }}</p>
 {% endif %}

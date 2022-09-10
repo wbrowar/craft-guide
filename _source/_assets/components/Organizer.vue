@@ -269,7 +269,7 @@ onMounted(() => {
               type="button"
               :href="cpUrl(`guide/edit/${guide.id}?return=${cpUrl('guide/organizer')}`)"
               v-if="userOperations.editGuides"
-              >Edit</a
+              >{{ t['Edit'] }}</a
             >
             <a
               class="btn small"
@@ -277,7 +277,7 @@ onMounted(() => {
               type="button"
               :href="cpUrl(`guide/delete/${guide.id}`)"
               v-if="userOperations.deleteGuides"
-              >Delete</a
+              >{{ t['Delete'] }}</a
             >
             <a
               class="btn small"
@@ -285,7 +285,7 @@ onMounted(() => {
               type="button"
               :href="cpUrl(`guide/page/${guide.slug}`)"
               v-if="proEdition"
-              >View</a
+              >{{ t['View'] }}</a
             >
             <button
               class="btn small icon add"
@@ -293,7 +293,7 @@ onMounted(() => {
               type="button"
               @click="addPlacementForGuide(guide)"
             >
-              Add
+              {{ t['Add'] }}
             </button>
           </div>
           <div class="g-mt-3" v-if="currentPreparingGuideId === guide.id">Edit this!</div>
