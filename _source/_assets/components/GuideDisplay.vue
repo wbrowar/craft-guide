@@ -11,6 +11,7 @@ const props = defineProps({
   teleportContainerClass: String,
   teleportMethod: String,
   teleportSelector: String,
+  teleportToSlideout: { type: Boolean, default: false },
 });
 
 const currentGuide = ref('');
@@ -23,9 +24,9 @@ const showTldr = ref(false);
 let slideout: { open: Function };
 const slideoutOpened = ref(false);
 
-const renderDisplay = computed(() => props.teleportMethod === 'slideout' ? slideoutOpened.value : true);
+const renderDisplay = computed(() => props.teleportToSlideout ? slideoutOpened.value : true);
 const teleportTarget = computed(() => {
-  if (props.teleportMethod === 'slideout') {
+  if (props.teleportToSlideout) {
     return props.teleportSelector;
   }
 
@@ -54,7 +55,7 @@ if (proEdition) {
   });
 }
 
-function openSlideout(guides: Guide[]) {
+function openSlideout() {
   if (slideout) {
     slideout.open();
   }

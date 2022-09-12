@@ -83,15 +83,15 @@
       ] %}
       {{ forms.selectField({
         label: 'PLUGIN_SETTINGS_FIELD_DEFAULT_TELEPORT_METHOD_LABEL'|t('guide'),
-        id: 'defaultTeleportMethod',
-        name: 'defaultTeleportMethod',
+        id: 'editPageTeleportTarget',
+        name: 'editPageTeleportTarget',
         options: options,
         required: true,
-        value: settings.defaultTeleportMethod,
+        value: settings.editPageTeleportTarget,
         instructions: 'PLUGIN_SETTINGS_FIELD_DEFAULT_TELEPORT_METHOD_INSTRUCTIONS'|t('guide'),
       }) }}
     {% else %}
-      <input type="hidden" name="defaultTeleportMethod" value="prepend">
+      <input type="hidden" name="editPageTeleportTarget" value="slideout">
     {% endif %}
   {% case 'variables' %}
     {% set classicCompanies = shuffle([

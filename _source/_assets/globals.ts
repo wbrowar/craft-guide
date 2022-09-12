@@ -1,4 +1,4 @@
-import { EditorComponent, Guide, PluginSettings, PluginUserOperations } from './types/plugins';
+import type { EditorComponent, Guide, PluginSettings, PluginUserOperations } from './types/plugins';
 
 const globalsElement = document.getElementById('guide-admin-globals');
 

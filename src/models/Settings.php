@@ -26,7 +26,7 @@ class Settings extends Model
     public $assetVolume = '';
 
     // Path to Guide CP Section templates
-    public $defaultTeleportMethod = 'slideout';
+    public $editPageTeleportTarget = 'slideout';
 
     // Path to Guide CP Section templates
     public $templatePath = '_guide';
@@ -45,11 +45,11 @@ class Settings extends Model
     public function rules(): array
     {
         return [
-            [['assetVolume', 'defaultTeleportMethod', 'templatePath'], 'required'],
+            [['assetVolume', 'editPageTeleportTarget', 'templatePath'], 'required'],
 
-            [['assetVolume', 'defaultTeleportMethod', 'templatePath'], 'string'],
+            [['assetVolume', 'editPageTeleportTarget', 'templatePath'], 'string'],
 
-            ['defaultTeleportMethod', 'default', 'value' => 'slideout'],
+            ['editPageTeleportTarget', 'default', 'value' => 'slideout'],
             ['templatePath', 'default', 'value' => '_guide'],
         ];
     }

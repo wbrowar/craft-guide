@@ -1,5 +1,5 @@
 import { log } from './globals';
-import { EditorComponent } from './types/plugins';
+import type { EditorComponent } from './types/plugins';
 
 export const editorData: EditorComponent[] = [
   // Components

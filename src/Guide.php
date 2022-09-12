@@ -712,7 +712,8 @@ class Guide extends Plugin
                 'element' => $element,
                 'guides' => $guides,
                 'teleportMap' => $teleportMap,
-                'teleportMethod' => self::$settings->defaultTeleportMethod,
+                'teleportMethod' => self::$settings->editPageTeleportTarget == 'prepend' ? 'prepend' : 'append',
+                'teleportToSlideout' => self::$settings->editPageTeleportTarget == 'slideout',
             ]);
         }
 

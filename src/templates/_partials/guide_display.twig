@@ -35,6 +35,7 @@
 
   <div
     {% if inlineEditorId ?? false %}data-enable-inline-editor{% endif %}
+    {% if teleportToSlideout ?? false %}data-teleport-to-slideout{% endif %}
     data-guide-display="{{ displaySlug }}"
     {% if guideNav|length %}data-guide-nav-data="{{ guideNav|json_encode }}"{% endif %}
     {% if not guides|length %}data-start-in-inline-editor{% endif %}
@@ -43,8 +44,8 @@
     {% if teleportSelector ?? false %}data-teleport-selector="{{ teleportSelector }}"{% endif %}
   >{{ placeholderText|default('') }}</div>
   <template id="{{ displaySlug }}">
-    <teleport to="#page-title" v-if="guideDisplay === 'guide-page' && teleportMethod === 'slideout'">
-      <button class="btn" @click="openSlideout({ guides })" type="button"><svg-guide class="g-mr-0.5 g-h-5 g-w-4"></svg-guide><span>${ t['Guide'] }</span></button>
+    <teleport to="#page-title" v-if="guideDisplay === 'guide-page' && teleportToSlideout">
+      <button class="btn" @click="openSlideout" type="button"><svg-guide class="g-mr-0.5 g-h-5 g-w-4"></svg-guide><span>${ t['Guide'] }</span></button>
     </teleport>
     <teleport :to="teleportTarget" :disabled="!teleportTarget" v-if="renderDisplay">
       <div{% if guideNav|length > 1 %} class="g-grid g-grid-cols-[var(--grid-cols)] g-items-start g-gap-6 g-relative" style="--grid-cols: 1fr 200px;"{% endif %}>
@@ -53,7 +54,7 @@
           {% if placementId ?? false %}placement-id="{{ placementId }}"{% endif %}
           v-if="showInlineEditor"
         ></placement-inline-editor>{% endif %}
-        <div {% if inlineEditorId ?? false %}v-else{% endif %}>
+        <div{% if inlineEditorId ?? false %} v-else{% endif %}>
           {% if guides|length %}
             {% for guide in guides %}
               {% set vueBoolean1 = "data['" ~ guide.slug ~ "'].boolean1" %}
@@ -88,7 +89,7 @@
           {% endif %}
         </div>
         {% if guideNav|length > 1 %}
-          <div class="g-sticky" :class="teleportMethod === 'slideout' ? 'g-top-0' : 'g-top-16'">
+          <div class="g-sticky" :class="teleportToSlideout ? 'g-top-0' : 'g-top-16'">
             <h2>{{ 'Guides'|t('guide') }}</h2>
             <div class="g-space-y-2">
               {% for link in guideNav %}

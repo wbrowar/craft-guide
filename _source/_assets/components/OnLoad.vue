@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { defineEmits, onBeforeMount } from 'vue';
+import { onBeforeMount } from 'vue';
 
 const emit = defineEmits(['loaded']);
 

@@ -1,9 +1,9 @@
 const plugin = require('tailwindcss/plugin');
 
 module.exports = {
+  content: ['./editorData.ts', './components/**/*.{vue,js,ts}', '../../src/templates/**/*.twig'],
   mode: 'jit',
   prefix: 'g-',
-  purge: ['./editorData.ts', './components/**/*.{vue,js,ts}', '../../src/templates/**/*.twig'],
   theme: {
     colors: {
       primary: '#E12D39',

@@ -53,7 +53,7 @@ class SettingsController extends Controller
         switch ($params['page']) {
             case 'general':
                 $settings['assetVolume'] = $params['assetVolume'];
-                $settings['defaultTeleportMethod'] = $params['defaultTeleportMethod'];
+                $settings['editPageTeleportTarget'] = $params['editPageTeleportTarget'];
                 $settings['templatePath'] = $this->removeSlashFromEnd($params['templatePath']);
                 break;
             case 'variables':

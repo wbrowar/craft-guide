@@ -1,7 +1,7 @@
+
 import { defineConfig } from 'vite';
 import * as dotenv from 'dotenv';
 import vue from '@vitejs/plugin-vue';
-dotenv.config({ path: '../../assembly-line.env' });
 
 export default defineConfig({
   build: {
@@ -13,9 +13,6 @@ export default defineConfig({
         'guide-admin': './guide-admin.ts',
         'guide-display': './guide-display.ts',
         'guide-welcome': './guide-welcome.ts',
-      },
-      output: {
-        manualChunks: undefined,
       },
     },
   },

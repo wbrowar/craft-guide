@@ -18,10 +18,10 @@ if (guideDisplays) {
             teleportTarget.setAttribute('class', display.dataset.teleportContainerClass);
           }
 
-          if (display.dataset?.teleportMethod === 'append') {
-            teleportElement.appendChild(teleportTarget);
-          } else {
+          if (display.dataset?.teleportMethod === 'prepend') {
             teleportElement.insertBefore(teleportTarget, teleportElement.firstChild);
+          } else {
+            teleportElement.appendChild(teleportTarget);
           }
         }
       }
