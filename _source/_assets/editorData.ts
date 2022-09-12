@@ -109,6 +109,26 @@ Content
     documentation: `<p>Use Craft’s "markdown" Twig filter to render markdown content.</p>`,
   },
   {
+    title: 'Modal',
+    group: 'components',
+    code: `<modal ref="my-modal" click-outside-to-close teleport-to="body">
+  <div style="padding: var(--xl)">
+    <p>Modal content!</p>
+  </div>
+</modal>
+<button class="btn" type="button" @click="$refs['my-modal'].open()">Open Modal</button>`,
+    summary: `<p>Display content in a modal.</p>`,
+    documentation: `<p>Display content in a modal.</p>`,
+    props: {
+      'aspect-ratio': `Sets a CSS aspect-ratio on the modal content.`,
+      'click-outside-to-close': `Enables closing the modal when the mask behind the content is clicked.`,
+      'max-height': `Sets a CSS max-height to the modal content.`,
+      'max-width': `Sets a CSS max-width to the modal content.`,
+      ref: `The Vue ref that lets you access the modal’s open and close functions.`,
+      'teleport-to': `CSS selector where modal is appended to.`,
+    },
+  },
+  {
     title: 'Table',
     group: 'components',
     code: `<table class="g-table">

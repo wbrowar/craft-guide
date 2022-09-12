@@ -220,10 +220,10 @@ class Guide extends Plugin
                     if ($userOperations['editGuides']) {
                         $editVariables = [];
 
-                        $editVariables['title'] = 'New Guide';
+                        $editVariables['title'] = Craft::t('guide', 'New Guide');
                         $event->rules['guide/new'] = ['template' => 'guide/edit', 'variables' => $editVariables];
 
-                        $editVariables['title'] = 'Edit Guide';
+                        $editVariables['title'] = Craft::t('guide', 'Edit Guide');
                         $event->rules['guide/edit/<guideId:\d{1,}>'] = ['template' => 'guide/edit', 'variables' => $editVariables];
                     }
                     if ($userOperations['deleteGuides']) {
@@ -251,11 +251,11 @@ class Guide extends Plugin
             if (Craft::$app->getEdition() > 0) {
                 Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
                     $event->permissions[] = [
-                        'heading' => Craft::t('guide', 'Guide'),
+                        'heading' => Craft::t('guide', Craft::t('guide', 'Guide')),
                         'permissions' => [
-                            'editGuides' => ['label' => Craft::t('guide', 'Edit Guides')],
-                            'deleteGuides' => ['label' => Craft::t('guide', 'Delete Guides')],
-                            'useOrganizer' => ['label' => Craft::t('guide', 'Use Organizer and UI Element Selector')],
+                            'editGuides' => ['label' => Craft::t('guide', Craft::t('guide', 'PERMISSIONS_LABEL_EDIT_GUIDES'))],
+                            'deleteGuides' => ['label' => Craft::t('guide', Craft::t('guide', 'PERMISSIONS_LABEL_DELETE_GUIDES'))],
+                            'useOrganizer' => ['label' => Craft::t('guide', Craft::t('guide', 'PERMISSIONS_LABEL_USE_ORGANIZER'))],
                         ]
                     ];
                 });
@@ -427,7 +427,7 @@ class Guide extends Plugin
 
         if ((self::$settings->templatePath ?? false) && (self::$settings->assetVolume ?? false)) {
             $navItem['subnav'] = [
-                'home' => ['label' => 'Guide', 'url' => 'guide'],
+                'home' => ['label' => Craft::t('guide', Craft::t('guide', 'Guide')), 'url' => 'guide'],
             ];
         }
 
@@ -607,9 +607,13 @@ class Guide extends Plugin
             'EDITOR_TAB_INSTRUCTIONS_GUIDES',
             'EDITOR_TAB_INSTRUCTIONS_IMAGES',
             'EDITOR_TAB_INSTRUCTIONS_SNIPPETS',
-            'EDITOR_SETTINGS_INSTRUCTIONS_CONTENT_URL',
-            'EDITOR_SETTINGS_INSTRUCTIONS_SUMMARY',
-            'EDITOR_SETTINGS_INSTRUCTIONS_TEMPLATE_FIELD_PREFIX',
+            'EDITOR_FIELD_INSTRUCTIONS_SETTINGS_CONTENT_URL',
+            'EDITOR_FIELD_INSTRUCTIONS_SETTINGS_SUMMARY',
+            'EDITOR_FIELD_INSTRUCTIONS_SETTINGS_TEMPLATE_FIELD_PREFIX',
+            'EDITOR_FIELD_INSTRUCTIONS_SETTINGS_TEMPLATE_FIELD_SUFFIX',
+            'EDITOR_FIELD_CONTENT_SOURCE_OPTION_FIELD',
+            'EDITOR_FIELD_CONTENT_SOURCE_OPTION_IFRAME',
+            'EDITOR_FIELD_CONTENT_SOURCE_OPTION_TEMPLATE',
             'EDITOR_TEMPLATE_COPY_BUTTON_LABEL',
             'EDITOR_TEMPLATE_COPY_INSTRUCTIONS',
             'EDITOR_TEMPLATE_LOAD_FROM_PREFIX',

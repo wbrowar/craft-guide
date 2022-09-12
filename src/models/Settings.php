@@ -26,7 +26,7 @@ class Settings extends Model
     public $assetVolume = '';
 
     // Path to Guide CP Section templates
-    public $defaultTeleportMethod = 'prepend';
+    public $defaultTeleportMethod = 'slideout';
 
     // Path to Guide CP Section templates
     public $templatePath = '_guide';
@@ -49,7 +49,7 @@ class Settings extends Model
 
             [['assetVolume', 'defaultTeleportMethod', 'templatePath'], 'string'],
 
-            ['defaultTeleportMethod', 'default', 'value' => 'prepend'],
+            ['defaultTeleportMethod', 'default', 'value' => 'slideout'],
             ['templatePath', 'default', 'value' => '_guide'],
         ];
     }

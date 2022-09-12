@@ -43,8 +43,11 @@
     {% if teleportSelector ?? false %}data-teleport-selector="{{ teleportSelector }}"{% endif %}
   >{{ placeholderText|default('') }}</div>
   <template id="{{ displaySlug }}">
-    <teleport :to="teleportTarget" :disabled="!teleportTarget">
-      <div{% if guideNav|length > 1 %} class="g-grid g-grid-cols-[var(--grid-cols)] g-gap-6 g-relative" style="--grid-cols: 1fr 200px;"{% endif %}>
+    <teleport to="#page-title" v-if="guideDisplay === 'guide-page' && teleportMethod === 'slideout'">
+      <button class="btn" @click="openSlideout({ guides })" type="button"><svg-guide class="g-mr-0.5 g-h-5 g-w-4"></svg-guide><span>${ t['Guide'] }</span></button>
+    </teleport>
+    <teleport :to="teleportTarget" :disabled="!teleportTarget" v-if="renderDisplay">
+      <div{% if guideNav|length > 1 %} class="g-grid g-grid-cols-[var(--grid-cols)] g-items-start g-gap-6 g-relative" style="--grid-cols: 1fr 200px;"{% endif %}>
         {% if inlineEditorId ?? false %}<placement-inline-editor
           placement-inline-editor="{{ inlineEditorId }}"
           {% if placementId ?? false %}placement-id="{{ placementId }}"{% endif %}
@@ -85,14 +88,12 @@
           {% endif %}
         </div>
         {% if guideNav|length > 1 %}
-          <div>
-            <div class="g-sticky g-top-16">
-              <h2>{{ 'Guides'|t('guide') }}</h2>
-              <div class="g-space-y-2">
-                {% for link in guideNav %}
-                  <button class="g-block g-text-left g-text-sm g-cursor-pointer g-duration-150" :class="{ 'g-font-bold g-text-primary': currentGuide === '{{ link.slug }}' }" type="button" @click="currentGuide = '{{ link.slug }}'">{{ link.title }}</button>
-                {% endfor %}
-              </div>
+          <div class="g-sticky" :class="teleportMethod === 'slideout' ? 'g-top-0' : 'g-top-16'">
+            <h2>{{ 'Guides'|t('guide') }}</h2>
+            <div class="g-space-y-2">
+              {% for link in guideNav %}
+                <button class="g-block g-text-left g-text-sm g-cursor-pointer g-duration-150" :class="{ 'g-font-bold g-text-primary': currentGuide === '{{ link.slug }}' }" type="button" @click="currentGuide = '{{ link.slug }}'">{{ link.title }}</button>
+              {% endfor %}
             </div>
           </div>
         {% endif %}

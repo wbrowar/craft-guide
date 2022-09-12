@@ -150,7 +150,7 @@ function showDocumentation(payload: Documentation) {
 }
 function submitForm() {
   if (!formErrors.value.length) {
-    form.value.$el.submit();
+    form.value.submit();
   }
 }
 
@@ -354,9 +354,9 @@ onMounted(() => {
             :label="t['Content Source']"
             name="contentSource"
             :options="[
-              { label: 'Code Editor', value: 'field' },
-              { label: 'Page Template', value: 'template' },
-              { label: 'External Page (iframe)', value: 'iframe' },
+              { label: t['EDITOR_FIELD_CONTENT_SOURCE_OPTION_FIELD'], value: 'field' },
+              { label: t['EDITOR_FIELD_CONTENT_SOURCE_OPTION_TEMPLATE'], value: 'template' },
+              { label: t['EDITOR_FIELD_CONTENT_SOURCE_OPTION_IFRAME'], value: 'iframe' },
             ]"
             @value-changed="onContentSourceChanged"
             v-show="proEdition"
@@ -364,7 +364,7 @@ onMounted(() => {
           <CraftFieldSelect
             ref="templateField"
             required
-            :instructions="`${t['EDITOR_SETTINGS_INSTRUCTIONS_TEMPLATE_FIELD_PREFIX']}<strong>${settings.templatePath}</strong>${t['EDITOR_SETTINGS_INSTRUCTIONS_TEMPLATE_FIELD_SUFFIX']}`"
+            :instructions="`${t['EDITOR_FIELD_INSTRUCTIONS_SETTINGS_TEMPLATE_FIELD_PREFIX']}<strong>${settings.templatePath}</strong>${t['EDITOR_FIELD_INSTRUCTIONS_SETTINGS_TEMPLATE_FIELD_SUFFIX']}`"
             :label="t['Template']"
             name="template"
             :options="templatesFieldOptions"
@@ -374,7 +374,7 @@ onMounted(() => {
           <CraftFieldText
             ref="contentUrlField"
             required
-            :instructions="t['EDITOR_SETTINGS_INSTRUCTIONS_CONTENT_URL']"
+            :instructions="t['EDITOR_FIELD_INSTRUCTIONS_SETTINGS_CONTENT_URL']"
             :label="t['Page URL']"
             name="contentUrl"
             :field-attributes="{
@@ -385,7 +385,7 @@ onMounted(() => {
           />
           <CraftFieldText
             ref="summaryField"
-            :instructions="t['EDITOR_SETTINGS_INSTRUCTIONS_SUMMARY']"
+            :instructions="t['EDITOR_FIELD_INSTRUCTIONS_SETTINGS_SUMMARY']"
             :label="t['Summary']"
             name="summary"
           />

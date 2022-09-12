@@ -10,7 +10,7 @@
  * @since     2.0.0
  */ #}
 
-{% set teleportMethod = teleportMethod ?? 'prepend' %}
+{% set teleportMethod = teleportMethod ?? 'slideout' %}
 
 {% if guides|length %}
   {% include 'guide/_partials/guide_display.twig' with {
@@ -21,6 +21,6 @@
     teleportContainerClass: 'content-pane ' ~ (teleportMethod == 'prepend' ? 'g-mb-3' : 'g-mt-3'),
     teleportMap: teleportMap ?? false,
     teleportMethod: teleportMethod,
-    teleportSelector: '#content-container'
+    teleportSelector: teleportMethod == 'slideout' ? '#guide-slideout' : '#content-container',
   } only %}
 {% endif %}

@@ -4,10 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## 3.2.1 - 2022-08-28
+## 3.3.0 - 2022-09-27
 
 ### Added
-- Added Craft translations for static strings throughout the Guide UI
+- Added option to the Edit Page Guide Location plugin setting that puts guides in a Craft Slideout panel.
+- Added the ability to click on an asset image and view the full-res image in a lightbox.
+  - Updated image asset components with the `lightbox` option set to `true` by default.
+- Added a new Modal Guide component, letting you display guide content in front of the current CP page.
+  - The size of the modal content can be adjusted by setting a max width, max height, and CSS aspect ratio (good for showing image or video content).
+- Added Craft translations for static strings throughout the Guide UI.
+
+### Changed
+- Changed the default option for Settings > Edit Page Guide Location to `Slideout panel`.
 
 ### Fixed
 - Fixed a Twig syntax error in Image components (thanks to @davidhellmann for the fix) [#78](https://github.com/wbrowar/craft-guide/pull/78)

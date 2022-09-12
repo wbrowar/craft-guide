@@ -1,55 +1,65 @@
 {
   "guide-admin.ts": {
-    "file": "assets/guide-admin.cad088d1.js",
+    "file": "assets/guide-admin.473a3fa3.js",
     "src": "guide-admin.ts",
     "isEntry": true,
     "imports": [
-      "_globals.c01e0dc8.js",
-      "__plugin-vue_export-helper.cdc0426e.js"
+      "__plugin-vue_export-helper.ac984e31.js",
+      "_Modal.e851e65d.js"
     ],
     "css": [
-      "assets/guide-admin.cdb984e8.css"
+      "assets/guide-admin.b3c84cdf.css"
     ]
   },
   "guide-display.ts": {
-    "file": "assets/guide-display.f3a069c1.js",
+    "file": "assets/guide-display.144f222c.js",
     "src": "guide-display.ts",
     "isEntry": true,
     "imports": [
-      "_globals.c01e0dc8.js"
+      "__plugin-vue_export-helper.ac984e31.js",
+      "_Modal.e851e65d.js"
     ],
     "css": [
-      "assets/guide-display.7c0ba033.css"
+      "assets/guide-display.4ba0ef2a.css"
     ]
   },
   "guide-welcome.ts": {
-    "file": "assets/guide-welcome.33da719b.js",
+    "file": "assets/guide-welcome.d12eba3e.js",
     "src": "guide-welcome.ts",
     "isEntry": true,
     "imports": [
-      "_globals.c01e0dc8.js",
-      "__plugin-vue_export-helper.cdc0426e.js"
+      "__plugin-vue_export-helper.ac984e31.js"
     ],
     "css": [
-      "assets/guide-welcome.c2d8d1c3.css"
+      "assets/guide-welcome.67dffbd1.css"
     ]
   },
-  "_globals.c01e0dc8.js": {
-    "file": "assets/globals.c01e0dc8.js"
+  "__plugin-vue_export-helper.ac984e31.js": {
+    "file": "assets/_plugin-vue_export-helper.ac984e31.js"
   },
-  "__plugin-vue_export-helper.cdc0426e.js": {
-    "file": "assets/_plugin-vue_export-helper.cdc0426e.js"
+  "_Modal.e851e65d.js": {
+    "file": "assets/Modal.e851e65d.js",
+    "imports": [
+      "__plugin-vue_export-helper.ac984e31.js"
+    ],
+    "css": [
+      "assets/Modal.29c8b7a6.css"
+    ]
   },
   "guide-admin.css": {
-    "file": "assets/guide-admin.cdb984e8.css",
+    "file": "assets/guide-admin.b3c84cdf.css",
     "src": "guide-admin.css"
   },
+  "Modal.css": {
+    "file": "assets/Modal.29c8b7a6.css",
+    "src": "Modal.css"
+  },
   "guide-welcome.css": {
-    "file": "assets/guide-welcome.c2d8d1c3.css",
+    "file": "assets/guide-welcome.67dffbd1.css",
     "src": "guide-welcome.css"
   },
   "guide-display.css": {
-    "file": "assets/guide-display.7c0ba033.css",
+    "file": "assets/guide-display.4ba0ef2a.css",
     "src": "guide-display.css"
   }
 }

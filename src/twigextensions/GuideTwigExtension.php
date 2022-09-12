@@ -32,7 +32,7 @@ class GuideTwigExtension extends AbstractExtension
      */
     public function getName()
     {
-        return 'Guide';
+        return Craft::t('guide', 'Guide');
     }
 
     /**

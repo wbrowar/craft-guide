@@ -77,8 +77,9 @@
 
     {% if proEdition %}
       {% set options = [
-        { label: 'Above edit fields', value: 'prepend' },
-        { label: 'Below edit fields', value: 'append' },
+        { label: 'PLUGIN_SETTINGS_FIELD_DEFAULT_TELEPORT_METHOD_OPTION_SLIDEOUT'|t('guide'), value: 'slideout' },
+        { label: 'PLUGIN_SETTINGS_FIELD_DEFAULT_TELEPORT_METHOD_OPTION_PREPEND'|t('guide'), value: 'prepend' },
+        { label: 'PLUGIN_SETTINGS_FIELD_DEFAULT_TELEPORT_METHOD_OPTION_APPEND'|t('guide'), value: 'append' },
       ] %}
       {{ forms.selectField({
         label: 'PLUGIN_SETTINGS_FIELD_DEFAULT_TELEPORT_METHOD_LABEL'|t('guide'),

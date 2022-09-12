@@ -3,7 +3,7 @@ const plugin = require('tailwindcss/plugin');
 module.exports = {
   mode: 'jit',
   prefix: 'g-',
-  purge: ['./editorData.ts', './components/**/*.{vue,js,ts}'],
+  purge: ['./editorData.ts', './components/**/*.{vue,js,ts}', '../../src/templates/**/*.twig'],
   theme: {
     colors: {
       primary: '#E12D39',

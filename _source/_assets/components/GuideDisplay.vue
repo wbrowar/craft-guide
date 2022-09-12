@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { computed, nextTick, onBeforeMount, onBeforeUnmount, onMounted, ref, watch } from 'vue';
-import { log, proEdition, userOperations } from '../globals';
-import type { GuideNavItem } from '../types/plugins';
+import { computed, getCurrentInstance, onBeforeMount, onBeforeUnmount, onMounted, nextTick, ref, watch } from 'vue';
+import { log, proEdition, t, userOperations } from '../globals';
+import type {Guide, GuideNavItem} from '../types/plugins';
 
 const props = defineProps({
   enableInlineEditor: Boolean,
@@ -20,8 +20,17 @@ const guideNav = ref((props.guideNavData ? JSON.parse(props.guideNavData) : []) 
 const hash = ref('');
 const showInlineEditor = ref(false);
 const showTldr = ref(false);
+let slideout: { open: Function };
+const slideoutOpened = ref(false);
 
-const teleportTarget = computed(() => (props.teleportSelector ? `#teleport-${props.guideDisplay}` : null));
+const renderDisplay = computed(() => props.teleportMethod === 'slideout' ? slideoutOpened.value : true);
+const teleportTarget = computed(() => {
+  if (props.teleportMethod === 'slideout') {
+    return props.teleportSelector;
+  }
+
+  return props.teleportSelector ? `#teleport-${props.guideDisplay}` : null;
+});
 
 if (proEdition) {
   guideNav.value.forEach((guide) => {
@@ -45,6 +54,12 @@ if (proEdition) {
   });
 }
 
+function openSlideout(guides: Guide[]) {
+  if (slideout) {
+    slideout.open();
+  }
+  slideoutOpened.value = true;
+}
 function onHashUpdated() {
   hash.value = window.location.hash.substr(1);
 }
@@ -96,6 +111,13 @@ onMounted(() => {
 
   window.addEventListener('hashchange', onHashUpdated);
 
+  slideout = new window.Craft.Slideout(`<div id="guide-slideout"></div>`, {
+    autoOpen: false,
+    containerAttributes: {
+      class: 'g-relative g-overflow-y-auto',
+    }
+  });
+
   log('GuideDisplay loaded');
 });
 
@@ -113,16 +135,20 @@ watch(currentGuide, () => {
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import Modal from './Modal.vue';
 import OnLoad from './OnLoad.vue';
 import PlacementInlineEditor from './PlacementInlineEditor.vue';
+import SvgGuide from './SvgGuide.vue';
 import SvgSettings from './SvgSettings.vue';
 
 export default defineComponent({
   name: 'GuideDisplay',
   delimiters: ['${', '}'],
   components: {
+    Modal,
     OnLoad,
     PlacementInlineEditor,
+    SvgGuide,
     SvgSettings,
   },
 });

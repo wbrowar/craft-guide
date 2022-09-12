@@ -66,10 +66,11 @@ class GuideComponents extends Component
                             $list[] = [
                                 'title' => $asset->title,
                                 'group' => 'images',
-                                'code' => "{{ craft.guide.component('image', { asset: craft.assets.filename('" . $asset->filename . "').volume('" . $assetVolume->handle . "').one() }) }}",
+                                'code' => "{{ craft.guide.component('image', { asset: craft.assets.filename('" . $asset->filename . "').volume('" . $assetVolume->handle . "').one(), lightbox: true }) }}",
 //                                'documentation' => '<p>Display an image from your <strong>Guide Asset Volume</strong>.</p>',
                                 'props' => [
                                     'asset' => 'An image asset.',
+                                    'lightbox' => 'Enables clicking on the image to display the asset’s full resolution image in a lightbox.',
                                 ],
                                 'thumbnail1x' => $thumbnailUrl1x ?? false,
                                 'thumbnail2x' => $thumbnailUrl2x ?? false,

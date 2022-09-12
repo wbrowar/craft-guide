@@ -40,7 +40,7 @@ Under the hood, the Twig component is transforming the image to optimize its fil
 The above example is based on the Image component, however, when you drag an asset component from the Images tab into the editor field you'll notice that the same `image` handle is used but different variables are passed in:
 
 ```twig
-{{ craft.guide.component('image', { asset: craft.assets.filename('my-image.jpg').volume('guide').one() }) }}
+{{ craft.guide.component('image', { asset: craft.assets.filename('my-image.jpg').volume('guide').one(), lightbox: true }) }}
 ```
 
 In this case, we're passing in a full image asset and the URL of the image will get extracted out within the component. You could use this same `asset` variable when looping through several image assets at a time.
