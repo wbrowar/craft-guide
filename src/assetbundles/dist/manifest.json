@@ -1,65 +1,60 @@
 {
-  "guide-admin.ts": {
-    "file": "assets/guide-admin.8612e215.js",
-    "src": "guide-admin.ts",
+  "guide.ts": {
+    "file": "guide.js",
+    "src": "guide.ts",
     "isEntry": true,
     "imports": [
-      "__plugin-vue_export-helper.d6f3a452.js",
-      "_Modal.95815eb1.js"
-    ],
-    "css": [
-      "assets/guide-admin.b3c84cdf.css"
+      "_guide.13c0c9fc.js"
+    ]
+  },
+  "_guide.13c0c9fc.js": {
+    "file": "guide.13c0c9fc.js",
+    "dynamicImports": [
+      "guide-display.ts",
+      "guide-admin.ts",
+      "guide-welcome.ts"
     ]
   },
   "guide-display.ts": {
-    "file": "assets/guide-display.3c9fc42b.js",
+    "file": "guide-display.881209a3.js",
     "src": "guide-display.ts",
-    "isEntry": true,
+    "isDynamicEntry": true,
     "imports": [
-      "__plugin-vue_export-helper.d6f3a452.js",
-      "_Modal.95815eb1.js"
-    ],
-    "css": [
-      "assets/guide-display.4ba0ef2a.css"
+      "__plugin-vue_export-helper.ac8eb838.js",
+      "_guide.13c0c9fc.js",
+      "_SvgSettings.fa0aaa27.js"
+    ]
+  },
+  "__plugin-vue_export-helper.ac8eb838.js": {
+    "file": "_plugin-vue_export-helper.ac8eb838.js"
+  },
+  "_SvgSettings.fa0aaa27.js": {
+    "file": "SvgSettings.fa0aaa27.js",
+    "imports": [
+      "__plugin-vue_export-helper.ac8eb838.js"
+    ]
+  },
+  "guide-admin.ts": {
+    "file": "guide-admin.8d6d890f.js",
+    "src": "guide-admin.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "__plugin-vue_export-helper.ac8eb838.js",
+      "_guide.13c0c9fc.js",
+      "_SvgSettings.fa0aaa27.js"
     ]
   },
   "guide-welcome.ts": {
-    "file": "assets/guide-welcome.1867ce6a.js",
+    "file": "guide-welcome.f0eb68cf.js",
     "src": "guide-welcome.ts",
-    "isEntry": true,
+    "isDynamicEntry": true,
     "imports": [
-      "__plugin-vue_export-helper.d6f3a452.js"
-    ],
-    "css": [
-      "assets/guide-welcome.d4efbf89.css"
+      "__plugin-vue_export-helper.ac8eb838.js",
+      "_guide.13c0c9fc.js"
     ]
   },
-  "__plugin-vue_export-helper.d6f3a452.js": {
-    "file": "assets/_plugin-vue_export-helper.d6f3a452.js"
-  },
-  "_Modal.95815eb1.js": {
-    "file": "assets/Modal.95815eb1.js",
-    "imports": [
-      "__plugin-vue_export-helper.d6f3a452.js"
-    ],
-    "css": [
-      "assets/Modal.86b2d2d6.css"
-    ]
-  },
-  "guide-admin.css": {
-    "file": "assets/guide-admin.b3c84cdf.css",
-    "src": "guide-admin.css"
-  },
-  "Modal.css": {
-    "file": "assets/Modal.86b2d2d6.css",
-    "src": "Modal.css"
-  },
-  "guide-welcome.css": {
-    "file": "assets/guide-welcome.d4efbf89.css",
-    "src": "guide-welcome.css"
-  },
-  "guide-display.css": {
-    "file": "assets/guide-display.4ba0ef2a.css",
-    "src": "guide-display.css"
+  "style.css": {
+    "file": "style.css",
+    "src": "style.css"
   }
 }

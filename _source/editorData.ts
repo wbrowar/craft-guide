@@ -1,4 +1,5 @@
 import { log } from './globals';
+
 export const editorData = [
     // Components
     {
@@ -736,7 +737,7 @@ const utilityClassesBase = [
     'g-scroll-snap-end',
 ];
 if (import.meta.env.DEV) {
-    const classes = [];
+    const classes: string[] = [];
     const variants = ['sm', 'md', 'lg', 'tldr'];
     utilityClassesBase.forEach((classString) => {
         variants.forEach((variant) => {

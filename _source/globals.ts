@@ -11,10 +11,12 @@ export const guides: Guide[] = globalsElement?.dataset?.guides ? JSON.parse(glob
 export const proEdition: boolean = globalsElement?.dataset?.proEdition
   ? globalsElement.dataset.proEdition === 'true'
   : false;
-// export const proEdition = false;
+export const scope: ('display' | 'admin' | 'welcome')[] = globalsElement?.dataset?.scope
+    ? JSON.parse(globalsElement.dataset.scope)
+    : [];
 export const settings: PluginSettings = globalsElement?.dataset?.settings
-  ? JSON.parse(globalsElement.dataset.settings)
-  : null;
+    ? JSON.parse(globalsElement.dataset.settings)
+    : null;
 export const templates: {
   filenames: Record<string, string>;
   contents: Record<string, string>;
@@ -25,12 +27,6 @@ export const t: Record<string, string> = globalsElement?.dataset?.translations
 export const userOperations: PluginUserOperations = globalsElement?.dataset?.userOperations
   ? JSON.parse(globalsElement.dataset.userOperations)
   : null;
-// export const userOperations: PluginUserOperations = {
-//   editGuides: false,
-//   deleteGuides: false,
-//   setAccessPermissions: true,
-//   useOrganizer: true,
-// };
 
 log('translations', t);
 

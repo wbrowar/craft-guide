@@ -1,7 +1,7 @@
 const plugin = require('tailwindcss/plugin');
 
 module.exports = {
-  content: ['./editorData.ts', './components/**/*.{vue,js,ts}', '../../src/templates/**/*.twig'],
+  content: ['./editorData.ts', './components/**/*.{vue,js,ts}', '../src/templates/**/*.twig'],
   mode: 'jit',
   prefix: 'g-',
   theme: {

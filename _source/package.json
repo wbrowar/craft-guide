@@ -1,12 +1,13 @@
 {
-  "name": "guide",
-  "version": "0.0.0",
   "scripts": {
     "dev": "vite --host",
     "build": "tsc --noEmit && vite build --mode=development",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path ../../.gitignore",
     "serve": "vite preview"
   },
+  "name": "guide",
+  "type": "module",
+  "version": "0.0.0",
   "dependencies": {
     "gsap": "^3.11.1",
     "tailwindcss": "^3.1.8",

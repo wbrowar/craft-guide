@@ -90,6 +90,11 @@ class Guide extends Plugin
     public static $schemaReady;
 
     /**
+     * @var array
+     */
+    public static $scope;
+
+    /**
      * @var Settings
      */
     public static $settings;
@@ -146,8 +151,11 @@ class Guide extends Plugin
             );
 
             if (!Craft::$app->getRequest()->isConsoleRequest && self::$schemaReady) {
+                // Determine which JavaScript files to load
+                self::$scope = ['display'];
+
                 // Load our JavaScript
-                $assets = self::$plugin->getPathsToAssetFiles('guide-display.ts');
+                $assets = self::$plugin->getPathsToAssetFiles('guide.ts');
                 if ($assets['css'] ?? false) {
                     Craft::$app->getView()->registerCssFile($assets['css']);
                 }
@@ -160,27 +168,15 @@ class Guide extends Plugin
                 $routeIsGuideUtilities = Craft::$app->getRequest()->getSegment(1) == 'utilities' && Craft::$app->getRequest()->getSegment(2) == 'guide-export-import';
                 $routeIsGuideWelcome = Craft::$app->getRequest()->getSegment(1) == 'guide' && Craft::$app->getRequest()->getSegment(2) == 'welcome';
                 if ($routeIsGuideAdmin || $routeIsGuideUtilities) {
-                    $assets = self::$plugin->getPathsToAssetFiles('guide-admin.ts');
-                    if ($assets['css'] ?? false) {
-                        Craft::$app->getView()->registerCssFile($assets['css']);
-                    }
-                    if ($assets['js'] ?? false) {
-                        Craft::$app->getView()->registerJsFile($assets['js'], ['position' => Craft::$app->getView()::POS_BEGIN, 'type' => 'module']);
-                    }
+                    self::$scope[] = 'admin';
                 } else if ($routeIsGuideWelcome) {
-                    $assets = self::$plugin->getPathsToAssetFiles('guide-welcome.ts');
-                    if ($assets['css'] ?? false) {
-                        Craft::$app->getView()->registerCssFile($assets['css']);
-                    }
-                    if ($assets['js'] ?? false) {
-                        Craft::$app->getView()->registerJsFile($assets['js'], ['position' => Craft::$app->getView()::POS_BEGIN, 'type' => 'module']);
-                    }
+                    self::$scope[] = 'welcome';
                 }
 
                 // Add guides to the bottom of the page
                 Event::on(View::class, View::EVENT_END_BODY, function(Event $event) {
                     // Add global settings to end body
-                    $this->renderAdminGlobals();
+                    $this->renderAdminGlobals(self::$scope);
 
                     // Get and display guides for the given page
                     $this->renderGuideDisplaysForPage();
@@ -532,9 +528,7 @@ class Guide extends Plugin
         }
 
         if ($path ?? false) {
-            if ($manifest[$filename]['css'] ?? false) {
-                $assetPaths['css'] = $path . '/' . $manifest[$filename]['css'][0];
-            }
+            $assetPaths['css'] = $path . '/style.css';
             if ($manifest[$filename]['file'] ?? false) {
                 $assetPaths['js'] = $path . '/' . $manifest[$filename]['file'];
             }
@@ -556,7 +550,7 @@ class Guide extends Plugin
     /**
      * Render admin globals used by Guide and Organizer editors
      */
-    public function renderAdminGlobals()
+    public function renderAdminGlobals(array $scope = [])
     {
         $guidesData = [];
         $guides = self::$plugin->guide->getGuides([
@@ -636,6 +630,7 @@ class Guide extends Plugin
         $adminGlobalsVariables = [
             'assetComponents' => self::$plugin->guideComponents->getAssetComponents(),
             'guides' => $guidesData,
+            'scope' => $scope,
             'proEdition' => self::$pro,
             'settings' => self::$settings,
             'templates' => $this->getTemplatesFromUserTemplatePath(),
