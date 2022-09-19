@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { computed, getCurrentInstance, onBeforeMount, onBeforeUnmount, onMounted, nextTick, ref, watch } from 'vue';
+import {getCurrentInstance, computed, onBeforeMount, onBeforeUnmount, onMounted, nextTick, reactive, ref, watch } from 'vue';
 import { log, proEdition, t, userOperations } from '../globals';
-import type {Guide, GuideNavItem} from '../types/plugins';
+import type { GuideNavItem } from '../types/plugins';
 
 const props = defineProps({
   enableInlineEditor: Boolean,
@@ -15,51 +15,37 @@ const props = defineProps({
 });
 
 const currentGuide = ref('');
-const data = ref({} as Record<string, any>);
+const data = reactive<Record<string, any>>({});
 const enableTldr = ref(false);
-const guideNav = ref((props.guideNavData ? JSON.parse(props.guideNavData) : []) as GuideNavItem[]);
 const hash = ref('');
 const showInlineEditor = ref(false);
 const showTldr = ref(false);
-let slideout: { open: Function };
+const slideout = ref();
 const slideoutOpened = ref(false);
 
-const renderDisplay = computed(() => props.teleportToSlideout ? slideoutOpened.value : true);
+const guideNav = computed((): GuideNavItem[] => {
+  return props.guideNavData ? JSON.parse(props.guideNavData) : [];
+});
+const renderDisplay = computed(() => {
+  log('renda')
+  return props.teleportToSlideout ? slideoutOpened.value : true;
+});
 const teleportTarget = computed(() => {
-  if (props.teleportToSlideout) {
+  log('huh');
+  if (props.teleportToSlideout && props.teleportSelector) {
+    log('ya');
     return props.teleportSelector;
   }
 
+  log('ba');
   return props.teleportSelector ? `#teleport-${props.guideDisplay}` : null;
 });
 
-if (proEdition) {
-  guideNav.value.forEach((guide) => {
-    data.value[guide.slug] = {
-      boolean1: false,
-      boolean2: false,
-      boolean3: false,
-      boolean4: false,
-      boolean5: false,
-      number1: 0,
-      number2: 0,
-      number3: 0,
-      number4: 0,
-      number5: 0,
-      string1: '',
-      string2: '',
-      string3: '',
-      string4: '',
-      string5: '',
-    };
-  });
-}
-
 function openSlideout() {
-  if (slideout) {
-    slideout.open();
+  if (slideout.value) {
+    slideout.value.open();
+    slideoutOpened.value = true;
   }
-  slideoutOpened.value = true;
 }
 function onHashUpdated() {
   hash.value = window.location.hash.substr(1);
@@ -93,7 +79,6 @@ function updateEnableTldr() {
     const tldrEl = document.querySelector(
       `.guide-${currentGuide.value} .tldr-hide, .guide-${currentGuide.value} .tldr-show, .guide-${currentGuide.value} [class^="tldr:"]`
     );
-    log(`.guide-${currentGuide.value}`, tldrEl);
     enableTldr.value = tldrEl !== null;
   }
 }
@@ -101,6 +86,29 @@ function updateEnableTldr() {
 onBeforeMount(() => {
   if (guideNav.value?.length) {
     currentGuide.value = guideNav.value[0].slug;
+
+    if (proEdition) {
+      guideNav.value.forEach((guide) => {
+        data[guide.slug] = {
+          boolean1: false,
+          boolean2: false,
+          boolean3: false,
+          boolean4: false,
+          boolean5: false,
+          number1: 0,
+          number2: 0,
+          number3: 0,
+          number4: 0,
+          number5: 0,
+          string1: '',
+          string2: '',
+          string3: '',
+          string4: '',
+          string5: '',
+        };
+        log('itss proooo', guide, data);
+      });
+    }
   }
 
   showInlineEditor.value = props.startInInlineEditor;
@@ -112,12 +120,19 @@ onMounted(() => {
 
   window.addEventListener('hashchange', onHashUpdated);
 
-  slideout = new window.Craft.Slideout(`<div id="guide-slideout"></div>`, {
-    autoOpen: false,
-    containerAttributes: {
-      class: 'g-relative g-overflow-y-auto',
-    }
-  });
+  if (props.teleportToSlideout && window.Craft?.Slideout) {
+    slideout.value = new window.Craft.Slideout(`<div id="guide-slideout"></div>`, {
+      autoOpen: false,
+      containerAttributes: {
+        class: 'g-relative g-overflow-y-auto',
+      },
+    });
+  }
+
+  const { appContext } = getCurrentInstance()!
+  log(appContext)
+
+  log('debug', teleportTarget.value)
 
   log('GuideDisplay loaded');
 });
@@ -131,27 +146,6 @@ watch(currentGuide, () => {
     updateEnableTldr();
     toggleTldr(showTldr.value);
   });
-});
-</script>
-
-<script lang="ts">
-import { defineComponent } from 'vue';
-import Modal from './Modal.vue';
-import OnLoad from './OnLoad.vue';
-import PlacementInlineEditor from './PlacementInlineEditor.vue';
-import SvgGuide from './SvgGuide.vue';
-import SvgSettings from './SvgSettings.vue';
-
-export default defineComponent({
-  name: 'GuideDisplay',
-  delimiters: ['${', '}'],
-  components: {
-    Modal,
-    OnLoad,
-    PlacementInlineEditor,
-    SvgGuide,
-    SvgSettings,
-  },
 });
 </script>
 

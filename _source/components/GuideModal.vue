@@ -16,11 +16,11 @@ const modalStyles = computed(() => {
     '--max-height': props.maxHeight,
     '--max-width': props.maxWidth,
   };
-  
+
   if (props.aspectRatio) {
     styles['--aspect-ratio'] = props.aspectRatio;
   }
-  
+
   return styles;
 });
 
@@ -48,9 +48,9 @@ defineExpose({
     >
       <div class="g-absolute g-w-full g-h-full" @click="clickOutsideToClose ? close() : null"></div>
       <div
-          class="g-relative g-w-full g-max-w-[var(--max-width)] g-max-h-[var(--max-height)] g-aspect-[var(--aspect-ratio)] g-bg-white g-rounded-lg g-shadow-lg"
-          :class="aspectRatio ? '' : 'g-h-full'"
-          :style="modalStyles"
+        class="g-relative g-w-full g-max-w-[var(--max-width)] g-max-h-[var(--max-height)] g-aspect-[var(--aspect-ratio)] g-bg-white g-rounded-lg g-shadow-lg"
+        :class="aspectRatio ? '' : 'g-h-full'"
+        :style="modalStyles"
       >
         <slot></slot>
       </div>

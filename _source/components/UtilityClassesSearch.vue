@@ -16,9 +16,6 @@ const searchResults = computed(() =>
     : classes.value
 );
 
-function onCopy(text: string) {
-  navigator.clipboard.writeText(text);
-}
 function onSearch(newValue: string) {
   searchValue.value = newValue;
 }

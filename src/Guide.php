@@ -160,7 +160,7 @@ class Guide extends Plugin
                     Craft::$app->getView()->registerCssFile($assets['css']);
                 }
                 if ($assets['js'] ?? false) {
-                    Craft::$app->getView()->registerJsFile($assets['js'], ['position' => Craft::$app->getView()::POS_BEGIN, 'type' => 'module']);
+                    Craft::$app->getView()->registerJsFile($assets['js'], ['depends' => ['craft\web\assets\garnish\GarnishAsset'], 'type' => 'module']);
                 }
 
                 // Admin-specific JavaScript

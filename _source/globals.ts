@@ -12,11 +12,11 @@ export const proEdition: boolean = globalsElement?.dataset?.proEdition
   ? globalsElement.dataset.proEdition === 'true'
   : false;
 export const scope: ('display' | 'admin' | 'welcome')[] = globalsElement?.dataset?.scope
-    ? JSON.parse(globalsElement.dataset.scope)
-    : [];
+  ? JSON.parse(globalsElement.dataset.scope)
+  : [];
 export const settings: PluginSettings = globalsElement?.dataset?.settings
-    ? JSON.parse(globalsElement.dataset.settings)
-    : null;
+  ? JSON.parse(globalsElement.dataset.settings)
+  : null;
 export const templates: {
   filenames: Record<string, string>;
   contents: Record<string, string>;

@@ -1,5 +1,5 @@
-import { _ as sa, h as Ft, b as qt, g as Pe, d as du, r as dt, c as pl, a as pu, i as tf, u as ao, t as Qn, e as nf, k as rf, f as ga, T as sf, j as af } from "./_plugin-vue_export-helper.ac8eb838.js";
-import { l as yi, d as of, e as lf, t as ml } from "./guide.13c0c9fc.js";
+import { _ as sa, l as Ft, h as qt, k as Pe, d as du, r as dt, c as pl, b as pu, e as tf, u as ao, t as Qn, i as nf, p as rf, j as ga, T as sf, m as af } from "./_plugin-vue_export-helper.54751eae.js";
+import { l as yi, d as of, e as lf, t as ml } from "./guide.e341e0e3.js";
 const cf = {}, uf = {
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 20 20",
@@ -14,7 +14,7 @@ const cf = {}, uf = {
 function df(o, e) {
   return Ft(), qt("svg", uf, ff);
 }
-const pf = /* @__PURE__ */ sa(cf, [["render", df], ["__file", "/Users/wbrowar/CODE/craft_v4/craft-guide/_source/components/SvgPause.vue"]]), mf = {}, gf = {
+const pf = /* @__PURE__ */ sa(cf, [["render", df], ["__file", "SvgPause.vue"]]), mf = {}, gf = {
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 20 20",
   fill: "currentColor"
@@ -28,7 +28,7 @@ const pf = /* @__PURE__ */ sa(cf, [["render", df], ["__file", "/Users/wbrowar/CO
 function vf(o, e) {
   return Ft(), qt("svg", gf, xf);
 }
-const yf = /* @__PURE__ */ sa(mf, [["render", vf], ["__file", "/Users/wbrowar/CODE/craft_v4/craft-guide/_source/components/SvgPlay.vue"]]);
+const yf = /* @__PURE__ */ sa(mf, [["render", vf], ["__file", "SvgPlay.vue"]]);
 function Rn(o) {
   if (o === void 0)
     throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -17472,7 +17472,7 @@ const ey = { class: "g-relative" }, ty = {
     let i, r, s, a, l, c, u, h, f, m, g, d;
     const p = dt("intro");
     dt(1);
-    const _ = dt(0.5), y = dt(0), M = dt(0), v = dt(0), b = dt(0), E = dt(0), C = dt(0), x = dt(!1), w = dt(`${of}/guide-book.gltf`), L = dt(null), z = dt({
+    const _ = dt(0.5), y = dt(0), M = dt(0), v = dt(0), b = dt(0), E = dt(0), C = dt(0), x = dt(!1), w = dt(`${lf}/guide-book.gltf`), L = dt(null), z = dt({
       animation: {
         rotation: {
           x: 0,
@@ -17532,7 +17532,7 @@ const ey = { class: "g-relative" }, ty = {
       const Z = n.aspectRatio.split(" ");
       return `${parseFloat(Z[2]) / parseFloat(Z[0]) * 100}%`;
     });
-    const N = pl(() => !0);
+    const N = pl(() => !1);
     function P() {
       if (f && m && g) {
         x.value = !0, p.value = "animating";
@@ -17698,7 +17698,7 @@ const ey = { class: "g-relative" }, ty = {
             z.value.object.rotation.x,
             z.value.object.rotation.y,
             z.value.object.rotation.z
-          ), u.add(l.scene), lf) {
+          ), u.add(l.scene), of) {
             const fe = [];
             l.scene.traverse((oe) => {
               fe.push(oe);
@@ -18030,11 +18030,11 @@ const ey = { class: "g-relative" }, ty = {
           type: "button",
           onMousedown: $[15] || ($[15] = (re) => G("zRotateDown"))
         }, "\u2B07\uFE0F", 32)
-      ])) : nf("v-if", !0)
+      ])) : nf("", !0)
     ]));
   }
 });
-const cy = /* @__PURE__ */ sa(ly, [["__file", "/Users/wbrowar/CODE/craft_v4/craft-guide/_source/components/WelcomeAnimation.vue"]]), uy = { class: "g-fixed g-inset-0 g-w-full g-h-screen g-bg-white g-z-[500]" }, hy = {
+const cy = /* @__PURE__ */ sa(ly, [["__file", "WelcomeAnimation.vue"]]), uy = { class: "g-fixed g-inset-0 g-w-full g-h-screen g-bg-white g-z-[500]" }, hy = {
   class: "g-grid g-grid-rows-[var(--grid-rows)] g-h-full",
   style: { "--grid-rows": "1fr auto" }
 }, fy = { class: "g-flex g-items-center g-justify-between g-gap-6 g-p-6 g-bg-matrix-titlebar" }, dy = { class: "control-button" }, py = ["href"], my = /* @__PURE__ */ du({
@@ -18092,7 +18092,7 @@ const cy = /* @__PURE__ */ sa(ly, [["__file", "/Users/wbrowar/CODE/craft_v4/craf
     ]));
   }
 });
-const gy = /* @__PURE__ */ sa(my, [["__scopeId", "data-v-b05e018a"], ["__file", "/Users/wbrowar/CODE/craft_v4/craft-guide/_source/components/GuideWelcome.vue"]]);
+const gy = /* @__PURE__ */ sa(my, [["__scopeId", "data-v-f9f4f1f3"], ["__file", "GuideWelcome.vue"]]);
 async function vy() {
   const o = document.getElementById("guide-welcome");
   o && af(gy, {

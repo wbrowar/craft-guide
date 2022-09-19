@@ -1,12 +1,17 @@
 import { createApp } from 'vue';
-import { log } from "./globals";
+import { log } from './globals';
 import GuideDisplay from './components/GuideDisplay.vue';
+
+import GuideModal from './components/GuideModal.vue';
+import OnLoad from './components/OnLoad.vue';
+import PlacementInlineEditor from './components/PlacementInlineEditor.vue';
+import SvgGuide from './components/SvgGuide.vue';
+import SvgSettings from './components/SvgSettings.vue';
 
 export default async function init() {
   // Add guides to the page
   const guideDisplays: NodeListOf<HTMLElement> = document.querySelectorAll('[data-guide-display]');
   if (guideDisplays) {
-
     guideDisplays.forEach((display) => {
       if (display.dataset?.guideDisplay) {
         if (display.dataset?.teleportSelector) {
@@ -28,8 +33,31 @@ export default async function init() {
           }
         }
 
+        // GuideDisplay.components = {
+        //   GuideModal,
+        //   OnLoad,
+        //   PlacementInlineEditor,
+        //   SvgGuide,
+        //   SvgSettings,
+        // };
+        GuideDisplay.name = 'GuideDisplay';
         GuideDisplay.template = `#${display.dataset.guideDisplay}`;
-        createApp({ ...GuideDisplay }, display.dataset).mount(display);
+
+        log('GuideDisplay', GuideDisplay, display);
+
+        const displayApp = createApp(GuideDisplay, { ...display.dataset });
+        displayApp.component('guide-modal', GuideModal);
+        displayApp.component('on-load', OnLoad);
+        displayApp.component('placement-inline-editor', PlacementInlineEditor);
+        displayApp.component('svg-guide', SvgGuide);
+        displayApp.component('svg-settings', SvgSettings);
+        displayApp.config.compilerOptions.delimiters = ['${', '}'];
+        displayApp.config.errorHandler = (err) => {
+          log('errorred', err);
+        }
+        displayApp.mount(display);
+
+        log('Display mounted for', display.dataset.guideDisplay);
       }
     });
   }

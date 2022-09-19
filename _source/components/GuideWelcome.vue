@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
-import { devMode, log, t } from '../globals';
+import { log, t } from '../globals';
 import SvgPause from './SvgPause.vue';
 import SvgPlay from './SvgPlay.vue';
 import WelcomeAnimation from './WelcomeAnimation.vue';

@@ -92,7 +92,9 @@ async function savePlacement() {
 }
 
 onMounted(() => {
-  guideField.value.setFieldValue(guideFieldOptions.value[0].value);
+  if (guideField.value) {
+    guideField.value.setFieldValue(guideFieldOptions.value[0].value);
+  }
 
   log('PlacementInlineEditor loaded');
 });

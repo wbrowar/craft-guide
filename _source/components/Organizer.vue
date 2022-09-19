@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { computed, onBeforeMount, onMounted, ref } from 'vue';
-import { devMode, guides, log, proEdition, settings, t, userOperations } from '../globals';
-import Modal from './Modal.vue';
+import { computed, onMounted, ref } from 'vue';
+import { guides, log, proEdition, t, userOperations } from '../globals';
+import GuideModal from './GuideModal.vue';
 import OrganizerDropZone from './OrganizerDropZone.vue';
 import PlacementEditor from './PlacementEditor.vue';
 import SvgGrid from './SvgGrid.vue';
@@ -13,15 +13,7 @@ import type {
   OrganizerGroupFilter,
   Placement,
   PlacementGroup,
-  PluginSettings,
-  PluginUserOperations,
 } from '~/types/plugins';
-
-declare global {
-  interface Window {
-    Craft: any;
-  }
-}
 
 const props = defineProps({
   actionUrlGetAllPlacements: { type: String, required: true },
@@ -39,7 +31,7 @@ const placements = ref<Placement[]>([]);
 const selectedGroupFilters = ref<PlacementGroup[]>([]);
 
 // Template refs
-const editModal = ref<InstanceType<typeof Modal>>();
+const editModal = ref<InstanceType<typeof GuideModal>>();
 const placementEditor = ref<InstanceType<typeof PlacementEditor>>();
 
 const filteredDropZones = computed(() =>
@@ -93,7 +85,7 @@ async function deletePlacement(placement: Placement) {
   );
 }
 function editPlacement(placement: Placement) {
-  if (placementEditor.value) {
+  if (editModal.value && placementEditor.value) {
     editModal.value.open();
     currentEditPlacement.value = { ...placement };
     placementEditor.value.resetFields();
@@ -103,7 +95,9 @@ function editPlacementClose(placement = null) {
   if (placement) {
     savePlacement(placement);
   }
-  editModal.value.close();
+  if (editModal.value) {
+    editModal.value.close();
+  }
   currentEditPlacement.value = null;
 }
 async function getPlacementList() {
@@ -418,7 +412,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <Modal ref="editModal">
+    <GuideModal ref="editModal">
       <PlacementEditor
         ref="placementEditor"
         :groups="groups"
@@ -426,7 +420,7 @@ onMounted(() => {
         @canceled="editPlacementClose"
         @saved="editPlacementClose"
       />
-    </Modal>
+    </GuideModal>
   </div>
 
   <Teleport to="#guide-action-buttons">

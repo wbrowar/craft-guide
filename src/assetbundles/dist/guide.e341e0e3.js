@@ -53,13 +53,13 @@ function N(s, a) {
 function F(s) {
   return s.toString().toLowerCase().replace(/\s+/g, "-").replace(/[^\w\-]+/g, "").replace(/\-\-+/g, "-").replace(/^-+/, "").replace(/-+$/, "");
 }
-d.includes("display") && import("./guide-display.881209a3.js").then((s) => {
+d.includes("display") && import("./guide-display.fad8df35.js").then((s) => {
   s.default();
 });
-d.includes("admin") && import("./guide-admin.8d6d890f.js").then((s) => {
+d.includes("admin") && import("./guide-admin.98e86172.js").then((s) => {
   s.default();
 });
-d.includes("welcome") && import("./guide-welcome.f0eb68cf.js").then((s) => {
+d.includes("welcome") && import("./guide-welcome.19e6f139.js").then((s) => {
   s.default();
 });
 J("Guide loaded for scope", d);
@@ -67,8 +67,8 @@ export {
   v as a,
   x as b,
   D as c,
-  y as d,
-  w as e,
+  w as d,
+  y as e,
   M as g,
   F as k,
   J as l,

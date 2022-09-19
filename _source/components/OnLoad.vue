@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import { onBeforeMount } from 'vue';
+import { onMounted } from 'vue';
 
 const emit = defineEmits(['loaded']);
 
-onBeforeMount(() => {
+onMounted(() => {
   emit('loaded');
 });
 </script>
 
-<template></template>
+<template><slot></slot></template>

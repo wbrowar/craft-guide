@@ -1,6 +1,6 @@
-import { d as m, r as _, c as p, k as S, l as w, v as x, g as t, m as f, p as b, u as y, q as C, T as M, h as a, _ as u, w as $, b as i, t as h, e as L, s as k, x as z, F as O, y as T } from "./_plugin-vue_export-helper.ac8eb838.js";
-const B = /* @__PURE__ */ m({
-  __name: "Modal",
+import { d as m, r as _, c as p, p as x, q as S, v as w, k as t, s as f, x as y, u as M, f as C, T as $, l as a, _ as u, w as L, h as c, t as v, i as b, y as z, z as k, F as T, A as B } from "./_plugin-vue_export-helper.54751eae.js";
+const q = /* @__PURE__ */ m({
+  __name: "GuideModal",
   props: {
     aspectRatio: String,
     clickOutsideToClose: { type: Boolean, default: !1 },
@@ -9,47 +9,47 @@ const B = /* @__PURE__ */ m({
     teleportTo: { type: String, default: null }
   },
   emits: ["closed", "opened"],
-  setup(e, { expose: o, emit: r }) {
-    const c = e, l = _(!1), g = p(() => {
-      const s = {
-        "--max-height": c.maxHeight,
-        "--max-width": c.maxWidth
+  setup(e, { expose: o, emit: d }) {
+    const i = e, s = _(!1), g = p(() => {
+      const l = {
+        "--max-height": i.maxHeight,
+        "--max-width": i.maxWidth
       };
-      return c.aspectRatio && (s["--aspect-ratio"] = c.aspectRatio), s;
+      return i.aspectRatio && (l["--aspect-ratio"] = i.aspectRatio), l;
     });
     function n() {
-      l.value = !1, r("closed");
+      s.value = !1, d("closed");
     }
-    function d() {
-      l.value = !0, r("opened");
+    function r() {
+      s.value = !0, d("opened");
     }
     return o({
       close: n,
-      open: d
-    }), (s, v) => (a(), S(M, {
+      open: r
+    }), (l, h) => (a(), x($, {
       disabled: !e.teleportTo,
       to: e.teleportTo
     }, [
-      w(t("div", {
+      S(t("div", {
         class: f(["guide-modal g-flex g-items-center g-justify-center g-p-20 g-inset-0 g-z-[1000]", [e.teleportTo ? "g-fixed" : "g-absolute"]])
       }, [
         t("div", {
           class: "g-absolute g-w-full g-h-full",
-          onClick: v[0] || (v[0] = (s0) => e.clickOutsideToClose ? n() : null)
+          onClick: h[0] || (h[0] = (l0) => e.clickOutsideToClose ? n() : null)
         }),
         t("div", {
           class: f(["g-relative g-w-full g-max-w-[var(--max-width)] g-max-h-[var(--max-height)] g-aspect-[var(--aspect-ratio)] g-bg-white g-rounded-lg g-shadow-lg", e.aspectRatio ? "" : "g-h-full"]),
-          style: b(y(g))
+          style: y(M(g))
         }, [
-          C(s.$slots, "default", {}, void 0, !0)
+          C(l.$slots, "default", {}, void 0, !0)
         ], 6)
       ], 2), [
-        [x, l.value]
+        [w, s.value]
       ])
     ], 8, ["disabled", "to"]));
   }
 });
-const n0 = /* @__PURE__ */ u(B, [["__scopeId", "data-v-0b5a066a"], ["__file", "/Users/wbrowar/CODE/craft_v4/craft-guide/_source/components/Modal.vue"]]), q = ["id"], V = { class: "heading" }, D = ["id", "for"], F = ["id"], E = ["innerHTML"], U = { class: "input ltr" }, j = { class: "select fullwidth" }, H = ["id", "name", "aria-describedby"], N = ["value"], R = /* @__PURE__ */ m({
+const n0 = /* @__PURE__ */ u(q, [["__scopeId", "data-v-a1d4fdaa"], ["__file", "GuideModal.vue"]]), G = ["id"], V = { class: "heading" }, F = ["id", "for"], O = ["id"], j = ["innerHTML"], A = { class: "input ltr" }, H = { class: "select fullwidth" }, N = ["id", "name", "aria-describedby"], R = ["value"], D = /* @__PURE__ */ m({
   __name: "CraftFieldSelect",
   props: {
     fieldAttributes: Object,
@@ -62,16 +62,16 @@ const n0 = /* @__PURE__ */ u(B, [["__scopeId", "data-v-0b5a066a"], ["__file", "/
     startingValue: { type: String, default: "" }
   },
   emits: ["value-changed"],
-  setup(e, { expose: o, emit: r }) {
-    const c = e, l = _(JSON.parse(JSON.stringify(c.startingValue)));
+  setup(e, { expose: o, emit: d }) {
+    const i = e, s = _(JSON.parse(JSON.stringify(i.startingValue)));
     function g(n) {
-      l.value = n;
+      s.value = n;
     }
-    return $(l, (n) => {
-      r("value-changed", n);
+    return L(s, (n) => {
+      d("value-changed", n);
     }), o({
       setFieldValue: g
-    }), (n, d) => (a(), i("div", {
+    }), (n, r) => (a(), c("div", {
       id: `${e.name}-field`,
       class: "field"
     }, [
@@ -80,42 +80,42 @@ const n0 = /* @__PURE__ */ u(B, [["__scopeId", "data-v-0b5a066a"], ["__file", "/
           id: `${e.name}-label`,
           class: f(e.required ? "required" : null),
           for: e.name
-        }, h(e.label), 11, D)
+        }, v(e.label), 11, F)
       ]),
-      e.instructions ? (a(), i("div", {
+      e.instructions ? (a(), c("div", {
         key: 0,
         id: `${e.name}-instructions`,
         class: "instructions"
       }, [
-        t("p", { innerHTML: e.instructions }, null, 8, E)
-      ], 8, F)) : L("v-if", !0),
-      t("div", U, [
-        t("div", j, [
-          w(t("select", z({
+        t("p", { innerHTML: e.instructions }, null, 8, j)
+      ], 8, O)) : b("", !0),
+      t("div", A, [
+        t("div", H, [
+          S(t("select", k({
             id: e.name,
-            "onUpdate:modelValue": d[0] || (d[0] = (s) => l.value = s),
+            "onUpdate:modelValue": r[0] || (r[0] = (l) => s.value = l),
             name: e.name,
             "aria-describedby": e.instructions ? `${e.name}-instructions` : null
           }, e.fieldAttributes), [
-            (a(!0), i(O, null, T(e.options, (s) => (a(), i("option", {
-              key: s.value,
-              value: s.value
-            }, h(s.label), 9, N))), 128))
-          ], 16, H), [
-            [k, l.value]
+            (a(!0), c(T, null, B(e.options, (l) => (a(), c("option", {
+              key: l.value,
+              value: l.value
+            }, v(l.label), 9, R))), 128))
+          ], 16, N), [
+            [z, s.value]
           ])
         ])
       ])
-    ], 8, q));
+    ], 8, G));
   }
-}), a0 = /* @__PURE__ */ u(R, [["__file", "/Users/wbrowar/CODE/craft_v4/craft-guide/_source/components/CraftFieldSelect.vue"]]), A = {}, G = {
+}), a0 = /* @__PURE__ */ u(D, [["__file", "CraftFieldSelect.vue"]]), J = {}, W = {
   fill: "currentColor",
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 99 99"
-}, J = /* @__PURE__ */ t("path", { d: `M64.3,47.7l-28.4-6.5c-0.5-0.1-0.9,0.3-1.1,0.7L30,63.3c-0.1,0.5,0.3,0.9,0.7,1.1L59,70.8c0.5,0.1,0.9-0.3,1.1-0.7l4.8-21.4
+}, E = /* @__PURE__ */ t("path", { d: `M64.3,47.7l-28.4-6.5c-0.5-0.1-0.9,0.3-1.1,0.7L30,63.3c-0.1,0.5,0.3,0.9,0.7,1.1L59,70.8c0.5,0.1,0.9-0.3,1.1-0.7l4.8-21.4
 	C65.1,48.2,64.7,47.8,64.3,47.7z M39.5,44.9c1.9,0,3.5,1.6,3.5,3.5c0,1.9-1.6,3.5-3.5,3.5c-1.9,0-3.5-1.6-3.5-3.5
-	C36,46.4,37.6,44.9,39.5,44.9z M58.1,68.4l-25.4-5.8l0.8-3.2l7-5l2.6,3.5l11.2-7.1l5.7,9.4L58.1,68.4z` }, null, -1), W = /* @__PURE__ */ t("path", { d: `M60.6,33c0.5-0.4,0.9-1.1,1.1-2.2c0.3-1.1,0.3-1.9,0-2.4s-0.7-0.9-1.2-1.1L60,27.2l-1.3,6.2l0.5,0.1
-	C59.7,33.7,60.2,33.5,60.6,33z` }, null, -1), I = /* @__PURE__ */ t("path", { d: `M84.6,18.3l0.2-0.7c0.6-2.5-0.8-4.9-3.1-5.8L82,9.2L53.3,5.3l-17-3.9c-1.5-0.4-3.1,0.1-4.2,1h-0.3v0.3
+	C36,46.4,37.6,44.9,39.5,44.9z M58.1,68.4l-25.4-5.8l0.8-3.2l7-5l2.6,3.5l11.2-7.1l5.7,9.4L58.1,68.4z` }, null, -1), I = /* @__PURE__ */ t("path", { d: `M60.6,33c0.5-0.4,0.9-1.1,1.1-2.2c0.3-1.1,0.3-1.9,0-2.4s-0.7-0.9-1.2-1.1L60,27.2l-1.3,6.2l0.5,0.1
+	C59.7,33.7,60.2,33.5,60.6,33z` }, null, -1), P = /* @__PURE__ */ t("path", { d: `M84.6,18.3l0.2-0.7c0.6-2.5-0.8-4.9-3.1-5.8L82,9.2L53.3,5.3l-17-3.9c-1.5-0.4-3.1,0.1-4.2,1h-0.3v0.3
 	c-0.7,0.7-1.2,1.5-1.5,2.5L13,81c-0.6,2.7,1.1,5.4,3.8,6l44.7,10.2c2.6,0.6,5.2-1,5.9-3.6l3,0.4l3.8-28l14.1-46.5L84.6,18.3z
 	 M60.9,25.3c0.7,0.1,1.3,0.4,1.9,0.8c0.5,0.4,0.8,0.8,1.1,1.3c0.3,0.5,0.4,1.1,0.4,1.7c0,0.7,0,1.3-0.1,2.2c-0.1,0.8-0.4,1.5-0.7,2
 	c-0.3,0.5-0.7,1.1-1.1,1.5c-0.4,0.4-0.9,0.7-1.6,0.7c-0.5,0.1-1.2,0.1-2-0.1l-3-0.5l2.3-10.2L60.9,25.3z M53.9,23.7l2.3,0.5
@@ -129,15 +129,15 @@ const n0 = /* @__PURE__ */ u(B, [["__scopeId", "data-v-0b5a066a"], ["__file", "/
 	s-1.1,0-1.7-0.1s-1.2-0.4-1.6-0.8s-0.8-0.8-1.1-1.3c-0.3-0.5-0.4-1.2-0.4-1.9C35.6,26.5,35.6,25.7,35.9,24.9z M67.5,48.1l-5.4,23.8
 	c-0.3,1.1-1.3,1.9-2.6,1.6l-30.3-7c-1.1-0.3-1.9-1.3-1.6-2.6l5.4-23.8c0.3-1.1,1.3-1.9,2.6-1.6l30.4,7
 	C67.1,45.8,67.9,46.9,67.5,48.1z M71.1,29.6L68.4,29L68,31l2.6,0.5l-0.4,1.9l-2.6-0.5L67.1,35l3,0.7l-0.5,2l-5.2-0.9l2.3-10.2l5,1.1
-	L71.1,29.6z` }, null, -1), P = [
-  J,
-  W,
-  I
+	L71.1,29.6z` }, null, -1), U = [
+  E,
+  I,
+  P
 ];
 function K(e, o) {
-  return a(), i("svg", G, P);
+  return a(), c("svg", W, U);
 }
-const c0 = /* @__PURE__ */ u(A, [["render", K], ["__file", "/Users/wbrowar/CODE/craft_v4/craft-guide/_source/components/SvgGuide.vue"]]), Q = {}, X = {
+const i0 = /* @__PURE__ */ u(J, [["render", K], ["__file", "SvgGuide.vue"]]), Q = {}, X = {
   xmlns: "http://www.w3.org/2000/svg",
   fill: "none",
   viewBox: "0 0 24 24",
@@ -157,12 +157,12 @@ const c0 = /* @__PURE__ */ u(A, [["render", K], ["__file", "/Users/wbrowar/CODE/
   Z
 ];
 function t0(e, o) {
-  return a(), i("svg", X, e0);
+  return a(), c("svg", X, e0);
 }
-const i0 = /* @__PURE__ */ u(Q, [["render", t0], ["__file", "/Users/wbrowar/CODE/craft_v4/craft-guide/_source/components/SvgSettings.vue"]]);
+const c0 = /* @__PURE__ */ u(Q, [["render", t0], ["__file", "SvgSettings.vue"]]);
 export {
   a0 as C,
-  n0 as M,
-  c0 as S,
-  i0 as a
+  n0 as G,
+  i0 as S,
+  c0 as a
 };

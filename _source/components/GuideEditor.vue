@@ -1,19 +1,7 @@
 <script lang="ts" setup>
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import type { ComponentPublicInstance } from 'vue';
-import {
-  assetComponents,
-  devMode,
-  guides,
-  kebab,
-  log,
-  proEdition,
-  settings,
-  t,
-  table,
-  templates,
-  userOperations,
-} from '../globals';
+import { assetComponents, guides, kebab, log, proEdition, settings, t, table, templates } from '../globals';
 import { editorData, utilityClasses } from '../editorData';
 import ComponentListItem from './ComponentListItem.vue';
 import CraftFieldSelect from './CraftFieldSelect.vue';
@@ -111,7 +99,7 @@ function copyText(text: string) {
   navigator.clipboard.writeText(text);
 }
 function insertGuideTemplateIntoEditor() {
-  if (editor.value && guideTemplateContent.value) {
+  if (editor.value && guideTemplateContent.value && contentSourceField.value) {
     editor.value._editor.setValue(guideTemplateContent.value);
     contentSourceField.value.setFieldValue('field');
   }
@@ -137,7 +125,7 @@ function onSlugChanged(newValue: string) {
 function onTitleChanged(newValue: string) {
   titleValue.value = newValue;
 
-  if (props.isNew && !slugFocused.value) {
+  if (props.isNew && !slugFocused.value && slugField.value) {
     slugField.value.setFieldValue(kebab(newValue));
   }
 }
@@ -164,25 +152,27 @@ onMounted(() => {
     editorContent.value = guide.value.content;
   }
   if (guide.value?.contentSource) {
-    if (proEdition) {
-      contentSourceField.value.setFieldValue(guide.value.contentSource);
-    } else {
-      contentSourceField.value.setFieldValue('template');
+    if (contentSourceField.value) {
+      if (proEdition) {
+        contentSourceField.value.setFieldValue(guide.value.contentSource);
+      } else {
+        contentSourceField.value.setFieldValue('template');
+      }
     }
   }
-  if (guide.value?.contentUrl) {
+  if (guide.value?.contentUrl && contentUrlField.value) {
     contentUrlField.value.setFieldValue(guide.value.contentUrl);
   }
-  if (guide.value?.template) {
+  if (guide.value?.template && templateField.value) {
     templateField.value.setFieldValue(guide.value.template);
   }
-  if (guide.value?.slug) {
+  if (guide.value?.slug && slugField.value) {
     slugField.value.setFieldValue(guide.value.slug);
   }
-  if (guide.value?.title) {
+  if (guide.value?.title && titleField.value) {
     titleField.value.setFieldValue(guide.value.title);
   }
-  if (guide.value?.summary) {
+  if (guide.value?.summary && summaryField.value) {
     summaryField.value.setFieldValue(guide.value.summary);
   }
 

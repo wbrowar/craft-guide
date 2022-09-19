@@ -35,9 +35,9 @@
       <figcaption class="{{ rootClass }}__caption">{{ caption }}</figcaption>
     {%- endif %}
     {% if asset ?? false and lightbox -%}
-      <modal ref="image-component-modal-{{ asset.id }}" click-outside-to-close aspect-ratio="{{ asset.width }} / {{ asset.height }}" max-height="{{ asset.width }}px" max-width="{{ asset.height }}px" teleport-to="body">
+      <guide-modal ref="image-component-modal-{{ asset.id }}" click-outside-to-close aspect-ratio="{{ asset.width }} / {{ asset.height }}" max-height="{{ asset.width }}px" max-width="{{ asset.height }}px" teleport-to="body">
         <img class="g-image" src="{{ asset.url }}" loading="lazy" width="{{ asset.width }}" height="{{ asset.height }}" alt="{{ alt ?? asset.title }}" />
-      </modal>
+      </guide-modal>
     {%- endif %}
   {% else %}
     <div class="fpo" style="padding: 30% 0;">

@@ -1,5 +1,11 @@
 import { ColorRepresentation } from 'three';
 
+declare global {
+  interface Window {
+    Craft: any;
+  }
+}
+
 export interface Documentation {
   code: string;
   description?: string;

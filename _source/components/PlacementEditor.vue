@@ -86,11 +86,13 @@ function onUriChanged(newValue: string) {
 }
 function resetFields() {
   nextTick(() => {
-    groupField.value.setFieldValue(
-      props.placement?.group + (props.placement?.groupId ? `|${props.placement.groupId}` : '') || 'nav'
-    );
-    uriField.value.setFieldValue(props.placement?.uri || '');
-    selectorField.value.setFieldValue(props.placement?.selector || '');
+    if (groupField.value && uriField.value && selectorField.value) {
+      groupField.value.setFieldValue(
+        props.placement?.group + (props.placement?.groupId ? `|${props.placement.groupId}` : '') || 'nav'
+      );
+      uriField.value.setFieldValue(props.placement?.uri || '');
+      selectorField.value.setFieldValue(props.placement?.selector || '');
+    }
   });
 }
 function saveEdit() {

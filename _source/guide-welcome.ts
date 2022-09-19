@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import { log } from "./globals";
+import { log } from './globals';
 import GuideWelcome from './components/GuideWelcome.vue';
 
 export default async function init() {

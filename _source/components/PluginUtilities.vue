@@ -16,7 +16,7 @@ const exportGuides = ref(props.exportData ? JSON.parse(props.exportData) : {});
 const importData = ref('');
 
 // Template Refs
-const exportField = ref<InstanceType<typeof CraftFieldText>>(null);
+const exportField = ref<InstanceType<typeof CraftFieldText>>();
 
 /**
  * Checks to see if navigator.clipboard is available for use.

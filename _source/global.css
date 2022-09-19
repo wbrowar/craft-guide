@@ -4,6 +4,9 @@
 
 @tailwind base;
 
+[v-cloak] {
+  display: none;
+}
 .fpo {
   background-color: rgba(255, 0, 255, 0.9);
   outline: rgba(255, 0, 255, 0.9) solid 4px;
