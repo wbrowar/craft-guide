@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
+import { PropType, ref, watch } from 'vue';
 
 const emit = defineEmits(['value-changed']);
 const props = defineProps({
@@ -7,7 +7,7 @@ const props = defineProps({
   instructions: String,
   label: { type: String, required: true },
   name: { type: String, required: true },
-  options: { type: Array, required: true },
+  options: { type: Array as PropType<{ label: string; value: string }[]>, required: true },
   placeholder: String,
   required: { type: Boolean, default: false },
   startingValue: { type: String, default: '' },
@@ -42,7 +42,7 @@ defineExpose({
           :id="name"
           v-model="fieldValue"
           :name="name"
-          :aria-describedby="instructions ? `${name}-instructions` : null"
+          :aria-describedby="instructions ? `${name}-instructions` : undefined"
           v-bind="fieldAttributes"
         >
           <option v-for="option in options" :key="option.value" :value="option.value">{{ option.label }}</option>

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Guide } from '~/types/plugins';
+import type { Guide } from '@/types/plugins';
 import { computed, onMounted, ref, watchEffect } from 'vue';
 import { log } from '../globals';
 import CraftFieldText from './CraftFieldText.vue';

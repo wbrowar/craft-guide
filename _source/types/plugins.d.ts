@@ -6,6 +6,11 @@ declare global {
   }
 }
 
+export interface CraftFieldSelectOptions {
+  label: string;
+  value: string;
+}
+
 export interface Documentation {
   code: string;
   description?: string;
@@ -59,19 +64,23 @@ export interface OrganizerGroup {
 
 export interface OrganizerGroupFilter {
   label: string;
-  value: string;
+  value: PlacementGroup;
 }
 
 export interface Placement {
   access: PlacementAccess;
-  group: PlacementGroup | null;
-  groupId: string | null;
-  guideId: number | null;
-  id: number | null;
+  group?: PlacementGroup;
+  groupId?: string;
+  guideId: number;
+  id: number;
   portalMethod: 'append' | 'prepend';
-  selector: string | null;
-  theme: 'default' | 'frame';
-  uri: string | null;
+  selector?: string;
+  theme?: 'default' | 'frame';
+  uri?: string;
+}
+
+export interface PlacementEdit extends Omit<Partial<Placement>, 'id'> {
+  id?: number;
 }
 
 export interface PlacementEditorGroup {
@@ -80,8 +89,8 @@ export interface PlacementEditorGroup {
   header: string;
   label: string;
   headerSize: number;
-  name: string;
-  groupId: string;
+  name: PlacementGroup;
+  groupId?: string;
 }
 
 export type PlacementAccess = 'all' | 'admins' | 'author';

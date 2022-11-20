@@ -528,7 +528,9 @@ class Guide extends Plugin
         }
 
         if ($path ?? false) {
-            $assetPaths['css'] = $path . '/style.css';
+            if ($manifest['style.css']['file'] ?? false) {
+                $assetPaths['css'] = $path . '/' . $manifest['style.css']['file'];
+            }
             if ($manifest[$filename]['file'] ?? false) {
                 $assetPaths['js'] = $path . '/' . $manifest[$filename]['file'];
             }

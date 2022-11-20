@@ -36,10 +36,10 @@ function onInsert() {
       <h4>{{ title }}</h4>
       <p v-html="docs.summary" v-if="docs?.summary"></p>
       <div class="g-space-x-1">
-        <button class="btn small icon add g-mt-1" type="button" @click="onInsert">{{ t['Add'] }}</button>
-        <button class="btn small icon copy g-mt-1" type="button" @click="onCopy">{{ t['Copy'] }}</button>
+        <button class="btn small icon add g-mt-1" type="button" @click="onInsert">{{ t('Add') }}</button>
+        <button class="btn small icon copy g-mt-1" type="button" @click="onCopy">{{ t('Copy') }}</button>
         <button class="btn small g-mt-1" type="button" @click="onDocumentation" v-if="docs">
-          {{ t['Documentation'] }}
+          {{ t('Documentation') }}
         </button>
       </div>
     </div>

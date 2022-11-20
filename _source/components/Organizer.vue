@@ -12,8 +12,10 @@ import type {
   OrganizerGroup,
   OrganizerGroupFilter,
   Placement,
+  PlacementEditorGroup,
+  PlacementEdit,
   PlacementGroup,
-} from '~/types/plugins';
+} from '@/types/plugins';
 
 const props = defineProps({
   actionUrlGetAllPlacements: { type: String, required: true },
@@ -22,8 +24,8 @@ const props = defineProps({
   isNew: { type: Boolean, default: false },
 });
 
-const currentEditPlacement = ref(null as Placement | null);
-const currentPreparingGuideId = ref(null as Placement | null);
+const currentEditPlacement = ref(undefined as PlacementEdit | undefined);
+const currentPreparingGuideId = ref(null as number | null);
 const gridView = ref<OrganizerGridView>('grid');
 const groups = ref<OrganizerGroup[]>(JSON.parse(props.groupsData));
 const groupFilters = ref<OrganizerGroupFilter[]>([]);
@@ -34,25 +36,29 @@ const selectedGroupFilters = ref<PlacementGroup[]>([]);
 const editModal = ref<InstanceType<typeof GuideModal>>();
 const placementEditor = ref<InstanceType<typeof PlacementEditor>>();
 
-const filteredDropZones = computed(() =>
+const filteredDropZones = computed<PlacementEditorGroup[]>(() =>
   proEdition
-    ? groups.value.filter((group) => {
+    ? (groups.value.filter((group) => {
         return selectedGroupFilters.value.includes(group.name);
-      })
+      }) as PlacementEditorGroup[])
     : []
 );
 
-function addPlacementForGuide(guide: Guide, group: PlacementGroup | null = null, groupId: string | null = null) {
-  const placement: Placement = {
+function addPlacementForGuide(
+  guide: Guide,
+  group: PlacementGroup | undefined = undefined,
+  groupId: string | undefined = undefined
+) {
+  const placement: PlacementEdit = {
     access: 'all',
     group: group,
     groupId: groupId,
     guideId: guide.id,
-    id: null,
+    id: undefined,
     portalMethod: 'append',
-    selector: null,
+    selector: undefined,
     theme: 'default',
-    uri: null,
+    uri: undefined,
   };
 
   if (proEdition) {
@@ -64,7 +70,7 @@ function addPlacementForGuide(guide: Guide, group: PlacementGroup | null = null,
     }
   } else {
     placement.group = 'nav';
-    placement.groupId = null;
+    placement.groupId = undefined;
     savePlacement(placement);
   }
 }
@@ -84,7 +90,7 @@ async function deletePlacement(placement: Placement) {
     }
   );
 }
-function editPlacement(placement: Placement) {
+function editPlacement(placement: PlacementEdit) {
   if (editModal.value && placementEditor.value) {
     editModal.value.open();
     currentEditPlacement.value = { ...placement };
@@ -98,7 +104,7 @@ function editPlacementClose(placement = null) {
   if (editModal.value) {
     editModal.value.close();
   }
-  currentEditPlacement.value = null;
+  currentEditPlacement.value = undefined;
 }
 async function getPlacementList() {
   await window.Craft?.postActionRequest(
@@ -110,7 +116,7 @@ async function getPlacementList() {
     }
   );
 }
-function onDropOnDropZone(e: any, group: PlacementGroup, groupId = null) {
+function onDropOnDropZone(e: any, group: PlacementGroup, groupId = undefined) {
   log('Dropping onto zone', group, groupId);
   if (e.dataTransfer.getData('placementId') === 'new') {
     const guide = guides.find((item) => {
@@ -124,7 +130,7 @@ function onDropOnDropZone(e: any, group: PlacementGroup, groupId = null) {
     updatePlacement(parseInt(e.dataTransfer.getData('placementId')), group, groupId);
   }
 }
-function onGuideDragStart(e: any, guideId: string) {
+function onGuideDragStart(e: any, guideId: number) {
   e.dataTransfer.dropEffect = 'move';
   e.dataTransfer.effectAllowed = 'move';
   e.dataTransfer.setData('placementId', 'new');
@@ -135,9 +141,9 @@ function placementsForGroup(group: string, groupId: string | null = null) {
     return placement.group === group && (groupId ? placement.groupId === groupId : true);
   });
 }
-async function savePlacement(placement: Placement) {
+async function savePlacement(placement: PlacementEdit) {
   if (placement.group !== 'uri') {
-    placement.uri = null;
+    placement.uri = undefined;
   }
 
   await window.Craft?.postActionRequest(
@@ -170,7 +176,7 @@ function toggleSelectedGroupFilter(value: PlacementGroup) {
 
   localStorage.setItem('guide:organizer:selectedGroupFilters', JSON.stringify(selectedGroupFilters.value));
 }
-function updatePlacement(placementId: number, group: PlacementGroup, groupId = null) {
+function updatePlacement(placementId: number, group: PlacementGroup, groupId = undefined) {
   log(`Updating placement: ${placementId} group to: ${group}`);
   placements.value.forEach((placement) => {
     log(
@@ -187,7 +193,7 @@ function updatePlacement(placementId: number, group: PlacementGroup, groupId = n
       (groupId && placement.groupId ? parseInt(placement.groupId) !== groupId : true)
     ) {
       placement.group = group;
-      placement.groupId = groupId || null;
+      placement.groupId = groupId || undefined;
       savePlacement(placement);
     }
   });
@@ -238,8 +244,8 @@ onMounted(() => {
   <div class="g-grid g-grid-cols-[minmax(150px,300px),minmax(400px,1fr)] g-relative g-overflow-hidden">
     <div class="g-bg-white g-rounded-l-lg g-min-h-[650px] g-h-admin-window g-overflow-x-auto">
       <div class="g-p-6">
-        <h2>{{ t['Guides'] }}</h2>
-        <p v-html="t['ORGANIZER_GUIDES_INSTRUCTIONS']"></p>
+        <h2>{{ t('Guides') }}</h2>
+        <p v-html="t('ORGANIZER_GUIDES_INSTRUCTIONS')"></p>
       </div>
 
       <ul>
@@ -263,7 +269,7 @@ onMounted(() => {
               type="button"
               :href="cpUrl(`guide/edit/${guide.id}?return=${cpUrl('guide/organizer')}`)"
               v-if="userOperations.editGuides"
-              >{{ t['Edit'] }}</a
+              >{{ t('Edit') }}</a
             >
             <a
               class="btn small"
@@ -271,7 +277,7 @@ onMounted(() => {
               type="button"
               :href="cpUrl(`guide/delete/${guide.id}`)"
               v-if="userOperations.deleteGuides"
-              >{{ t['Delete'] }}</a
+              >{{ t('Delete') }}</a
             >
             <a
               class="btn small"
@@ -279,7 +285,7 @@ onMounted(() => {
               type="button"
               :href="cpUrl(`guide/page/${guide.slug}`)"
               v-if="proEdition"
-              >{{ t['View'] }}</a
+              >{{ t('View') }}</a
             >
             <button
               class="btn small icon add"
@@ -287,7 +293,7 @@ onMounted(() => {
               type="button"
               @click="addPlacementForGuide(guide)"
             >
-              {{ t['Add'] }}
+              {{ t('Add') }}
             </button>
           </div>
           <div class="g-mt-3" v-if="currentPreparingGuideId === guide.id">Edit this!</div>
@@ -301,8 +307,8 @@ onMounted(() => {
     <div class="g-min-h-[650px] g-h-admin-window g-relative g-bg-select-dark g-rounded-r-lg g-overflow-x-auto">
       <div class="g-p-6">
         <div class="g-text-select-light">
-          <h2>{{ t['Craft CP'] }}</h2>
-          <p>{{ t['ORGANIZER_CP_INSTRUCTIONS'] }}</p>
+          <h2>{{ t('Craft CP') }}</h2>
+          <p>{{ t('ORGANIZER_CP_INSTRUCTIONS') }}</p>
         </div>
         <div class="g-grid g-grid-cols-[1fr,150px] g-gap-4 g-mt-6">
           <div class="g-grid g-gap-5 xl:g-grid-cols-4">
@@ -317,7 +323,7 @@ onMounted(() => {
               group="nav"
               :guides="guides"
               :placements="placementsForGroup('nav', null)"
-              @drop="onDropOnDropZone($event, 'nav', null)"
+              @drop="onDropOnDropZone($event, 'nav', undefined)"
               @dragover.prevent
               @dragenter.prevent
               @delete-placement-clicked="deletePlacement"
@@ -333,12 +339,12 @@ onMounted(() => {
                 'xl:g-col-start-1 xl:g-col-span-4': gridView === 'list',
               }"
               :header-size="group.headerSize"
-              :description="group.description || null"
-              :header="group.header || null"
+              :description="group.description || undefined"
+              :header="group.header || undefined"
               :group="group.name"
               :guides="guides"
               :placements="placementsForGroup(group.name, group.groupId)"
-              @drop="onDropOnDropZone($event, group.name, group.groupId || null)"
+              @drop="onDropOnDropZone($event, group.name, group.groupId ?? undefined)"
               @dragover.prevent
               @dragenter.prevent
               @delete-placement-clicked="deletePlacement"
@@ -356,7 +362,7 @@ onMounted(() => {
               group="uri"
               :guides="guides"
               :placements="placementsForGroup('uri', null)"
-              @drop="onDropOnDropZone($event, 'uri', null)"
+              @drop="onDropOnDropZone($event, 'uri', undefined)"
               @dragover.prevent
               @dragenter.prevent
               @delete-placement-clicked="deletePlacement"

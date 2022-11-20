@@ -68,7 +68,7 @@
     </teleport>
     <teleport :to="teleportTarget" :disabled="!teleportTarget" v-if="renderDisplay">
       <div{% if guideNav|length > 1 %} class="g-grid g-grid-cols-[var(--grid-cols)] g-items-start g-gap-6 g-relative" style="--grid-cols: 1fr 200px;"{% endif %}>
-        {% if inlineEditorId ?? false %}<placement-inline-editor placement-inline-editor="{{ inlineEditorId }}" {% if placementId ?? false %}placement-id="{{ placementId }}"{% endif %} v-if="showInlineEditor"></placement-inline-editor>{% endif %}
+        {% if inlineEditorId ?? false %}<placement-inline-editor placement-inline-editor="{{ inlineEditorId }}"{% if placementId ?? false %} placement-id="{{ placementId }}"{% endif %} v-if="showInlineEditor"></placement-inline-editor>{% endif %}
         <div{% if inlineEditorId ?? false %} v-else{% endif %}>
           {% if guides|length %}
             {% for guide in guides %}
@@ -88,9 +88,9 @@
               {% set vueString4 = "data['" ~ guide.slug ~ "'].string4" %}
               {% set vueString5 = "data['" ~ guide.slug ~ "'].string5" %}
               {% if teleportMap['id-' ~ guide.id] ?? false %}<teleport to="{{ teleportMap['id-' ~ guide.id] }}">{% endif %}
-              <section class="guide guide-{{ guide.slug }} g-relative" :class="[showTldr ? 'guide-tldr' : null]" {% if not (teleportMap['id-' ~ guide.id] ?? false) and (guideNav|length > 1) %}v-if="currentGuide === '{{ guide.slug }}'"{% endif %}>
+              <section class="guide guide-{{ guide.slug }} g-relative" :class="showTldr ? 'guide-tldr' : null" {% if not (teleportMap['id-' ~ guide.id] ?? false) and (guideNav|length > 1) %}v-if="currentGuide === '{{ guide.slug }}'"{% endif %}>
                 <div class="guide-edit-button g-ml-3 g-space-x-1 g-duration-150" v-if="enableInlineEditor || enableTldr">
-                  <button class="btn small g-duration-150" :class="[showTldr ? 'submit' : null]" type="button" title="Hide some of the content in this guide to read a summarized version." @click="showTldr ? toggleTldr(false) : toggleTldr(true)" v-if="enableTldr">{{ 'TL;DR'|t('guide') }}</button>
+                  <button class="btn small g-duration-150" :class="showTldr ? 'submit' : null" type="button" title="Hide some of the content in this guide to read a summarized version." @click="showTldr ? toggleTldr(false) : toggleTldr(true)" v-if="enableTldr">{{ 'TL;DR'|t('guide') }}</button>
                   <button class="btn small g-duration-150" type="button" title="Select a new guide for this area." @click="showInlineEditor = true" v-if="enableInlineEditor && userOperations.useOrganizer"><svg-settings class="g-h-4 g-w-4"></svg-settings></button>
                 </div>
                 {{ include('guide/_partials/render_content', { guide: guide }) }}

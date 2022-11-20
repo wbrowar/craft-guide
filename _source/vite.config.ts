@@ -10,24 +10,25 @@ export default defineConfig(({ command }) => {
   }
 
   return {
+    base: command === 'build' ? './' : '/',
     build: {
+      cssCodeSplit: false,
       emptyOutDir: true,
-      lib: {
-        entry: resolve(__dirname, './guide.ts'),
-        formats: ['es'],
-        name: 'Guide',
-        fileName: 'guide',
-      },
       manifest: true,
       outDir: '../src/assetbundles/dist',
+      rollupOptions: {
+        input: {
+          guide: './guide.ts',
+        },
+      },
     },
     define,
-    plugins: [vue({
-    })],
+    plugins: [vue()],
     resolve: {
       alias: {
-        vue: 'vue/dist/vue.esm-bundler.js'
-      }
+        '@': './',
+        vue: 'vue/dist/vue.esm-bundler.js',
+      },
     },
     server: {
       port: 3100,

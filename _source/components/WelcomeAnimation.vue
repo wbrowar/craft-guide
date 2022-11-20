@@ -5,7 +5,7 @@ import gsap from 'gsap';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { DirectionalLight, HemisphereLight, Object3D, PerspectiveCamera, Scene, WebGLRenderer } from 'three';
-import type { SceneSettings } from '~/types/plugins';
+import type { SceneSettings } from '@/types/plugins';
 
 const emit = defineEmits(['paused', 'played']);
 const props = defineProps({

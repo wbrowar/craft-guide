@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onBeforeMount, onMounted, ref } from 'vue';
 import { guides, log, t, userOperations } from '../globals';
 import CraftFieldSelect from './CraftFieldSelect.vue';
-import type { Placement } from '../types/plugins';
+import { PlacementEdit } from '../types/plugins';
 
 const props = defineProps({
   placementId: String,
@@ -10,26 +10,14 @@ const props = defineProps({
 });
 
 const guideValue = ref();
-const placement = ref<Placement>();
+const placement = ref<PlacementEdit>();
 const placementSaved = ref(false);
-
-placement.value = {
-  access: 'all',
-  group: 'uiElement',
-  groupId: props.placementInlineEditor,
-  guideId: null,
-  id: props.placementId ? parseFloat(props.placementId) : null,
-  portalMethod: 'append',
-  selector: null,
-  theme: 'default',
-  uri: null,
-};
 
 // Template refs
 const guideField = ref<InstanceType<typeof CraftFieldSelect>>();
 
 const guideFieldOptions = computed(() => {
-  const options = [{ label: t['Select One'], value: '__none__' }];
+  const options = [{ label: t('Select One'), value: '__none__' }];
 
   guides.forEach((guide) => {
     options.push({ label: guide.title, value: guide.slug });
@@ -91,6 +79,19 @@ async function savePlacement() {
   );
 }
 
+onBeforeMount(() => {
+  placement.value = {
+    access: 'all',
+    group: 'uiElement',
+    groupId: props.placementInlineEditor,
+    guideId: undefined,
+    id: props.placementId ? parseFloat(props.placementId) : undefined,
+    portalMethod: 'append',
+    selector: undefined,
+    theme: 'default',
+    uri: undefined,
+  };
+});
 onMounted(() => {
   if (guideField.value) {
     guideField.value.setFieldValue(guideFieldOptions.value[0].value);
@@ -103,23 +104,23 @@ onMounted(() => {
 <template>
   <div v-if="placementInlineEditor">
     <div v-if="placementSaved">
-      <p v-if="guideValue === '__none__'">{{ t['PLACEMENT_INLINE_EDITOR_CONFIRM_REMOVED'] }}</p>
-      <p v-else>{{ t['PLACEMENT_INLINE_EDITOR_CONFIRM_ADDED'] }}</p>
+      <p v-if="guideValue === '__none__'">{{ t('PLACEMENT_INLINE_EDITOR_CONFIRM_REMOVED') }}</p>
+      <p v-else>{{ t('PLACEMENT_INLINE_EDITOR_CONFIRM_ADDED') }}</p>
     </div>
     <div v-if="!placementSaved && userOperations.useOrganizer">
       <div v-if="guides.length">
         <CraftFieldSelect
           ref="guideField"
-          :instructions="t['PLACEMENT_INLINE_EDITOR_FIELD_INSTRUCTIONS_GUIDE']"
-          :label="t['Guide']"
+          :instructions="t('PLACEMENT_INLINE_EDITOR_FIELD_INSTRUCTIONS_GUIDE')"
+          :label="t('Guide')"
           name="guide"
           :options="guideFieldOptions"
           @value-changed="onGroupChanged"
         />
-        <button class="btn submit" type="button" @click="onSaveClicked">{{ t['Save'] }}</button>
+        <button class="btn submit" type="button" @click="onSaveClicked">{{ t('Save') }}</button>
       </div>
       <div v-else>
-        <p>{{ t['PLACEMENT_INLINE_EDITOR_NO_GUIDES'] }}</p>
+        <p>{{ t('PLACEMENT_INLINE_EDITOR_NO_GUIDES') }}</p>
       </div>
     </div>
   </div>

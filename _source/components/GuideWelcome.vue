@@ -49,10 +49,10 @@ onMounted(() => {
             </button>
           </div>
           <div>
-            <p>{{ t['WELCOME_MESSAGE'] }}</p>
+            <p>{{ t('WELCOME_MESSAGE') }}</p>
           </div>
           <a class="btn submit icon go" :href="skipUrl" style="--ui-control-color: currentColor">{{
-            t['WELCOME_BUTTON_LABEL']
+            t('WELCOME_BUTTON_LABEL')
           }}</a>
         </div>
       </div>

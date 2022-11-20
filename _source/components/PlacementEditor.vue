@@ -3,12 +3,12 @@ import { computed, nextTick, onMounted, PropType, ref } from 'vue';
 import { log, t } from '../globals';
 import CraftFieldSelect from './CraftFieldSelect.vue';
 import CraftFieldText from './CraftFieldText.vue';
-import type { Placement, PlacementEditorGroup, PlacementGroup } from '../types/plugins';
+import type { PlacementEdit, PlacementEditorGroup, PlacementGroup } from '../types/plugins';
 
 const emit = defineEmits(['canceled', 'saved']);
 const props = defineProps({
   groups: Array as PropType<PlacementEditorGroup[]>,
-  placement: Object as PropType<Placement>,
+  placement: Object as PropType<PlacementEdit>,
 });
 
 const groupValue = ref('');
@@ -68,8 +68,8 @@ const groupFieldOptions = computed(() => {
 const isNew = computed(() => props.placement?.id === null);
 const selectorFieldInstructions = computed(() =>
   groupValue.value === 'uri'
-    ? t['PLACEMENT_EDITOR_FIELD_INSTRUCTIONS_SELECTOR_URI']
-    : t['PLACEMENT_EDITOR_FIELD_INSTRUCTIONS_SELECTOR_NON_URI']
+    ? t('PLACEMENT_EDITOR_FIELD_INSTRUCTIONS_SELECTOR_URI')
+    : t('PLACEMENT_EDITOR_FIELD_INSTRUCTIONS_SELECTOR_NON_URI')
 );
 
 function cancelEdit() {
@@ -147,8 +147,8 @@ defineExpose({
         <CraftFieldSelect
           ref="groupField"
           required
-          :instructions="t['PLACEMENT_EDITOR_FIELD_INSTRUCTIONS_GROUP']"
-          :label="t['Group']"
+          :instructions="t('PLACEMENT_EDITOR_FIELD_INSTRUCTIONS_GROUP')"
+          :label="t('Group')"
           name="group"
           :options="groupFieldOptions"
           @value-changed="onGroupChanged"
@@ -156,8 +156,8 @@ defineExpose({
         <CraftFieldText
           ref="uriField"
           required
-          :instructions="t['PLACEMENT_EDITOR_FIELD_INSTRUCTIONS_URI']"
-          :label="t['Page URI']"
+          :instructions="t('PLACEMENT_EDITOR_FIELD_INSTRUCTIONS_URI')"
+          :label="t('Page URI')"
           name="uri"
           @value-changed="onUriChanged"
           v-show="groupValue === 'uri'"
@@ -166,7 +166,7 @@ defineExpose({
           ref="selectorField"
           :required="groupValue === 'uri'"
           :instructions="selectorFieldInstructions"
-          :label="t['CSS Selector']"
+          :label="t('CSS Selector')"
           name="selector"
           @value-changed="onSelectorChanged"
           v-show="groupValue !== 'nav'"

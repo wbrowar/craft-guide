@@ -46,13 +46,6 @@ class Placement extends Model
     public $groupId;
 
     /**
-     * Add CSS to guide display to help it fit in better with its surrounding elements.
-     *
-     * @var string
-     */
-    public $theme;
-
-    /**
      * The ID of the guide being placed.
      *
      * @var integer
@@ -74,6 +67,13 @@ class Placement extends Model
      * @var string
      */
     public $selector;
+
+    /**
+     * Add CSS to guide display to help it fit in better with its surrounding elements.
+     *
+     * @var string
+     */
+    public $theme;
 
     /**
      * The CP URI of the specific page a placement will appear on.

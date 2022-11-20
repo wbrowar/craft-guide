@@ -17,16 +17,22 @@ const props = defineProps({
 
 const confirmDelete = ref(false);
 
-function guideForPlacement(guideId: number): Guide | undefined {
-  return props.guides.find((item) => {
-    return item.id === guideId;
-  });
+function guideForPlacement(guideId: number | null): Guide | undefined {
+  return guideId
+    ? props.guides.find((item) => {
+        return item.id === guideId;
+      })
+    : undefined;
 }
-function onPlacementDragStart(e: any, placementId: string, guideId: string) {
+function onPlacementDragStart(e: any, placementId: number | null, guideId: number | null) {
   e.dataTransfer.dropEffect = 'move';
   e.dataTransfer.effectAllowed = 'move';
-  e.dataTransfer.setData('placementId', placementId);
-  e.dataTransfer.setData('guideId', guideId);
+  if (placementId) {
+    e.dataTransfer.setData('placementId', placementId);
+  }
+  if (guideId) {
+    e.dataTransfer.setData('guideId', guideId);
+  }
 }
 function onDeletePlacementClicked(placement: Placement) {
   emit('delete-placement-clicked', placement);
@@ -65,8 +71,8 @@ onMounted(() => {
     </div>
     <ul>
       <li
-        v-for="placement in placements"
-        :key="placement.id"
+        v-for="(placement, index) in placements"
+        :key="index"
         title="Drag guide to a different area of the Craft Control Panel"
       >
         <div
@@ -76,7 +82,7 @@ onMounted(() => {
           @mouseleave="confirmDelete = false"
         >
           <h4 class="g-mb-0">
-            {{ guideForPlacement(placement.guideId).title
+            {{ guideForPlacement(placement.guideId)?.title ?? ''
             }}<span class="g-ml-2 g-font-normal g-opacity-60" v-if="placement.uri">{{ placement.uri }}</span
             ><span class="g-ml-2 g-font-normal g-opacity-40" v-if="placement.selector">{{ placement.selector }}</span>
           </h4>

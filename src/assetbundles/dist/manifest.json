@@ -1,14 +1,8 @@
 {
   "guide.ts": {
-    "file": "guide.js",
+    "file": "assets/guide.d4fc2305.js",
     "src": "guide.ts",
     "isEntry": true,
-    "imports": [
-      "_guide.e341e0e3.js"
-    ]
-  },
-  "_guide.e341e0e3.js": {
-    "file": "guide.e341e0e3.js",
     "dynamicImports": [
       "guide-display.ts",
       "guide-admin.ts",
@@ -16,45 +10,45 @@
     ]
   },
   "guide-display.ts": {
-    "file": "guide-display.fad8df35.js",
+    "file": "assets/guide-display.8269b76c.js",
     "src": "guide-display.ts",
     "isDynamicEntry": true,
     "imports": [
-      "__plugin-vue_export-helper.54751eae.js",
-      "_guide.e341e0e3.js",
-      "_SvgSettings.ca68580a.js"
+      "__plugin-vue_export-helper.007b8a71.js",
+      "guide.ts",
+      "_SvgSettings.3d313eba.js"
     ]
   },
-  "__plugin-vue_export-helper.54751eae.js": {
-    "file": "_plugin-vue_export-helper.54751eae.js"
+  "__plugin-vue_export-helper.007b8a71.js": {
+    "file": "assets/_plugin-vue_export-helper.007b8a71.js"
   },
-  "_SvgSettings.ca68580a.js": {
-    "file": "SvgSettings.ca68580a.js",
+  "_SvgSettings.3d313eba.js": {
+    "file": "assets/SvgSettings.3d313eba.js",
     "imports": [
-      "__plugin-vue_export-helper.54751eae.js"
+      "__plugin-vue_export-helper.007b8a71.js"
     ]
   },
   "guide-admin.ts": {
-    "file": "guide-admin.98e86172.js",
+    "file": "assets/guide-admin.0f5db8a6.js",
     "src": "guide-admin.ts",
     "isDynamicEntry": true,
     "imports": [
-      "__plugin-vue_export-helper.54751eae.js",
-      "_guide.e341e0e3.js",
-      "_SvgSettings.ca68580a.js"
+      "__plugin-vue_export-helper.007b8a71.js",
+      "guide.ts",
+      "_SvgSettings.3d313eba.js"
     ]
   },
   "guide-welcome.ts": {
-    "file": "guide-welcome.19e6f139.js",
+    "file": "assets/guide-welcome.a29a533f.js",
     "src": "guide-welcome.ts",
     "isDynamicEntry": true,
     "imports": [
-      "__plugin-vue_export-helper.54751eae.js",
-      "_guide.e341e0e3.js"
+      "__plugin-vue_export-helper.007b8a71.js",
+      "guide.ts"
     ]
   },
   "style.css": {
-    "file": "style.css",
+    "file": "assets/style.943a3a9b.css",
     "src": "style.css"
   }
 }

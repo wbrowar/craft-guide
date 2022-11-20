@@ -16,7 +16,14 @@ import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/mode-markdown';
 import 'ace-builds/src-noconflict/mode-twig';
 import 'ace-builds/src-noconflict/theme-tomorrow_night_bright';
-import type { Documentation, EditorComponent, EditorTabGroup, Guide, GuideContentSource } from '~/types/plugins';
+import type {
+  CraftFieldSelectOptions,
+  Documentation,
+  EditorComponent,
+  EditorTabGroup,
+  Guide,
+  GuideContentSource,
+} from 'types/plugins';
 import type { VAceEditorInstance } from 'vue3-ace-editor/types';
 
 const props = defineProps({
@@ -38,7 +45,7 @@ const guideTemplate = ref('__none__');
 const pageForm = ref(JSON.parse(props.formData));
 const slugFocused = ref(false);
 const slugValue = ref('');
-const templatesFieldOptions = ref<Record<string, string>[]>([]);
+const templatesFieldOptions = ref<CraftFieldSelectOptions[]>([]);
 const titleValue = ref('');
 
 // Template refs
@@ -239,7 +246,7 @@ onMounted(() => {
           <li class="g-flex-grow" :class="currentTab === 'publishing' ? 'g-bg-select-dark' : 'g-bg-select-light'">
             <button
               class="g-w-full g-h-[60px] g-cursor-pointer"
-              :title="t['Settings']"
+              :title="t('Settings')"
               type="button"
               @click="selectTab('publishing')"
             >
@@ -256,7 +263,7 @@ onMounted(() => {
           >
             <button
               class="g-w-full g-h-[60px] g-cursor-pointer"
-              :title="t['Components']"
+              :title="t('Components')"
               type="button"
               @click="selectTab('components')"
             >
@@ -273,7 +280,7 @@ onMounted(() => {
           >
             <button
               class="g-w-full g-h-[60px] g-cursor-pointer"
-              :title="t['Images']"
+              :title="t('Images')"
               type="button"
               @click="selectTab('images')"
             >
@@ -290,7 +297,7 @@ onMounted(() => {
           >
             <button
               class="g-w-full g-h-[60px] g-cursor-pointer"
-              :title="t['Guides']"
+              :title="t('Guides')"
               type="button"
               @click="selectTab('guides')"
             >
@@ -307,7 +314,7 @@ onMounted(() => {
           >
             <button
               class="g-w-full g-h-[60px] g-cursor-pointer"
-              :title="t['Snippets']"
+              :title="t('Snippets')"
               type="button"
               @click="selectTab('snippets')"
             >
@@ -321,11 +328,11 @@ onMounted(() => {
       </div>
       <div>
         <div class="g-p-6" v-show="currentTab === 'publishing'">
-          <h2>{{ t['Settings'] }}</h2>
+          <h2>{{ t('Settings') }}</h2>
           <CraftFieldText
             ref="titleField"
             required
-            :label="t['Title']"
+            :label="t('Title')"
             name="title"
             placeholder="Guide Title"
             @value-changed="onTitleChanged"
@@ -333,7 +340,7 @@ onMounted(() => {
           <CraftFieldText
             ref="slugField"
             required
-            :label="t['Slug']"
+            :label="t('Slug')"
             name="slug"
             placeholder="guide-title"
             @focused="slugFocused = true"
@@ -341,12 +348,12 @@ onMounted(() => {
           />
           <CraftFieldSelect
             ref="contentSourceField"
-            :label="t['Content Source']"
+            :label="t('Content Source')"
             name="contentSource"
             :options="[
-              { label: t['EDITOR_FIELD_CONTENT_SOURCE_OPTION_FIELD'], value: 'field' },
-              { label: t['EDITOR_FIELD_CONTENT_SOURCE_OPTION_TEMPLATE'], value: 'template' },
-              { label: t['EDITOR_FIELD_CONTENT_SOURCE_OPTION_IFRAME'], value: 'iframe' },
+              { label: t('EDITOR_FIELD_CONTENT_SOURCE_OPTION_FIELD'), value: 'field' },
+              { label: t('EDITOR_FIELD_CONTENT_SOURCE_OPTION_TEMPLATE'), value: 'template' },
+              { label: t('EDITOR_FIELD_CONTENT_SOURCE_OPTION_IFRAME'), value: 'iframe' },
             ]"
             @value-changed="onContentSourceChanged"
             v-show="proEdition"
@@ -354,8 +361,10 @@ onMounted(() => {
           <CraftFieldSelect
             ref="templateField"
             required
-            :instructions="`${t['EDITOR_FIELD_INSTRUCTIONS_SETTINGS_TEMPLATE_FIELD_PREFIX']}<strong>${settings.templatePath}</strong>${t['EDITOR_FIELD_INSTRUCTIONS_SETTINGS_TEMPLATE_FIELD_SUFFIX']}`"
-            :label="t['Template']"
+            :instructions="`${t('EDITOR_FIELD_INSTRUCTIONS_SETTINGS_TEMPLATE_FIELD_PREFIX')}<strong>${
+              settings.templatePath
+            }</strong>${t('EDITOR_FIELD_INSTRUCTIONS_SETTINGS_TEMPLATE_FIELD_SUFFIX')}`"
+            :label="t('Template')"
             name="template"
             :options="templatesFieldOptions"
             @value-changed="onGuideTemplateChanged"
@@ -364,8 +373,8 @@ onMounted(() => {
           <CraftFieldText
             ref="contentUrlField"
             required
-            :instructions="t['EDITOR_FIELD_INSTRUCTIONS_SETTINGS_CONTENT_URL']"
-            :label="t['Page URL']"
+            :instructions="t('EDITOR_FIELD_INSTRUCTIONS_SETTINGS_CONTENT_URL')"
+            :label="t('Page URL')"
             name="contentUrl"
             :field-attributes="{
               maxlength: 255,
@@ -375,27 +384,27 @@ onMounted(() => {
           />
           <CraftFieldText
             ref="summaryField"
-            :instructions="t['EDITOR_FIELD_INSTRUCTIONS_SETTINGS_SUMMARY']"
-            :label="t['Summary']"
+            :instructions="t('EDITOR_FIELD_INSTRUCTIONS_SETTINGS_SUMMARY')"
+            :label="t('Summary')"
             name="summary"
           />
         </div>
         <ul v-show="['components', 'guides', 'images', 'snippets'].includes(currentTab)">
           <div class="g-p-6" v-if="currentTab === 'components'">
-            <h2>{{ t['Components'] }}</h2>
-            <p class="g-text-text">{{ t['EDITOR_TAB_INSTRUCTIONS_COMPONENTS'] }}</p>
+            <h2>{{ t('Components') }}</h2>
+            <p class="g-text-text">{{ t('EDITOR_TAB_INSTRUCTIONS_COMPONENTS') }})</p>
           </div>
           <div class="g-p-6" v-if="currentTab === 'images'">
-            <h2>{{ t['Images'] }}</h2>
-            <p class="g-text-text">{{ t['EDITOR_TAB_INSTRUCTIONS_IMAGES'] }}</p>
+            <h2>{{ t('Images') }}</h2>
+            <p class="g-text-text">{{ t('EDITOR_TAB_INSTRUCTIONS_IMAGES') }}</p>
           </div>
           <div class="g-p-6" v-if="currentTab === 'guides'">
-            <h2>{{ t['Guides'] }}</h2>
-            <p class="g-text-text">{{ t['EDITOR_TAB_INSTRUCTIONS_GUIDES'] }}</p>
+            <h2>{{ t('Guides') }}</h2>
+            <p class="g-text-text">{{ t('EDITOR_TAB_INSTRUCTIONS_GUIDES') }}</p>
           </div>
           <div class="g-p-6" v-if="currentTab === 'snippets'">
-            <h2>{{ t['Snippets'] }}</h2>
-            <p class="g-text-text">{{ t['EDITOR_TAB_INSTRUCTIONS_SNIPPETS'] }}</p>
+            <h2>{{ t('Snippets') }}</h2>
+            <p class="g-text-text">{{ t('EDITOR_TAB_INSTRUCTIONS_SNIPPETS') }}</p>
           </div>
           <li v-for="(component, index) in tabComponents" :key="index">
             <ComponentListItem
@@ -408,7 +417,7 @@ onMounted(() => {
               :image-srcset="
                 component.thumbnail1x && component.thumbnail2x
                   ? `${component.thumbnail1x} 1x, ${component.thumbnail2x} 2x`
-                  : null
+                  : undefined
               "
               :title="component.title"
               @documentation-clicked="showDocumentation"
@@ -443,11 +452,13 @@ onMounted(() => {
           <p
             class="g-text-center"
             v-html="
-              `${t['EDITOR_URL_LOADED_IN_IFRAME_PREFIX']}<strong>${contentUrl}</strong>${t['EDITOR_URL_LOADED_IN_IFRAME_SUFFIX']}`
+              `${t('EDITOR_URL_LOADED_IN_IFRAME_PREFIX')}<strong>${contentUrl}</strong>${t(
+                'EDITOR_URL_LOADED_IN_IFRAME_SUFFIX'
+              )}`
             "
             v-if="contentUrl !== ''"
           ></p>
-          <p v-html="t[`EDITOR_ADD_PAGE_URL`]" v-else></p>
+          <p v-html="t(`EDITOR_ADD_PAGE_URL`)" v-else></p>
         </div>
       </div>
       <div
@@ -463,17 +474,19 @@ onMounted(() => {
           <div class="g-text-center" v-if="guideTemplate !== '__none__'">
             <p
               v-html="
-                `${t['EDITOR_TEMPLATE_LOAD_FROM_PREFIX']}<strong>${guideTemplate}</strong>${t['EDITOR_TEMPLATE_LOAD_FROM_MID']}<strong>${settings.templatePath}</strong>${t['EDITOR_TEMPLATE_LOAD_FROM_SUFFIX']}`
+                `${t('EDITOR_TEMPLATE_LOAD_FROM_PREFIX')}<strong>${guideTemplate}</strong>${t(
+                  'EDITOR_TEMPLATE_LOAD_FROM_MID'
+                )}<strong>${settings.templatePath}</strong>${t('EDITOR_TEMPLATE_LOAD_FROM_SUFFIX')}`
               "
             ></p>
             <div v-if="proEdition">
-              <p>{{ t['EDITOR_TEMPLATE_COPY_INSTRUCTIONS'] }}</p>
+              <p>{{ t('EDITOR_TEMPLATE_COPY_INSTRUCTIONS') }}</p>
               <button class="btn submit" type="button" @click="insertGuideTemplateIntoEditor">
-                {{ t['EDITOR_TEMPLATE_COPY_BUTTON_LABEL'] }}
+                {{ t('EDITOR_TEMPLATE_COPY_BUTTON_LABEL') }}
               </button>
             </div>
           </div>
-          <p v-html="t['EDITOR_TEMPLATE_SELECT_FILE']" v-else></p>
+          <p v-html="t('EDITOR_TEMPLATE_SELECT_FILE')" v-else></p>
         </div>
       </div>
     </div>
@@ -486,21 +499,29 @@ onMounted(() => {
           <div v-html="currentDocs.description" v-if="currentDocs.description"></div>
           <img class="g-mt-6" :srcset="currentDocs.imageSrcset" alt="image preview" v-if="currentDocs.imageSrcset" />
           <div class="g-mt-6" v-if="currentDocs.code">
-            <h2>{{ t['Code'] }}</h2>
+            <h2>{{ t('Code') }}</h2>
             <div class="g-bg-matrix-titlebar g-rounded g-border-matrix-border g-overflow-x-scroll">
               <pre class="g-p-3 g-select-all"><code>{{ currentDocs.code }}</code></pre>
             </div>
             <div class="g-space-x-1">
-              <button class="btn small icon add g-mt-1" type="button" @click="insertTextIntoEditor(currentDocs.code)">
-                {{ t['Add'] }}
+              <button
+                class="btn small icon add g-mt-1"
+                type="button"
+                @click="currentDocs?.code ? insertTextIntoEditor(currentDocs.code) : undefined"
+              >
+                {{ t('Add') }}
               </button>
-              <button class="btn small g-mt-1" type="button" @click="copyText(currentDocs.code)">
-                {{ t['Copy'] }}
+              <button
+                class="btn small g-mt-1"
+                type="button"
+                @click="currentDocs?.code ? copyText(currentDocs.code) : undefined"
+              >
+                {{ t('Copy') }}
               </button>
             </div>
           </div>
           <div class="g-mt-6" v-if="currentDocs.props">
-            <h2>{{ t['Arguments'] }}</h2>
+            <h2>{{ t('Arguments') }}</h2>
             <table>
               <tbody>
                 <tr v-for="(prop, index) in currentDocs.props" :key="index">
@@ -514,15 +535,15 @@ onMounted(() => {
           </div>
         </div>
         <button class="btn g-absolute g-top-4 g-right-4" type="button" @click="currentDocs = null">
-          {{ t['Close'] }}
+          {{ t('Close') }}
         </button>
       </div>
     </transition>
   </form>
 
   <Teleport to="#guide-action-buttons">
-    <button class="btn disabled" :title="formErrors.join(' ')" v-if="formErrors.length > 0">{{ t['Save'] }}</button>
-    <button class="btn submit" type="button" @click="submitForm" v-else>{{ t['Save'] }}</button>
+    <button class="btn disabled" :title="formErrors.join(' ')" v-if="formErrors.length > 0">{{ t('Save') }}</button>
+    <button class="btn submit" type="button" @click="submitForm" v-else>{{ t('Save') }}</button>
   </Teleport>
 </template>
 

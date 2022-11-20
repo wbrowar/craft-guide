@@ -4,7 +4,7 @@ import GuideEditor from './components/GuideEditor.vue';
 import Organizer from './components/Organizer.vue';
 import PluginUtilities from './components/PluginUtilities.vue';
 
-export default async function init() {
+export default function init() {
   const guideEditor = document.getElementById('guide-editor');
   if (guideEditor) {
     createApp(GuideEditor, {

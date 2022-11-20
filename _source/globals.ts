@@ -21,14 +21,20 @@ export const templates: {
   filenames: Record<string, string>;
   contents: Record<string, string>;
 } = globalsElement?.dataset?.templates ? JSON.parse(globalsElement.dataset.templates) : null;
-export const t: Record<string, string> = globalsElement?.dataset?.translations
+const translations: Record<string, string> = globalsElement?.dataset?.translations
   ? JSON.parse(globalsElement.dataset.translations)
-  : null;
+  : {};
+export function t(key: string) {
+  return translations?.[key] ?? 'MISSING_TRANSLATION';
+}
 export const userOperations: PluginUserOperations = globalsElement?.dataset?.userOperations
   ? JSON.parse(globalsElement.dataset.userOperations)
   : null;
 
-log('translations', t);
+if (globalsElement) {
+  log('Loaded global set', globalsElement.dataset);
+}
+log('translations', translations);
 
 // LOGGING FUNCTIONS
 export function dir(...args: any[]) {
