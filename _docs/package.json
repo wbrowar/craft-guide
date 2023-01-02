@@ -11,6 +11,6 @@
   "dependencies": {
     "@nuxt/components": "^2.2.1",
     "@nuxt/content-theme-docs": "^0.9.0",
-    "nuxt": "^2.15.2"
+    "nuxt": "^3.0.0"
   }
 }
