@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.1.3 - 2023-11-13
+
+> {warning} This is the last planned release for the Craft CMS 3.x version of Guide.
+
+### Fixed
+- Fixed broken links to README and CHANGELOG
+
+
 ## 3.1.2 - 2022-08-28
 
 ### Fixed
