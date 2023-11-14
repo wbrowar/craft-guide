@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.2.2 - 2023-11-13
+
+### Fixed
+- Fixed a Twig syntax error in Image components (thanks to @davidhellmann for the fix) [#78](https://github.com/wbrowar/craft-guide/pull/78)
+- Fixed broken links to README and CHANGELOG
+
+
 ## 3.2.1 - 2022-08-28
 
 ### Fixed
