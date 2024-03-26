@@ -1,5 +1,5 @@
 # NODE ENVIRONMENT
-_source/_assets/node_modules/*
+_assets/node_modules/*
 
 # MISC FILES
 .cache

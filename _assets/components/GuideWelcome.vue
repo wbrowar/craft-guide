@@ -23,7 +23,7 @@
               then use the Organizer to create your guides and move them around Craft’s Control Panel.
             </p>
           </div>
-          <a class="btn submit icon go" :href="skipUrl">Go to Guide</a>
+          <a class="go" :href="skipUrl">Go to Guide</a>
         </div>
       </div>
     </div>

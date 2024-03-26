@@ -1,9 +1,8 @@
-const plugin = require('tailwindcss/plugin');
+const plugin = require('tailwindcss/plugin')
 
 module.exports = {
-  mode: 'jit',
   prefix: 'g-',
-  purge: ['./editorData.ts', './components/**/*.{vue,js,ts}'],
+  content: ['./editorData.ts', './components/**/*.{vue,js,ts}', '../src/templates/**/*.twig'],
   theme: {
     colors: {
       primary: '#E12D39',
@@ -94,33 +93,33 @@ module.exports = {
         '.scroll-snap-end': {
           scrollSnapAlign: 'end',
         },
-      };
+      }
 
-      const transitionDuration = theme('transitionDuration');
+      const transitionDuration = theme('transitionDuration')
       Object.keys(transitionDuration).forEach((key) => {
         newUtilities[`.animate-duration-${key}`] = {
           '--duration': transitionDuration[key],
-        };
+        }
         newUtilities[`.animate-delay-${key}`] = {
           '--delay': transitionDuration[key],
-        };
-      });
-      const transitionTimingFunction = theme('transitionTimingFunction');
+        }
+      })
+      const transitionTimingFunction = theme('transitionTimingFunction')
       Object.keys(transitionTimingFunction).forEach((key) => {
         newUtilities[`.animate-ease-${key}`] = {
           '--ease': transitionTimingFunction[key],
-        };
-      });
+        }
+      })
 
-      addUtilities(newUtilities);
+      addUtilities(newUtilities)
     }),
     // Hide content and replace it with a summary
     plugin(function ({ addVariant, e }) {
       addVariant('tldr', ({ modifySelectors, separator }) => {
         modifySelectors(({ className }) => {
-          return `.guide-tldr .${e(`tldr${separator}${className}`)}`;
-        });
-      });
+          return `.guide-tldr .${e(`tldr${separator}${className}`)}`
+        })
+      })
     }),
     // Add Tailwind Typography
     require('@tailwindcss/typography'),
@@ -128,4 +127,4 @@ module.exports = {
   corePlugins: {
     preflight: false,
   },
-};
+}

@@ -1,59 +1,59 @@
 <script setup lang="ts">
-import type { Guide } from '~/types/plugins';
-import { computed, defineProps, onMounted, ref, watchEffect } from 'vue';
-import { log } from '../globals';
-import CraftFieldText from './CraftFieldText.vue';
+import type { Guide } from '~/types/plugins'
+import { computed, onMounted, ref, watchEffect } from 'vue'
+import { log } from '../globals'
+import CraftFieldText from './CraftFieldText.vue'
 
 // Props
 const props = defineProps({
   exportData: String,
-});
+})
 
 // Variables
-const checkedGuides = ref<string[]>([]);
-const dataImported = ref(false);
-const exportGuides = ref(props.exportData ? JSON.parse(props.exportData) : {});
-const importData = ref('');
+const checkedGuides = ref<string[]>([])
+const dataImported = ref(false)
+const exportGuides = ref(props.exportData ? JSON.parse(props.exportData) : {})
+const importData = ref('')
 
 // Template Refs
-const exportField = ref(null);
+const exportField = ref(null)
 
 /**
  * Checks to see if navigator.clipboard is available for use.
  */
 const clipboardEnabled = computed(() => {
-  return navigator.clipboard && window.isSecureContext;
-});
+  return navigator.clipboard && window.isSecureContext
+})
 
 /**
  * The formatted string of exported guide data. Matched to the guide import expected format.
  */
 const exportDataString = computed(() => {
-  const selectedData: string[] = [];
+  const selectedData: string[] = []
   exportGuideOptions.value.forEach((option: { checked: boolean; slug: string; title: string }) => {
     if (checkedGuides.value.includes(option.slug)) {
-      selectedData.push(option.slug);
+      selectedData.push(option.slug)
     }
-  });
+  })
 
   const filteredGuides = exportGuides.value?.guides?.length
     ? exportGuides.value.guides.filter((guide: Guide) => {
-        return selectedData.includes(guide.slug);
+        return selectedData.includes(guide.slug)
       })
-    : [];
+    : []
 
   const data = {
     guides: filteredGuides,
-  };
-
-  const exportDataString = JSON.stringify(data);
-
-  if (exportDataString) {
-    return exportDataString;
   }
 
-  return '';
-});
+  const exportDataString = JSON.stringify(data)
+
+  if (exportDataString) {
+    return exportDataString
+  }
+
+  return ''
+})
 
 /**
  * Data and state of guides that can be selected for export.
@@ -65,50 +65,50 @@ const exportGuideOptions = computed(() => {
           checked: false,
           slug: guide.slug,
           title: guide.title,
-        };
+        }
       })
-    : [];
-});
+    : []
+})
 
 function copyText(text: string, notification: string) {
   navigator.clipboard.writeText(text).then(() => {
-    window.Craft?.cp?.displayNotice(notification);
-  });
+    window.Craft?.cp?.displayNotice(notification)
+  })
 }
 function copyExportData() {
   if (clipboardEnabled.value && exportDataString.value) {
-    copyText(exportDataString.value, 'Data copied');
+    copyText(exportDataString.value, 'Data copied')
   }
 }
 function onImportDataChanged(newValue: string) {
-  importData.value = newValue;
+  importData.value = newValue
 }
 async function importPluginData() {
   await window.Craft?.postActionRequest(
     'guide/import-export/import-json',
     { guideData: importData.value },
     (response, textStatus, request) => {
-      log('Saving placement', response, textStatus, request);
-      dataImported.value = true;
+      log('Saving placement', response, textStatus, request)
+      dataImported.value = true
 
       if (response.status === 'success') {
-        window.Craft?.cp?.displayNotice('Guide Data Imported');
+        window.Craft?.cp?.displayNotice('Guide Data Imported')
       } else {
-        window.Craft?.cp?.displayError(response.data.error);
+        window.Craft?.cp?.displayError(response.data.error)
       }
     }
-  );
+  )
 }
 
 onMounted(() => {
-  log('PluginUtilities loaded');
-});
+  log('PluginUtilities loaded')
+})
 
 watchEffect(() => {
   if (exportField.value) {
-    exportField.value.setFieldValue(exportDataString.value);
+    exportField.value.setFieldValue(exportDataString.value)
   }
-});
+})
 </script>
 
 <template>
