@@ -13,6 +13,18 @@ namespace wbrowar\guide\records;
 use craft\db\ActiveRecord;
 
 /**
+ * Class Guide record.
+ *
+ * @property integer $id
+ * @property integer $authorId
+ * @property string $content
+ * @property string $contentSource
+ * @property string $contentUrl
+ * @property string $slug
+ * @property string $summary
+ * @property string $template
+ * @property string $title
+ * 
  * @author    Will Browar
  * @package   Guide
  * @since     2.0.0

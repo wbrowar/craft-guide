@@ -44,14 +44,18 @@ To install the plugin, you can find it in the [Craft Plugin Store](https://plugi
 
 [Documenation for Guide and Craft Guide Templates can be found here.](https://guide.wbrowar.com)
 
+## Releases
+
+Release notes can be found at [CHANGELOG.md](https://github.com/wbrowar/craft-guide/blob/main/CHANGELOG.md)
+
+## Supported Versions
+
+Here is a general goal for adding and supporting features for Guide going forward:
+
+- New features for the plugin will be added to the current major plugin version that targets the current released version of Craft CMS.
+- The latest major plugin version that targets the previous released major version of Craft CMS will be supported with bug fixes intruduced in updates to that version of Craft CMS.
+- Previous major plugin versions will only get security-related updates—when necessary.
+
 ---
 
 Brought to you by [Will Browar](https://wbrowar.com)
-
-Here are some great open source projects that were used to help create this plugin:
-- [Nuxt.js](https://nuxtjs.org)
-- [Tailwind CSS](https://tailwindcss.com)
-- [Vite.js](https://vitejs.dev)
-- [Vue.js](https://vuejs.org)
-
-Thanks to the maintainers for doing what you do to make things like this possible. 💚

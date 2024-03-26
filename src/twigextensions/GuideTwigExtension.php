@@ -123,7 +123,7 @@ class GuideTwigExtension extends AbstractExtension
         if ($guideVolumeUid) {
             $guideVolume = Craft::$app->getVolumes()->getVolumeByUid($guideVolumeUid);
 
-            $guideVolumePath = Craft::getAlias($guideVolume->url);
+            $guideVolumePath = Craft::getAlias($guideVolume->getRootUrl());
         }
 
         $shortcodes = [
@@ -139,10 +139,6 @@ class GuideTwigExtension extends AbstractExtension
             $replace[] = $shortcode[1];
         }
 
-        if (count($find) > 0 && count($replace) > 0) {
-            $newString = str_replace($find, $replace, $string);
-        }
-
-        return $newString;
+        return str_replace($find, $replace, $string);
     }
 }

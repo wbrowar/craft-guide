@@ -93,7 +93,7 @@ class GuideDisplay extends BaseUiElement
             return $this->error($e->getMessage(), 'error');
         }
 
-        if ($content === '') {
+        if ($content == '') {
             return null;
         }
 
@@ -125,6 +125,6 @@ class GuideDisplay extends BaseUiElement
 
     private function generateRandomString($length = 10):string
     {
-        return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
+        return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', intval(ceil($length/strlen($x))) )),1,$length);
     }
 }

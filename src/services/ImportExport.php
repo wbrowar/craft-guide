@@ -32,7 +32,7 @@ class ImportExport extends Component
      *
      *     Guide::$plugin->importExport->getGuidesAsJson()
      *
-     * @return mixed
+     * @return string
      */
     public function getGuidesAsJson():string
     {
@@ -71,7 +71,7 @@ class ImportExport extends Component
      */
     public function importGuideData($data)
     {
-        if ($data['slug'] ?? false && $data['title'] ?? false) {
+        if (isset($data['slug']) && isset($data['title'])) {
             // Check to see if a guide with this slug already exists
             if(!Guide::$plugin->guide->getGuides([
                 'slug' => $data['slug'],

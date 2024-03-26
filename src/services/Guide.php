@@ -14,6 +14,7 @@ use craft\elements\User;
 use wbrowar\guide\Guide as GuidePlugin;
 use wbrowar\guide\helpers\GuideHelpers;
 use wbrowar\guide\models\Guide as GuideModel;
+use wbrowar\guide\records\Placements;
 
 use Craft;
 use craft\base\Component;
@@ -61,10 +62,13 @@ class Guide extends Component
 
         switch ($queryType) {
             case 'all':
+                /**
+                 * @var Guides[] $guides
+                 */
                 $guides = Guides::find()->where($params)->limit($limit)->orderBy($orderBy)->all();
 
                 foreach ($guides as $guide) {
-                    if (!is_int($guide) && $guide->content) {
+                    if (!empty($guide->content)) {
                         $guide->content = GuideHelpers::decodeEmoji($guide->content);
                     }
                 }
@@ -74,9 +78,12 @@ class Guide extends Component
                 $guides = new Guides([]);
                 break;
             case 'one':
+                /**
+                 * @var Guides $guides
+                 */
                 $guides = Guides::find()->where($params)->orderBy($orderBy)->one();
 
-                if ($guide ?? false) {
+                if (!empty($guides->content)) {
                     $guides->content = GuideHelpers::decodeEmoji($guides->content);
                 }
 
@@ -85,6 +92,9 @@ class Guide extends Component
                 $guides = Guides::find()->where($params)->count();
                 break;
             case 'ids':
+                /**
+                 * @var Guides $guideData
+                 */
                 $guideData = Guides::find()->where($params)->select(['id'])->all();
                 $guides = [];
                 foreach ($guideData as $data) {
@@ -101,12 +111,12 @@ class Guide extends Component
      *
      *     Guide::$plugin->guide->getGuidesForUserFromPlacements()
      *
-     * @param $placements Placement
+     * @param $placements Placements
      * @param $user User The user to check access against
      *                   
      * @return Guides | array | null
      */
-    public function getGuidesForUserFromPlacements(array $placements, User $user = null)
+    public function getGuidesForUserFromPlacements(Placements $placements, User $user = null)
     {
         $user = $user ?? Craft::$app->getUser()->getIdentity();
 
@@ -181,6 +191,9 @@ class Guide extends Component
     private function getUniqueSlug(string $slug, int $id):string
     {
         // Get all current slugs
+        /**
+         * @var Guides $allGuideSlugs
+         */
         $allGuideSlugs = Guides::find()->select(['slug', 'id'])->all();
         $slugs = [];
         foreach ($allGuideSlugs as $item) {

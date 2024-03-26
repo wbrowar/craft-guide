@@ -63,6 +63,8 @@ use yii\base\Event;
  * @property GuideService $guide
  * @property PlacementService $placement
  * @property GuideComponentsService $guideComponents
+ * 
+ * @method Settings getSettings()
  */
 class Guide extends Plugin
 {
@@ -106,6 +108,11 @@ class Guide extends Plugin
      * @var string
      */
     public string $schemaVersion = '3.0.0';
+
+    /**
+     * @var string
+     */
+    public string $minVersionRequired = '3.0.0';
 
     // Public Methods
     // =========================================================================
@@ -239,7 +246,7 @@ class Guide extends Plugin
         // Add our utilities
         Event::on(
             Utilities::class,
-            Utilities::EVENT_REGISTER_UTILITY_TYPES,
+            Utilities::EVENT_REGISTER_UTILITIES,
             function (RegisterComponentTypesEvent $event) {
                 $event->types[] = ImportExport::class;
             }
@@ -283,7 +290,7 @@ class Guide extends Plugin
                                     ];
                                 }
                             }
-                            $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element ?? null);
+                            $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element);
                             break;
                         case Category::class:
                             $queries = [[
@@ -301,7 +308,7 @@ class Guide extends Plugin
                                     ];
                                 }
                             }
-                            $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element ?? null);
+                            $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element);
                             break;
                         case Entry::class:
                             $queries = [[
@@ -311,7 +318,7 @@ class Guide extends Plugin
                             
 
                             if ($event->element['sectionId'] ?? false) {
-                                $section = Craft::$app->getSections()->getSectionById($event->element['sectionId']);
+                                $section = Craft::$app->getEntries()->getSectionById($event->element['sectionId']);
 
                                 if ($section->uid ?? false) {
                                     $queries[] = [
@@ -320,7 +327,7 @@ class Guide extends Plugin
                                     ];
                                 }
                             }
-                            $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element ?? null);
+                            $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element);
                             break;
 //                        case GlobalSet::class:
 //                            $queries = [[
@@ -486,11 +493,9 @@ class Guide extends Plugin
 
         $user = Craft::$app->getUser();
 
-        if ($user) {
-            $operations['deleteGuides'] = $user->getIsAdmin() || $user->checkPermission('deleteGuides');
-            $operations['editGuides'] = $user->getIsAdmin() || $user->checkPermission('editGuides');
-            $operations['useOrganizer'] = $user->getIsAdmin() || $user->checkPermission('useOrganizer');
-        }
+        $operations['deleteGuides'] = $user->getIsAdmin() || $user->checkPermission('deleteGuides');
+        $operations['editGuides'] = $user->getIsAdmin() || $user->checkPermission('editGuides');
+        $operations['useOrganizer'] = $user->getIsAdmin() || $user->checkPermission('useOrganizer');
 
         return $operations;
     }
@@ -519,24 +524,24 @@ class Guide extends Plugin
 
         $manifestPath = self::$plugin->getBasePath() . '/assetbundles/dist/manifest.json';
 
-        if ($manifestPath ?? false) {
+        if (file_exists($manifestPath)) {
             $manifestJson = file_get_contents($manifestPath);
 
-            if ($manifestJson ?? false) {
+            if (!empty($manifestJson)) {
                 $manifest = Json::decodeIfJson($manifestJson);
 
-                if ($manifest && $manifest[$filename]) {
+                if (!empty($manifest) && $manifest[$filename]) {
                     $path = Craft::$app->getAssetManager()->getPublishedUrl('@wbrowar/guide/assetbundles/dist/', true);
-                }
-            }
-        }
 
-        if ($path ?? false) {
-            if ($manifest[$filename]['css'] ?? false) {
-                $assetPaths['css'] = $path . '/' . $manifest[$filename]['css'][0];
-            }
-            if ($manifest[$filename]['file'] ?? false) {
-                $assetPaths['js'] = $path . '/' . $manifest[$filename]['file'];
+                    if (!empty($path)) {
+                        if ($manifest[$filename]['css'] ?? false) {
+                            $assetPaths['css'] = $path . '/' . $manifest[$filename]['css'][0];
+                        }
+                        if ($manifest[$filename]['file'] ?? false) {
+                            $assetPaths['js'] = $path . '/' . $manifest[$filename]['file'];
+                        }
+                    }
+                }
             }
         }
 
@@ -605,10 +610,10 @@ class Guide extends Plugin
                 }
             }
 
-            if ($guideIds ?? false) {
+            if (!empty($guideIds)) {
                 $guides = self::$plugin->guide->getGuides(['id' => $guideIds]);
 
-                if ($guides ?? false) {
+                if (!empty($guides)) {
                     echo self::$view->renderTemplate('guide/_partials/guide_display', [
                         'displayId' => 'uri',
                         'guides' => $guides,
@@ -673,7 +678,7 @@ class Guide extends Plugin
         Craft::$app->getView()->setTemplateMode(View::TEMPLATE_MODE_SITE);
         $userTemplatePath = Craft::$app->getView()->getTemplatesPath() . DIRECTORY_SEPARATOR . self::$settings->templatePath;
 
-        if (is_dir($userTemplatePath) ?? false) {
+        if (is_dir($userTemplatePath)) {
             $filesInDirectory = FileHelper::findFiles(Craft::$app->getView()->getTemplatesPath() . DIRECTORY_SEPARATOR . self::$settings->templatePath, ['only' => ['*.html', '*.twig']]);
 
             foreach ($filesInDirectory as $item) {

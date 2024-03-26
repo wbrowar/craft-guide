@@ -77,7 +77,7 @@ class Placement extends Component
             // Assets and asset volumes - if any
             $assetVolumes = Craft::$app->getVolumes()->getAllVolumes();
 
-            if ($assetVolumes ?? false) {
+            if (!empty($assetVolumes)) {
                 $groups[] = [
                     'columns' => $colSm,
                     'description' => 'All asset edit pages',
@@ -104,7 +104,7 @@ class Placement extends Component
             // Categories and category groups - if any
             $categoryGroups = Craft::$app->getCategories()->getAllGroups();
 
-            if ($categoryGroups ?? false) {
+            if (!empty($categoryGroups)) {
                 $groups[] = [
                     'columns' => $colSm,
                     'description' => 'All category edit pages',
@@ -129,9 +129,9 @@ class Placement extends Component
             }
 
             // Entries and sections - if any
-            $sections = Craft::$app->getSections()->getAllSections();
+            $sections = Craft::$app->getEntries()->getAllSections();
 
-            if ($sections ?? false) {
+            if (!empty($sections)) {
                 $groups[] = [
                     'columns' => $colSm,
                     'description' => 'All entry edit pages',
@@ -158,7 +158,7 @@ class Placement extends Component
             // Entries and sections - if any
             $globalSets = Craft::$app->getGlobals()->getAllSets();
 
-            if ($globalSets ?? false) {
+            if (!empty($globalSets)) {
                 $groups[] = [
                     'columns' => $colSm,
                     'description' => 'All globals edit pages',
@@ -239,18 +239,27 @@ class Placement extends Component
 
         switch ($queryType) {
             case 'all':
+                /**
+                 * @var Placements $placements
+                 */
                 $placements = Placements::find()->where($params)->limit($limit)->orderBy($orderBy)->all();
                 break;
             case 'new':
                 $placements = new Placements([]);
                 break;
             case 'one':
+                /**
+                 * @var Placements $placements
+                 */
                 $placements = Placements::find()->where($params)->orderBy($orderBy)->one();
                 break;
             case 'count':
                 $placements = Placements::find()->where($params)->count();
                 break;
             case 'guideId':
+                /**
+                 * @var Placements $placementData
+                 */
                 $placementData = Placements::find()->where($params)->select(['guideId'])->all();
                 $placements = [];
                 foreach ($placementData as $data) {
@@ -258,6 +267,9 @@ class Placement extends Component
                 }
                 break;
             case 'ids':
+                /**
+                 * @var Placements $placementData
+                 */
                 $placementData = Placements::find()->where($params)->select(['id'])->all();
                 $placements = [];
                 foreach ($placementData as $data) {
