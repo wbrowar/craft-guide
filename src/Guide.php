@@ -343,14 +343,14 @@ class Guide extends Plugin
 //                            }
 //                            $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element ?? null);
 //                            break;
-//                        case User::class:
-//                            $queries = [[
-//                                'group' => 'user',
-//                                'groupId' => null,
-//                            ]];
-//
-//                            $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element ?? null);
-//                            break;
+                        case User::class:
+                            $queries = [[
+                                'group' => 'user',
+                                'groupId' => null,
+                            ]];
+
+                            $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element ?? null);
+                            break;
                     }
                 });
 
@@ -370,14 +370,14 @@ class Guide extends Plugin
 
                 return $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries);
             });
-            Craft::$app->view->hook('cp.users.edit.content', function(&$context) {
-                $queries = [[
-                    'group' => 'user',
-                    'groupId' => null,
-                ]];
-
-                return $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['user'] ?? null);
-            });
+//            Craft::$app->view->hook('cp.users.edit.content', function(&$context) {
+//                $queries = [[
+//                    'group' => 'user',
+//                    'groupId' => null,
+//                ]];
+//
+//                return $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['user'] ?? null);
+//            });
 
             // Add custom field UI elements
             Event::on(

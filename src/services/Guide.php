@@ -111,12 +111,12 @@ class Guide extends Component
      *
      *     Guide::$plugin->guide->getGuidesForUserFromPlacements()
      *
-     * @param $placements Placements
+     * @param $placements Placements[]
      * @param $user User The user to check access against
      *                   
      * @return Guides | array | null
      */
-    public function getGuidesForUserFromPlacements(Placements $placements, User $user = null)
+    public function getGuidesForUserFromPlacements(array $placements, User $user = null)
     {
         $user = $user ?? Craft::$app->getUser()->getIdentity();
 

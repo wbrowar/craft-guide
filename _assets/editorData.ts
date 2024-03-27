@@ -36,54 +36,6 @@ export const editorData: EditorComponent[] = [
     documentation: `<p>Write custom CSS for this guide. A ".guide" class wraps around all guide content. </p>`,
   },
   {
-    title: 'Grid',
-    group: 'components',
-    code: `<div class="g-grid sm:g-grid-cols-2 md:g-grid-cols-3 lg:g-grid-cols-4 g-gap-6">
-  <div>
-    <p>REPLACE_CONTENT</p>
-  </div>
-  <div>
-    <p>REPLACE_CONTENT</p>
-  </div>
-  <div>
-    <p>REPLACE_CONTENT</p>
-  </div>
-  <div>
-    <p>REPLACE_CONTENT</p>
-  </div>
-</div>`,
-    summary: `<p>A 4-column CSS grid example.</p>`,
-    documentation: `<p>An example using utility classes to lay out content using CSS grid columns.</p>`,
-  },
-  {
-    title: 'Grid – Custom Columns',
-    group: 'components',
-    code: `<div class="g-grid g-grid-cols-[var(--grid-cols)] g-gap-6" style="--grid-cols: repeat(3, 1fr);">
-  <div>
-    <p>REPLACE_CONTENT</p>
-  </div>
-  <div>
-    <p>REPLACE_CONTENT</p>
-  </div>
-  <div>
-    <p>REPLACE_CONTENT</p>
-  </div> 
-</div>`,
-    summary: `<p>A custom CSS grid example.</p>`,
-    documentation: `<p>An example using utility classes to lay out content using CSS Custom Properties to define the grid’s columns.</p>`,
-  },
-  // {
-  //   title: 'Heading',
-  //   group: 'components',
-  //   code: `{{ craft.guide.component('heading', { level: 2, text: 'REPLACE_TEXT' }) }}`,
-  //   summary: `<p>A section heading wrapped in an anchor link.</p>`,
-  //   documentation: `<p>A section heading wrapped in an anchor link.</p>`,
-  //   props: {
-  //     level: `A number that defines the wrapper tag. For example, the value of <strong>2</strong> would set the wrapper tag to <strong>h2</strong>.`,
-  //     text: `The text displayed in the header.`,
-  //   },
-  // },
-  {
     title: 'Image',
     group: 'components',
     code: `{{ craft.guide.component('image', { url: 'REPLACE_URL' }) }}`,
@@ -141,7 +93,7 @@ Content
   {
     title: 'TL;DR Hide',
     group: 'components',
-    code: `<div class="tldr-hide g-space-y-6">
+    code: `<div class="tldr-hide">
   
 </div>`,
     summary: `<p>Show a <strong>TL;DR</strong> button on your guide and hide this content when <strong>TL;DR</strong> is active.</p>`,
@@ -150,7 +102,7 @@ Content
   {
     title: 'TL;DR Show',
     group: 'components',
-    code: `<div class="tldr-show g-space-y-6">
+    code: `<div class="tldr-show">
   
 </div>`,
     summary: `<p>Show a <strong>TL;DR</strong> button on your guide, hide this content and show it when <strong>TL;DR</strong> is active.</p>`,
@@ -340,66 +292,6 @@ Content
 </div>`,
     summary: `<p>Show a total of entries that are currently published.</p>`,
     documentation: `<p>Show a total of entries that are currently published.</p>`,
-  },
-  {
-    title: 'Element Search',
-    group: 'snippets',
-    code: `{# Import _self to use macro below #}
-{% import _self as self %}
-
-{# Start Snippet Display #}
-<h2>Entry Search</h2>
-<div class="g-flex g-flex-nowrap g-gap-3">
-  <div class="field">
-    <div class="input">
-      <input class="text fullwidth" form="guide" type="text" v-model="{{ vueString1 }}" @keyup.enter="$refs.searchButton.click()" />
-    </div>
-  </div>
-  <a class="btn submit" :href="'?search=' + {{ vueString1 }}" ref="searchButton">Search</a>
-</div>
-
-{% set query = craft.app.request.getQueryParam('search') %}
-{% if query ?? false %}
-  <on-load @loaded="{{ vueString1 }} = '{{ query }}'"></on-load>
-  <div>
-    {% set elements = craft.entries.status(null).search(query).all() %}
-      
-    {# Table columns. Add more columns to show more entry data (such as the value of the field you are searching for). #}
-    {% set data = {
-      title: 'Search Results',
-      data: elements
-    } %}
-    
-    {# Display table #}
-    {% if elements|length %}
-      {{ self.table(data) }}
-    {% else %}
-      <p>There are no results for the search: <strong>{{ query }}</strong></p>
-    {% endif %}
-  </div>
-{% endif %}
-
-{# Use a macro to cut down on repeated code if you wanted to show more than one field at a time. #}
-{% macro table(data) %}
-  <table class="g-table">
-    <thead>
-      <tr>
-        <td>{{ data.title }}</td>
-        <td>Edit Page</td>
-      </tr>
-    </thead>
-    <tbody>
-    {% for row in data.data %}
-      <tr>
-        <td><a href="{{ row.url }}" target="_blank" rel="nofollow noopener" title="View element’s page in a new window."><span class="status {{ row.status }}"></span><span>{{ row.title }}</span></a></td>
-        <td><a class="btn icon edit" href="{{ row.cpEditUrl }}" target="_blank" rel="nofollow noopener" title="Go to element edit page.">Edit</a></td>
-      </tr>
-    {% endfor %}
-    </tbody>
-  </table>
-{% endmacro %}`,
-    summary: `<p>Search for entries using Craft’s keyword search.</p>`,
-    documentation: `<p>Search for entries using Craft’s keyword search.</p>`,
   },
   {
     title: 'Incorrect File Type',
