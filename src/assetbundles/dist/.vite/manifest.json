@@ -1,0 +1,51 @@
+{
+  "_SvgSettings-D8nBVKej.js": {
+    "file": "assets/SvgSettings-D8nBVKej.js",
+    "name": "SvgSettings",
+    "imports": [
+      "__plugin-vue_export-helper-B6mECTcI.js"
+    ]
+  },
+  "__plugin-vue_export-helper-B6mECTcI.js": {
+    "file": "assets/_plugin-vue_export-helper-B6mECTcI.js",
+    "name": "_plugin-vue_export-helper"
+  },
+  "guide-admin.ts": {
+    "file": "assets/guide-admin-CmGfesd2.js",
+    "name": "guide-admin",
+    "src": "guide-admin.ts",
+    "isEntry": true,
+    "imports": [
+      "__plugin-vue_export-helper-B6mECTcI.js",
+      "_SvgSettings-D8nBVKej.js"
+    ],
+    "css": [
+      "assets/guide-admin-DUUC3s4e.css"
+    ]
+  },
+  "guide-display.ts": {
+    "file": "assets/guide-display-BMRmsL8Q.js",
+    "name": "guide-display",
+    "src": "guide-display.ts",
+    "isEntry": true,
+    "imports": [
+      "__plugin-vue_export-helper-B6mECTcI.js",
+      "_SvgSettings-D8nBVKej.js"
+    ],
+    "css": [
+      "assets/guide-display-ClIN1na-.css"
+    ]
+  },
+  "guide-welcome.ts": {
+    "file": "assets/guide-welcome-CWsTOD2f.js",
+    "name": "guide-welcome",
+    "src": "guide-welcome.ts",
+    "isEntry": true,
+    "imports": [
+      "__plugin-vue_export-helper-B6mECTcI.js"
+    ],
+    "css": [
+      "assets/guide-welcome-DCinEATt.css"
+    ]
+  }
+}

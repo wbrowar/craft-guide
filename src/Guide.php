@@ -522,7 +522,7 @@ class Guide extends Plugin
             ];
         }
 
-        $manifestPath = self::$plugin->getBasePath() . '/assetbundles/dist/manifest.json';
+        $manifestPath = self::$plugin->getBasePath() . '/assetbundles/dist/.vite/manifest.json';
 
         if (file_exists($manifestPath)) {
             $manifestJson = file_get_contents($manifestPath);
