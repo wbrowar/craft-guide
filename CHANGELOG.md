@@ -4,37 +4,40 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## 4.0.0 - 2024-03-26
+## 4.0.0 - 2024-03-31
 ### Added
-- Added support for Craft 5
+- Added support for Craft 5.
 
 ### Changed
-- Updated build tools and Node dependencies
+- When adding a Guide UI Element in the field layout designer, it’s no longer required to take an extra step to save a uniqe ID.
+- Updated build tools and Node dependencies.
 
 ### Removed
-- Removed the following Grid Components and Snippets from Guide Editor
+- Removed the following Grid Components and Snippets from Guide Editor:
   - Grid
   - Grid – Custom Columns
   - Element Search
+
+> {warning} The update to UI Elements requirs a one-time action of re-selecting a guide for each UI Element in the production/live environemnt.
 
 
 ## 3.2.2 - 2023-11-13
 
 ### Fixed
-- Fixed a Twig syntax error in Image components (thanks to @davidhellmann for the fix) [#78](https://github.com/wbrowar/craft-guide/pull/78)
-- Fixed broken links to README and CHANGELOG
+- Fixed a Twig syntax error in Image components (thanks to @davidhellmann for the fix). [#78](https://github.com/wbrowar/craft-guide/pull/78)
+- Fixed broken links to README and CHANGELOG.
 
 
 ## 3.2.1 - 2022-08-28
 
 ### Fixed
-- Fixes an error that occurs when a guide query doesn’t return a guide [#82](https://github.com/wbrowar/craft-guide/issues/82)
+- Fixes an error that occurs when a guide query doesn’t return a guide. [#82](https://github.com/wbrowar/craft-guide/issues/82)
 
 
 ## 3.2.0 - 2022-05-01
 
 ### Added
-- Added support for Craft 4 [#70](https://github.com/wbrowar/craft-guide/issues/70)
+- Added support for Craft 4. [#70](https://github.com/wbrowar/craft-guide/issues/70)
 
 ### Changed
 - Updated components to use `apply` tags instead of `filter`.
@@ -50,8 +53,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Guides now support emoji 👀
 
 ### Fixed
-- Removed unused function that was causing install to fail (thanks, @internetztube) [#49](https://github.com/wbrowar/craft-guide/issues/49)
-- Fixed an issue where you couldn’t copy Guide export data [#59](https://github.com/wbrowar/craft-guide/issues/59)
+- Removed unused function that was causing install to fail (thanks, @internetztube). [#49](https://github.com/wbrowar/craft-guide/issues/49)
+- Fixed an issue where you couldn’t copy Guide export data. [#59](https://github.com/wbrowar/craft-guide/issues/59)
   - A new textarea includes your export data, so you can choose to copy it out of the textarea or use the button to copy it to your clipboard (when available).
 
 
@@ -120,7 +123,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## 2.2.1 - 2020-10-31
 ### Fixed
-- Composer 2 compatibility [#34](https://github.com/wbrowar/craft-guide/issues/34)
+- Composer 2 compatibility. [#34](https://github.com/wbrowar/craft-guide/issues/34)
 
 
 ## 2.2.0 - 2020-08-04
@@ -141,7 +144,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## 2.1.5 - 2020-07-26
 ### Fixed
-- Fixed an issue saving guides when using Postgres [#31](https://github.com/wbrowar/craft-guide/issues/31)
+- Fixed an issue saving guides when using Postgres. [#31](https://github.com/wbrowar/craft-guide/issues/31)
 
 
 ## 2.1.4 - 2020-04-25
@@ -155,9 +158,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - New Markdown image components will have the `loading` attribute added to them by default.
 
 ### Fixed
-- Fixed an error that occurs on some pages in the CP [#27](https://github.com/wbrowar/craft-guide/issues/27#issue-587394637).
-- Fixed an error when adding template guides in a Windows environment [#29](https://github.com/wbrowar/craft-guide/issues/29).
-- Fixed an error that prevented guides templates from being imported when an Organizer hadn’t been created yet [#30](https://github.com/wbrowar/craft-guide/issues/30).
+- Fixed an error that occurs on some pages in the CP. [#27](https://github.com/wbrowar/craft-guide/issues/27#issue-587394637).
+- Fixed an error when adding template guides in a Windows environment. [#29](https://github.com/wbrowar/craft-guide/issues/29).
+- Fixed an error that prevented guides templates from being imported when an Organizer hadn’t been created yet. [#30](https://github.com/wbrowar/craft-guide/issues/30).
 
 
 ## 2.1.3.3 - 2020-01-29
@@ -180,13 +183,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## 2.1.3 - 2020-01-15
 ### Added
-- Added drop targets to make it easier to drag-and-drop guides in the Organizer [#25](https://github.com/wbrowar/craft-guide/issues/25).
+- Added drop targets to make it easier to drag-and-drop guides in the Organizer. [#25](https://github.com/wbrowar/craft-guide/issues/25).
 
 ### Changed
 - Bumped minimum Craft version to `^3.4.0-RC1`.
 - Updated styles for Craft 3.4.
   - _NOTE: This involved making some changes to Guide’s default styles and custom styles may need to be adjusted._
-- Changed the label of "Unused Guides" to "Available Guides" in the Organizer [#23](https://github.com/wbrowar/craft-guide/issues/23).
+- Changed the label of "Unused Guides" to "Available Guides" in the Organizer. [#23](https://github.com/wbrowar/craft-guide/issues/23).
 - Images loaded through the Twig component are now lazy loaded via the native lazy attribute.
 
 ### Fixed
@@ -208,7 +211,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Added
 - File contents in guide templates can be moved to the Content Field in one click—making it easier to go from importing templates to editing their content in the Guide Editor.
 - A Guide utility has been added to the Utilities CP section.
-  - Guides can be imported from [Craft Guide Templates](https://github.com/wbrowar/craft-guide-templates)
+  - Guides can be imported from [Craft Guide Templates](https://github.com/wbrowar/craft-guide-templates).
   - Guide data stored in the database can be exported from one environment (dev, staging, etc...) then imported into another environment.
   - The layout of guides in the Organizer are exported and imported, too.
 - Guides can now be duplicated from the Guide Organizer via a new action button found on each guide (click on the gear to see guide actions).

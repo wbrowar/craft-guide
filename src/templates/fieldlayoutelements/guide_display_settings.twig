@@ -10,13 +10,4 @@
  * @since     3.0.0
  */ #}
 
-{% import "_includes/forms" as forms %}
-
-{{ forms.textField({
-  label: 'UI Element ID',
-  tip: 'A unique ID required to place guides into this UI element',
-  id: 'uiId',
-  name: 'uiId',
-  required: true,
-  value: uiId ?? randomString,
-}) }}
+<p>Because UI Elements are saved in project config, you cannot select a guide yet. A select field will appear in your fields where this UI Element will be placed. This will let you select guides that have been created for that environment.</p>

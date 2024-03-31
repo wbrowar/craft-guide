@@ -60,13 +60,7 @@ class GuideDisplay extends BaseUiElement
      */
     public function settingsHtml(): null|string
     {
-        return Craft::$app->getView()->renderTemplate(
-            'guide/fieldlayoutelements/guide_display_settings',
-            [
-                'randomString' => $this->generateRandomString(15),
-                'uiId' => $this->uiId,
-            ]
-        );
+        return Craft::$app->getView()->renderTemplate('guide/fieldlayoutelements/guide_display_settings');
     }
 
     /**
@@ -75,7 +69,7 @@ class GuideDisplay extends BaseUiElement
     public function formHtml(ElementInterface $element = null, bool $static = false): ?string
     {
         try {
-            $placement = Guide::$plugin->placement->getPlacements(['group' => 'uiElement', 'groupId' => 'uiElement-' . $this->uiId], 'one');
+            $placement = Guide::$plugin->placement->getPlacements(['group' => 'uiElement', 'groupId' => 'uiElement-' . $this->uid], 'one');
 
             if ($placement) {
                 $guide = Guide::$plugin->guide->getGuides(['id' => $placement->guideId], 'one');
@@ -87,7 +81,7 @@ class GuideDisplay extends BaseUiElement
                 'placementId' => $placement->id ?? null,
                 'proEdition' => Guide::$pro,
                 'static' => $static,
-                'uiId' => $this->uiId,
+                'uid' => $this->uid,
             ]));
         } catch (\Throwable $e) {
             return $this->error($e->getMessage(), 'error');
