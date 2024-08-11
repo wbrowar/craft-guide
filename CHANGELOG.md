@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## 4.0.0 - 2024-03-31
+## 4.0.0 - 2024-08-11
 ### Added
 - Added support for Craft 5.
 
@@ -17,6 +17,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - Grid
   - Grid – Custom Columns
   - Element Search
+
+### Fixed
+- Fixed an error that occurred when previewing Craft Commerce Email Templates
 
 > {warning} The update to UI Elements requirs a one-time action of re-selecting a guide for each UI Element in the production/live environemnt.
 

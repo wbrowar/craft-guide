@@ -152,7 +152,9 @@ class Guide extends Plugin
                 }
             );
 
-            if (!Craft::$app->getRequest()->isConsoleRequest && self::$schemaReady) {
+            if (!Craft::$app->getRequest()->isConsoleRequest &&
+                !Craft::$app->getRequest()->getIsActionRequest() &&
+                self::$schemaReady) {
                 // Load our JavaScript
                 $assets = self::$plugin->getPathsToAssetFiles('guide-display.ts');
                 if ($assets['css'] ?? false) {
