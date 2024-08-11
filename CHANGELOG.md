@@ -19,7 +19,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - Element Search
 
 ### Fixed
-- Fixed an error that occurred when previewing Craft Commerce Email Templates
+- Fixed an error that occurred when previewing Craft Commerce Email Templates [#103](https://github.com/wbrowar/craft-guide/pull/103)
 
 > {warning} The update to UI Elements requirs a one-time action of re-selecting a guide for each UI Element in the production/live environemnt.
 
