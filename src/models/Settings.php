@@ -26,10 +26,10 @@ class Settings extends Model
     public $assetVolume = '';
 
     // Path to Guide CP Section templates
-    public $defaultTeleportMethod = 'prepend';
+    public $defaultTeleportMethod = 'slideout';
 
     // Path to Guide CP Section templates
-    public $templatePath = '_guide';
+    public $templatePath = '';
 
     // Twig variables
     public $clientName = '';
@@ -45,12 +45,11 @@ class Settings extends Model
     public function rules(): array
     {
         return [
-            [['assetVolume', 'defaultTeleportMethod', 'templatePath'], 'required'],
+            [['defaultTeleportMethod'], 'required'],
 
-            [['assetVolume', 'defaultTeleportMethod', 'templatePath'], 'string'],
+            [['assetVolume', 'defaultTeleportMethod', 'templatePath', 'clientName', 'projectName', 'myCompanyName'], 'string'],
 
-            ['defaultTeleportMethod', 'default', 'value' => 'prepend'],
-            ['templatePath', 'default', 'value' => '_guide'],
+            ['defaultTeleportMethod', 'default', 'value' => 'slideout'],
         ];
     }
 }

@@ -19,7 +19,7 @@
 {% endif %}
 
 {# The title of this CP section #}
-{% set title = guide.title ?? "Guide" %}
+{% set title = guide.title ?? "Guide"|t('guide') %}
 
 {# The URL to this plugin's base CP section #}
 {% set pluginCpUrl = url('guide') %}

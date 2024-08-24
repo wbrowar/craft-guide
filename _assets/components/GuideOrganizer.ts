@@ -2,7 +2,7 @@ import {html, LitElement} from 'lit'
 import {customElement, property, state} from 'lit/decorators.js'
 import {log} from "../utils/console.ts";
 import {Placement} from "../plugins";
-import {guides} from "../globals.ts";
+import {guides, settings} from "../globals.ts";
 
 @customElement('guide-organizer')
 export class GuideOrganizer extends LitElement {
@@ -82,6 +82,7 @@ export class GuideOrganizer extends LitElement {
     this._getPlacementList()
 
     log('guides', guides)
+    log('settings', settings)
   }
 
   disconnectedCallback() {

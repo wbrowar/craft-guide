@@ -430,11 +430,9 @@ class Guide extends Plugin
         $user = Craft::$app->getUser()->getIdentity();
         $userOperations = $this->getUserOperations();
 
-        if ((self::$settings->templatePath ?? false) && (self::$settings->assetVolume ?? false)) {
-            $navItem['subnav'] = [
-                'home' => ['label' => 'Guide', 'url' => 'guide'],
-            ];
-        }
+        $navItem['subnav'] = [
+            'home' => ['label' => 'Guide', 'url' => 'guide'],
+        ];
 
         if ($userOperations['useOrganizer']) {
             $navItem['subnav']['organizer'] = ['label' => 'Organizer', 'url' => 'guide/organizer'];

@@ -13,7 +13,7 @@
 {% extends "_layouts/cp" %}
 
 {# The title of this CP section #}
-{% set title = "Guide" %}
+{% set title = "Guide"|t('guide') %}
 
 {# The URL to this plugin's base CP section #}
 {% set pluginCpUrl = url('guide') %}
@@ -23,15 +23,13 @@
 {% endif %}
 
 {% set content %}
-  {% if not settings.templatePath ?? false %}
-    {% redirect 'guide/settings/general' %}
-  {% elseif guides ?? false %}
+  {% if guides ?? false %}
     {% include 'guide/_partials/guide_display.twig' with { guideDisplayArea: 'guide', displayId: 'nav', guides: guides } only %}
   {% elseif userOperations.useOrganizer %}
     {% redirect 'guide/organizer' %}
   {% elseif craft.app.config.general.allowAdminChanges %}
     {% redirect 'guide/settings/general' %}
   {% else %}
-    Guide needs to be set up before it can be used. Return here in an environment where "allowAdminChanges" is set to "true" to begin.
+    'Guide needs to be set up before it can be used. Return here in an environment where "allowAdminChanges" is set to "true" to begin.'|t('guide')
   {% endif %}
 {% endset %}

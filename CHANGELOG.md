@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.0.0 - 2024-12-25
+### Added
+- Added **Slideout** option to **Edit Page Guide Location** setting.
+
+### Changed
+- The **Template Path** and **Asset Volume** settings are no longer required.
+- **Slideout** is now set as the default value for the **Edit Page Guide Location** setting.
+
+
 ## 4.0.0 - 2024-08-11
 ### Added
 - Added support for Craft 5.

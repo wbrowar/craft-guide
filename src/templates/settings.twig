@@ -18,15 +18,15 @@
 {% endif %}
 
 {# The title of this CP section #}
-{% set title = "Guide Settings" %}
+{% set title = "Guide Settings"|t('guide') %}
 
 {# The selected CP subnav item #}
 {% set selectedSubnavItem = 'settings' %}
 
 {# {% set selectedTab = 'ho' %} #}
 {% set tabs = {
-  'general': { label: 'General', url: 'general' },
-  'variables': { label: 'Variables', url: 'variables' },
+  'general': { label: 'General'|t('guide'), url: 'general' },
+  'variables': { label: 'Variables'|t('guide'), url: 'variables' },
 } %}
 
 {% set fullPageForm = true %}
@@ -44,50 +44,49 @@
   {% switch selectedTab %}
   {% case 'general' %}
     {{ forms.textField({
-      label: 'Template Path',
+      label: 'Template Path'|t('guide'),
       id: 'templatePath',
       name: 'templatePath',
-      required: true,
+      placeholder: '_guide',
       value: settings.templatePath,
-      instructions: 'A path inside of the **templates** directory where Guide will look for templates.',
+      instructions: 'A path inside of the **templates** directory where Guide will look for templates.'|t('guide'),
     }) }}
 
     {% set volumes = craft.app.volumes.allVolumes %}
-    {% set options = [{ label: 'Select One', value: 0 }] %}
+    {% set options = [{ label: 'Select A Volume'|t('guide'), value: '' }] %}
     {% for item in volumes %}
       {% set options = options|merge([{ label: item.name, value: item.uid }]) %}
     {% endfor %}
 
     {{ forms.selectField({
-      label: 'Asset Volume',
+      label: 'Asset Volume'|t('guide'),
       id: 'assetVolume',
       name: 'assetVolume',
       options: options,
-      required: true,
       value: settings.assetVolume,
-      instructions: 'An asset volume that stores all images and videos used in guides.',
+      instructions: 'An asset volume that stores all images and videos used in guides.'|t('guide'),
     }) }}
 
-    {% if settings.assetVolume == '0' %}
-      <p>An asset volume is required to view guides. Please create a new volume and select it here.</p>
+    {% if settings.assetVolume == '' %}
       <p>
-        <a class="go" href="{{ url('settings/assets/volumes/new') }}">Create a New Volume</a>
+        <a class="go" href="{{ url('settings/assets/volumes/new') }}">{{ 'Create a New Volume'|t('guide') }}</a>
       </p>
     {% endif %}
 
     {% if proEdition %}
       {% set options = [
-        { label: 'Above edit fields', value: 'prepend' },
-        { label: 'Below edit fields', value: 'append' },
+        { label: 'Slideout (opened by a button in the sidebar)'|t('guide'), value: 'slideout' },
+        { label: 'Above edit fields'|t('guide'), value: 'prepend' },
+        { label: 'Below edit fields'|t('guide'), value: 'append' },
       ] %}
       {{ forms.selectField({
-        label: 'Edit Page Guide Location',
+        label: 'Edit Page Guide Location'|t('guide'),
         id: 'defaultTeleportMethod',
         name: 'defaultTeleportMethod',
         options: options,
         required: true,
         value: settings.defaultTeleportMethod,
-        instructions: 'Determine if guides should appear above or below content editing fields on element edit pages.',
+        instructions: 'Determine where guides should be displayed on element edit pages.'|t('guide'),
       }) }}
     {% else %}
       <input type="hidden" name="defaultTeleportMethod" value="prepend">
@@ -101,31 +100,31 @@
     ]) %}
 
     {{ forms.textField({
-      label: 'Project Name',
+      label: 'Project Name'|t('guide'),
       id: 'projectName',
       name: 'projectName',
       value: settings.projectName,
-      instructions: 'The name of the project. Twig tag: **{{ craft.guide.var("projectName") }}**',
+      instructions: 'The name of the project. Twig tag: **{{ craft.guide.var("projectName") }}**'|t('guide'),
       placeholder: classicCompanies|last ~ '’s Website'
     }) }}
 
     {{ forms.textField({
-      label: 'Client Name',
+      label: 'Client Name'|t('guide'),
       id: 'clientName',
       name: 'clientName',
       value: settings.clientName,
-      instructions: 'The name of the person or organization that the website is built for. Twig tag: **{{ craft.guide.var("clientName") }}**',
+      instructions: 'The name of the person or organization that the website is built for. Twig tag: **{{ craft.guide.var("clientName") }}**'|t('guide'),
       placeholder: classicCompanies|last
     }) }}
 
     {% set classicCompaniesLast = classicCompanies|last %}
     {% set classicCompanies = classicCompanies|without(classicCompaniesLast) %}
     {{ forms.textField({
-      label: 'My Company Name',
+      label: 'My Company Name'|t('guide'),
       id: 'myCompanyName',
       name: 'myCompanyName',
       value: settings.myCompanyName,
-      instructions: 'The name of the person or organization that built the website. Twig tag: **{{ craft.guide.var("myCompanyName") }}**',
+      instructions: 'The name of the person or organization that built the website. Twig tag: **{{ craft.guide.var("myCompanyName") }}**'|t('guide'),
       placeholder: classicCompanies|last
     }) }}
   {% endswitch %}
@@ -134,10 +133,10 @@
     <hr>
     <div class="readable">
       <blockquote class="note tip">
-        <strong>Thanks for using the LITE edition of Guide!</strong>
-        <p>The PRO edition of Guide offers a drag-and-drop editor that includes snippets and components, lets you display guides—and contextually useful information—on content edit pages or on any page within the Craft CP, and makes it easy to create standalone CP pages, widgets, and UI elements.</p>
+        <strong>{{ 'Thanks for using the LITE edition of Guide!'|t('guide') }}</strong>
+        <p>{{ 'The PRO edition of Guide offers a drag-and-drop editor that includes snippets and components, lets you display guides—and contextually useful information—on content edit pages or on any page within the Craft CP, and makes it easy to create standalone CP pages, widgets, and UI elements.'|t('guide') }}</p>
         <p>
-          <a class="go" href="{{ url('plugin-store/guide') }}">Check out Guide PRO in the Plugin Store</a>
+          <a class="go" href="{{ url('plugin-store/guide') }}">{{ 'Check out Guide PRO in the Plugin Store'|t('guide') }}</a>
         </p>
       </blockquote>
     </div>

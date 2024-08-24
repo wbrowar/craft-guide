@@ -1,9 +1,9 @@
 {% set settingsData = {
-  assetVolume: settings.assetVolume,
+  assetVolume: settings.assetVolume ?? '',
   clientName: settings.clientName,
   myCompanyName: settings.myCompanyName,
   projectName: settings.projectName,
-  templatePath: settings.templatePath,
+  templatePath: settings.templatePath ?? '',
 } %}
 
 <div
