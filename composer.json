@@ -2,7 +2,7 @@
     "name": "wbrowar/guide",
     "description": "A CMS Guide for Craft CMS.",
     "type": "craft-plugin",
-    "version": "4.0.0",
+    "version": "5.0.0-alpha.0",
     "keywords": [
         "craft",
         "cms",
@@ -16,7 +16,7 @@
         "vue"
     ],
     "support": {
-        "docs": "https://github.com/wbrowar/craft-guide/blob/3.x-craft-4/README.md",
+        "docs": "https://github.com/wbrowar/craft-guide/blob/main/README.md",
         "issues": "https://github.com/wbrowar/craft-guide/issues"
     },
     "license": "proprietary",
@@ -27,7 +27,8 @@
         }
     ],
     "require": {
-        "craftcms/cms": "^5.0.0"
+        "craftcms/cms": "^5.0.0",
+        "nystudio107/craft-code-editor": "^1.0.18"
     },
     "autoload": {
         "psr-4": {
@@ -40,7 +41,7 @@
         "developer": "Will Browar",
         "hasCpSettings": true,
         "hasCpSection": true,
-        "changelogUrl": "https://github.com/wbrowar/craft-guide/blob/3.x-craft-4/CHANGELOG.md",
+        "changelogUrl": "https://github.com/wbrowar/craft-guide/blob/main/CHANGELOG.md",
         "class": "wbrowar\\guide\\Guide"
     }
 }
