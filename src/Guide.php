@@ -10,46 +10,42 @@
 
 namespace wbrowar\guide;
 
+use Craft;
+use craft\base\Plugin;
 use craft\controllers\ElementsController;
 use craft\elements\Asset;
 use craft\elements\Category;
 use craft\elements\Entry;
-use craft\elements\GlobalSet;
 use craft\elements\User;
 use craft\events\DefineElementEditorHtmlEvent;
 use craft\events\DefineFieldLayoutElementsEvent;
+use craft\events\PluginEvent;
+use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterTemplateRootsEvent;
+use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
 use craft\helpers\App;
 use craft\helpers\FileHelper;
 use craft\helpers\Json;
 use craft\helpers\UrlHelper;
 use craft\models\FieldLayout;
-use craft\services\Globals;
+use craft\services\Dashboard;
+use craft\services\Plugins;
 use craft\services\UserPermissions;
+use craft\services\Utilities;
+use craft\web\twig\variables\CraftVariable;
+use craft\web\UrlManager;
 use craft\web\View;
 use wbrowar\guide\fieldlayoutelements\GuideDisplay;
 use wbrowar\guide\models\Settings;
 use wbrowar\guide\services\Guide as GuideService;
+use wbrowar\guide\services\GuideComponents as GuideComponentsService;
 use wbrowar\guide\services\ImportExport as ImportExportService;
 use wbrowar\guide\services\Placement as PlacementService;
-use wbrowar\guide\services\GuideComponents as GuideComponentsService;
 use wbrowar\guide\twigextensions\GuideTwigExtension;
 use wbrowar\guide\utilities\ImportExport;
 use wbrowar\guide\variables\GuideVariable;
 use wbrowar\guide\widgets\Guide as GuideWidget;
-
-use Craft;
-use craft\base\Plugin;
-use craft\services\Plugins;
-use craft\events\PluginEvent;
-use craft\web\UrlManager;
-use craft\services\Utilities;
-use craft\web\twig\variables\CraftVariable;
-use craft\services\Dashboard;
-use craft\events\RegisterComponentTypesEvent;
-use craft\events\RegisterUrlRulesEvent;
-
 use yii\base\Event;
 
 /**
@@ -239,7 +235,7 @@ class Guide extends Plugin
                         $event->rules['guide/delete/<guideId:\d{1,}>'] = ['template' => 'guide/delete', 'variables' => ['userOperations' => $userOperations]];
                     }
                     if ($userOperations['useOrganizer']) {
-                        $event->rules['guide/organizer'] = ['template' => 'guide/organizer', 'variables' => ['groupsData' => self::$plugin->placement->getPlacementGroups()]];
+                        $event->rules['guide/organizer'] = ['template' => 'guide/organizer', 'variables' => ['groupsData' => self::$plugin->placement->getPlacementGroups(), 'userOperations' => $userOperations]];
                     }
                 }
             );

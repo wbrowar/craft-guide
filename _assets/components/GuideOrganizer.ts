@@ -1,8 +1,72 @@
 import {html, LitElement} from 'lit'
-import {customElement} from 'lit/decorators.js'
+import {customElement, property, state} from 'lit/decorators.js'
+import {log} from "../utils/console.ts";
+import {Placement} from "../plugins";
+import {guides} from "../globals.ts";
 
 @customElement('guide-organizer')
 export class GuideOrganizer extends LitElement {
+  /**
+   * ===========================================================================
+   * PROPS
+   * ===========================================================================
+   */
+  /**
+   * The Controller Action URL that is used to get all guide placements.
+   */
+  @property({ attribute: 'action-url-get-all-placements' })
+  actionUrlGetAllPlacements = ''
+
+  /**
+   * The Controller Action URL that is used to get all guide placements.
+   */
+  @property({ attribute: 'cp-trigger' })
+  cpTrigger = ''
+
+  /**
+   * The Controller Action URL that is used to get all guide placements.
+   */
+  @property({ attribute: 'groups-data', type: Object })
+  groupsData = []
+
+  /**
+   * =========================================================================
+   * STATE
+   * =========================================================================
+   */
+  /**
+   * TODO
+   */
+  @state()
+  private _placements: Placement[] = []
+
+  /**
+   * =========================================================================
+   * METHODS
+   * =========================================================================
+   */
+  /**
+   * Formats a URI into a relative CP URL
+   */
+  private async _cpUrl(uri: string) {
+    return this.cpTrigger ? `/${this.cpTrigger}/${uri}` : `/${uri}`;
+  }
+  /**
+   * TODO
+   */
+  private async _getPlacementList() {
+    await window.Craft?.postActionRequest(
+      'guide/placement/get-all-placements',
+      null,
+      (response, textStatus, request) => {
+        if (request.status === 200) {
+          log('Getting placements', response, textStatus, request);
+          this._placements = response;
+          log('Placements', this._placements);
+        }
+      }
+    );
+  }
 
   /**
    * =========================================================================
@@ -11,6 +75,13 @@ export class GuideOrganizer extends LitElement {
    */
   connectedCallback() {
     super.connectedCallback()
+
+    log('cpTrigger', this.cpTrigger)
+    log('groupsData', this.groupsData)
+
+    this._getPlacementList()
+
+    log('guides', guides)
   }
 
   disconnectedCallback() {
@@ -20,6 +91,23 @@ export class GuideOrganizer extends LitElement {
   render() {
     return html`
       <p>Guide Organizer</p>
+      <h2>Guides:</h2>
+      <ul>
+        ${guides.map((guide) => html`<li>
+          <p>
+            <strong>${guide.title}</strong>
+            <br>${guide.id}
+            <br><a href="${guide.viewUrl}">view</a>
+            <br><a href="${guide.editUrl}">edit</a>
+          </p>
+        </li>`)}
+      </ul>
+      <h2>Placements:</h2>
+      <ul>
+        ${this._placements.map((placement) => html`<li>
+          <p>${placement.group} – ${placement.guideId}</p>
+        </li>`)}
+      </ul>
     `
   }
 
