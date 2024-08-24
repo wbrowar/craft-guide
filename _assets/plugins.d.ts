@@ -12,6 +12,11 @@ export interface EditorComponent {
 export type EditorTabGroup = 'components' | 'guides' | 'images' | 'publishing' | 'snippets' | 'utility-classes';
 
 /*
+ * Determines if guide is parsed as Markdown
+ */
+export type GuideParser = 'html' | 'markdown';
+
+/*
  * Guide data as stored as a GuideModel
  */
 export interface Guide {
@@ -20,6 +25,7 @@ export interface Guide {
   contentSource: GuideContentSource;
   contentUrl: string;
   id: number;
+  parser: GuideParser;
   slug: string;
   summary: string | null;
   template: string;
@@ -39,7 +45,7 @@ export interface Placement {
   groupId: string | null;
   guideId: number;
   id: number;
-  portalMethod: 'append' | 'prepend';
+  portalMethod: 'append' | 'prepend' | 'slideout';
   selector: string | null;
   theme: 'default' | 'frame';
   uri: string | null;
@@ -66,6 +72,7 @@ export interface PluginSettings {
   assetVolume: string;
   components: any[];
   clientName: string;
+  defaultParser: GuideParser;
   myCompanyName: string;
   templatePath: string;
   rebrand: any[];

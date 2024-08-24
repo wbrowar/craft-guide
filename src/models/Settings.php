@@ -26,6 +26,9 @@ class Settings extends Model
     public $assetVolume = '';
 
     // Path to Guide CP Section templates
+    public $defaultParser = 'markdown';
+
+    // Path to Guide CP Section templates
     public $defaultTeleportMethod = 'slideout';
 
     // Path to Guide CP Section templates
@@ -49,6 +52,7 @@ class Settings extends Model
 
             [['assetVolume', 'defaultTeleportMethod', 'templatePath', 'clientName', 'projectName', 'myCompanyName'], 'string'],
 
+            ['defaultParser', 'default', 'value' => 'markdown'],
             ['defaultTeleportMethod', 'default', 'value' => 'slideout'],
         ];
     }

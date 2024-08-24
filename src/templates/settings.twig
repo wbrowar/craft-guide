@@ -25,9 +25,16 @@
 
 {# {% set selectedTab = 'ho' %} #}
 {% set tabs = {
-  'general': { label: 'General'|t('guide'), url: 'general' },
-  'variables': { label: 'Variables'|t('guide'), url: 'variables' },
+  "general": {label: "General"|t('guide'), url: "#general"},
 } %}
+{% if proEdition %}
+  {% set tabs = tabs|merge({
+    "editing": {label: "Editing"|t('guide'), url: "#editing"},
+  }) %}
+{% endif %}
+{% set tabs = tabs|merge({
+  "variables": {label: "Variables"|t('guide'), url: "#variables"},
+}) %}
 
 {% set fullPageForm = true %}
 
@@ -41,8 +48,7 @@
   <input type="hidden" name="action" value="guide/settings">
   <input type="hidden" name="page" value="{{ selectedTab }}">
 
-  {% switch selectedTab %}
-  {% case 'general' %}
+  <div id="general">
     {{ forms.textField({
       label: 'Template Path'|t('guide'),
       id: 'templatePath',
@@ -72,8 +78,23 @@
         <a class="go" href="{{ url('settings/assets/volumes/new') }}">{{ 'Create a New Volume'|t('guide') }}</a>
       </p>
     {% endif %}
+  </div>
 
-    {% if proEdition %}
+  {% if proEdition %}
+    <div id="editing" class="hidden">
+      {% set options = [
+        { label: 'Markdown'|t('guide'), value: 'markdown' },
+        { label: 'HTML'|t('guide'), value: 'html' },
+      ] %}
+      {{ forms.selectField({
+        label: 'Default Parser'|t('guide'),
+        id: 'defaultParser',
+        name: 'defaultParser',
+        options: options,
+        value: settings.defaultParser,
+        instructions: 'Determines if guide is parsed as Markdown by default. This can be overridden on a per-guide basis.'|t('guide'),
+      }) }}
+
       {% set options = [
         { label: 'Slideout (opened by a button in the sidebar)'|t('guide'), value: 'slideout' },
         { label: 'Above edit fields'|t('guide'), value: 'prepend' },
@@ -84,14 +105,15 @@
         id: 'defaultTeleportMethod',
         name: 'defaultTeleportMethod',
         options: options,
-        required: true,
         value: settings.defaultTeleportMethod,
         instructions: 'Determine where guides should be displayed on element edit pages.'|t('guide'),
       }) }}
-    {% else %}
-      <input type="hidden" name="defaultTeleportMethod" value="prepend">
-    {% endif %}
-  {% case 'variables' %}
+    </div>
+  {% else %}
+    <input type="hidden" name="defaultTeleportMethod" value="slideout">
+  {% endif %}
+
+  <div id="variables" class="hidden">
     {% set classicCompanies = shuffle([
       'Happy Lager',
       'The Museum of Euro Art',
@@ -104,7 +126,7 @@
       id: 'projectName',
       name: 'projectName',
       value: settings.projectName,
-      instructions: 'The name of the project. Twig tag: **{{ craft.guide.var("projectName") }}**'|t('guide'),
+      instructions: 'The name of the project. Twig tag:'|t('guide') ~ ' <strong class="guide-select-string">{{ craft.guide.var("projectName") }}</strong>',
       placeholder: classicCompanies|last ~ '’s Website'
     }) }}
 
@@ -113,7 +135,7 @@
       id: 'clientName',
       name: 'clientName',
       value: settings.clientName,
-      instructions: 'The name of the person or organization that the website is built for. Twig tag: **{{ craft.guide.var("clientName") }}**'|t('guide'),
+      instructions: 'The name of the person or organization that the website is built for. Twig tag:'|t('guide') ~ ' <strong class="guide-select-string">{{ craft.guide.var("clientName") }}</strong>',
       placeholder: classicCompanies|last
     }) }}
 
@@ -124,10 +146,10 @@
       id: 'myCompanyName',
       name: 'myCompanyName',
       value: settings.myCompanyName,
-      instructions: 'The name of the person or organization that built the website. Twig tag: **{{ craft.guide.var("myCompanyName") }}**'|t('guide'),
+      instructions: 'The name of the person or organization that built the website. Twig tag:'|t('guide') ~ ' <strong class="guide-select-string">{{ craft.guide.var("myCompanyName") }}</strong>',
       placeholder: classicCompanies|last
     }) }}
-  {% endswitch %}
+  </div>
 
   {% if not proEdition and currentUser.admin %}
     <hr>

@@ -12,10 +12,10 @@
 
 {% if proEdition %}
   {% if guide ?? false %}
-    {% include 'guide/_partials/guide_display.twig' with { guideDisplayArea: 'widget', displayId: 'widget-' ~ widgetId, guides: [guide], placeholderText: 'Refresh this page to view this guide.' } only %}
+    {% include 'guide/_partials/guide_display.twig' with { guideDisplayArea: 'widget', displayId: 'widget-' ~ widgetId, guides: [guide], placeholderText: 'Refresh this page to view this guide.'|t('guide') } only %}
   {% else %}
-    <p>The guide that was displayed here is no longer available. Select another guide in this widget’s settings.</p>
+    <p>{{ 'The guide that was displayed here is no longer available. Select another guide in this widget’s settings.'|t('guide') }}</p>
   {% endif %}
 {% else %}
-  <p>Guide widgets are available in the PRO edition of Guide. <a href="{{ url('plugin-store/guide') }}">Please upgrade the Guide plugin</a> to add guides to Dashboard widgets.</p>
+  <p>{{ 'Guide widgets are available in the PRO edition of Guide.'|t('guide') }} <a href="{{ url('plugin-store/guide') }}">{{ 'Please upgrade the Guide plugin</a> to add guides to Dashboard widgets.'|t('guide') }}</p>
 {% endif %}
