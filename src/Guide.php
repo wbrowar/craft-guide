@@ -161,7 +161,7 @@ class Guide extends Plugin
                 }
 
                 // Admin-specific JavaScript
-                $routeIsGuideAdmin = Craft::$app->getRequest()->getSegment(1) == 'guide' && in_array(Craft::$app->getRequest()->getSegment(2), ['edit', 'new', 'organizer']);
+                $routeIsGuideAdmin = Craft::$app->getRequest()->getSegment(1) == 'guide' && in_array(Craft::$app->getRequest()->getSegment(2), ['edit', 'list', 'new', 'organizer']);
                 $routeIsGuideUtilities = Craft::$app->getRequest()->getSegment(1) == 'utilities' && Craft::$app->getRequest()->getSegment(2) == 'guide-export-import';
                 $routeIsGuideWelcome = Craft::$app->getRequest()->getSegment(1) == 'guide' && Craft::$app->getRequest()->getSegment(2) == 'welcome';
                 if ($routeIsGuideAdmin || $routeIsGuideUtilities) {
@@ -223,12 +223,9 @@ class Guide extends Plugin
                     $event->rules['guide/settings/variables'] = ['template' => 'guide/settings', 'variables' => ['proEdition' => self::$pro, 'selectedTab' => 'variables', 'settings' => self::$settings]];
                     
                     if ($userOperations['editGuides']) {
-                        $editVariables = [];
-
-                        $editVariables['title'] = 'New Guide';
+                        $editVariables = ['userOperations' => $userOperations];
+                        $event->rules['guide/list'] = ['template' => 'guide/list', 'variables' => $editVariables];
                         $event->rules['guide/new'] = ['template' => 'guide/edit', 'variables' => $editVariables];
-
-                        $editVariables['title'] = 'Edit Guide';
                         $event->rules['guide/edit/<guideId:\d{1,}>'] = ['template' => 'guide/edit', 'variables' => $editVariables];
                     }
                     if ($userOperations['deleteGuides']) {
@@ -431,10 +428,10 @@ class Guide extends Plugin
         $userOperations = $this->getUserOperations();
 
         $navItem['subnav'] = [
-            'home' => ['label' => 'Guide', 'url' => 'guide'],
         ];
 
         if ($userOperations['useOrganizer']) {
+            $navItem['subnav']['list'] = ['label' => 'Guides', 'url' => 'guide/list'];
             $navItem['subnav']['organizer'] = ['label' => 'Organizer', 'url' => 'guide/organizer'];
         }
 

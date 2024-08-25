@@ -18,13 +18,13 @@ export class GuideOrganizer extends LitElement {
   actionUrlGetAllPlacements = ''
 
   /**
-   * The Controller Action URL that is used to get all guide placements.
+   * The CP Trigger config setting used to format CP URLs
    */
   @property({ attribute: 'cp-trigger' })
   cpTrigger = ''
 
   /**
-   * The Controller Action URL that is used to get all guide placements.
+   * TODO
    */
   @property({ attribute: 'groups-data', type: Object })
   groupsData = []

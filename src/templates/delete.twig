@@ -11,10 +11,9 @@
  */ #}
 
 {% extends "_layouts/cp" %}
-{% import "_includes/forms" as forms %}
 
 {# The selected CP subnav item #}
-{% set selectedSubnavItem = 'organizer' %}
+{% set selectedSubnavItem = 'list' %}
 
 {% if (guideId ?? false) %}
   {% set guide = craft.guide.getOne({ id: guideId }) %}
@@ -44,7 +43,7 @@
 
     <div class="buttons">
       <input class="btn submit" type="submit" value="{{ 'Delete'|t('guide') }}">
-      <a class="btn" href="{{ url('guide/organizer') }}">{{ 'Back to Organizer'|t('guide') }}</a>
+      <a class="btn" href="{{ url('guide/list') }}">{{ 'Back to Guides'|t('guide') }}</a>
     </div>
   </form>
 {% endset %}

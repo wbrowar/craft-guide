@@ -85,7 +85,7 @@ export function warn (...args: any[]) {
  * ```
  */
 function logger (type: 'dir' | 'error' | 'log' | 'table' | 'warn', args: any[]) {
-    const spirit = '🍱'
+    const spirit = '📘'
 
     if (import.meta.env.DEV) {
         for (let i = 0; i < args.length; i++) {

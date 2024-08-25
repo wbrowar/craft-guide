@@ -9,12 +9,28 @@ export interface EditorComponent {
   props?: Record<string, string>;
 }
 
-export type EditorTabGroup = 'components' | 'guides' | 'images' | 'publishing' | 'snippets' | 'utility-classes';
+export enum EditorTabGroup {
+  Components = 'components',
+  Guides = 'guides',
+  Images = 'images',
+  Publishing = 'publishing',
+  Snippets = 'snippets',
+  UtilityClasses = 'utility-classes',
+}
+
+export enum EditPageLocation {
+  Append = 'append' ,
+  Prepend = 'prepend',
+  Slideout = 'slideout',
+}
 
 /*
  * Determines if guide is parsed as Markdown
  */
-export type GuideParser = 'html' | 'markdown';
+export enum GuideParser {
+  Html = 'html',
+  Markdown = 'markdown',
+};
 
 /*
  * Guide data as stored as a GuideModel
@@ -45,28 +61,33 @@ export interface Placement {
   groupId: string | null;
   guideId: number;
   id: number;
-  portalMethod: 'append' | 'prepend' | 'slideout';
+  portalMethod: EditPageLocation;
   selector: string | null;
   theme: 'default' | 'frame';
   uri: string | null;
 }
 
-export type PlacementAccess = 'all' | 'admins' | 'author';
+export enum PlacementAccess {
+  All = 'all' ,
+  Admins = 'admins',
+  Author = 'author',
+}
 
-export type PlacementGroup =
-  | 'nav'
-  | 'asset'
-  | 'assetVolume'
-  | 'category'
-  | 'categoryGroup'
-  | 'entry'
-  | 'global'
-  | 'globalSet'
-  | 'section'
-  | 'uiElement'
-  | 'uri'
-  | 'user'
-  | 'widget';
+export enum PlacementGroup {
+  Nav = 'nav',
+  Asset = 'asset',
+  AssetVolume = 'assetVolume',
+  Category = 'category',
+  CategoryGroup = 'categoryGroup',
+  Entry = 'entry',
+  Global = 'global',
+  GlobalSet = 'globalSet',
+  Section = 'section',
+  UiElement = 'uiElement',
+  Uri = 'uri',
+  User = 'user',
+  Widget = 'widget',
+}
 
 export interface PluginSettings {
   assetVolume: string;

@@ -1,8 +1,23 @@
-import {html, LitElement} from 'lit'
+import {css, html, LitElement} from 'lit'
 import {customElement} from 'lit/decorators.js'
 
 @customElement('guide-editor')
 export class GuideEditor extends LitElement {
+  /**
+   * =========================================================================
+   * CSS
+   * =========================================================================
+   */
+  static styles = css`
+    @layer guide.page {
+      :host {
+        background-color: red;
+      }
+      guide-editor {
+        background-color: red;
+      }
+    }
+  `
 
   /**
    * =========================================================================
@@ -19,15 +34,8 @@ export class GuideEditor extends LitElement {
 
   render() {
     return html`
-      <p>Guide Editor</p>
+      <slot name="settings"></slot>
     `
-  }
-
-  /**
-   * Changes the render mode for this component from shadow DOM to light DOM.
-   */
-  protected createRenderRoot() {
-    return this
   }
 }
 

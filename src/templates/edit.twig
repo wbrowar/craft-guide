@@ -16,7 +16,7 @@
 {% set title = title ?? "Guide Edit"|t('guide') %}
 
 {# The selected CP subnav item #}
-{% set selectedSubnavItem = 'organizer' %}
+{% set selectedSubnavItem = 'list' %}
 
 {% if not (guide is defined) %}
   {% if (guideId ?? false) %}
@@ -29,18 +29,16 @@
   {% endif %}
 {% endif %}
 
+{% set cpTrigger = craft.app.config.general.cpTrigger %}
+{% set fullPageForm = true %}
+
 {% block actionButton %}
-  <div id="guide-action-buttons"></div>
+  <div class="buttons">
+    <button class="btn submit" type="button">Save</button>
+  </div>
 {% endblock %}
 
 {% set content %}
-  {% set formData = {
-    action: 'guide/guide/save-guide',
-    authorId: guide.authorId ?? currentUser.id,
-    redirect: craft.app.request.param('return') ?? false ? craft.app.request.param('return') : null,
-    csrf: craft.app.config.general.csrfTokenName ~ '|' ~ craft.app.request.csrfToken,
-  } %}
-
   {% set guideData = {
     content: guide.content ?? '',
     contentSource: guide.contentSource ?? 'field',
@@ -52,12 +50,31 @@
     title: guide.title ?? '',
   } %}
 
-  <div
-    id="guide-editor"
-    {% if isNew %}data-is-new{% endif %}
-    data-form-data="{{ formData|json_encode }}"
-    data-guide-data="{{ guideData|json_encode }}"
-  ></div>
 
-  <guide-editor></guide-editor>
+
+
+
+
+
+
+
+
+  <input type="hidden" name="action" value="guide/guide/save-guide" />
+  <input type="hidden" name="authorId" value="{{ guide.authorId ?? currentUser.id }}" />
+{#  <input type="hidden" name="content" :value="editorContent" />#}
+
+  {% if guideId ?? false %}
+    <input type="hidden" name="id" value="{{ guideId }}" />
+  {% endif %}
+
+  {% set redirect = craft.app.request.param('return') ?? false ? craft.app.request.param('return') : null %}
+  {% if redirect ?? false %}
+    <input type="hidden" name="redirect" value="{{ redirect }}" />
+  {% endif %}
+
+  <p>{{ guide.title }}</p>
+
+  <guide-editor>
+    <div slot="settings">Settingggs</div>
+  </guide-editor>
 {% endset %}

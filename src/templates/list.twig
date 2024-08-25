@@ -1,0 +1,54 @@
+{# /**
+ * Guide plugin for Craft CMS
+ *
+ * Guide Widget Body
+ *
+ * @author    Will Browar
+ * @copyright Copyright (c) 2019 Will Browar
+ * @link      https://wbrowar.com
+ * @package   Guide
+ * @since     2.0.0
+ */ #}
+
+{% extends "_layouts/cp" %}
+{% requirePermission 'editGuides' %}
+
+{# The title of this CP section #}
+{% set title = "Guides"|t('guide') %}
+
+{# The selected CP subnav item #}
+{% set selectedSubnavItem = 'list' %}
+
+{% block actionButton %}
+  {% if userOperations.editGuides %}
+    <div class="buttons">
+      <a class="btn add icon submit" href="{{ cpUrl('guide/new') }}">New Guide</a>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% set labelMessages = {
+  'copyToClipboard': 'Copy to clipboard'|t('app'),
+  'copiedToClipboard': 'Copied to clipboard'|t('app'),
+  'edit': 'Edit'|t('guide'),
+  'delete': 'Delete'|t('guide'),
+  'tooltipInGuide': ''|t('guide'),
+  'tooltipSlug': 'Click a slug to copy its embed code.'|t('guide'),
+  'view': 'View'|t('guide'),
+} %}
+
+{% set tableHeaders = [
+  { handle: 'title', label: 'Title'|t('guide') },
+  { handle: 'summary', label: 'Summary'|t('guide') },
+  { handle: 'slug', label: 'Slug'|t('guide') },
+  { handle: 'in-guide', label: 'In Guide'|t('guide') },
+  { handle: 'actions', label: 'Actions'|t('guide') },
+] %}
+
+{% set content %}
+  <guide-list
+      cp-trigger="{{ craft.app.config.general.cpTrigger }}"
+      label-messages="{{ labelMessages|json_encode }}"
+      table-headers="{{ tableHeaders|json_encode }}"
+  ></guide-list>
+{% endset %}
