@@ -1,0 +1,84 @@
+.guide-display {
+  container-name: guide-display;
+  container-type: inline-size;
+}
+guide-display {
+  display: grid;
+  grid-template-columns: var(--grid-template-columns, 1fr);
+  gap: calc(var(--xl) * 2);
+
+  @container guide-display (width > 600px) {
+    --grid-template-columns: 1fr 200px;
+  }
+
+  & .guide {
+    container-name: guide;
+    container-type: inline-size;
+
+    & > * + *:not(hr) {
+      margin-block-start: var(--m);
+    }
+
+    & :is(blockquote, dd, dl, h1, h2, h3, h4, h5, h6, hr, p, li, pre) {
+      max-width: var(--prose-max-width, 70ch);
+      font-size: var(--prose-font-size, 1rem);
+      line-height: var(--prose-line-height, 1.4rem);
+      text-wrap: pretty;
+
+      & a {
+        color: var(--color-primary);
+
+        &:hover {
+          color: var(--color-blue);
+        }
+      }
+      & code {
+        padding: 0.4em;
+        background-color: color-mix(in srgb, var(--color-blue), transparent 50%);
+        border-radius: 0.3em;
+        font-family: monospace;
+        font-size: 0.9em;
+        user-select: all;
+        color: light-dark(var(--prose-code-color, var(--color-blue-800)), var(--prose-code-color, var(--color-blue-300)));
+      }
+    }
+    & :is(ol, ul) {
+      & li {
+        & + li {
+          margin-block-start: var(--sm-rem);
+        }
+
+        &::marker {
+          color: var(--color-red);
+        }
+      }
+    }
+  }
+
+  & > aside {
+    display: grid;
+    gap: var(--xl);
+
+    & nav {
+      & ul {
+        display: grid;
+        gap: var(--s);
+
+        & li {
+          transition: font-weight .1s ease-out, color .1s ease-out;
+
+          &.selected {
+            font-weight: bold;
+            color: var(--primary-color);
+            list-style: disc;
+          }
+
+          @container guide-display (width <= 600px) {
+            margin-inline-start: var(--m);
+          }
+        }
+      }
+    }
+  }
+}
+

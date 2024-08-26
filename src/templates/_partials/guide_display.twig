@@ -101,4 +101,20 @@
   </template>
 {% endif %}
 
-<guide-display></guide-display>
+{% set tMessages = {
+  'guides': 'Guides'|t('guide'),
+} %}
+
+{% if guides|length or (inlineEditorId ?? false) %}
+  <div class="guide-display">
+    <guide-display t-messages="{{ tMessages|json_encode }}">
+      <div class="guides">
+        {% for guide in guides %}
+          <section data-guide-slug="{{ guide.slug }}" class="guide visually-hidden">
+            {{ include('guide/_partials/render_content', { guide: guide }) }}
+          </section>
+        {% endfor %}
+      </div>
+    </guide-display>
+  </div>
+{% endif %}

@@ -1,6 +1,6 @@
 @layer guide.globals, guide.page, guide.display, guide.utilities;
 
-@import url('components/GuideList.css');
+@import url('components/GuideDisplay.css') layer(guide.page);
 
 @layer guide.utilities {
   .fpo {

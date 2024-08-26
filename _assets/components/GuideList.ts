@@ -12,19 +12,19 @@ export class GuideList extends LitElement {
    * ===========================================================================
    */
   /**
-   * The CP Trigger config setting used to format CP URLs
+   * The CP Trigger config setting used to format CP URLs.
    */
   @property({ attribute: 'cp-trigger' })
   cpTrigger = ''
 
   /**
-   * The CP Trigger config setting used to format CP URLs
+   * Messages translated via Craft’s `t` filter.
    */
-  @property({ attribute: 'label-messages', type: Object })
-  labelMessages: Record<string, string> = {}
+  @property({ attribute: 't-messages', type: Object })
+  tMessages: Record<string, string> = {}
 
   /**
-   * The CP Trigger config setting used to format CP URLs
+   * The CP Trigger config setting used to format CP URLs.
    */
   @property({ attribute: 'table-headers', type: Object })
   tableHeaders: { handle: string; label: string; }[] = []
@@ -35,12 +35,7 @@ export class GuideList extends LitElement {
    * =========================================================================
    */
   /**
-   * TODO
-   */
-  @state()
-  private _headers: (TemplateResult | string)[] = []
-  /**
-   * TODO
+   * Rows of table data for each guide. Each cell is formatted as an `html` template.
    */
   @state()
   private _rows: TemplateResult[][] = []
@@ -51,19 +46,11 @@ export class GuideList extends LitElement {
    * =========================================================================
    */
   /**
-   * Formats a URI into a relative CP URL
+   * Formats a URI into a relative CP URL.
    */
   private async _copyText(text: string) {
-    log('copy text', text)
-
     await copyToClipboard(text)
-    window.Craft.cp.displayNotice(this.labelMessages.copiedToClipboard)
-  }
-  /**
-   * Formats a URI into a relative CP URL
-   */
-  private async _cpUrl(uri: string) {
-    return this.cpTrigger ? `/${this.cpTrigger}/${uri}` : `/${uri}`;
+    window.Craft.cp.displayNotice(this.tMessages.copiedToClipboard)
   }
 
   /**
@@ -75,14 +62,11 @@ export class GuideList extends LitElement {
     super.connectedCallback()
 
     log('cpTrigger', this.cpTrigger)
-    log('cpUrl', this._cpUrl('guide/new'))
     log('guides', guides)
     log('settings', settings)
 
     log('tableHeaders', this.tableHeaders)
-    log('labelMessages', this.labelMessages)
-
-    this._headers = this.tableHeaders.map(header => header.handle)
+    log('labelMessages', this.tMessages)
 
     this._rows = guides.map((guide) => {
       const items = []
@@ -94,12 +78,10 @@ export class GuideList extends LitElement {
       items.push(html`<p>${guide.summary ?? ''}</p>`)
 
       // Slug
-      // items.push(html`<span class="guide-select-string">${guide.slug}</span>`)
-
       items.push(html`
-        <div class="code small light copytextbtn" title="${this.labelMessages.copyToClipboard}" role="button" @click="${() => this._copyText(`{{ craft.guide.include({ slug: '${guide.slug}' }) }}`)}">
+        <div class="code small light copytextbtn" title="${this.tMessages.copyToClipboard}" role="button" @click="${() => this._copyText(`{{ craft.guide.include({ slug: '${guide.slug}' }) }}`)}">
           <span class="copytextbtn__value">${guide.slug}</span>
-          <span class="visually-hidden">${this.labelMessages.copyToClipboard}</span>
+          <span class="visually-hidden">${this.tMessages.copyToClipboard}</span>
           <span class="copytextbtn__icon" data-icon="clipboard" aria-hidden="true"></span>
         </div>
       `)
@@ -110,12 +92,12 @@ export class GuideList extends LitElement {
       // Action Items
       const actionItems = []
       if (userOperations.editGuides) {
-        actionItems.push(html`<a class="btn small secondary" href="${guide.editUrl}">${this.labelMessages.edit}</a>`)
+        actionItems.push(html`<a class="btn small secondary" href="${guide.editUrl}">${this.tMessages.edit}</a>`)
       }
       if (userOperations.deleteGuides) {
-        actionItems.push(html`<a class="btn small" href="${guide.deleteUrl}">${this.labelMessages.delete}</a>`)
+        actionItems.push(html`<a class="btn small" href="${guide.deleteUrl}">${this.tMessages.delete}</a>`)
       }
-      actionItems.push(html`<a class="btn small" href="${guide.viewUrl}">${this.labelMessages.view}</a>`)
+      actionItems.push(html`<a class="btn small" href="${guide.viewUrl}">${this.tMessages.view}</a>`)
       items.push(html`<div class="buttons">${actionItems.map(item => item)}</div>`)
 
       return items
@@ -130,8 +112,10 @@ export class GuideList extends LitElement {
 
   render() {
     const tableHeaders = this.tableHeaders.map((header) => {
-      if (header.handle === 'slug') {
-        return html`<th><span>${ header.label }</span> <span class="info">${this.labelMessages.tooltipSlug}</span></th>`
+      if (header.handle === 'inGuide') {
+        return html`<th><span>${ header.label }</span> <span class="info">${this.tMessages.tooltipInGuide}</span></th>`
+      } else if (header.handle === 'slug') {
+        return html`<th><span>${ header.label }</span> <span class="info">${this.tMessages.tooltipSlug}</span></th>`
       }
 
       return html`<th>${ header.label }</th>`

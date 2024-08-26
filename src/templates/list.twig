@@ -27,13 +27,13 @@
   {% endif %}
 {% endblock %}
 
-{% set labelMessages = {
-  'copyToClipboard': 'Copy to clipboard'|t('app'),
-  'copiedToClipboard': 'Copied to clipboard'|t('app'),
+{% set tMessages = {
+  'copyToClipboard': 'Copy guide include snippet to clipboard'|t('guide'),
+  'copiedToClipboard': 'Copied to clipboard'|t('guide'),
   'edit': 'Edit'|t('guide'),
   'delete': 'Delete'|t('guide'),
-  'tooltipInGuide': ''|t('guide'),
-  'tooltipSlug': 'Click a slug to copy its embed code.'|t('guide'),
+  'tooltipInGuide': 'Determines if guide is included on the main Guide page.'|t('guide'),
+  'tooltipSlug': 'The slug is used when embedding one guide into another.'|t('guide'),
   'view': 'View'|t('guide'),
 } %}
 
@@ -41,14 +41,14 @@
   { handle: 'title', label: 'Title'|t('guide') },
   { handle: 'summary', label: 'Summary'|t('guide') },
   { handle: 'slug', label: 'Slug'|t('guide') },
-  { handle: 'in-guide', label: 'In Guide'|t('guide') },
+  { handle: 'inGuide', label: 'In Guide'|t('guide') },
   { handle: 'actions', label: 'Actions'|t('guide') },
 ] %}
 
 {% set content %}
   <guide-list
       cp-trigger="{{ craft.app.config.general.cpTrigger }}"
-      label-messages="{{ labelMessages|json_encode }}"
+      t-messages="{{ tMessages|json_encode }}"
       table-headers="{{ tableHeaders|json_encode }}"
   ></guide-list>
 {% endset %}
