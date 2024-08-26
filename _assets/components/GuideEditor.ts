@@ -11,10 +11,6 @@ export class GuideEditor extends LitElement {
   static styles = css`
     @layer guide.page {
       :host {
-        background-color: red;
-      }
-      guide-editor {
-        background-color: red;
       }
     }
   `
@@ -34,7 +30,14 @@ export class GuideEditor extends LitElement {
 
   render() {
     return html`
-      <slot name="settings"></slot>
+      <aside>
+        <slot name="settings"></slot>
+        <slot name="components"></slot>
+        <slot name="images"></slot>
+        <slot name="guides"></slot>
+        <slot name="snippets"></slot>
+      </aside>
+      <slot name="editor"></slot>
     `
   }
 }

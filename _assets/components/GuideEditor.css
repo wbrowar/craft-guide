@@ -1,0 +1,20 @@
+.guide-editor {
+  container-name: guide-editor;
+  container-type: inline-size;
+}
+guide-editor {
+  display: grid;
+  grid-template-columns: var(--grid-template-columns, 1fr);
+  gap: calc(var(--xl) * 2);
+  position: relative;
+
+  & > aside {
+    position: sticky;
+    top: 70px;
+  }
+
+  @container guide-editor (width > 600px) {
+    --grid-template-columns: minmax(200px, 400px) minmax(1px, 1fr);
+  }
+}
+

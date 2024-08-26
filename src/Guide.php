@@ -223,7 +223,7 @@ class Guide extends Plugin
                     $event->rules['guide/settings/variables'] = ['template' => 'guide/settings', 'variables' => ['proEdition' => self::$pro, 'selectedTab' => 'variables', 'settings' => self::$settings]];
                     
                     if ($userOperations['editGuides']) {
-                        $editVariables = ['userOperations' => $userOperations];
+                        $editVariables = ['proEdition' => self::$pro, 'userOperations' => $userOperations];
                         $event->rules['guide/list'] = ['template' => 'guide/list', 'variables' => $editVariables];
                         $event->rules['guide/new'] = ['template' => 'guide/edit', 'variables' => $editVariables];
                         $event->rules['guide/edit/<guideId:\d{1,}>'] = ['template' => 'guide/edit', 'variables' => $editVariables];

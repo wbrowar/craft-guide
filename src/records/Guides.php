@@ -20,6 +20,7 @@ use craft\db\ActiveRecord;
  * @property string $content
  * @property string $contentSource
  * @property string $contentUrl
+ * @property boolean $renderMarkdown
  * @property string $slug
  * @property string $summary
  * @property string $template

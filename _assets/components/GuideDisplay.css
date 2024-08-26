@@ -5,11 +5,9 @@
 guide-display {
   display: grid;
   grid-template-columns: var(--grid-template-columns, 1fr);
+  align-items: start;
   gap: calc(var(--xl) * 2);
-
-  @container guide-display (width > 600px) {
-    --grid-template-columns: 1fr 200px;
-  }
+  position: relative;
 
   & .guide {
     container-name: guide;
@@ -58,6 +56,8 @@ guide-display {
   & > aside {
     display: grid;
     gap: var(--xl);
+    position: sticky;
+    top: 70px;
 
     & nav {
       & ul {
@@ -79,6 +79,10 @@ guide-display {
         }
       }
     }
+  }
+
+  @container guide-display (width > 600px) {
+    --grid-template-columns: 1fr 200px;
   }
 }
 

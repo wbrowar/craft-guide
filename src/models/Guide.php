@@ -52,6 +52,13 @@ class Guide extends Model
     public $contentUrl;
 
     /**
+     * When enabled, the Content field will be parsed as Github-flavored markdown.
+     *
+     * @var boolean
+     */
+    public $renderMarkdown = true;
+
+    /**
      * The unique slug used in the URL to the guide’s page in the CP.
      *
      * @var string
