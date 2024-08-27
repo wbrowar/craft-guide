@@ -10,14 +10,10 @@
 
 namespace wbrowar\guide\controllers;
 
-use craft\fields\data\ColorData;
-use craft\helpers\UrlHelper;
-use craft\models\VolumeFolder;
-use craft\records\Volume;
-use wbrowar\guide\Guide;
-
 use Craft;
+use craft\helpers\UrlHelper;
 use craft\web\Controller;
+use wbrowar\guide\Guide;
 
 /**
  * @author    Will Browar
@@ -39,22 +35,19 @@ class SettingsController extends Controller
         $params = Craft::$app->getRequest()->getBodyParams();
         $settings = Guide::$plugin->getSettings();
 
-        switch ($params['page']) {
-            case 'general':
-                $settings['assetVolume'] = $params['assetVolume'];
-                $settings['defaultTeleportMethod'] = $params['defaultTeleportMethod'];
-                $settings['templatePath'] = $this->removeSlashFromEnd($params['templatePath']);
-                break;
-            case 'variables':
-                $settings['clientName'] = $params['clientName'];
-                $settings['myCompanyName'] = $params['myCompanyName'];
-                $settings['projectName'] = $params['projectName'];
-                break;
-        }
+        $settings['templatePath'] = $this->removeSlashFromEnd($params['templatePath']);
+        $settings['assetVolume'] = $params['assetVolume'];
+        $settings['renderMarkdownDefault'] = $params['renderMarkdownDefault'];
+        $settings['enableGuideCss'] = $params['enableGuideCss'];
+        $settings['enableGuideJavascript'] = $params['enableGuideJavascript'];
+        $settings['editPageLocation'] = $params['editPageLocation'];
+        $settings['clientName'] = $params['clientName'];
+        $settings['myCompanyName'] = $params['myCompanyName'];
+        $settings['projectName'] = $params['projectName'];
         
         Craft::$app->getPlugins()->savePluginSettings(Guide::$plugin, $settings->toArray());
 
-        return $this->redirect(UrlHelper::cpUrl('guide/settings/' . $params['page']));
+        return $this->redirect(UrlHelper::cpUrl('guide/settings'));
     }
 
     // Private Methods

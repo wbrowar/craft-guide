@@ -25,14 +25,6 @@ export enum EditPageLocation {
 }
 
 /*
- * Determines if guide is parsed as Markdown
- */
-export enum GuideParser {
-  Html = 'html',
-  Markdown = 'markdown',
-};
-
-/*
  * Guide data as stored as a GuideModel
  */
 export interface Guide {
@@ -93,10 +85,13 @@ export interface PluginSettings {
   assetVolume: string;
   components: any[];
   clientName: string;
-  defaultParser: GuideParser;
+  editPageLocation: EditPageLocation;
+  enableGuideCss: boolean;
+  enableGuideJavascript: boolean;
+  renderMarkdownDefault: boolean;
   myCompanyName: string;
+  projectName: string;
   templatePath: string;
-  rebrand: any[];
 }
 
 export interface PluginUserOperations {

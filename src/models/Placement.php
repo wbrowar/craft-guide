@@ -24,6 +24,7 @@ class Placement extends Model
 
     /**
      * Determine who can view the guide.
+     * Currently only 'all' is supported.
      * Options: 'all', 'admins', 'author'
      *
      * @var string
@@ -46,27 +47,11 @@ class Placement extends Model
     public $groupId;
 
     /**
-     * Add CSS to guide display to help it fit in better with its surrounding elements.
-     *
-     * @var string
-     */
-    public $theme;
-
-    /**
      * The ID of the guide being placed.
      *
      * @var integer
      */
     public $guideId;
-
-    /**
-     * Determine if a guide should be appended or prepended to the selector element.
-     * Options: 'append', 'prepend'
-     * NOTE: Only 'append' is supported right now.
-     *
-     * @var string
-     */
-    public $portalMethod = 'append';
 
     /**
      * The CSS selector where the guide will be placed in the CP.
@@ -81,6 +66,13 @@ class Placement extends Model
      * @var string
      */
     public $uri;
+
+    /**
+     * When guides are re-ordered in their group they will be displayed in that order by default.
+     *
+     * @var integer
+     */
+    public $weight = 1;
 
     // Public Methods
     // =========================================================================

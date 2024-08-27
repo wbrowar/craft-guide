@@ -6,11 +6,22 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## 5.0.0 - 2024-12-25
 ### Added
-- Added **Slideout** option to **Edit Page Guide Location** setting.
+- Guides in slideouts!
+  - On edit pages, guides can be displayed in slideouts or above or below the editing fields.
+  - Added **Slideout** option to **Edit Page Guide Location** setting to set this location.
+- Guides can now be rendered in Markdown without using Twig filters.
+  - This can be turned on or off on a per-guide basis.
+  - A new setting, **Render Markdown Default** sets the initial value when a new guide is created.
 
 ### Changed
+- The settings page now submits all settings at once, instead of having one page per setting tab.
 - The **Template Path** and **Asset Volume** settings are no longer required.
+  - If a **Template Path** isn’t set, using templates as a guide source is disabled.
 - **Slideout** is now set as the default value for the **Edit Page Guide Location** setting.
+
+### Removed
+- Vue.js and TailwindCSS are no longer used to render guides.
+  - Vue Variables and Guide Utility Classes have been removed.
 
 
 ## 4.0.0 - 2024-08-11

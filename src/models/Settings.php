@@ -25,11 +25,15 @@ class Settings extends Model
     // Path to Guide CP Section templates
     public $assetVolume = '';
 
-    // Path to Guide CP Section templates
-    public $defaultParser = 'markdown';
+    // The location of guides when displayed on element edit pages
+    public $editPageLocation = 'slideout';
+
+    // Enable CSS and JavaScript fields to appear in the Guide Editor
+    public $enableGuideCss = true;
+    public $enableGuideJavascript = false;
 
     // Path to Guide CP Section templates
-    public $defaultTeleportMethod = 'slideout';
+    public $renderMarkdownDefault = true;
 
     // Path to Guide CP Section templates
     public $templatePath = '';
@@ -48,12 +52,10 @@ class Settings extends Model
     public function rules(): array
     {
         return [
-            [['defaultTeleportMethod'], 'required'],
+            [['enableGuideCss', 'enableGuideJavascript', 'renderMarkdownDefault'], 'boolean'],
+            [['assetVolume', 'editPageLocation', 'templatePath', 'clientName', 'projectName', 'myCompanyName'], 'string'],
 
-            [['assetVolume', 'defaultTeleportMethod', 'templatePath', 'clientName', 'projectName', 'myCompanyName'], 'string'],
-
-            ['defaultParser', 'default', 'value' => 'markdown'],
-            ['defaultTeleportMethod', 'default', 'value' => 'slideout'],
+            ['editPageLocation', 'default', 'value' => 'slideout'],
         ];
     }
 }

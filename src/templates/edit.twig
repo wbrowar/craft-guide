@@ -38,10 +38,17 @@
   "content": {label: "Content"|t('guide'), url: "#guide"},
 } %}
 {% if proEdition %}
-  {% set tabs = tabs|merge({
-    "css": {label: "CSS"|t('guide'), url: "#css"},
-    "javascript": {label: "JavaScript"|t('guide'), url: "#javascript"},
-  }) %}
+  {% if settings.enableGuideCss %}
+    {% set tabs = tabs|merge({
+      "css": {label: "CSS"|t('guide'), url: "#css"},
+    }) %}
+  {% endif %}
+
+  {% if settings.enableGuideJavascript %}
+    {% set tabs = tabs|merge({
+      "javascript": {label: "JavaScript"|t('guide'), url: "#javascript"},
+    }) %}
+  {% endif %}
 {% endif %}
 
 {% set fullPageForm = true %}
@@ -69,7 +76,6 @@
 
   <input type="hidden" name="action" value="guide/guide/save-guide" />
   <input type="hidden" name="authorId" value="{{ guide.authorId ?? currentUser.id }}" />
-{#  <input type="hidden" name="content" :value="editorContent" />#}
 
   {% if guideId ?? false %}
     <input type="hidden" name="id" value="{{ guideId }}" />
@@ -120,7 +126,6 @@
             name: 'contentSource',
             options: options,
             value: guide.contentSource,
-            instructions: ''|t('guide'),
           }) }}
 
           {{ forms.lightswitchField({
@@ -128,20 +133,20 @@
             id: 'renderMarkdown',
             name: 'renderMarkdown',
             options: options,
-            on: guide.renderMarkdown ?? settings.defaultParser == 'markdown',
-            instructions: ''|t('guide'),
+            on: isNew ? settings.renderMarkdownDefault : guide.renderMarkdown,
           }) }}
         {% else %}
           <input type="hidden" id="contentSource" name="contentSource" value="template" />
           <input type="hidden" id="renderMarkdown" name="renderMarkdown" value="0" />
         {% endif %}
 
+        {% if settings.templatePath %}
+          <p>field: template (when content source is set to template)</p>
+        {% else %}
+          <input type="hidden" name="template" value="" />
+        {% endif %}
 
-        <p>field: content source</p>
-        <p>field: parser (when content source is set to code editor)</p>
-        <p>field: template (when content source is set to template)</p>
-        <p>field: page url (when content source is set to iframe)</p>
-        <p>field: summary</p>
+        <input type="hidden" name="contentUrl" value="" />
       </div>
       <div slot="components">
         <p>list of components</p>
@@ -172,38 +177,41 @@
     </guide-editor>
   </div>
 
-  {% if proEdition %}
-  <div id="css" class="hidden">
-    {{ codeEditor.textareaField({
-      label: 'CSS'|t('guide'),
-      instructions: "ddddd"|t('guide'),
-      id: 'cssEditor',
-      name: "cssEditor",
-      placeholder: '',
-      value: '',
-      rows: 20,
-    }, "css-editor", {
-      language: "css",
-      theme: "vs-dark",
-    }) }}
-  </div>
-
-  <div id="javascript" class="hidden">
-    {{ codeEditor.textareaField({
-      label: 'JavaScript'|t('guide'),
-      instructions: "xxxxx"|t('guide'),
-      id: 'javascriptEditor',
-      name: "javascriptEditor",
-      placeholder: '',
-      value: '',
-      rows: 20,
-    }, "javascript-editor", {
-      language: "javascript",
-      theme: "vs-dark",
-    }) }}
-  </div>
+  {% if proEdition and settings.enableGuideCss %}
+    <div id="css" class="hidden">
+      {{ codeEditor.textareaField({
+        label: 'CSS'|t('guide'),
+        instructions: "ddddd"|t('guide'),
+        id: 'contentCss',
+        name: "contentCss",
+        placeholder: '',
+        value: guide.contentCss,
+        rows: 20,
+      }, "css-editor", {
+        language: "css",
+        theme: "vs-dark",
+      }) }}
+    </div>
   {% else %}
-    <input type="hidden" name="css" value="" />
-    <input type="hidden" name="javascript" value="" />
+    <input type="hidden" name="contentCss" value="" />
+  {% endif %}
+
+  {% if proEdition and settings.enableGuideJavascript %}
+    <div id="javascript" class="hidden">
+      {{ codeEditor.textareaField({
+        label: 'JavaScript'|t('guide'),
+        instructions: "xxxxx"|t('guide'),
+        id: 'contentJavascript',
+        name: "contentJavascript",
+        placeholder: '',
+        value: guide.contentJavascript,
+        rows: 20,
+      }, "javascript-editor", {
+        language: "javascript",
+        theme: "vs-dark",
+      }) }}
+    </div>
+  {% else %}
+    <input type="hidden" name="contentJavascript" value="" />
   {% endif %}
 {% endset %}

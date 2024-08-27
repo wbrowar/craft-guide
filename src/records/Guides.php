@@ -18,6 +18,8 @@ use craft\db\ActiveRecord;
  * @property integer $id
  * @property integer $authorId
  * @property string $content
+ * @property string $contentCss
+ * @property string $contentJavascript
  * @property string $contentSource
  * @property string $contentUrl
  * @property boolean $renderMarkdown

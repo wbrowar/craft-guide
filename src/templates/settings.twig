@@ -45,7 +45,6 @@
   {% import _self as self %}
 
   <input type="hidden" name="action" value="guide/settings">
-  <input type="hidden" name="page" value="{{ selectedTab }}">
 
   <div id="general">
     {{ forms.textField({
@@ -81,17 +80,30 @@
 
   {% if proEdition %}
     <div id="editing" class="hidden">
-      {% set options = [
-        { label: 'Markdown'|t('guide'), value: 'markdown' },
-        { label: 'HTML'|t('guide'), value: 'html' },
-      ] %}
-      {{ forms.selectField({
-        label: 'Default Parser'|t('guide'),
-        id: 'defaultParser',
-        name: 'defaultParser',
+      {{ forms.lightswitchField({
+        label: 'Render Markdown Default'|t('guide'),
+        id: 'renderMarkdownDefault',
+        name: 'renderMarkdownDefault',
+        on: settings.renderMarkdownDefault,
+        instructions: 'The default value of the Render Markdown field in the Guide Editor. This can be overridden on a per-guide basis.'|t('guide'),
+      }) }}
+
+      {{ forms.lightswitchField({
+        label: 'Enable CSS Field'|t('guide'),
+        id: 'enableGuideCss',
+        name: 'enableGuideCss',
         options: options,
-        value: settings.defaultParser,
-        instructions: 'Determines if guide is parsed as Markdown by default. This can be overridden on a per-guide basis.'|t('guide'),
+        on: settings.enableGuideCss,
+        instructions: 'Enable CSS field to appear in the Guide Editor.'|t('guide'),
+      }) }}
+
+      {{ forms.lightswitchField({
+        label: 'Enable JavaScript Field'|t('guide'),
+        id: 'enableGuideJavascript',
+        name: 'enableGuideJavascript',
+        options: options,
+        on: settings.enableGuideJavascript,
+        instructions: 'Enable JavaScript field to appear in the Guide Editor.'|t('guide'),
       }) }}
 
       {% set options = [
@@ -101,15 +113,18 @@
       ] %}
       {{ forms.selectField({
         label: 'Edit Page Guide Location'|t('guide'),
-        id: 'defaultTeleportMethod',
-        name: 'defaultTeleportMethod',
+        id: 'editPageLocation',
+        name: 'editPageLocation',
         options: options,
-        value: settings.defaultTeleportMethod,
+        value: settings.editPageLocation,
         instructions: 'Determine where guides should be displayed on element edit pages.'|t('guide'),
       }) }}
     </div>
   {% else %}
-    <input type="hidden" name="defaultTeleportMethod" value="slideout">
+    <input type="hidden" name="renderMarkdownDefault" value="0">
+    <input type="hidden" name="enableGuideCss" value="0">
+    <input type="hidden" name="enableGuideJavascript" value="0">
+    <input type="hidden" name="editPageLocation" value="slideout">
   {% endif %}
 
   <div id="variables" class="hidden">

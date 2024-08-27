@@ -219,11 +219,10 @@ class Guide extends Plugin
                     $event->rules['guide'] = ['template' => 'guide/index', 'variables' => ['cpNavPlacements' => self::$plugin->placement->getPlacements([ 'group' => 'nav' ], 'guideId'), 'settings' => self::$settings, 'userOperations' => $userOperations]];
                     $event->rules['guide/welcome'] = ['template' => 'guide/welcome', 'variables' => ['settings' => self::$settings]];
                     $event->rules['guide/page/<slug:(.*)>'] = ['template' => 'guide/page', 'variables' => ['proEdition' => self::$pro, 'settings' => self::$settings, 'userOperations' => $userOperations]];
-                    $event->rules['guide/settings/general'] = ['template' => 'guide/settings', 'variables' => ['proEdition' => self::$pro, 'selectedTab' => 'general', 'settings' => self::$settings]];
-                    $event->rules['guide/settings/variables'] = ['template' => 'guide/settings', 'variables' => ['proEdition' => self::$pro, 'selectedTab' => 'variables', 'settings' => self::$settings]];
+                    $event->rules['guide/settings'] = ['template' => 'guide/settings', 'variables' => ['proEdition' => self::$pro, 'settings' => self::$settings]];
                     
                     if ($userOperations['editGuides']) {
-                        $editVariables = ['proEdition' => self::$pro, 'userOperations' => $userOperations];
+                        $editVariables = ['proEdition' => self::$pro, 'settings' => self::$settings, 'templates' => $this->getTemplatesFromUserTemplatePath(), 'userOperations' => $userOperations];
                         $event->rules['guide/list'] = ['template' => 'guide/list', 'variables' => $editVariables];
                         $event->rules['guide/new'] = ['template' => 'guide/edit', 'variables' => $editVariables];
                         $event->rules['guide/edit/<guideId:\d{1,}>'] = ['template' => 'guide/edit', 'variables' => $editVariables];
@@ -436,7 +435,7 @@ class Guide extends Plugin
         }
 
         if ($user->admin && Craft::$app->getConfig()->getGeneral()->allowAdminChanges) {
-            $navItem['subnav']['settings'] = ['label' => 'Settings', 'url' => 'guide/settings/general'];
+            $navItem['subnav']['settings'] = ['label' => 'Settings', 'url' => 'guide/settings'];
         }
 
         return $navItem;
@@ -470,7 +469,7 @@ class Guide extends Plugin
     public function getSettingsResponse(): \craft\web\Response|\yii\console\Response
     {
         // Just redirect to the plugin settings page
-        return Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('guide/settings/general'));
+        return Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('guide/settings'));
     }
 
     /**

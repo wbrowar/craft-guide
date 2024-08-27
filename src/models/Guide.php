@@ -37,6 +37,20 @@ class Guide extends Model
     public $content;
 
     /**
+     * The raw CSS code added to when displaying a guide.
+     *
+     * @var string
+     */
+    public $contentCss;
+
+    /**
+     * The raw JavaScript code added to when displaying a guide.
+     *
+     * @var string
+     */
+    public $contentJavascript;
+
+    /**
      * Determines how a guide is rendered based on where the content of the guide is stored.
      * Options: 'field', 'iframe', 'template'
      *
@@ -98,8 +112,9 @@ class Guide extends Model
         return [
             [['authorId', 'slug', 'title'], 'required'],
 
+            ['renderMarkdown', 'boolean'],
             ['authorId', 'integer'],
-            [['content', 'slug', 'summary', 'title'], 'string'],
+            [['content', 'contentCss', 'contentJavascript', 'slug', 'summary', 'title'], 'string'],
 
             ['authorId', 'default', 'value' => 1],
         ];

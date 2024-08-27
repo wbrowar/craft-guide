@@ -10,13 +10,12 @@
 
 namespace wbrowar\guide\controllers;
 
+use Craft;
 use craft\helpers\StringHelper;
 use craft\helpers\UrlHelper;
+use craft\web\Controller;
 use wbrowar\guide\Guide;
 use wbrowar\guide\models\Guide as GuideModel;
-
-use Craft;
-use craft\web\Controller;
 
 /**
  * @author    Will Browar
@@ -75,9 +74,12 @@ class GuideController extends Controller
 
         $guide = new GuideModel([
             'authorId' => $params['authorId'],
-            'content' => $params['content'],
+            'content' => $params['contentEditor'],
+            'contentCss' => $params['contentCss'],
+            'contentJavascript' => $params['contentJavascript'],
             'contentSource' => $params['contentSource'] ?? 'field',
             'contentUrl' => $params['contentUrl'],
+            'renderMarkdown' => $params['renderMarkdown'],
             'slug' => $slug,
             'summary' => $params['summary'],
             'template' => $params['template'],
@@ -87,7 +89,7 @@ class GuideController extends Controller
         if ($guide->validate()) {
             Guide::$plugin->guide->saveGuide($guide, $params['id'] ?? null);
 
-            return $this->redirect(UrlHelper::url($params['redirect'] ?? 'guide/organizer'));
+            return $this->redirect(UrlHelper::url($params['redirect'] ?? 'guide/list'));
         } else {
             // @TODO handle error correctly
 //            Craft::dd('Error');

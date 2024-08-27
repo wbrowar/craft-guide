@@ -10,10 +10,7 @@
 
 namespace wbrowar\guide\migrations;
 
-use wbrowar\guide\Guide;
-
 use Craft;
-use craft\config\DbConfig;
 use craft\db\Migration;
 
 /**
@@ -70,6 +67,7 @@ class Install extends Migration
         $tablesCreatedForGuides = false;
         $tablesCreatedForPlacements = false;
 
+        // TODO add contentJavascript, contentSource, renderMarkdown
         $tableSchema = Craft::$app->db->schema->getTableSchema('{{%guide_guides}}');
         if ($tableSchema === null) {
             $tablesCreatedForGuides = true;
@@ -85,13 +83,18 @@ class Install extends Migration
                     'template' => $this->string(255),
                     'contentSource' => $this->string(255),
                     'contentUrl' => $this->string(255),
+                    'renderMarkdown' => $this->boolean()->defaultValue(false),
                     'title' => $this->string(255)->notNull(),
                     'summary' => $this->string(255),
                     'content' => $this->text(),
+                    'contentCss' => $this->text(),
+                    'contentJavascript' => $this->text(),
                 ]
             );
         }
 
+        // TODO add weight
+        // TODO remove portalMethod, theme
         $tableSchema = Craft::$app->db->schema->getTableSchema('{{%guide_placements}}');
         if ($tableSchema === null) {
             $tablesCreatedForPlacements = true;
@@ -106,10 +109,9 @@ class Install extends Migration
                     'access' => $this->string(255),
                     'group' => $this->string(255),
                     'groupId' => $this->string(255),
-                    'portalMethod' => $this->string(255),
                     'selector' => $this->string(255),
-                    'theme' => $this->string(255),
                     'uri' => $this->string(255),
+                    'weight' => $this->integer()->defaultValue(1),
                 ]
             );
         }

@@ -234,7 +234,7 @@ class Placement extends Component
             $orderBy = $params['orderBy'];
             unset($params['orderBy']);
         } else {
-            $orderBy = 'id';
+            $orderBy = 'weight';
         }
 
         switch ($queryType) {
@@ -296,8 +296,8 @@ class Placement extends Component
         $record->group = $model->group;
         $record->groupId = $model->groupId;
         $record->guideId = $model->guideId;
-        $record->portalMethod = $model->portalMethod;
         $record->selector = $model->selector;
+        $record->weight = $model->weight;
         $record->uri = $this->formatUri($model->uri);
 
         $record->save();
