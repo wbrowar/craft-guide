@@ -1,4 +1,4 @@
-{% if guide.contentSource == 'iframe' and (guide.contentUrl ?? false) %}
+{% apply spaceless %}{% if guide.contentSource == 'iframe' and (guide.contentUrl ?? false) %}
   <iframe class="g-iframe" src="{{ guide.contentUrl }}"></iframe>
 {% else %}
   {% if guide.contentSource == 'template' and (guide.template ?? false) %}
@@ -9,9 +9,13 @@
       <a class="btn submit" href="{{ url('guide/organizer') }}">{{ 'Return to Organizer'|t('guide') }}</a>
     {% endif %}
   {% elseif guide.content ?? false %}
-    {{ craft.guide.render(guide.content, guide.slug, _context, 'string')|raw }}
+    {% if guide.renderMarkdown %}
+      {{ craft.guide.render(guide.content, guide.slug, _context, 'string')|md(flavor='gfm')|raw }}
+    {% else %}
+      {{ craft.guide.render(guide.content, guide.slug, _context, 'string')|raw }}
+    {% endif %}
   {% else %}
     <p>{{ 'This guide seems to have moved.'|t('guide') }}</p>
     <a class="btn submit" href="{{ url('guide/organizer') }}">{{ 'Return to Organizer'|t('guide') }}</a>
   {% endif %}
-{% endif %}
+{% endif %}{% endapply %}

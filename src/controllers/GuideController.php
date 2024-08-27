@@ -54,7 +54,7 @@ class GuideController extends Controller
             $guide->delete();
         }
 
-        return $this->redirect(UrlHelper::url($params['redirect'] ?? 'guide/organizer'));
+        return $this->redirect(UrlHelper::url($params['redirect'] ?? 'guide/list'));
     }
 
     /**
