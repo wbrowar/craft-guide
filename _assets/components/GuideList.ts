@@ -1,7 +1,7 @@
 import {html, LitElement, TemplateResult} from 'lit'
 import {customElement, property, state} from 'lit/decorators.js'
 import {log} from "../utils/console.ts";
-import {guides, settings, userOperations} from "../globals.ts";
+import {guides, settings, showGuideSlideout, userOperations} from "../globals.ts";
 import {copyToClipboard} from "../utils/clipboard.ts";
 
 @customElement('guide-list')
@@ -97,7 +97,7 @@ export class GuideList extends LitElement {
       if (userOperations.deleteGuides) {
         actionItems.push(html`<a class="btn small" href="${guide.deleteUrl}">${this.tMessages.delete}</a>`)
       }
-      actionItems.push(html`<a class="btn small" href="${guide.viewUrl}">${this.tMessages.view}</a>`)
+      actionItems.push(html`<button class="btn small" type="button" @click="${() => showGuideSlideout(guide.slug)}">${this.tMessages.preview}</button>`)
       items.push(html`<div class="buttons">${actionItems.map(item => item)}</div>`)
 
       return items

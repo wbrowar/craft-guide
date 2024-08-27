@@ -1,0 +1,19 @@
+{% apply spaceless %}{# /**
+ * Guide plugin for Craft CMS
+ *
+ * Guide Widget Body
+ *
+ * @author    Will Browar
+ * @copyright Copyright (c) 2019 Will Browar
+ * @link      https://wbrowar.com
+ * @package   Guide
+ * @since     2.0.0
+ */ #}
+
+{% set slugs = slug|split('|') %}
+
+{% set guides = craft.guide.getAll({ slug: slugs }) %}
+
+{% if guides ?? false %}
+  {% include 'guide/_partials/guide_display.twig' with { guideDisplayArea: 'page', displayId: 'page', guides: guides } only %}
+{% endif %}{% endapply %}

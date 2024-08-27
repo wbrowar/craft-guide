@@ -1,6 +1,6 @@
 <?php
 /**
- * Guide plugin for Craft CMS 3.x
+ * Guide plugin for Craft CMS 5.x
  *
  * A CMS Guide for Craft CMS.
  *
@@ -10,12 +10,10 @@
 
 namespace wbrowar\guide\services;
 
-use craft\elements\Asset;
-use craft\helpers\Template;
-use wbrowar\guide\Guide;
-
 use Craft;
 use craft\base\Component;
+use craft\elements\Asset;
+use wbrowar\guide\Guide;
 
 /**
  * @author    Will Browar

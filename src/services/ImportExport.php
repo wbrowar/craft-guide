@@ -1,6 +1,6 @@
 <?php
 /**
- * Guide plugin for Craft CMS 3.x
+ * Guide plugin for Craft CMS 5.x
  *
  * A CMS Guide for Craft CMS.
  *
@@ -10,11 +10,10 @@
 
 namespace wbrowar\guide\services;
 
-use craft\helpers\Json;
-use wbrowar\guide\Guide;
-
 use Craft;
 use craft\base\Component;
+use craft\helpers\Json;
+use wbrowar\guide\Guide;
 use wbrowar\guide\models\Guide as GuideModel;
 
 /**

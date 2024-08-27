@@ -1,6 +1,6 @@
 <?php
 /**
- * Guide plugin for Craft CMS 3.x
+ * Guide plugin for Craft CMS 5.x
  *
  * A CMS Guide for Craft CMS.
  *
@@ -10,16 +10,10 @@
 
 namespace wbrowar\guide\controllers;
 
-use craft\helpers\Assets;
-use craft\helpers\FileHelper;
-use craft\helpers\Json;
-use craft\web\View;
-use wbrowar\guide\Guide;
-use wbrowar\guide\models\Guide as GuideModel;
-
 use Craft;
+use craft\helpers\Json;
 use craft\web\Controller;
-use wbrowar\guide\models\Placement as PlacementModel;
+use wbrowar\guide\Guide;
 
 /**
  * @author    Will Browar

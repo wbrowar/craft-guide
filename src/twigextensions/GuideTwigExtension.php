@@ -1,6 +1,6 @@
 <?php
 /**
- * Guide plugin for Craft CMS 3.x
+ * Guide plugin for Craft CMS 5.x
  *
  * A CMS Guide for Craft CMS.
  *
@@ -10,9 +10,8 @@
 
 namespace wbrowar\guide\twigextensions;
 
-use craft\helpers\Template;
-
 use Craft;
+use craft\helpers\Template;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use wbrowar\guide\Guide;

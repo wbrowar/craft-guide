@@ -11,7 +11,20 @@ export const guides: Guide[] = globalsElement?.dataset?.guides ? JSON.parse(glob
 export const proEdition: boolean = globalsElement?.dataset?.proEdition
   ? globalsElement.dataset.proEdition === 'true'
   : false;
-// export const proEdition = false;
+export async function showGuideSlideout(slug: string) {
+  if (proEdition) {
+    await window.Craft?.postActionRequest(
+      'guide/slideout',
+      { slug },
+      (response, textStatus, request) => {
+        if (request.statusText === 'OK') {
+          const slideout = new window.Craft.Slideout(response.data);
+          slideout.open();
+        }
+      }
+    );
+  }
+}
 export const settings: PluginSettings = globalsElement?.dataset?.settings
   ? JSON.parse(globalsElement.dataset.settings)
   : null;
