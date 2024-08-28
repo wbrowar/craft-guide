@@ -22,7 +22,8 @@
 {% block actionButton %}
   {% if userOperations.editGuides %}
     <div class="buttons">
-      <a class="btn add icon submit" href="{{ cpUrl('guide/new') }}">New Guide</a>
+      <a class="btn add icon secondary" href="{{ cpUrl('utilities/guide-export-import') }}">{{ 'Import Guides'|t('guide') }}</a>
+      <a class="btn add icon submit" href="{{ cpUrl('guide/new') }}">{{ 'New Guide'|t('guide') }}</a>
     </div>
   {% endif %}
 {% endblock %}

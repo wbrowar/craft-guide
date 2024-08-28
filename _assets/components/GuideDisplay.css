@@ -3,47 +3,61 @@
   container-type: inline-size;
 }
 guide-display {
+  --guide-display-border-radius: 0.3em;
   display: grid;
   grid-template-columns: var(--grid-template-columns, 1fr);
-  align-items: start;
   gap: calc(var(--xl) * 2);
   position: relative;
+  align-items: start;
 
   & .guide {
     container-name: guide;
     container-type: inline-size;
 
-    & > * + *:not(hr) {
-      margin-block-start: var(--m);
+    & > * + :is(h1, h2, h3, h4, h5, h6) {
+      margin-block-start: 2.4em;
     }
 
     & :is(blockquote, dd, dl, h1, h2, h3, h4, h5, h6, hr, p, li, pre) {
-      max-width: var(--prose-max-width, 70ch);
-      font-size: var(--prose-font-size, 1rem);
-      line-height: var(--prose-line-height, 1.4rem);
+      max-width: 70ch;
+      font-size: 1rem;
+      line-height: 1.4rem;
       text-wrap: pretty;
 
       & a {
-        color: var(--color-primary);
-
-        &:hover {
-          color: var(--color-blue);
-        }
+        text-decoration: underline;
       }
       & code {
         padding: 0.4em;
-        background-color: color-mix(in srgb, var(--color-blue), transparent 50%);
-        border-radius: 0.3em;
+        background-color: color-mix(in srgb, var(--blue-100), transparent 40%);
+        border-radius: var(--guide-display-border-radius);
         font-family: monospace;
-        font-size: 0.9em;
         user-select: all;
-        color: light-dark(var(--prose-code-color, var(--color-blue-800)), var(--prose-code-color, var(--color-blue-300)));
+      }
+    }
+    & blockquote {
+      padding-inline: var(--l);
+      padding-block: var(--s);
+      background-color: color-mix(in srgb, var(--gray-100), transparent 70%);
+      border-inline-start: 1px solid var(--gray-300);
+    }
+    & pre {
+      max-width: 100%;
+      overflow-x: auto;
+
+      & > code {
+        padding: 1em;
+        font-size: 1rem;
+        white-space: pre;
       }
     }
     & :is(ol, ul) {
       & li {
+        list-style: initial;
+        margin-inline-start: var(--l);
+
         & + li {
-          margin-block-start: var(--sm-rem);
+          margin-block-start: var(--s);
         }
 
         &::marker {
@@ -51,13 +65,39 @@ guide-display {
         }
       }
     }
+    & table {
+      width: 100%;
+      border-radius: var(--guide-display-border-radius);
+
+      & thead {
+        & tr {
+          background-color: var(--gray-200);
+
+          & th {
+            padding-inline: .5em;
+          }
+        }
+      }
+      & tbody {
+        & tr {
+          &:hover {
+            background-color: color-mix(in srgb, var(--gray-200), transparent 60%);
+          }
+
+          & td {
+            padding-inline: .5em;
+          }
+        }
+      }
+    }
   }
 
   & > aside {
     display: grid;
+    align-items: start;
     gap: var(--xl);
     position: sticky;
-    top: 70px;
+    top: var(--guide-display-aside-top, 0px);
 
     & nav {
       & ul {
@@ -81,8 +121,14 @@ guide-display {
     }
   }
 
+  #page-container:has(#header) & {
+    --guide-display-aside-top: 70px;
+  }
+
   @container guide-display (width > 600px) {
-    --grid-template-columns: 1fr 200px;
+    &:has(aside) {
+      --grid-template-columns: 1fr 200px;
+    }
   }
 }
 

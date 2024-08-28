@@ -91,13 +91,13 @@ export class GuideList extends LitElement {
 
       // Action Items
       const actionItems = []
+      actionItems.push(html`<button class="btn small" data-icon="eye" type="button" @click="${() => showGuideSlideout(guide.slug)}">${this.tMessages.preview}</button>`)
       if (userOperations.editGuides) {
-        actionItems.push(html`<a class="btn small secondary" href="${guide.editUrl}">${this.tMessages.edit}</a>`)
+        actionItems.push(html`<a class="btn small secondary" data-icon="pencil" href="${guide.editUrl}">${this.tMessages.edit}</a>`)
       }
       if (userOperations.deleteGuides) {
-        actionItems.push(html`<a class="btn small" href="${guide.deleteUrl}">${this.tMessages.delete}</a>`)
+        actionItems.push(html`<a class="btn small" data-icon="trash" href="${guide.deleteUrl}">${this.tMessages.delete}</a>`)
       }
-      actionItems.push(html`<button class="btn small" type="button" @click="${() => showGuideSlideout(guide.slug)}">${this.tMessages.preview}</button>`)
       items.push(html`<div class="buttons">${actionItems.map(item => item)}</div>`)
 
       return items
@@ -124,7 +124,7 @@ export class GuideList extends LitElement {
     return html`
       <div class="tableview tablepane">
         <table class="data fullwidth">
-          <thead>${ tableHeaders }</thead>
+          <thead><tr>${ tableHeaders }</tr></thead>
           <tbody>
             ${ this._rows.map((row) => html`<tr>
               ${ row.map((item) => html`<td>${item}</td>`) }

@@ -117,9 +117,9 @@ class PlacementController extends Controller
             'group' => $params['group'],
             'groupId' => $params['groupId'],
             'guideId' => $params['guideId'],
-            'portalMethod' => $params['portalMethod'],
             'selector' => $params['selector'],
             'uri' => $params['uri'],
+            'weight' => $params['weight'],
         ]);
 
         if ($placement->validate()) {

@@ -1,0 +1,6 @@
+guide-list {
+  & td:has(input[type="checkbox"]) {
+    line-height: 2.2em;
+  }
+}
+

@@ -52,8 +52,6 @@ export class GuideDisplay extends LitElement {
     super.connectedCallback()
 
     const guideElements = this.querySelectorAll('.guide')
-    log('huh', guideElements)
-
     this._guides = [...guideElements].map((guide:HTMLElement) => {
       log('guide slug', guide.dataset.guideSlug)
       const slug = guide.dataset.guideSlug;
@@ -85,18 +83,27 @@ export class GuideDisplay extends LitElement {
       }</ul></nav>
     `
 
-    const options = html`
-      <div>
-        <input switch type="checkbox" id="tldr" name="tldr">
-        <label for="tldr">TL;DR <span class="info">HI</span></label>
-      </div>
-    `
+    const options = []
+    let tldrFound = false;
+
+    if (tldrFound) {
+      options.push(html`
+        <div>
+          <input switch type="checkbox" id="tldr" name="tldr">
+          <label for="tldr">TL;DR <span class="info">HI</span></label>
+        </div>
+      `)
+    }
 
     return html`
+      ${this._guides?.length > 1 || options.length ? html`
       <aside>
         ${this._guides?.length > 1 ? nav : nothing}
-        ${options}
+        ${options.length ? options.map((option) => {
+          return option
+        }) : nothing}
       </aside>
+      ` : nothing }
     `
   }
 

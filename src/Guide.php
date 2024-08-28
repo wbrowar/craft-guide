@@ -429,8 +429,11 @@ class Guide extends Plugin
         $navItem['subnav'] = [
         ];
 
-        if ($userOperations['useOrganizer']) {
+        if ($userOperations['editGuides']) {
             $navItem['subnav']['list'] = ['label' => 'Guides', 'url' => 'guide/list'];
+        }
+
+        if ($userOperations['useOrganizer']) {
             $navItem['subnav']['organizer'] = ['label' => 'Organizer', 'url' => 'guide/organizer'];
         }
 

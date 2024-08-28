@@ -20,86 +20,88 @@
   uri: A guide added via URI
 #}
 
-{% if guides|length or (inlineEditorId ?? false) %}
-  {% set guideDisplayArea = guideDisplayArea|default('uri') %}
-  {% set displaySlug = 'guide-' ~ (displayId ?? 'display') %}
+{#{% if guides|length or (inlineEditorId ?? false) %}#}
+{#  {% set guideDisplayArea = guideDisplayArea|default('uri') %}#}
+{#  {% set displaySlug = 'guide-' ~ (displayId ?? 'display') %}#}
 
-  {% set guideNav = [] %}
-  {% if guides|length %}
-    {% for guide in guides %}
-      {% if not (teleportMap['id-' ~ guide.id] ?? false) %}
-        {% set guideNav = guideNav|merge([{ id: guide.id, slug: guide.slug, title: guide.title }]) %}
-      {% endif %}
-    {% endfor %}
-  {% endif %}
+{#  {% set guideNav = [] %}#}
+{#  {% if guides|length %}#}
+{#    {% for guide in guides %}#}
+{#      {% if not (teleportMap['id-' ~ guide.id] ?? false) %}#}
+{#        {% set guideNav = guideNav|merge([{ id: guide.id, slug: guide.slug, title: guide.title }]) %}#}
+{#      {% endif %}#}
+{#    {% endfor %}#}
+{#  {% endif %}#}
 
-  <div
-    {% if inlineEditorId ?? false %}data-enable-inline-editor{% endif %}
-    data-guide-display="{{ displaySlug }}"
-    {% if guideNav|length %}data-guide-nav-data="{{ guideNav|json_encode }}"{% endif %}
-    {% if not guides|length %}data-start-in-inline-editor{% endif %}
-    {% if teleportContainerClass ?? false %}data-teleport-container-class="{{ teleportContainerClass }}"{% endif %}
-    {% if teleportMethod ?? false %}data-teleport-method="{{ teleportMethod }}"{% endif %}
-    {% if teleportSelector ?? false %}data-teleport-selector="{{ teleportSelector }}"{% endif %}
-  >{{ placeholderText|default('') }}</div>
-  <template id="{{ displaySlug }}">
-    <teleport :to="teleportTarget" :disabled="!teleportTarget">
-      <div{% if guideNav|length > 1 %} class="g-grid g-grid-cols-[var(--grid-cols)] g-gap-6 g-relative" style="--grid-cols: 1fr 200px;"{% endif %}>
-        {% if inlineEditorId ?? false %}<placement-inline-editor
-          placement-inline-editor="{{ inlineEditorId }}"
-          {% if placementId ?? false %}placement-id="{{ placementId }}"{% endif %}
-          v-if="showInlineEditor"
-        ></placement-inline-editor>{% endif %}
-        <div {% if inlineEditorId ?? false %}v-else{% endif %}>
-          {% if guides|length %}
-            {% for guide in guides %}
-              {% set vueBoolean1 = "data['" ~ guide.slug ~ "'].boolean1" %}
-              {% set vueBoolean2 = "data['" ~ guide.slug ~ "'].boolean2" %}
-              {% set vueBoolean3 = "data['" ~ guide.slug ~ "'].boolean3" %}
-              {% set vueBoolean4 = "data['" ~ guide.slug ~ "'].boolean4" %}
-              {% set vueBoolean5 = "data['" ~ guide.slug ~ "'].boolean5" %}
-              {% set vueNumber1 = "data['" ~ guide.slug ~ "'].number1" %}
-              {% set vueNumber2 = "data['" ~ guide.slug ~ "'].number2" %}
-              {% set vueNumber3 = "data['" ~ guide.slug ~ "'].number3" %}
-              {% set vueNumber4 = "data['" ~ guide.slug ~ "'].number4" %}
-              {% set vueNumber5 = "data['" ~ guide.slug ~ "'].number5" %}
-              {% set vueString1 = "data['" ~ guide.slug ~ "'].string1" %}
-              {% set vueString2 = "data['" ~ guide.slug ~ "'].string2" %}
-              {% set vueString3 = "data['" ~ guide.slug ~ "'].string3" %}
-              {% set vueString4 = "data['" ~ guide.slug ~ "'].string4" %}
-              {% set vueString5 = "data['" ~ guide.slug ~ "'].string5" %}
-              {% if teleportMap['id-' ~ guide.id] ?? false %}<teleport to="{{ teleportMap['id-' ~ guide.id] }}">{% endif %}
-              <div
-                class="guide guide-{{ guide.slug }} g-relative"
-                :class="[showTldr ? 'guide-tldr' : null]"
-                {% if not (teleportMap['id-' ~ guide.id] ?? false) and (guideNav|length > 1) %}v-if="currentGuide === '{{ guide.slug }}'"{% endif %}
-              >
-                <div class="guide-edit-button g-ml-3 g-space-x-1 g-duration-150" v-if="enableInlineEditor || enableTldr">
-                  <button class="btn small g-duration-150" :class="[showTldr ? 'submit' : null]" type="button" title="Hide some of the content in this guide to read a summarized version." @click="showTldr ? toggleTldr(false) : toggleTldr(true)" v-if="enableTldr">TL;DR</button>
-                  <button class="btn small g-duration-150" type="button" title="Select a new guide for this area." @click="showInlineEditor = true" v-if="enableInlineEditor && userOperations.useOrganizer"><svg-settings class="g-h-4 g-w-4"></svg-settings></button>
-                </div>
-                {{ include('guide/_partials/render_content', { guide: guide }) }}
-              </div>
-              {% if teleportMap['id-' ~ guide.id] ?? false %}</teleport>{% endif %}
-            {% endfor %}
-          {% endif %}
-        </div>
-        {% if guideNav|length > 1 %}
-          <div>
-            <div class="g-sticky g-top-16">
-              <h2>Guides</h2>
-              <div class="g-space-y-2">
-                {% for link in guideNav %}
-                  <button class="g-block g-text-left g-text-sm g-cursor-pointer g-duration-150" :class="{ 'g-font-bold g-text-primary': currentGuide === '{{ link.slug }}' }" type="button" @click="currentGuide = '{{ link.slug }}'">{{ link.title }}</button>
-                {% endfor %}
-              </div>
-            </div>
-          </div>
-        {% endif %}
-      </div>
-    </teleport>
-  </template>
-{% endif %}
+{#  <div#}
+{#    {% if inlineEditorId ?? false %}data-enable-inline-editor{% endif %}#}
+{#    data-guide-display="{{ displaySlug }}"#}
+{#    {% if guideNav|length %}data-guide-nav-data="{{ guideNav|json_encode }}"{% endif %}#}
+{#    {% if not guides|length %}data-start-in-inline-editor{% endif %}#}
+{#    {% if teleportContainerClass ?? false %}data-teleport-container-class="{{ teleportContainerClass }}"{% endif %}#}
+{#    {% if teleportMethod ?? false %}data-teleport-method="{{ teleportMethod }}"{% endif %}#}
+{#    {% if teleportSelector ?? false %}data-teleport-selector="{{ teleportSelector }}"{% endif %}#}
+{#  >{{ placeholderText|default('') }}</div>#}
+{#  <template id="{{ displaySlug }}">#}
+{#    <teleport :to="teleportTarget" :disabled="!teleportTarget">#}
+{#      <div{% if guideNav|length > 1 %} class="g-grid g-grid-cols-[var(--grid-cols)] g-gap-6 g-relative" style="--grid-cols: 1fr 200px;"{% endif %}>#}
+{#        {% if inlineEditorId ?? false %}<placement-inline-editor#}
+{#          placement-inline-editor="{{ inlineEditorId }}"#}
+{#          {% if placementId ?? false %}placement-id="{{ placementId }}"{% endif %}#}
+{#          v-if="showInlineEditor"#}
+{#        ></placement-inline-editor>{% endif %}#}
+{#        <div {% if inlineEditorId ?? false %}v-else{% endif %}>#}
+{#          {% if guides|length %}#}
+{#            {% for guide in guides %}#}
+{#              {% set vueBoolean1 = "data['" ~ guide.slug ~ "'].boolean1" %}#}
+{#              {% set vueBoolean2 = "data['" ~ guide.slug ~ "'].boolean2" %}#}
+{#              {% set vueBoolean3 = "data['" ~ guide.slug ~ "'].boolean3" %}#}
+{#              {% set vueBoolean4 = "data['" ~ guide.slug ~ "'].boolean4" %}#}
+{#              {% set vueBoolean5 = "data['" ~ guide.slug ~ "'].boolean5" %}#}
+{#              {% set vueNumber1 = "data['" ~ guide.slug ~ "'].number1" %}#}
+{#              {% set vueNumber2 = "data['" ~ guide.slug ~ "'].number2" %}#}
+{#              {% set vueNumber3 = "data['" ~ guide.slug ~ "'].number3" %}#}
+{#              {% set vueNumber4 = "data['" ~ guide.slug ~ "'].number4" %}#}
+{#              {% set vueNumber5 = "data['" ~ guide.slug ~ "'].number5" %}#}
+{#              {% set vueString1 = "data['" ~ guide.slug ~ "'].string1" %}#}
+{#              {% set vueString2 = "data['" ~ guide.slug ~ "'].string2" %}#}
+{#              {% set vueString3 = "data['" ~ guide.slug ~ "'].string3" %}#}
+{#              {% set vueString4 = "data['" ~ guide.slug ~ "'].string4" %}#}
+{#              {% set vueString5 = "data['" ~ guide.slug ~ "'].string5" %}#}
+{#              {% if teleportMap['id-' ~ guide.id] ?? false %}<teleport to="{{ teleportMap['id-' ~ guide.id] }}">{% endif %}#}
+{#              <div#}
+{#                class="guide guide-{{ guide.slug }} g-relative"#}
+{#                :class="[showTldr ? 'guide-tldr' : null]"#}
+{#                {% if not (teleportMap['id-' ~ guide.id] ?? false) and (guideNav|length > 1) %}v-if="currentGuide === '{{ guide.slug }}'"{% endif %}#}
+{#              >#}
+{#                <div class="guide-edit-button g-ml-3 g-space-x-1 g-duration-150" v-if="enableInlineEditor || enableTldr">#}
+{#                  <button class="btn small g-duration-150" :class="[showTldr ? 'submit' : null]" type="button" title="Hide some of the content in this guide to read a summarized version." @click="showTldr ? toggleTldr(false) : toggleTldr(true)" v-if="enableTldr">TL;DR</button>#}
+{#                  <button class="btn small g-duration-150" type="button" title="Select a new guide for this area." @click="showInlineEditor = true" v-if="enableInlineEditor && userOperations.useOrganizer"><svg-settings class="g-h-4 g-w-4"></svg-settings></button>#}
+{#                </div>#}
+{#                {{ include('guide/_partials/render_content', { guide: guide }) }}#}
+{#              </div>#}
+{#              {% if teleportMap['id-' ~ guide.id] ?? false %}</teleport>{% endif %}#}
+{#            {% endfor %}#}
+{#          {% endif %}#}
+{#        </div>#}
+{#        {% if guideNav|length > 1 %}#}
+{#          <div>#}
+{#            <div class="g-sticky g-top-16">#}
+{#              <h2>Guides</h2>#}
+{#              <div class="g-space-y-2">#}
+{#                {% for link in guideNav %}#}
+{#                  <button class="g-block g-text-left g-text-sm g-cursor-pointer g-duration-150" :class="{ 'g-font-bold g-text-primary': currentGuide === '{{ link.slug }}' }" type="button" @click="currentGuide = '{{ link.slug }}'">{{ link.title }}</button>#}
+{#                {% endfor %}#}
+{#              </div>#}
+{#            </div>#}
+{#          </div>#}
+{#        {% endif %}#}
+{#      </div>#}
+{#    </teleport>#}
+{#  </template>#}
+{#{% endif %}#}
+
+
 
 {% set tMessages = {
   'guides': 'Guides'|t('guide'),

@@ -1,7 +1,14 @@
 @layer guide.globals, guide.page, guide.display, guide.utilities;
 
-@import url('components/GuideDisplay.css') layer(guide.page);
 @import url('components/GuideEditor.css') layer(guide.page);
+@import url('components/GuideList.css') layer(guide.page);
+
+@import url('components/GuideDisplay.css');
+
+/* Enable scrolling on slideouts that render guides. */
+[data-slideout]:has(.guide-display) {
+  overflow: auto;
+}
 
 @layer guide.utilities {
   .fpo {
