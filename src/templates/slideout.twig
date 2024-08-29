@@ -15,5 +15,5 @@
 {% set guides = craft.guide.getAll({ slug: slugs }) %}
 
 {% if guides ?? false %}
-  {% include 'guide/_partials/guide_display.twig' with { guideDisplayArea: 'page', displayId: 'page', guides: guides } only %}
+  {% include 'guide/_partials/guide_display.twig' with { guideDisplayArea: 'page', displayId: 'page', guides: guides } %}
 {% endif %}{% endapply %}

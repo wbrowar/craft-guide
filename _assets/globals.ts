@@ -16,10 +16,13 @@ export async function showGuideSlideout(slug: string) {
     await window.Craft?.postActionRequest(
       'guide/slideout',
       { slug },
-      (response, textStatus, request) => {
+      (response: {data: string}, textStatus: string, request: {statusText: string}) => {
         if (request.statusText === 'OK') {
           const slideout = new window.Craft.Slideout(response.data);
           slideout.open();
+          slideout.on('close', function () {
+            slideout.destroy()
+          })
         }
       }
     );

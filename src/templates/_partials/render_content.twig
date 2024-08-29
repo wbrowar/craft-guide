@@ -9,11 +9,7 @@
       <a class="btn submit" href="{{ url('guide/organizer') }}">{{ 'Return to Organizer'|t('guide') }}</a>
     {% endif %}
   {% elseif guide.content ?? false %}
-    {% if guide.renderMarkdown %}
-      {{ craft.guide.render(guide.content, guide.slug, _context, 'string')|md(flavor='gfm')|raw }}
-    {% else %}
-      {{ craft.guide.render(guide.content, guide.slug, _context, 'string')|raw }}
-    {% endif %}
+    {{ craft.guide.render(guide.content, guide.slug, _context, 'string')|raw }}
   {% else %}
     <p>{{ 'This guide seems to have moved.'|t('guide') }}</p>
     <a class="btn submit" href="{{ url('guide/organizer') }}">{{ 'Return to Organizer'|t('guide') }}</a>

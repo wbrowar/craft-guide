@@ -12,6 +12,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Guides can now be rendered in Markdown without using Twig filters.
   - This can be turned on or off on a per-guide basis.
   - A new setting, **Render Markdown Default** sets the initial value when a new guide is created.
+- Guides can now include custom CSS and JavaScript via code fields added to the Guide Editor.
+  - New settings have been created to enable or disable custom CSS and JavaScript. Setting these to **off** will disable the CSS or JavaScript from rendering on the page, along with hiding their respective field.
+  - **Enable CSS Field** is **on** by default.
+  - **Enable JavaScript Field** is **off** by default.
 
 ### Changed
 - The settings page now submits all settings at once, instead of having one page per setting tab.

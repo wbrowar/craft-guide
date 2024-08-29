@@ -1,3 +1,14 @@
+declare global {
+  interface Window {
+    guideCallback: Function[string];
+    Craft: any;
+  }
+}
+
+if (typeof window !== "undefined") {
+  window.global = window;
+}
+
 export interface EditorComponent {
   code: string;
   documentation?: string;
@@ -13,9 +24,8 @@ export enum EditorTabGroup {
   Components = 'components',
   Guides = 'guides',
   Images = 'images',
-  Publishing = 'publishing',
+  Settings = 'settings',
   Snippets = 'snippets',
-  UtilityClasses = 'utility-classes',
 }
 
 export enum EditPageLocation {
@@ -45,7 +55,11 @@ export interface GuideNavItem {
   slug: string;
 }
 
-export type GuideContentSource = 'field' | 'iframe' | 'template';
+export enum GuideContentSource {
+  Field = 'field',
+  Iframe = 'iframe',
+  Template = 'template',
+}
 
 export interface Placement {
   access: PlacementAccess;

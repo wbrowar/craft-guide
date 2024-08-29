@@ -21,10 +21,10 @@
   {% if guide ?? false %}
     {% set title = "Delete "|t('guide') ~ guide.title %}
   {% else %}
-    {% redirect 'guide/organizer' %}
+    {% redirect 'guide/list' %}
   {% endif %}
 {% else %}
-  {% redirect 'guide/organizer' %}
+  {% redirect 'guide/list' %}
 {% endif %}
 
 {% set content %}

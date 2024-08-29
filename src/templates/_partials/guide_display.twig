@@ -105,6 +105,7 @@
 
 {% set tMessages = {
   'guides': 'Guides'|t('guide'),
+  'guideJsCallbackError': 'An error occured when firing the callback for a guide with the slug, "[slug]". Update the code in the guide’s JavaScript field.'|t('guide'),
 } %}
 
 {% if guides|length or (inlineEditorId ?? false) %}
@@ -113,7 +114,11 @@
       <div class="guides">
         {% for guide in guides %}
           <section data-guide-slug="{{ guide.slug }}" class="guide guide-{{ guide.slug}} visually-hidden">
-            {{ include('guide/_partials/render_content', { guide: guide }) }}
+            {% if guide.contentSource == 'field' and guide.renderMarkdown %}
+              {{ include('guide/_partials/render_content', { guide: guide })|md('gfm') }}
+            {% else %}
+              {{ include('guide/_partials/render_content', { guide: guide }) }}
+            {% endif %}
           </section>
         {% endfor %}
       </div>

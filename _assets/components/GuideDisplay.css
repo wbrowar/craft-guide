@@ -24,9 +24,6 @@ guide-display {
       line-height: 1.4rem;
       text-wrap: pretty;
 
-      & a {
-        text-decoration: underline;
-      }
       & code {
         padding: 0.4em;
         background-color: color-mix(in srgb, var(--blue-100), transparent 40%);
@@ -53,7 +50,6 @@ guide-display {
     }
     & :is(ol, ul) {
       & li {
-        list-style: initial;
         margin-inline-start: var(--l);
 
         & + li {
@@ -61,9 +57,12 @@ guide-display {
         }
 
         &::marker {
-          color: var(--color-red);
+          color: var(--primary-color);
         }
       }
+    }
+    & ul li {
+      list-style: initial;
     }
     & table {
       width: 100%;

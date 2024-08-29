@@ -249,7 +249,7 @@ class Guide extends Plugin
         // Register Pro features
         if (self::$pro && self::$schemaReady) {
             // Add custom permissions
-            if (Craft::$app->getEdition() > 0) {
+            if (Craft::$app->edition > 0) {
                 Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
                     $event->permissions[] = [
                         'heading' => Craft::t('guide', 'Guide'),
@@ -426,8 +426,7 @@ class Guide extends Plugin
         $user = Craft::$app->getUser()->getIdentity();
         $userOperations = $this->getUserOperations();
 
-        $navItem['subnav'] = [
-        ];
+        $navItem['subnav'] = [];
 
         if ($userOperations['editGuides']) {
             $navItem['subnav']['list'] = ['label' => 'Guides', 'url' => 'guide/list'];
@@ -558,12 +557,12 @@ class Guide extends Plugin
      */
     public function renderAdminGlobals()
     {
-        $guidesData = [];
+        $guidesForJs = [];
         $guides = self::$plugin->guide->getGuides([
             'orderBy' => 'title asc',
         ]);
         foreach ($guides as $guide) {
-            $guidesData[] = [
+            $guidesForJs[] = [
                 'deleteUrl' => UrlHelper::url('guide/delete/' . $guide->id),
                 'editUrl' => UrlHelper::url('guide/edit/' . $guide->id),
                 'id' => $guide->id,
@@ -576,7 +575,8 @@ class Guide extends Plugin
 
         $adminGlobalsVariables = [
             'assetComponents' => self::$plugin->guideComponents->getAssetComponents(),
-            'guides' => $guidesData,
+            'guides' => $guides,
+            'guidesForJs' => $guidesForJs,
             'proEdition' => self::$pro,
             'settings' => self::$settings,
             'templates' => $this->getTemplatesFromUserTemplatePath(),

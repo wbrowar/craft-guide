@@ -1,8 +1,7 @@
 import {html, LitElement, nothing} from 'lit'
 import {customElement, property, state} from 'lit/decorators.js'
 import {Guide} from "../plugins";
-import {log} from "../utils/console.ts";
-import {guides} from "../globals.ts";
+import {guides, proEdition, settings} from "../globals.ts";
 
 @customElement('guide-display')
 export class GuideDisplay extends LitElement {
@@ -39,7 +38,7 @@ export class GuideDisplay extends LitElement {
    * METHODS
    * =========================================================================
    */
-  private _selectGuide(slug) {
+  private _selectGuide(slug: string) {
     this._selectedGuide = this._guides.find(guide => guide.slug === slug)
   }
 
@@ -51,10 +50,15 @@ export class GuideDisplay extends LitElement {
   connectedCallback() {
     super.connectedCallback()
 
-    const guideElements = this.querySelectorAll('.guide')
-    this._guides = [...guideElements].map((guide:HTMLElement) => {
-      log('guide slug', guide.dataset.guideSlug)
-      const slug = guide.dataset.guideSlug;
+    const guideElements: NodeListOf<HTMLElement> = this.querySelectorAll('.guide')
+    const guideSlugs: string[] = [];
+    [...guideElements].forEach((guideElement) => {
+      if (guideElement.dataset.guideSlug) {
+        guideSlugs.push(guideElement.dataset.guideSlug);
+      }
+    });
+
+    this._guides = guideSlugs.map((slug) => {
       return guides.find((guide) => guide.slug === slug);
     })
 
@@ -62,8 +66,15 @@ export class GuideDisplay extends LitElement {
       this._selectedGuide = this._guides[0]
     }
 
-    log('guides found', this._guides)
-    log('selected guide', this._selectedGuide)
+    if(proEdition && settings.enableGuideJavascript) {
+      guideSlugs.forEach((slug) => {
+        try {
+          window.guideCallback[slug]?.();
+        } catch (error) {
+          window.Craft.cp.displayError(this.tMessages.guideJsCallbackError.replace('[slug]', slug))
+        }
+      })
+    }
   }
 
   disconnectedCallback() {
@@ -109,12 +120,9 @@ export class GuideDisplay extends LitElement {
 
   protected willUpdate(changedProperties: Map<string, any>) {
     if (changedProperties.has('_selectedGuide')) {
-      log('gonna change em')
-
-      const guideElements = this.querySelectorAll('.guide')
+      const guideElements:NodeListOf<HTMLElement> = this.querySelectorAll('.guide')
 
       guideElements.forEach((guide) => {
-        log('guidee', guide.dataset.guideSlug)
         if (guide.dataset.guideSlug === this._selectedGuide?.slug) {
           guide.classList.remove('visually-hidden')
         } else {

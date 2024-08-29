@@ -57,23 +57,15 @@
   <input class="btn submit" type="submit" value="Save">
 {% endblock %}
 
+{% set tMessages = {
+  'components': 'Components'|t('guide'),
+  'images': 'Images'|t('guide'),
+  'guides': 'Guides'|t('guide'),
+  'settings': 'Settings'|t('guide'),
+  'snippets': 'Snippets'|t('guide'),
+} %}
+
 {% set content %}
-  {% set guideData = {
-    content: guide.content ?? '',
-    contentSource: guide.contentSource ?? 'field',
-    contentUrl: guide.contentUrl ?? '',
-    id: guide.id ?? -1,
-    slug: guide.slug ?? '',
-    summary: guide.summary ?? '',
-    template: guide.template ?? '__none__',
-    title: guide.title ?? '',
-  } %}
-
-
-
-
-
-
   <input type="hidden" name="action" value="guide/guide/save-guide" />
   <input type="hidden" name="authorId" value="{{ guide.authorId ?? currentUser.id }}" />
 
@@ -87,7 +79,10 @@
   {% endif %}
 
   <div id="guide" class="guide-editor">
-    <guide-editor>
+    <guide-editor
+        {{ isNew ? ' is-new' : '' }}
+        t-messages="{{ tMessages|json_encode }}"
+    >
       <div slot="settings">
         {{ forms.textField({
           label: 'Title'|t('guide'),
@@ -111,42 +106,62 @@
           id: 'summary',
           name: 'summary',
           value: guide.summary,
-          instructions: 'An internal note about how this guide is used.'|t('guide'),
+          instructions: 'An internal note about the purpose of this guide.'|t('guide'),
         }) }}
 
-        {% if proEdition %}
-          {% set options = [
-            { label: 'Code Editor'|t('guide'), value: 'field' },
-            { label: 'Twig Template'|t('guide'), value: 'template' },
-            { label: 'External Page (iframe)'|t('guide'), value: 'iframe' },
-          ] %}
-          {{ forms.selectField({
-            label: 'Content Source'|t('guide'),
-            id: 'contentSource',
-            name: 'contentSource',
-            options: options,
-            value: guide.contentSource,
-          }) }}
+        {% set options = [
+          { label: 'Code Editor'|t('guide'), value: 'field' },
+          { label: 'Twig Template'|t('guide'), value: 'template' },
+          { label: 'External Page (iframe)'|t('guide'), value: 'iframe' },
+        ] %}
+        {{ forms.selectField({
+          label: 'Content Source'|t('guide'),
+          id: 'contentSource',
+          name: 'contentSource',
+          disabled: not proEdition,
+          options: options,
+          value: proEdition ? guide.contentSource : 'template',
+        }) }}
 
-          {{ forms.lightswitchField({
-            label: 'Render Markdown'|t('guide'),
-            id: 'renderMarkdown',
-            name: 'renderMarkdown',
-            options: options,
-            on: isNew ? settings.renderMarkdownDefault : guide.renderMarkdown,
-          }) }}
-        {% else %}
-          <input type="hidden" id="contentSource" name="contentSource" value="template" />
-          <input type="hidden" id="renderMarkdown" name="renderMarkdown" value="0" />
+        {{ forms.lightswitchField({
+          label: 'Render Markdown'|t('guide'),
+          id: 'renderMarkdown',
+          name: 'renderMarkdown',
+          disabled: not proEdition,
+          options: options,
+          on: isNew ? settings.renderMarkdownDefault : guide.renderMarkdown,
+        }) }}
+
+        {{ forms.textField({
+          label: 'Page URL'|t('guide'),
+          id: 'contentUrl',
+          name: 'contentUrl',
+          disabled: not proEdition,
+          value: guide.contentUrl,
+          instructions: 'A URL that is loaded in an iframe.'|t('guide'),
+        }) }}
+
+        {% if not proEdition %}
+          <div class="readable">
+            <blockquote class="note warn">
+              <strong>{{ 'Template Path is Required'|t('guide') }}</strong>
+              <p>{{ 'A Template Path is needed to load guides in the LITE edition of Guide.'|t('guide') }}</p>
+              <p>
+                <a class="go" href="{{ cpUrl('guide/settings') }}">{{ 'Set a Template Path in Guide Settings.'|t('guide') }}</a>
+              </p>
+            </blockquote>
+          </div>
         {% endif %}
 
-        {% if settings.templatePath %}
-          <p>field: template (when content source is set to template)</p>
-        {% else %}
-          <input type="hidden" name="template" value="" />
-        {% endif %}
-
-        <input type="hidden" name="contentUrl" value="" />
+        {{ forms.selectField({
+          label: 'Page Template'|t('guide'),
+          id: 'template',
+          name: 'template',
+          disabled: not settings.templatePath,
+          options: templates.filenames,
+          value: guide.template,
+          instructions: 'Load a template found in your <strong>{path}</strong> directory.'|t('guide', { path: settings.templatePath }),
+        }) }}
       </div>
       <div slot="components">
         <p>list of components</p>
@@ -174,6 +189,12 @@
           theme: "vs-dark",
         }) }}
       </div>
+
+      <div class="guide-tab-icon" slot="icon-components">{{ svg('@appicons/icons.svg')|raw }}</div>
+      <div class="guide-tab-icon" slot="icon-images">{{ svg('@appicons/image.svg')|raw }}</div>
+      <div class="guide-tab-icon" slot="icon-guides">{{ svg('@appicons/book.svg')|raw }}</div>
+      <div class="guide-tab-icon" slot="icon-settings">{{ svg('@appicons/gear.svg')|raw }}</div>
+      <div class="guide-tab-icon" slot="icon-snippets">{{ svg('@appicons/code.svg')|raw }}</div>
     </guide-editor>
   </div>
 
@@ -193,7 +214,7 @@
       }) }}
     </div>
   {% else %}
-    <input type="hidden" name="contentCss" value="" />
+    <input type="hidden" name="contentCss" value="{{ guide.contentCss }}" />
   {% endif %}
 
   {% if proEdition and settings.enableGuideJavascript %}
@@ -212,6 +233,6 @@
       }) }}
     </div>
   {% else %}
-    <input type="hidden" name="contentJavascript" value="" />
+    <input type="hidden" name="contentJavascript" value="{{ guide.contentJavascript }}" />
   {% endif %}
 {% endset %}

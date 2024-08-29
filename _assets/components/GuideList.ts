@@ -1,7 +1,6 @@
 import {html, LitElement, TemplateResult} from 'lit'
 import {customElement, property, state} from 'lit/decorators.js'
-import {log} from "../utils/console.ts";
-import {guides, settings, showGuideSlideout, userOperations} from "../globals.ts";
+import {guides, showGuideSlideout, userOperations} from "../globals.ts";
 import {copyToClipboard} from "../utils/clipboard.ts";
 
 @customElement('guide-list')
@@ -61,13 +60,6 @@ export class GuideList extends LitElement {
   connectedCallback() {
     super.connectedCallback()
 
-    log('cpTrigger', this.cpTrigger)
-    log('guides', guides)
-    log('settings', settings)
-
-    log('tableHeaders', this.tableHeaders)
-    log('labelMessages', this.tMessages)
-
     this._rows = guides.map((guide) => {
       const items = []
 
@@ -102,8 +94,6 @@ export class GuideList extends LitElement {
 
       return items
     })
-
-    log('rows', this._rows)
   }
 
   disconnectedCallback() {
