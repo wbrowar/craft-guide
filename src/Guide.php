@@ -222,7 +222,13 @@ class Guide extends Plugin
                     $event->rules['guide/settings'] = ['template' => 'guide/settings', 'variables' => ['proEdition' => self::$pro, 'settings' => self::$settings]];
                     
                     if ($userOperations['editGuides']) {
-                        $editVariables = ['proEdition' => self::$pro, 'settings' => self::$settings, 'templates' => $this->getTemplatesFromUserTemplatePath(), 'userOperations' => $userOperations];
+                        $editVariables = [
+                            'assetComponents' => self::$plugin->guideComponents->getAssetComponents(),
+                            'proEdition' => self::$pro,
+                            'settings' => self::$settings,
+                            'templates' => $this->getTemplatesFromUserTemplatePath(),
+                            'userOperations' => $userOperations
+                        ];
                         $event->rules['guide/list'] = ['template' => 'guide/list', 'variables' => $editVariables];
                         $event->rules['guide/new'] = ['template' => 'guide/edit', 'variables' => $editVariables];
                         $event->rules['guide/edit/<guideId:\d{1,}>'] = ['template' => 'guide/edit', 'variables' => $editVariables];
@@ -574,12 +580,10 @@ class Guide extends Plugin
         }
 
         $adminGlobalsVariables = [
-            'assetComponents' => self::$plugin->guideComponents->getAssetComponents(),
             'guides' => $guides,
             'guidesForJs' => $guidesForJs,
             'proEdition' => self::$pro,
             'settings' => self::$settings,
-            'templates' => $this->getTemplatesFromUserTemplatePath(),
             'userOperations' => $this->getUserOperations(),
         ];
         echo self::$view->renderTemplate('guide/_partials/admin_globals', $adminGlobalsVariables);
@@ -608,6 +612,7 @@ class Guide extends Plugin
             if (!empty($guideIds)) {
                 $guides = self::$plugin->guide->getGuides(['id' => $guideIds]);
 
+//                TODO replace this
                 if (!empty($guides)) {
                     echo self::$view->renderTemplate('guide/_partials/guide_display', [
                         'displayId' => 'uri',

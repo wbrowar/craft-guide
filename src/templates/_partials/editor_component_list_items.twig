@@ -1,0 +1,555 @@
+{# /**
+ * Guide plugin for Craft CMS
+ *
+ * @author    Will Browar
+ * @copyright Copyright (c) 2021 Will Browar
+ * @link      https://wbrowar.com
+ * @package   Guide
+ * @since     5.0.0
+ */ #}
+
+{% set components = [] %}
+{% set guides = [] %}
+{% set images = [] %}
+{% set snippets = [] %}
+
+
+{# Components #}
+{% set code %}{% verbatim %}{{ craft.guide.component('audio', { src: 'REPLACE_URL' }) }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Audio'|t('guide'),
+  code,
+  group: 'components',
+  summary: '<p>Play audio in the browser’s audio player.</p>'|t('guide'),
+  props: {
+    src: 'A absolute URL to your audio file.'|t('guide'),
+  },
+}]) %}
+
+{% set code %}{% verbatim %}{{ craft.guide.component('button', { label: 'REPLACE_LABEL', url: url('REPLACE_URL') }) }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Button',
+  code,
+  group: 'components',
+  summary: '<p>A call-to-action link that looks like a button.</p>',
+  props: {
+    label: 'The label text for the button.',
+    href: 'The URL that the button goes to when clicked.',
+  },
+}]) %}
+
+{% set code %}{% verbatim %}{{ craft.guide.component('image', { url: 'REPLACE_URL' }) }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Image',
+  code,
+  group: 'components',
+  summary: '<p>Display an image or a screenshot from a URL.</p>',
+  props: {
+    src: 'The URL of the image to be displayed.',
+  },
+}]) %}
+
+{% set code %}{% verbatim %}<div class="g-prose g-prose-sm">
+{% apply markdown('gfm') %}
+
+## Heading
+
+Content
+
+{% endapply %}
+</div>{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Markdown',
+  code,
+  group: 'components',
+  summary: '<p>Use Craft’s "markdown" Twig filter to render markdown content.</p>',
+}]) %}
+
+{% set code %}{% verbatim %}<table class="g-table">
+  <thead>
+    <tr>
+      <th>Table</th>
+      <th>Header</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Content</td>
+      <td>Content</td>
+    </tr>
+  </tbody>
+</table>{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Table',
+  code,
+  group: 'components',
+  summary: '<p>A styled HTML table.</p>',
+}]) %}
+
+{% set code %}{% verbatim %}{{ craft.guide.component('tip', { text: 'REPLACE_TEXT' }) }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Tip',
+  code,
+  group: 'components',
+  summary: '<p>Inform content authors in a way that stands out from surrounding text.</p>',
+  props: {
+    message: 'Text displayed in the tip.',
+  },
+}]) %}
+
+{% set code %}{% verbatim %}<div class="tldr-hide"></div>{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'TL;DR Hide',
+  code,
+  group: 'components',
+  summary: '<p>Show a <strong>TL;DR</strong> button on your guide and hide this content when <strong>TL;DR</strong> is active.</p>',
+}]) %}
+
+{% set code %}{% verbatim %}<div class="tldr-show"></div>{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'TL;DR Show',
+  code,
+  group: 'components',
+  summary: '<p>Show a <strong>TL;DR</strong> button on your guide, hide this content and show it when <strong>TL;DR</strong> is active.</p>',
+}]) %}
+
+{% set code %}{% verbatim %}{{ craft.guide.var('clientName') }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Variable Client Name',
+  code,
+  group: 'components',
+  summary: '<p>Display the value of the <strong>Client Name</strong> variable.</p>',
+}]) %}
+
+{% set code %}{% verbatim %}{{ craft.guide.var('myCompanyName') }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Variable My Company Name',
+  code,
+  group: 'components',
+  summary: '<p>Display the value of the <strong>My Company Name</strong> variable.</p>',
+}]) %}
+
+{% set code %}{% verbatim %}{{ craft.guide.var('projectName') }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Variable Project Name',
+  code,
+  group: 'components',
+  summary: '<p>Display the value of the <strong>Project Name</strong> variable.</p>',
+}]) %}
+
+{% set code %}{% verbatim %}{{ craft.guide.component('video', { source: 'vimeo', videoId: 'REPLACE_VIDEO_ID' }) }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Vimeo Video',
+  code,
+  group: 'components',
+  summary: '<p>Play a Vimeo video in an iframe.</p>',
+  props: {
+    source: 'Determine the video hosting service’s embed code.',
+    videoId: 'The ID of the Vimeo video, found in the URL or embed code provided by Vimeo.',
+  },
+  }]) %}
+
+{% set code %}{% verbatim %}{{ craft.guide.component('warning', { text: 'REPLACE_TEXT' }) }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Warning',
+  code,
+  group: 'components',
+  summary: '<p>Warn content authors about potential content issues.</p>',
+  props: {
+    message: 'Text displayed in the warning.',
+  },
+}]) %}
+
+{% set code %}{% verbatim %}{{ craft.guide.component('video', { source: 'youtube', videoId: 'REPLACE_VIDEO_ID' }) }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'YouTube Video',
+  code,
+  group: 'components',
+  summary: '<p>Play a YouTube video in an iframe.</p>',
+  props: {
+    source: 'Determine the video hosting service’s embed code.',
+    videoId: 'The ID of the Vimeo video, found in the URL or embed code provided by YouTube.',
+  },
+}]) %}
+
+
+{# Guides #}
+{% set guidesData = craft.guide.getAll() %}
+{% for guide in guidesData %}
+  {% set code %}{% verbatim %}{{ craft.guide.include({ slug: '{% endverbatim %}{{ guide.slug }}{% verbatim %}' }) }}{% endverbatim %}{% endset %}
+  {% set guides = guides|merge([{
+    title: guide.title,
+    code,
+    group: 'guides',
+    summary: guide.summary,
+  }]) %}
+{% endfor %}
+
+
+{# Images #}
+{% if assetComponents|length %}
+  {% set images = assetComponents %}
+{% endif %}
+
+
+{# Snippets #}
+{% set code %}{% verbatim %}{# VERSION START – For each version, make a copy of this block and place it at the top of this guide. #}
+{% set version %}
+<div class="version">
+  <h2 class="g-mb-6"><span>1.0.0</span> Aug 27, 2021</h2>
+<div class="g-prose g-prose-sm">
+{% apply markdown('gfm') %}
+
+### &#x1F680; Added
+
+- Features that have been added.
+
+### &#x1F527; Changed
+
+- Things that have changed.
+
+### &#x1F6A7; Fixed
+
+- Bugs that have been fixed.
+
+### &#x1F525; Deleted
+
+- Features that have been removed.
+
+{% endapply %}
+</div>
+</div>
+{% endset %}
+{% set versions = versions is defined ? versions|merge([version]) : [version] %}
+{# VERSION END #}
+
+{# -------------------------------------------------------------------------- #}
+
+{# Display changelog versions #}
+<div>
+  {% if guideDisplayArea == 'widget' %}
+    {{ versions[0] }}
+  {% else %}
+    {% for version in versions %}
+      {{ version }}
+    {% endfor %}
+  {% endif %}
+</div>
+
+{% if guideDisplayArea == 'widget' %}
+  {{ craft.guide.component('button', { label: 'See all changes', url: url('guide/page/' ~ guide.slug) }) }}
+{% endif %}
+
+{% css %}
+.guide-{{ guide.slug }} .version + .version {
+  margin-top: 3rem;
+  padding-top: 3rem;
+  border-top: 1px solid rgba(0,0,0,0.2);
+}
+.guide-{{ guide.slug }} .version h2 span {
+  font-size: 2rem;
+}
+{% endcss %}{% endverbatim %}{% endset %}
+{% set snippets = snippets|merge([{
+  title: 'Changelog',
+  code,
+  group: 'snippets',
+  summary: '<p>Display updates to your Craft project.</p>',
+}]) %}
+
+{% set code %}{% verbatim %}{# Set the type of element to be displayed. Options: assets, categories, entries, users #}
+{% set elementType = 'entries' %}
+
+{# If showing content stats for entries, specifcy the section; for assets, the volume, or for categories, the group. #}
+{# Leave this as null to get all entries, assets, or category groups. #}
+{% set subType = null %}
+
+{# Set a label that sits under the total number. Leave this as blank to default to the element type. #}
+{% set label = null %}
+
+{% if elementType == 'assets' %}
+  {% set labelDefault = 'Assets' %}
+  {% set statuses = ['live'] %}
+  {% set live = craft.assets.limit(null).volume(subType ?? null).status('live').count() %}
+{% elseif elementType == 'categories' %}
+  {% set labelDefault = 'Categories' %}
+  {% set statuses = ['live', 'disabled'] %}
+  {% set live = craft.categories.limit(null).group(subType ?? null).status('enabled').count() %}
+  {% set disabled = craft.categories.limit(null).group(subType ?? null).status('disabled').count() %}
+{% elseif elementType == 'entries' %}
+  {% set labelDefault = 'Entries' %}
+  {% set statuses = ['live', 'disabled', 'pending', 'expired'] %}
+  {% set live = craft.entries.limit(null).section(subType ?? null).status('live').count() %}
+  {% set disabled = craft.entries.limit(null).section(subType ?? null).status('disabled').count() %}
+  {% set pending = craft.entries.limit(null).section(subType ?? null).status('pending').count() %}
+  {% set expired = craft.entries.limit(null).section(subType ?? null).status('expired').count() %}
+{% elseif elementType == 'users' %}
+  {% set labelDefault = 'Users' %}
+  {% set statuses = ['live', 'disabled'] %}
+  {% set live = craft.users.limit(null).status('enabled').count() %}
+  {% set disabled = craft.users.limit(null).status('disabled').count() %}
+{% endif %}
+
+<div class="g-text-center g-mt-6">
+  <p class="g-mb-0" style="font-size: 3rem"><b>{{ live|default('') }}</b></p>
+  <h2>{{ label|default(labelDefault) }}</h2>
+</div>
+
+<div class="g-grid g-grid-cols-2 g-w-full">
+  {% if 'live' in statuses %}
+    <div class="element small hasstatus" title="Live elements"><span class="status live"></span><div class="label"><span class="title">Live</span></div></div>
+    <div class="g-text-right" style="font-size: 1.5em"><b>{{ live }}</b></div>
+  {% endif %}
+
+  {% if 'disabled' in statuses %}
+    <div class="element small hasstatus" title="Live elements"><span class="status disabled"></span><div class="label"><span class="title">Disabled</span></div></div>
+    <div class="g-text-right" style="font-size: 1.5em"><b>{{ disabled }}</b></div>
+  {% endif %}
+
+  {% if 'pending' in statuses %}
+    <div class="element small hasstatus" title="Live elements"><span class="status pending"></span><div class="label"><span class="title">Pending</span></div></div>
+    <div class="g-text-right" style="font-size: 1.5em"><b>{{ pending }}</b></div>
+  {% endif %}
+
+  {% if 'expired' in statuses %}
+    <div class="element small hasstatus" title="Live elements"><span class="status expired"></span><div class="label"><span class="title">Expired</span></div></div>
+    <div class="g-text-right" style="font-size: 1.5em"><b>{{ expired }}</b></div>
+  {% endif %}
+</div>{% endverbatim %}{% endset %}
+{% set snippets = snippets|merge([{
+  title: 'Content Stats',
+  code,
+  group: 'snippets',
+  summary: '<p>Show a total of entries that are currently published.</p>',
+}]) %}
+
+{% set code %}{% verbatim %}{# Set the asset volume you would like to check for images in. #}
+{% set volume = null %}
+
+{# Set file types that should assets should be uplaoded as. #}
+{% set acceptedExtensions = ['jpg', 'jpeg'] %}
+
+{# Display a list of invalid assets and instruct authors on what extension is required. #}
+{% cache %}
+  {% set assets = craft.assets.volume(volume ?? null).all() %}
+
+  {% if assets|length %}
+<div class="g-prose g-prose-sm">
+{% apply markdown('gfm') %}
+
+These assets should be replaced with files using the extension: {{ acceptedExtensions|join(', ') }}
+
+{% endapply %}
+</div>
+  <table class="g-table">
+    <thead>
+      <tr>
+        <th>Preview</th>
+        <th>Title</th>
+        <th>File name</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for asset in assets %}
+        {% if asset.extension|lower not in acceptedExtensions %}
+          <tr>
+            <td>
+              {% if asset.kind == 'image' %}
+                <a href="{{ asset.cpEditUrl }}" style="display: block; max-width: 300px" title="Edit image">{{ craft.guide.component('image', { url: asset.url }) }}</a>
+              {% endif %}
+            </td>
+            <td><a href="{{ asset.cpEditUrl }}">{{ asset.title }}</a></td>
+            <td>{{ asset.filename }}</td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+{% endcache %}{% endverbatim %}{% endset %}
+{% set snippets = snippets|merge([{
+  title: 'Incorrect File Type',
+  code,
+  group: 'snippets',
+  summary: '<p>Find assets that have the wrong file type for a given volume.</p>',
+}]) %}
+
+{% set code %}{% verbatim %}{# Set the field’s handle. #}
+{% set handle = 'REPLACE_HANDLE' %}
+
+{# Set the field label for this guide. #}
+{% set label = 'REPLACE_LABEL' %}
+
+{# Set this to "true" to find elements with the field filled out, or "false" to find elements that are missing this field. #}
+{% set filledOut = true %}
+
+{# Import _self to use macro below #}
+{% import _self as self %}
+
+{# Start Snippet Display #}
+{% cache %}
+<div>
+  <h2>{{ label }}</h2>
+  {% set elements = craft.entries({
+    (handle): filledOut ? ':notempty:' : ':empty:',
+  }).all() %}
+
+  {% set data = {
+    title: 'Entries that ' ~ (filledOut ? 'include' : 'are missing') ~ ' the ' ~ label ~ ' field',
+    data: elements
+  } %}
+
+  {# Display table #}
+  {{ self.table(data) }}
+</div>
+{% endcache %}
+
+
+{# Use a macro to cut down on repeated code if you wanted to show more than one field at a time. #}
+{% macro table(data) %}
+  <table class="g-table">
+    <thead>
+      <tr>
+        <td>{{ data.title }}</td>
+        <td>Edit Page</td>
+      </tr>
+    </thead>
+    <tbody>
+    {% for row in data.data %}
+      <tr>
+        <td><a href="{{ row.url }}" target="_blank" rel="nofollow noopener" title="View element’s page in a new window.">{{ row.title }}</a></td>
+        <td><a class="btn icon edit" href="{{ row.cpEditUrl }}" target="_blank" rel="nofollow noopener" title="Go to element edit page.">Edit</a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endmacro %}{% endverbatim %}{% endset %}
+{% set snippets = snippets|merge([{
+  title: 'Filled Out Fields',
+  code,
+  group: 'snippets',
+  summary: '<p>Find elements where a field is either filled out or empty.</p>',
+}]) %}
+
+{% set code %}{% verbatim %}{# Set the asset volume you would like to check for images in. #}
+{% set volume = null %}
+
+{# Set the width to the smallest size that an image should be uploaded. #}
+{% set width = 500 %}
+
+{# Display a list of invalid images and instruct authors on what size is recommended. #}
+{% cache %}
+  {% set assets = craft.assets.volume(volume ?? null).width('< ' ~ width).kind('image').all() %}
+
+  {% if assets|length %}
+<div class="g-prose g-prose-sm">
+{% apply markdown('gfm') %}
+
+These images should be replaced with a .jpg that is at least {{ width }}px wide.
+
+{% endapply %}
+</div>
+  <table class="g-table">
+    <thead>
+      <tr>
+        <th>Preview</th>
+        <th>Title</th>
+        <th>Width</th>
+        <th>File name</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for asset in assets %}
+        <tr>
+          <td>
+            {% if asset.kind == 'image' %}
+              <a href="{{ asset.cpEditUrl }}" style="display: block; max-width: 300px" title="Edit image">{{ craft.guide.component('image', { url: asset.url }) }}</a>
+            {% endif %}
+          </td>
+          <td><a href="{{ asset.cpEditUrl }}">{{ asset.title }}</a></td>
+          <td>{{ asset.width }}px</td>
+          <td>{{ asset.filename }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+{% endcache %}`,
+    summary: '<p>Find images that would get upscaled if transformed.</p>',
+
+  }},
+  {
+    title: 'Missing Focal Points',
+    code: `{# Set the asset volume you would like to check for images in. #}
+{% set volume = null %}
+
+{# Display a list of invalid images that are missing focal points. #}
+{% cache %}
+  {% set assets = craft.assets.volume(volume ?? null).kind('image').all() %}
+
+
+  {% if assets|length %}
+<div class="g-prose g-prose-sm">
+{% apply markdown('gfm') %}
+
+These images are missing a focal point and might get cropped incorrectly.
+
+{% endapply %}
+</div>
+  <table class="g-table">
+    <thead>
+      <tr>
+        <th>Preview</th>
+        <th>Title</th>
+        <th>File name</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for asset in assets %}
+        {% if not asset.hasFocalPoint %}
+          <tr>
+            <td>
+              <a href="{{ asset.cpEditUrl }}" style="display: block; max-width: 300px" title="Edit image">{{ craft.guide.component('image', { url: asset.url }) }}</a>
+            </td>
+            <td><a href="{{ asset.cpEditUrl }}">{{ asset.title }}</a></td>
+            <td>{{ asset.filename }}</td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+{% endcache %}{% endverbatim %}{% endset %}
+{% set snippets = snippets|merge([{
+  title: 'Low-Res Image Check',
+  code,
+  group: 'snippets',
+  summary: '<p>Find images that are missing focal points.</p>',
+}]) %}
+
+
+{# Render list items #}
+{% if group == 'components' %}
+  {% set listItems = components %}
+{% elseif group == 'guides' %}
+  {% set listItems = guides %}
+{% elseif group == 'images' %}
+  {% set listItems = images %}
+{% elseif group == 'snippets' %}
+  {% set listItems = snippets %}
+{% endif %}
+
+{% set tMessages = {
+  'add': 'Add'|t('guide'),
+  'variables': 'Variables'|t('guide'),
+} %}
+
+{% if listItems|length %}
+  <ul id="editor-component-list-{{ group }}">
+    {% for item in listItems %}
+      <li>
+        <guide-editor-component-list-item component-data="{{ item|json_encode }}" t-messages="{{ tMessages|json_encode }}"></guide-editor-component-list-item>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}

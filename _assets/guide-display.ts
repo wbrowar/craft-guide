@@ -1,4 +1,5 @@
 import "./components/GuideDisplay.ts";
+import "./components/GuideSlideoutButton.ts"
 import './global.css';
 
 // Add guides to the page

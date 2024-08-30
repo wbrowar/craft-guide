@@ -15,7 +15,7 @@
 {% import "codeeditor/codeEditor" as codeEditor %}
 
 {# The title of this CP section #}
-{% set title = title ?? "Guide Edit"|t('guide') %}
+{% set title = title ?? "Guide Editor"|t('guide') %}
 
 {# The selected CP subnav item #}
 {% set selectedSubnavItem = 'list' %}
@@ -54,6 +54,8 @@
 {% set fullPageForm = true %}
 
 {% block actionButton %}
+  {% include 'guide/_partials/slideout_button.twig' with { docs: true, label: 'Docs'|t('guide'), slug: 'guide-editor' } only %}
+
   <input class="btn submit" type="submit" value="Save">
 {% endblock %}
 
@@ -164,16 +166,20 @@
         }) }}
       </div>
       <div slot="components">
-        <p>list of components</p>
+        <p>{{ 'Add basic building blocks to your guide using Twig and Vue components.'|t('guide') }}</p>
+        {% include 'guide/_partials/editor_component_list_items.twig' with { group: 'components' } %}
       </div>
       <div slot="images">
-        <p>list of images</p>
+        <p>{{ 'Display screenshots and other images located in your Guide Asset Volume.'|t('guide') }}</p>
+        {% include 'guide/_partials/editor_component_list_items.twig' with { group: 'images' } %}
       </div>
       <div slot="guides">
-        <p>list of guides</p>
+        <p>{{ 'Include content from other guides into your guide.'|t('guide') }}</p>
+        {% include 'guide/_partials/editor_component_list_items.twig' with { group: 'guides' } %}
       </div>
       <div slot="snippets">
-        <p>list of snippets</p>
+        <p>{{ 'Add these snippets to inform your authors of missing content and provide contextual tips. Edit them to fit your project.'|t('guide') }}</p>
+        {% include 'guide/_partials/editor_component_list_items.twig' with { group: 'snippets' } %}
       </div>
       <div slot="editor">
         {{ codeEditor.textareaField({
@@ -192,7 +198,8 @@
 
       <div class="guide-tab-icon" slot="icon-components">{{ svg('@appicons/icons.svg')|raw }}</div>
       <div class="guide-tab-icon" slot="icon-images">{{ svg('@appicons/image.svg')|raw }}</div>
-      <div class="guide-tab-icon" slot="icon-guides">{{ svg('@appicons/book.svg')|raw }}</div>
+{#      <div class="guide-tab-icon" slot="icon-guides">{{ svg('@appicons/book.svg')|raw }}</div>#}
+      <div class="guide-tab-icon" slot="icon-guides">{{ svg('@wbrowar/guide/assetbundles/static/icon-mask.svg')|raw }}</div>
       <div class="guide-tab-icon" slot="icon-settings">{{ svg('@appicons/gear.svg')|raw }}</div>
       <div class="guide-tab-icon" slot="icon-snippets">{{ svg('@appicons/code.svg')|raw }}</div>
     </guide-editor>
@@ -200,9 +207,13 @@
 
   {% if proEdition and settings.enableGuideCss %}
     <div id="css" class="hidden">
+      <div class="flex">
+        <span class="flex-grow"></span>
+        {% include 'guide/_partials/slideout_button.twig' with { docs: true, label: 'Guide CSS'|t('guide'), slug: 'guide-editor-css' } only %}
+      </div>
+
       {{ codeEditor.textareaField({
         label: 'CSS'|t('guide'),
-        instructions: "ddddd"|t('guide'),
         id: 'contentCss',
         name: "contentCss",
         placeholder: '',
@@ -219,9 +230,14 @@
 
   {% if proEdition and settings.enableGuideJavascript %}
     <div id="javascript" class="hidden">
+      <div class="flex">
+        <span class="flex-grow"></span>
+        {% include 'guide/_partials/slideout_button.twig' with { docs: true, label: 'Guide JavaScript'|t('guide'), slug: 'guide-editor-javascript' } only %}
+      </div>
+
       {{ codeEditor.textareaField({
         label: 'JavaScript'|t('guide'),
-        instructions: "xxxxx"|t('guide'),
+        instructions: "Code wrapped in a callback function—fired whenever this guide is displayed."|t('guide'),
         id: 'contentJavascript',
         name: "contentJavascript",
         placeholder: '',

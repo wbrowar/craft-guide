@@ -1,19 +1,27 @@
-{% apply spaceless %}{# /**
- * Guide plugin for Craft CMS
- *
- * Guide Widget Body
- *
- * @author    Will Browar
- * @copyright Copyright (c) 2019 Will Browar
- * @link      https://wbrowar.com
- * @package   Guide
- * @since     2.0.0
- */ #}
+{% apply spaceless %}
+  {# /**
+   * Guide plugin for Craft CMS
+   *
+   * Guide Widget Body
+   *
+   * @author    Will Browar
+   * @copyright Copyright (c) 2019 Will Browar
+   * @link      https://wbrowar.com
+   * @package   Guide
+   * @since     5.0.0
+   */ #}
 
-{% set slugs = slug|split('|') %}
+  {% if docs %}
+    <div class="guide">
+      {{ source('guide/docs/' ~ slug ~ '.md')|md('gfm') }}
+    </div>
+  {% else %}
+    {% set slugs = slug|split('|') %}
 
-{% set guides = craft.guide.getAll({ slug: slugs }) %}
+    {% set guides = craft.guide.getAll({ slug: slugs }) %}
 
-{% if guides ?? false %}
-  {% include 'guide/_partials/guide_display.twig' with { guideDisplayArea: 'page', displayId: 'page', guides: guides } %}
-{% endif %}{% endapply %}
+    {% if guides ?? false %}
+      {% include 'guide/_partials/guide_display.twig' with { guideDisplayArea: 'page', displayId: 'page', guides: guides } %}
+    {% endif %}
+  {% endif %}
+{% endapply %}

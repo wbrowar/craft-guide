@@ -20,6 +20,7 @@ class SlideoutController extends Controller
     public function actionIndex(): Response
     {
         return $this->asJson(['data' => Guide::$view->renderTemplate('guide/slideout.twig', [
+            'docs' => Craft::$app->getRequest()->getBodyParams()['docs'] === 'true',
             'slug' => Craft::$app->getRequest()->getBodyParams()['slug'],
         ])]);
     }

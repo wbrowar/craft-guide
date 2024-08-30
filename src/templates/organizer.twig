@@ -20,6 +20,8 @@
 {% set selectedSubnavItem = 'organizer' %}
 
 {% block actionButton %}
+  {% include 'guide/_partials/slideout_button.twig' with { docs: true, label: 'Docs'|t('guide'), slug: 'guide-organizer' } only %}
+
   {% if userOperations.editGuides %}
     <div id="guide-action-buttons">
       <a class="btn add icon submit" href="{{ cpUrl('guide/new') }}">New Guide</a>

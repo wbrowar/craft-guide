@@ -164,9 +164,7 @@
           </div>
           <div class="g-p-6" v-if="currentTab === 'snippets'">
             <h2>Snippets</h2>
-            <p class="g-text-text">
-              Add these snippets to inform your authors of missing content and provide contextual tips. Edit them to fit
-              your project.
+            <p class="g-text-text">Add these snippets to inform your authors of missing content and provide contextual tips. Edit them to fit your project.
             </p>
           </div>
           <li v-for="(component, index) in tabComponents" :key="index">
@@ -322,7 +320,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from 'vue';
+import {defineComponent, reactive, toRefs} from 'vue';
 import {
   assetComponents,
   devMode,
@@ -335,7 +333,7 @@ import {
   templates,
   userOperations,
 } from '../globals';
-import { editorData, utilityClasses } from '../editorData';
+import {editorData, utilityClasses} from '../editorData';
 import ComponentListItem from './ComponentListItem.vue';
 import CraftFieldSelect from './CraftFieldSelect.vue';
 import CraftFieldText from './CraftFieldText.vue';
@@ -344,12 +342,12 @@ import SvgGuide from './SvgGuide.vue';
 import SvgPuzzle from './SvgPuzzle.vue';
 import SvgPhotograph from './SvgPhotograph.vue';
 import SvgSettings from './SvgSettings.vue';
-import { VAceEditor } from 'vue3-ace-editor';
+import {VAceEditor} from 'vue3-ace-editor';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/mode-markdown';
 import 'ace-builds/src-noconflict/mode-twig';
 import 'ace-builds/src-noconflict/theme-tomorrow_night_bright';
-import { EditorComponent, EditorTabGroup, Guide, GuideContentSource } from '~/types/plugins';
+import {EditorComponent, EditorTabGroup, Guide, GuideContentSource} from '~/types/plugins';
 
 export default defineComponent({
   name: 'GuideEditor',

@@ -2,7 +2,9 @@
   <iframe class="g-iframe" src="{{ guide.contentUrl }}"></iframe>
 {% else %}
   {% if guide.contentSource == 'template' and (guide.template ?? false) %}
-    {% if craft.app.view.resolveTemplate('guide_template_path/' ~ guide.template) %}
+    {% if guide.template starts with 'guide/' %}
+      {{ craft.guide.render(guide.template, guide.slug, _context, 'path')|raw }}
+    {% elseif craft.app.view.resolveTemplate('guide_template_path/' ~ guide.template) %}
       {{ craft.guide.render('guide_template_path/' ~ guide.template, guide.slug, _context, 'path')|raw }}
     {% else %}
       <p>{{ 'This guide seems to have moved.'|t('guide') }}</p>

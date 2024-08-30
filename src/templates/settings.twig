@@ -38,6 +38,8 @@
 {% set fullPageForm = true %}
 
 {% block actionButton %}
+  {% include 'guide/_partials/slideout_button.twig' with { docs: true, label: 'Docs'|t('guide'), slug: 'guide-settings' } only %}
+
   <input class="btn submit" type="submit" value="Save">
 {% endblock %}
 
@@ -62,20 +64,27 @@
       {% set options = options|merge([{ label: item.name, value: item.uid }]) %}
     {% endfor %}
 
+    {% set assetVolumeInstructions = 'An asset volume that stores all images and videos used in guides.'|t('guide') %}
+    {% if settings.assetVolume == '' %}
+      {% set assetVolumeInstructions = assetVolumeInstructions ~ ' ' ~ '<a class="go" href="' ~ cpUrl('settings/assets/volumes/new') ~ '">' ~ 'Create a New Volume'|t('guide') ~ '</a>' %}
+    {% endif %}
     {{ forms.selectField({
       label: 'Asset Volume'|t('guide'),
       id: 'assetVolume',
       name: 'assetVolume',
       options: options,
       value: settings.assetVolume,
-      instructions: 'An asset volume that stores all images and videos used in guides.'|t('guide'),
+      instructions: assetVolumeInstructions,
     }) }}
 
-    {% if settings.assetVolume == '' %}
-      <p>
-        <a class="go" href="{{ url('settings/assets/volumes/new') }}">{{ 'Create a New Volume'|t('guide') }}</a>
-      </p>
-    {% endif %}
+    {{ forms.textField({
+      label: 'Guide Button Label'|t('guide'),
+      id: 'guideButtonLabel',
+      name: 'guideButtonLabel',
+      placeholder: 'Guide',
+      value: settings.guideButtonLabel,
+      instructions: 'The label shown on Guide Buttons on edit pages.'|t('guide'),
+    }) }}
   </div>
 
   {% if proEdition %}

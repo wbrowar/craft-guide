@@ -3,93 +3,11 @@
   container-type: inline-size;
 }
 guide-display {
-  --guide-display-border-radius: 0.3em;
   display: grid;
   grid-template-columns: var(--grid-template-columns, 1fr);
   gap: calc(var(--xl) * 2);
   position: relative;
   align-items: start;
-
-  & .guide {
-    container-name: guide;
-    container-type: inline-size;
-
-    & > * + :is(h1, h2, h3, h4, h5, h6) {
-      margin-block-start: 2.4em;
-    }
-
-    & :is(blockquote, dd, dl, h1, h2, h3, h4, h5, h6, hr, p, li, pre) {
-      max-width: 70ch;
-      font-size: 1rem;
-      line-height: 1.4rem;
-      text-wrap: pretty;
-
-      & code {
-        padding: 0.4em;
-        background-color: color-mix(in srgb, var(--blue-100), transparent 40%);
-        border-radius: var(--guide-display-border-radius);
-        font-family: monospace;
-        user-select: all;
-      }
-    }
-    & blockquote {
-      padding-inline: var(--l);
-      padding-block: var(--s);
-      background-color: color-mix(in srgb, var(--gray-100), transparent 70%);
-      border-inline-start: 1px solid var(--gray-300);
-    }
-    & pre {
-      max-width: 100%;
-      overflow-x: auto;
-
-      & > code {
-        padding: 1em;
-        font-size: 1rem;
-        white-space: pre;
-      }
-    }
-    & :is(ol, ul) {
-      & li {
-        margin-inline-start: var(--l);
-
-        & + li {
-          margin-block-start: var(--s);
-        }
-
-        &::marker {
-          color: var(--primary-color);
-        }
-      }
-    }
-    & ul li {
-      list-style: initial;
-    }
-    & table {
-      width: 100%;
-      border-radius: var(--guide-display-border-radius);
-
-      & thead {
-        & tr {
-          background-color: var(--gray-200);
-
-          & th {
-            padding-inline: .5em;
-          }
-        }
-      }
-      & tbody {
-        & tr {
-          &:hover {
-            background-color: color-mix(in srgb, var(--gray-200), transparent 60%);
-          }
-
-          & td {
-            padding-inline: .5em;
-          }
-        }
-      }
-    }
-  }
 
   & > aside {
     display: grid;
@@ -131,3 +49,89 @@ guide-display {
   }
 }
 
+.guide {
+  container-name: guide;
+  container-type: inline-size;
+
+  & > * + :is(h1, h2, h3, h4, h5, h6) {
+    margin-block-start: 2.4em;
+  }
+
+  & :is(blockquote, dd, dl, h1, h2, h3, h4, h5, h6, hr, p, li, pre) {
+    max-width: 70ch;
+    font-size: 1rem;
+    line-height: 1.4rem;
+    text-wrap: pretty;
+
+    & code {
+      padding: 0.4em;
+      background-color: color-mix(in srgb, var(--blue-100), transparent 40%);
+      border-radius: var(--guide-border-radius);
+      font-family: monospace;
+      user-select: all;
+    }
+  }
+  & blockquote {
+    padding-inline: var(--l);
+    padding-block: var(--s);
+    background-color: color-mix(in srgb, var(--gray-100), transparent 70%);
+    border-inline-start: 1px solid var(--gray-300);
+  }
+  & img {
+    border-radius: var(--guide-border-radius);
+  }
+  & pre {
+    max-width: 100%;
+    overflow-x: auto;
+
+    & > code {
+      padding: 1em;
+      font-size: 1rem;
+      white-space: pre;
+    }
+  }
+  & :is(ol, ul) {
+    & li {
+      margin-inline-start: var(--l);
+
+      & + li {
+        margin-block-start: var(--s);
+      }
+
+      &::marker {
+        color: var(--primary-color);
+      }
+    }
+  }
+  & ul li {
+    list-style: initial;
+  }
+  & table {
+    width: 100%;
+    border-radius: var(--guide-border-radius);
+
+    & thead {
+      & tr {
+        background-color: var(--gray-200);
+
+        & th {
+          padding-inline: .5em;
+        }
+      }
+    }
+    & tbody {
+      & tr {
+        &:hover {
+          background-color: color-mix(in srgb, var(--gray-200), transparent 60%);
+        }
+
+        & td {
+          padding-inline: .5em;
+        }
+      }
+    }
+  }
+  & video {
+    border-radius: var(--guide-border-radius);
+  }
+}

@@ -22,23 +22,26 @@ class Settings extends Model
     // Public Properties
     // =========================================================================
 
-    // Path to Guide CP Section templates
+    // Path to Guide CP Section templates.
     public $assetVolume = '';
 
-    // The location of guides when displayed on element edit pages
+    // The location of guides when displayed on element edit pages.
     public $editPageLocation = 'slideout';
 
-    // Enable CSS and JavaScript fields to appear in the Guide Editor
+    // Enable CSS and JavaScript fields to appear in the Guide Editor.
     public $enableGuideCss = true;
     public $enableGuideJavascript = false;
 
-    // Path to Guide CP Section templates
+    // The label shown on Guide Buttons on edit pages.
+    public $guideButtonLabel = '';
+
+    // Path to Guide CP Section templates.
     public $renderMarkdownDefault = true;
 
-    // Path to Guide CP Section templates
+    // Path to Guide CP Section templates.
     public $templatePath = '';
 
-    // Twig variables
+    // Twig variables.
     public $clientName = '';
     public $projectName = '';
     public $myCompanyName = '';

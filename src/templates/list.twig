@@ -20,12 +20,14 @@
 {% set selectedSubnavItem = 'list' %}
 
 {% block actionButton %}
-  {% if userOperations.editGuides %}
-    <div class="buttons">
+  <div class="buttons">
+    {% include 'guide/_partials/slideout_button.twig' with { docs: true, label: 'Docs'|t('guide'), slug: 'guide-list' } only %}
+
+    {% if userOperations.editGuides %}
       <a class="btn add icon secondary" href="{{ cpUrl('utilities/guide-export-import') }}">{{ 'Import Guides'|t('guide') }}</a>
       <a class="btn add icon submit" href="{{ cpUrl('guide/new') }}">{{ 'New Guide'|t('guide') }}</a>
-    </div>
-  {% endif %}
+    {% endif %}
+  </div>
 {% endblock %}
 
 {% set tMessages = {

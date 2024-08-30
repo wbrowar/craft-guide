@@ -3,7 +3,6 @@
   container-type: inline-size;
 }
 guide-editor {
-
   &:not(:defined) * {
     display: none;
   }
@@ -18,5 +17,11 @@ guide-editor {
     & svg {
       fill: var(--guide-tab-icon-svg-fill);
     }
+  }
+}
+
+#content:has(guide-editor) {
+  & .monaco-editor {
+    border-radius: var(--guide-border-radius);
   }
 }

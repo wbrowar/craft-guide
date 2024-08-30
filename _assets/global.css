@@ -1,22 +1,24 @@
-@layer guide.globals, guide.page, guide.display, guide.utilities;
-
-@import url('components/GuideEditor.css') layer(guide.page);
-@import url('components/GuideList.css') layer(guide.page);
+@import url('components/GuideEditor.css');
+@import url('components/GuideEditorComponentListItem.css');
+@import url('components/GuideList.css');
 
 @import url('components/GuideDisplay.css');
+@import url('components/GuideSlideoutButton.css');
+
+:root {
+  --guide-border-radius: 0.3rem;
+}
 
 /* Enable scrolling on slideouts that render guides. */
-[data-slideout]:has(.guide-display) {
+[data-slideout]:has(.guide) {
   overflow: auto;
 }
 
-@layer guide.utilities {
-  .fpo {
-    background-color: rgba(255, 0, 255, 0.9);
-    outline: rgba(255, 0, 255, 0.9) solid 4px;
-    color: white !important;
-  }
-  .guide-select-string {
-    user-select: all;
-  }
+.fpo {
+  background-color: rgba(255, 0, 255, 0.9);
+  outline: rgba(255, 0, 255, 0.9) solid 4px;
+  color: white !important;
+}
+.guide-select-string {
+  user-select: all;
 }
