@@ -1,4 +1,6 @@
 guide-slideout-button {
+  display: block;
+
   & > button.btn {
     gap: .3em;
     background-color: rgb(126, 159, 195);

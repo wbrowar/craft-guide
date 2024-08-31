@@ -38,6 +38,18 @@
   },
 }]) %}
 
+{% set code %}{% verbatim %}{{ craft.guide.component('guide-button', { slug: 'REPLACE_SLUG' }) }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Guide Button',
+  code,
+  group: 'components',
+  summary: '<p>A button that opens up a guide in a slideout.</p>',
+  props: {
+    label: 'The label of the button.',
+    slug: 'The slug of the guide that is displayed in the slideout.',
+  },
+}]) %}
+
 {% set code %}{% verbatim %}{{ craft.guide.component('image', { url: 'REPLACE_URL' }) }}{% endverbatim %}{% endset %}
 {% set components = components|merge([{
   title: 'Image',
@@ -49,15 +61,13 @@
   },
 }]) %}
 
-{% set code %}{% verbatim %}<div class="g-prose g-prose-sm">
-{% apply markdown('gfm') %}
+{% set code %}{% verbatim %}{% apply markdown('gfm') %}
 
 ## Heading
 
 Content
 
-{% endapply %}
-</div>{% endverbatim %}{% endset %}
+{% endapply %}{% endverbatim %}{% endset %}
 {% set components = components|merge([{
   title: 'Markdown',
   code,
@@ -65,25 +75,24 @@ Content
   summary: '<p>Use Craft’s "markdown" Twig filter to render markdown content.</p>',
 }]) %}
 
-{% set code %}{% verbatim %}<table class="g-table">
-  <thead>
-    <tr>
-      <th>Table</th>
-      <th>Header</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Content</td>
-      <td>Content</td>
-    </tr>
-  </tbody>
-</table>{% endverbatim %}{% endset %}
+{% set code %}{% verbatim %}{{ craft.guide.component('table', {
+  headers: ['REPLACE_TEXT', 'REPLACE_TEXT', 'REPLACE_TEXT'],
+  rows: [
+    ['REPLACE_TEXT', 'REPLACE_TEXT', 'REPLACE_TEXT'],
+    ['REPLACE_TEXT', 'REPLACE_TEXT', 'REPLACE_TEXT'],
+    ['REPLACE_TEXT', 'REPLACE_TEXT', 'REPLACE_TEXT'],
+  ],
+}) }}{% endverbatim %}{% endset %}
 {% set components = components|merge([{
   title: 'Table',
   code,
   group: 'components',
   summary: '<p>A styled HTML table.</p>',
+  props: {
+    headers: 'An array of table header cells.',
+    rows: 'An array of arrays that populate the table body.',
+    footers: 'An array of table footer cells.',
+  }
 }]) %}
 
 {% set code %}{% verbatim %}{{ craft.guide.component('tip', { text: 'REPLACE_TEXT' }) }}{% endverbatim %}{% endset %}
@@ -175,14 +184,16 @@ Content
 
 {# Guides #}
 {% set guidesData = craft.guide.getAll() %}
-{% for guide in guidesData %}
-  {% set code %}{% verbatim %}{{ craft.guide.include({ slug: '{% endverbatim %}{{ guide.slug }}{% verbatim %}' }) }}{% endverbatim %}{% endset %}
-  {% set guides = guides|merge([{
-    title: guide.title,
-    code,
-    group: 'guides',
-    summary: guide.summary,
-  }]) %}
+{% for item in guidesData %}
+  {% if item.id != guide.id %}
+    {% set code %}{% verbatim %}{{ craft.guide.include({ slug: '{% endverbatim %}{{ guide.slug }}{% verbatim %}' }) }}{% endverbatim %}{% endset %}
+    {% set guides = guides|merge([{
+      title: item.title,
+      code,
+      group: 'guides',
+      summary: item.summary,
+    }]) %}
+  {% endif %}
 {% endfor %}
 
 

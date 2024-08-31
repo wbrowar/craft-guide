@@ -94,7 +94,7 @@ class GuideComponents extends Component
     {
         if (Guide::$pro) {
             $class = $options['attrs']['class'] ?? [];
-            $class[] = 'g-' . $handle;
+            $class[] = 'guide-component-' . $handle;
 
             $options['attrs'] = $options['attrs'] ?? [];
             $options['attrs']['class'] = $class;

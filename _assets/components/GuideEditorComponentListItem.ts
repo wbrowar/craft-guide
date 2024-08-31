@@ -61,6 +61,7 @@ export class GuideEditorComponentListItem extends LitElement {
         forceMoveMarkers: true,
       }
       contentEditor.executeEdits('my-source', [op])
+      contentEditor.focus()
     }
   }
 

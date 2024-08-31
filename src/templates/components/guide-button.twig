@@ -1,0 +1,9 @@
+{% extends 'guide/_partials/render_component.twig' %}
+
+{% set attributes = {
+  'page-slug': slug ?? null,
+} %}
+
+{% set element = 'guide-slideout-button' %}
+
+{% block content -%}<button class="btn" type="button">{{ svg('@wbrowar/guide/assetbundles/static/icon-mask.svg')|raw }}<span>{{ label ?? 'Guide'|t('guide') }}</span></button>{%- endblock %}

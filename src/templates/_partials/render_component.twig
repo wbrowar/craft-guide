@@ -18,5 +18,5 @@
 {% endif %}
 
 {% block before %}{{ before ?? null }}{% endblock %}
-<{{ element }} {{ attr(containerAttributes) }}>{% block content %}{{ content ?? null }}{% endblock %}</{{ element }}>
+{% if element %}<{{ element }} {{ attr(containerAttributes) }}>{% endif %}{% block content %}{{ content ?? null }}{% endblock %}{% if element %}</{{ element }}>{% endif %}
 {% block after %}{{ after ?? null }}{% endblock %}

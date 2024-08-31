@@ -53,6 +53,9 @@ guide-display {
   container-name: guide;
   container-type: inline-size;
 
+  & > * + * {
+    margin-block-start: 1.6em;
+  }
   & > * + :is(h1, h2, h3, h4, h5, h6) {
     margin-block-start: 2.4em;
   }
@@ -76,6 +79,15 @@ guide-display {
     padding-block: var(--s);
     background-color: color-mix(in srgb, var(--gray-100), transparent 70%);
     border-inline-start: 1px solid var(--gray-300);
+  }
+  & iframe {
+    aspect-ratio: var(--guide-iframe-aspect);
+    max-width: 100%;
+    height: auto;
+
+    &:is([src^="https://player.vimeo.com"], [src^="https://www.youtube.com"]) {
+      --guide-iframe-aspect: 16 / 9;
+    }
   }
   & img {
     border-radius: var(--guide-border-radius);
@@ -115,7 +127,7 @@ guide-display {
         background-color: var(--gray-200);
 
         & th {
-          padding-inline: .5em;
+          padding-inline: .7em;
         }
       }
     }
@@ -126,12 +138,22 @@ guide-display {
         }
 
         & td {
-          padding-inline: .5em;
+          padding-inline: .7em;
+        }
+      }
+    }
+    & tfoot {
+      & tr {
+        background-color: color-mix(in srgb, var(--gray-200), transparent 30%);
+
+        & td {
+          padding-inline: .7em;
         }
       }
     }
   }
   & video {
+    aspect-ratio: var(--guide-video-aspect, 16 / 9);
     border-radius: var(--guide-border-radius);
   }
 }

@@ -3,7 +3,6 @@
 {% if source == 'youtube' %}
   {% set attributes = {
     allowfullscreen: true,
-    class: ['g-iframe'],
     loading: 'lazy',
     src: 'https://www.youtube.com/embed/' ~ videoId ~ '?rel=0&amp;controls=' ~ (controls ?? false ? '1' : '0') ~ '&amp;showinfo=0',
     width: 1600,
@@ -13,7 +12,6 @@
 {% elseif source == 'vimeo' %}
   {% set attributes = {
     allowfullscreen: true,
-    class: ['g-iframe'],
     loading: 'lazy',
     mozallowfullscreen: true,
     src: 'https://player.vimeo.com/video/' ~ videoId ~ '?title=0&byline=0&portrait=0',
@@ -25,7 +23,6 @@
 {% else %}
   {% set attributes = {
     autoplay: autoplay ?? null,
-    class: ['g-video'],
     controls: controls ?? null,
     loop: loop ?? null,
     muted: muted ?? null,

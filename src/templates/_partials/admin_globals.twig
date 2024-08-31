@@ -21,7 +21,7 @@
   {% set guideGlobalJs %}
     window.guideCallback = [];
   {% endset %}
-  {% js guideGlobalJs %}
+  {% js guideGlobalJs at beginBody %}
 {% endif %}
 
 {% for guide in guides %}
@@ -33,6 +33,6 @@
 {% set guideJs %}window.guideCallback['{{ guide.slug }}'] = () => {
 {{ guide.contentJavascript|raw }}
 }{% endset %}
-    {% js guideJs %}
+    {% js guideJs at beginBody %}
   {% endif %}
 {% endfor %}

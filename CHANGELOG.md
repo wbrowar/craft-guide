@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - The **Template Path** and **Asset Volume** settings are no longer required.
   - If a **Template Path** isn’t set, using templates as a guide source is disabled.
 - **Slideout** is now set as the default value for the **Edit Page Guide Location** setting.
+- **Table** component is now Twig-based.
 
 ### Removed
 - Vue.js and TailwindCSS are no longer used to render guides.

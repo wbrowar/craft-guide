@@ -1,7 +1,7 @@
-import {html, LitElement, TemplateResult} from 'lit'
-import {customElement, property, state} from 'lit/decorators.js'
-import {guides, userOperations} from "../globals.ts";
-import {copyToClipboard} from "../utils/clipboard.ts";
+import { html, LitElement, TemplateResult } from 'lit'
+import { customElement, property, state } from 'lit/decorators.js'
+import { guides, userOperations } from '../globals.ts'
+import { copyToClipboard } from '../utils/clipboard.ts'
 
 @customElement('guide-list')
 export class GuideList extends LitElement {
@@ -26,7 +26,7 @@ export class GuideList extends LitElement {
    * The CP Trigger config setting used to format CP URLs.
    */
   @property({ attribute: 'table-headers', type: Object })
-  tableHeaders: { handle: string; label: string; }[] = []
+  tableHeaders: { handle: string; label: string }[] = []
 
   /**
    * =========================================================================
@@ -49,7 +49,7 @@ export class GuideList extends LitElement {
    */
   private async _copyText(text: string) {
     await copyToClipboard(text)
-    window.Craft.cp.displayNotice(this.tMessages.copiedToClipboard)
+    window.Craft.cp.displayNotice(`${this.tMessages.copiedToClipboard}: ${text}`)
   }
 
   /**
@@ -71,7 +71,12 @@ export class GuideList extends LitElement {
 
       // Slug
       items.push(html`
-        <div class="code small light copytextbtn" title="${this.tMessages.copyToClipboard}" role="button" @click="${() => this._copyText(`{{ craft.guide.include({ slug: '${guide.slug}' }) }}`)}">
+        <div
+          class="code small light copytextbtn"
+          title="${this.tMessages.copyToClipboard}"
+          role="button"
+          @click="${() => this._copyText(guide.slug)}"
+        >
           <span class="copytextbtn__value">${guide.slug}</span>
           <span class="visually-hidden">${this.tMessages.copyToClipboard}</span>
           <span class="copytextbtn__icon" data-icon="clipboard" aria-hidden="true"></span>
@@ -89,12 +94,16 @@ export class GuideList extends LitElement {
         </guide-slideout-button>
       `)
       if (userOperations.editGuides) {
-        actionItems.push(html`<a class="btn small secondary" data-icon="pencil" href="${guide.editUrl}">${this.tMessages.edit}</a>`)
+        actionItems.push(
+          html`<a class="btn small secondary" data-icon="pencil" href="${guide.editUrl}">${this.tMessages.edit}</a>`
+        )
       }
       if (userOperations.deleteGuides) {
-        actionItems.push(html`<a class="btn small" data-icon="trash" href="${guide.deleteUrl}">${this.tMessages.delete}</a>`)
+        actionItems.push(
+          html`<a class="btn small" data-icon="trash" href="${guide.deleteUrl}">${this.tMessages.delete}</a>`
+        )
       }
-      items.push(html`<div class="buttons">${actionItems.map(item => item)}</div>`)
+      items.push(html`<div class="buttons">${actionItems.map((item) => item)}</div>`)
 
       return items
     })
@@ -107,22 +116,29 @@ export class GuideList extends LitElement {
   render() {
     const tableHeaders = this.tableHeaders.map((header) => {
       if (header.handle === 'inGuide') {
-        return html`<th><span>${ header.label }</span> <span class="info">${this.tMessages.tooltipInGuide}</span></th>`
+        return html`<th><span>${header.label}</span> <span class="info">${this.tMessages.tooltipInGuide}</span></th>`
       } else if (header.handle === 'slug') {
-        return html`<th><span>${ header.label }</span> <span class="info">${this.tMessages.tooltipSlug}</span></th>`
+        return html`<th><span>${header.label}</span> <span class="info">${this.tMessages.tooltipSlug}</span></th>`
       }
 
-      return html`<th>${ header.label }</th>`
+      return html`<th>${header.label}</th>`
     })
 
     return html`
       <div class="tableview tablepane">
         <table class="data fullwidth">
-          <thead><tr>${ tableHeaders }</tr></thead>
+          <thead>
+            <tr>
+              ${tableHeaders}
+            </tr>
+          </thead>
           <tbody>
-            ${ this._rows.map((row) => html`<tr>
-              ${ row.map((item) => html`<td>${item}</td>`) }
-            </tr>`) }
+            ${this._rows.map(
+              (row) =>
+                html`<tr>
+                  ${row.map((item) => html`<td>${item}</td>`)}
+                </tr>`
+            )}
           </tbody>
         </table>
       </div>
