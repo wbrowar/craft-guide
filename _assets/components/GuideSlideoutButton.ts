@@ -1,7 +1,6 @@
-import {html, LitElement} from 'lit'
-import {customElement, property} from 'lit/decorators.js'
-import {showGuideSlideout} from "../globals.ts";
-import {log} from "../utils/console.ts";
+import { html, LitElement } from 'lit'
+import { customElement, property, state } from 'lit/decorators.js'
+import { guides, showGuideSlideout } from '../globals.ts'
 
 @customElement('guide-slideout-button')
 export class GuideSlideoutButton extends LitElement {
@@ -24,6 +23,23 @@ export class GuideSlideoutButton extends LitElement {
   slug = ''
 
   /**
+   * Messages translated via Craft’s `t` filter.
+   */
+  @property({ attribute: 't-messages', type: Object })
+  tMessages: Record<string, string> = {}
+
+  /**
+   * =========================================================================
+   * STATE
+   * =========================================================================
+   */
+  /**
+   * Display an error when `slug` doesn’t exist.
+   */
+  @state()
+  private _isValid = false
+
+  /**
    * =========================================================================
    * METHODS
    * =========================================================================
@@ -32,8 +48,11 @@ export class GuideSlideoutButton extends LitElement {
    * Formats a URI into a relative CP URL.
    */
   private _onButtonClick() {
-    log('sdaf', this.docs, this.slug)
-    showGuideSlideout({ docs: this.docs, slug: this.slug })
+    if (this._isValid) {
+      showGuideSlideout({ docs: this.docs, slug: this.slug })
+    } else {
+      window.Craft.cp.displayError(this.tMessages.guideSlideoutSlugError?.replace('[slug]', this.slug))
+    }
   }
 
   /**
@@ -43,6 +62,8 @@ export class GuideSlideoutButton extends LitElement {
    */
   connectedCallback() {
     super.connectedCallback()
+
+    this._isValid = guides.find((guide) => guide.slug === this.slug) !== undefined
 
     const guideButton = this.querySelector('button')
     guideButton?.addEventListener('click', () => this._onButtonClick())

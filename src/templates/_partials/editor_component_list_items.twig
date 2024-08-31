@@ -186,7 +186,7 @@ Content
 {% set guidesData = craft.guide.getAll() %}
 {% for item in guidesData %}
   {% if item.id != guide.id %}
-    {% set code %}{% verbatim %}{{ craft.guide.include({ slug: '{% endverbatim %}{{ guide.slug }}{% verbatim %}' }) }}{% endverbatim %}{% endset %}
+    {% set code %}{% verbatim %}{{ craft.guide.include({ slug: '{% endverbatim %}{{ item.slug }}{% verbatim %}' }) }}{% endverbatim %}{% endset %}
     {% set guides = guides|merge([{
       title: item.title,
       code,
