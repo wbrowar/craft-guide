@@ -28,36 +28,36 @@
 
 {% set code %}{% verbatim %}{{ craft.guide.component('button', { label: 'REPLACE_LABEL', url: url('REPLACE_URL') }) }}{% endverbatim %}{% endset %}
 {% set components = components|merge([{
-  title: 'Button',
+  title: 'Button'|t('guide'),
   code,
   group: 'components',
-  summary: '<p>A call-to-action link that looks like a button.</p>',
+  summary: '<p>A call-to-action link that looks like a button.</p>'|t('guide'),
   props: {
-    label: 'The label text for the button.',
-    href: 'The URL that the button goes to when clicked.',
+    label: 'The label text for the button.'|t('guide'),
+    href: 'The URL that the button goes to when clicked.'|t('guide'),
   },
 }]) %}
 
 {% set code %}{% verbatim %}{{ craft.guide.component('guide-button', { slug: 'REPLACE_SLUG' }) }}{% endverbatim %}{% endset %}
 {% set components = components|merge([{
-  title: 'Guide Button',
+  title: 'Guide Button'|t('guide'),
   code,
   group: 'components',
-  summary: '<p>A button that opens up a guide in a slideout.</p>',
+  summary: '<p>A button that opens up a guide in a slideout.</p>'|t('guide'),
   props: {
-    label: 'The label of the button.',
-    slug: 'The slug of the guide that is displayed in the slideout.',
+    label: 'The label of the button.'|t('guide'),
+    slug: 'The slug of the guide that is displayed in the slideout.'|t('guide'),
   },
 }]) %}
 
 {% set code %}{% verbatim %}{{ craft.guide.component('image', { url: 'REPLACE_URL' }) }}{% endverbatim %}{% endset %}
 {% set components = components|merge([{
-  title: 'Image',
+  title: 'Image'|t('guide'),
   code,
   group: 'components',
-  summary: '<p>Display an image or a screenshot from a URL.</p>',
+  summary: '<p>Display an image or a screenshot from a URL.</p>'|t('guide'),
   props: {
-    src: 'The URL of the image to be displayed.',
+    src: 'The URL of the image to be displayed.'|t('guide'),
   },
 }]) %}
 
@@ -69,10 +69,10 @@ Content
 
 {% endapply %}{% endverbatim %}{% endset %}
 {% set components = components|merge([{
-  title: 'Markdown',
+  title: 'Markdown'|t('guide'),
   code,
   group: 'components',
-  summary: '<p>Use Craft’s "markdown" Twig filter to render markdown content.</p>',
+  summary: '<p>Use Craft’s "markdown" Twig filter to render markdown content.</p>'|t('guide'),
 }]) %}
 
 {% set code %}{% verbatim %}{{ craft.guide.component('table', {
@@ -84,100 +84,100 @@ Content
   ],
 }) }}{% endverbatim %}{% endset %}
 {% set components = components|merge([{
-  title: 'Table',
+  title: 'Table'|t('guide'),
   code,
   group: 'components',
-  summary: '<p>A styled HTML table.</p>',
+  summary: '<p>A styled HTML table.</p>'|t('guide'),
   props: {
-    headers: 'An array of table header cells.',
-    rows: 'An array of arrays that populate the table body.',
-    footers: 'An array of table footer cells.',
+    headers: 'An array of table header cells.'|t('guide'),
+    rows: 'An array of arrays that populate the table body.'|t('guide'),
+    footers: 'An array of table footer cells.'|t('guide'),
   }
 }]) %}
 
 {% set code %}{% verbatim %}{{ craft.guide.component('tip', { text: 'REPLACE_TEXT' }) }}{% endverbatim %}{% endset %}
 {% set components = components|merge([{
-  title: 'Tip',
+  title: 'Tip'|t('guide'),
   code,
   group: 'components',
-  summary: '<p>Inform content authors in a way that stands out from surrounding text.</p>',
+  summary: '<p>Inform content authors in a way that stands out from surrounding text.</p>'|t('guide'),
   props: {
-    message: 'Text displayed in the tip.',
+    message: 'Text displayed in the tip.'|t('guide'),
   },
 }]) %}
 
 {% set code %}{% verbatim %}<div class="tldr-hide"></div>{% endverbatim %}{% endset %}
 {% set components = components|merge([{
-  title: 'TL;DR Hide',
+  title: 'TL;DR Hide'|t('guide'),
   code,
   group: 'components',
-  summary: '<p>Show a <strong>TL;DR</strong> button on your guide and hide this content when <strong>TL;DR</strong> is active.</p>',
+  summary: '<p>Show a <strong>TL;DR</strong> button on your guide and hide this content when <strong>TL;DR</strong> is active.</p>'|t('guide'),
 }]) %}
 
 {% set code %}{% verbatim %}<div class="tldr-show"></div>{% endverbatim %}{% endset %}
 {% set components = components|merge([{
-  title: 'TL;DR Show',
+  title: 'TL;DR Show'|t('guide'),
   code,
   group: 'components',
-  summary: '<p>Show a <strong>TL;DR</strong> button on your guide, hide this content and show it when <strong>TL;DR</strong> is active.</p>',
+  summary: '<p>Show a <strong>TL;DR</strong> button on your guide, hide this content and show it when <strong>TL;DR</strong> is active.</p>'|t('guide'),
 }]) %}
 
 {% set code %}{% verbatim %}{{ craft.guide.var('clientName') }}{% endverbatim %}{% endset %}
 {% set components = components|merge([{
-  title: 'Variable Client Name',
+  title: 'Variable Client Name'|t('guide'),
   code,
   group: 'components',
-  summary: '<p>Display the value of the <strong>Client Name</strong> variable.</p>',
+  summary: '<p>Display the value of the <strong>Client Name</strong> variable.</p>'|t('guide'),
 }]) %}
 
 {% set code %}{% verbatim %}{{ craft.guide.var('myCompanyName') }}{% endverbatim %}{% endset %}
 {% set components = components|merge([{
-  title: 'Variable My Company Name',
+  title: 'Variable My Company Name'|t('guide'),
   code,
   group: 'components',
-  summary: '<p>Display the value of the <strong>My Company Name</strong> variable.</p>',
+  summary: '<p>Display the value of the <strong>My Company Name</strong> variable.</p>'|t('guide'),
 }]) %}
 
 {% set code %}{% verbatim %}{{ craft.guide.var('projectName') }}{% endverbatim %}{% endset %}
 {% set components = components|merge([{
-  title: 'Variable Project Name',
+  title: 'Variable Project Name'|t('guide'),
   code,
   group: 'components',
-  summary: '<p>Display the value of the <strong>Project Name</strong> variable.</p>',
+  summary: '<p>Display the value of the <strong>Project Name</strong> variable.</p>'|t('guide'),
 }]) %}
 
 {% set code %}{% verbatim %}{{ craft.guide.component('video', { source: 'vimeo', videoId: 'REPLACE_VIDEO_ID' }) }}{% endverbatim %}{% endset %}
 {% set components = components|merge([{
-  title: 'Vimeo Video',
+  title: 'Vimeo Video'|t('guide'),
   code,
   group: 'components',
-  summary: '<p>Play a Vimeo video in an iframe.</p>',
+  summary: '<p>Play a Vimeo video in an iframe.</p>'|t('guide'),
   props: {
-    source: 'Determine the video hosting service’s embed code.',
-    videoId: 'The ID of the Vimeo video, found in the URL or embed code provided by Vimeo.',
+    source: 'Determine the video hosting service’s embed code.'|t('guide'),
+    videoId: 'The ID of the Vimeo video, found in the URL or embed code provided by Vimeo.'|t('guide'),
   },
   }]) %}
 
 {% set code %}{% verbatim %}{{ craft.guide.component('warning', { text: 'REPLACE_TEXT' }) }}{% endverbatim %}{% endset %}
 {% set components = components|merge([{
-  title: 'Warning',
+  title: 'Warning'|t('guide'),
   code,
   group: 'components',
-  summary: '<p>Warn content authors about potential content issues.</p>',
+  summary: '<p>Warn content authors about potential content issues.</p>'|t('guide'),
   props: {
-    message: 'Text displayed in the warning.',
+    message: 'Text displayed in the warning.'|t('guide'),
   },
 }]) %}
 
 {% set code %}{% verbatim %}{{ craft.guide.component('video', { source: 'youtube', videoId: 'REPLACE_VIDEO_ID' }) }}{% endverbatim %}{% endset %}
 {% set components = components|merge([{
-  title: 'YouTube Video',
+  title: 'YouTube Video'|t('guide'),
   code,
   group: 'components',
-  summary: '<p>Play a YouTube video in an iframe.</p>',
+  summary: '<p>Play a YouTube video in an iframe.</p>'|t('guide'),
   props: {
-    source: 'Determine the video hosting service’s embed code.',
-    videoId: 'The ID of the Vimeo video, found in the URL or embed code provided by YouTube.',
+    source: 'Determine the video hosting service’s embed code.'|t('guide'),
+    videoId: 'The ID of the Vimeo video, found in the URL or embed code provided by YouTube.'|t('guide'),
   },
 }]) %}
 
@@ -262,10 +262,10 @@ Content
 }
 {% endcss %}{% endverbatim %}{% endset %}
 {% set snippets = snippets|merge([{
-  title: 'Changelog',
+  title: 'Changelog'|t('guide'),
   code,
   group: 'snippets',
-  summary: '<p>Display updates to your Craft project.</p>',
+  summary: '<p>Display updates to your Craft project.</p>'|t('guide'),
 }]) %}
 
 {% set code %}{% verbatim %}{# Set the type of element to be displayed. Options: assets, categories, entries, users #}
@@ -328,10 +328,10 @@ Content
   {% endif %}
 </div>{% endverbatim %}{% endset %}
 {% set snippets = snippets|merge([{
-  title: 'Content Stats',
+  title: 'Content Stats'|t('guide'),
   code,
   group: 'snippets',
-  summary: '<p>Show a total of entries that are currently published.</p>',
+  summary: '<p>Show a total of entries that are currently published.</p>'|t('guide'),
 }]) %}
 
 {% set code %}{% verbatim %}{# Set the asset volume you would like to check for images in. #}
@@ -379,10 +379,10 @@ These assets should be replaced with files using the extension: {{ acceptedExten
   {% endif %}
 {% endcache %}{% endverbatim %}{% endset %}
 {% set snippets = snippets|merge([{
-  title: 'Incorrect File Type',
+  title: 'Incorrect File Type'|t('guide'),
   code,
   group: 'snippets',
-  summary: '<p>Find assets that have the wrong file type for a given volume.</p>',
+  summary: '<p>Find assets that have the wrong file type for a given volume.</p>'|t('guide'),
 }]) %}
 
 {% set code %}{% verbatim %}{# Set the field’s handle. #}
@@ -436,10 +436,10 @@ These assets should be replaced with files using the extension: {{ acceptedExten
   </table>
 {% endmacro %}{% endverbatim %}{% endset %}
 {% set snippets = snippets|merge([{
-  title: 'Filled Out Fields',
+  title: 'Filled Out Fields'|t('guide'),
   code,
   group: 'snippets',
-  summary: '<p>Find elements where a field is either filled out or empty.</p>',
+  summary: '<p>Find elements where a field is either filled out or empty.</p>'|t('guide'),
 }]) %}
 
 {% set code %}{% verbatim %}{# Set the asset volume you would like to check for images in. #}
@@ -532,10 +532,10 @@ These images are missing a focal point and might get cropped incorrectly.
   {% endif %}
 {% endcache %}{% endverbatim %}{% endset %}
 {% set snippets = snippets|merge([{
-  title: 'Low-Res Image Check',
+  title: 'Low-Res Image Check'|t('guide'),
   code,
   group: 'snippets',
-  summary: '<p>Find images that are missing focal points.</p>',
+  summary: '<p>Find images that are missing focal points.</p>'|t('guide'),
 }]) %}
 
 
