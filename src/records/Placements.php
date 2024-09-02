@@ -19,9 +19,7 @@ use craft\db\ActiveRecord;
  * @property string $access
  * @property string $group
  * @property integer $groupId
- * @property string $theme
  * @property integer $guideId
- * @property string $portalMethod
  * @property string $selector
  * @property string $uri
  * 

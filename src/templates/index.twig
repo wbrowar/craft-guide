@@ -22,11 +22,9 @@
 {% set content %}
   {% if guides ?? false %}
     {% include 'guide/_partials/guide_display.twig' with { guideDisplayArea: 'guide', displayId: 'nav', guides: guides } only %}
-  {% elseif userOperations.useOrganizer %}
-    {% redirect 'guide/organizer' %}
-  {% elseif craft.app.config.general.allowAdminChanges %}
-    {% redirect 'guide/settings/general' %}
+  {% elseif userOperations.editGuides %}
+    {% redirect 'guide/list' %}
   {% else %}
-    'Guide needs to be set up before it can be used. Return here in an environment where "allowAdminChanges" is set to "true" to begin.'|t('guide')
+    {{ 'No guides have been added to the Guide home page yet. An admin or an author with the right permissions can add guides to this page.'|t('guide') }}
   {% endif %}
 {% endset %}

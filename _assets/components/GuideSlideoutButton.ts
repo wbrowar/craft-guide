@@ -1,7 +1,6 @@
 import { html, LitElement } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { guides, showGuideSlideout } from '../globals.ts'
-import { log } from '../utils/console.ts'
 
 @customElement('guide-slideout-button')
 export class GuideSlideoutButton extends LitElement {
@@ -49,7 +48,6 @@ export class GuideSlideoutButton extends LitElement {
    * Formats a URI into a relative CP URL.
    */
   private _onButtonClick() {
-    log('hsadfdsf', this.slug, this._isValid)
     if (this._isValid) {
       showGuideSlideout({ docs: this.docs, slug: this.slug })
     } else {

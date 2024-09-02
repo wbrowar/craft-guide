@@ -16,6 +16,13 @@ if (typeof window !== 'undefined') {
   window.global = window
 }
 
+export enum ApiStatus {
+  Initial = 'initial',
+  Loading = 'loading',
+  Success = 'success',
+  Error = 'error',
+}
+
 export interface EditorComponent {
   code: string
   documentation?: string
@@ -55,6 +62,16 @@ export interface Guide {
   summary: string | null
   template: string
   title: string
+}
+
+export interface GuideListGuide {
+  deleteUrl: string
+  editUrl: string
+  id: number
+  title: string
+  slug: string
+  summary: string
+  viewUrl: string
 }
 
 export interface GuideNavItem {

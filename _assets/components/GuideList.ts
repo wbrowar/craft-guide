@@ -1,7 +1,8 @@
-import { html, LitElement, TemplateResult } from 'lit'
+import { html, LitElement } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { guides, userOperations } from '../globals.ts'
 import { copyToClipboard } from '../utils/clipboard.ts'
+import { ApiStatus, Placement, PlacementGroup } from '../types.ts'
 
 @customElement('guide-list')
 export class GuideList extends LitElement {
@@ -34,10 +35,16 @@ export class GuideList extends LitElement {
    * =========================================================================
    */
   /**
-   * Rows of table data for each guide. Each cell is formatted as an `html` template.
+   * List of guide placements, used to determine which guides are in the `nav` group.
    */
   @state()
-  private _rows: TemplateResult[][] = []
+  private _getAllPlacementsStatus: ApiStatus = ApiStatus.Initial
+
+  /**
+   * List of guide placements, used to determine which guides are in the `nav` group.
+   */
+  @state()
+  private _placements: Placement[] = []
 
   /**
    * =========================================================================
@@ -53,14 +60,83 @@ export class GuideList extends LitElement {
   }
 
   /**
+   * Gets the list of placements from the database and filters them down to only ones in the `nav` group.
+   */
+  private async _getAllPlacements() {
+    this._getAllPlacementsStatus = ApiStatus.Loading
+    const response = await window.Craft?.postActionRequest('guide/placement/get-all-placements')
+
+    this._placements = response.filter((placement: Placement) => placement.group === PlacementGroup.Nav)
+    this._getAllPlacementsStatus = ApiStatus.Success
+  }
+
+  /**
+   * Creates a new `nav` placement for the guideId.
+   */
+  private async _onInGuideDisabled(guideId: number, guideTitle: string) {
+    const placement = this._placements.find((placement) => placement.guideId === guideId)
+    if (placement) {
+      await window.Craft?.postActionRequest(
+        'guide/placement/delete-placement',
+        {
+          data: {
+            id: placement.id,
+          },
+        },
+        (response: object, textStatus: string) => {
+          if (textStatus === 'success') {
+            this._getAllPlacements()
+            window.Craft.cp.displayNotice(this.tMessages.placementDeleteSuccess?.replace('[guide]', guideTitle))
+          }
+        }
+      )
+    }
+  }
+
+  /**
+   * Creates a new `nav` placement for the guideId.
+   */
+  private async _onInGuideEnabled(guideId: number, guideTitle: string) {
+    await window.Craft?.postActionRequest(
+      'guide/placement/save-placement',
+      {
+        data: {
+          access: 'all',
+          group: 'nav',
+          guideId,
+        },
+      },
+      (response: object, textStatus: string) => {
+        if (textStatus === 'success') {
+          this._getAllPlacements()
+          window.Craft.cp.displayNotice(this.tMessages.placementSaveSuccess?.replace('[guide]', guideTitle))
+        }
+      }
+    )
+  }
+
+  /**
    * =========================================================================
    * LIFECYCLE
    * =========================================================================
    */
+  async firstUpdated() {
+    await this._getAllPlacements()
+  }
   connectedCallback() {
     super.connectedCallback()
+  }
 
-    this._rows = guides.map((guide) => {
+  disconnectedCallback() {
+    super.disconnectedCallback()
+  }
+
+  render() {
+    const tableHeaders = this.tableHeaders.map((header) => {
+      return html`<th>${header.label}</th>`
+    })
+
+    const rows = guides.map((guide) => {
       const items = []
 
       // Title
@@ -84,7 +160,19 @@ export class GuideList extends LitElement {
       `)
 
       // In Guide
-      items.push(html`<input type="checkbox" switch name="in-guide-${guide.slug}" />`)
+      const checked = this._placements.find((placement) => placement.guideId === guide.id) !== undefined
+      items.push(
+        html`<input
+          type="checkbox"
+          switch
+          name="in-guide-${guide.slug}"
+          ?checked="${checked}"
+          ?disabled="${this._getAllPlacementsStatus === ApiStatus.Loading}"
+          @change="${checked
+            ? () => this._onInGuideDisabled(guide.id, guide.title)
+            : () => this._onInGuideEnabled(guide.id, guide.title)}"
+        />`
+      )
 
       // Action Items
       const actionItems = []
@@ -107,22 +195,6 @@ export class GuideList extends LitElement {
 
       return items
     })
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback()
-  }
-
-  render() {
-    const tableHeaders = this.tableHeaders.map((header) => {
-      if (header.handle === 'inGuide') {
-        return html`<th><span>${header.label}</span> <span class="info">${this.tMessages.tooltipInGuide}</span></th>`
-      } else if (header.handle === 'slug') {
-        return html`<th><span>${header.label}</span> <span class="info">${this.tMessages.tooltipSlug}</span></th>`
-      }
-
-      return html`<th>${header.label}</th>`
-    })
 
     return html`
       <div class="tableview tablepane">
@@ -133,7 +205,7 @@ export class GuideList extends LitElement {
             </tr>
           </thead>
           <tbody>
-            ${this._rows.map(
+            ${rows.map(
               (row) =>
                 html`<tr>
                   ${row.map((item) => html`<td>${item}</td>`)}

@@ -115,11 +115,11 @@ class PlacementController extends Controller
         $placement = new PlacementModel([
             'access' => $params['access'],
             'group' => $params['group'],
-            'groupId' => $params['groupId'],
+            'groupId' => $params['groupId'] ?? null,
             'guideId' => $params['guideId'],
-            'selector' => $params['selector'],
-            'uri' => $params['uri'],
-            'weight' => $params['weight'],
+            'selector' => $params['selector'] ?? null,
+            'uri' => $params['uri'] ?? null,
+            'weight' => $params['weight'] ?? 1,
         ]);
 
         if ($placement->validate()) {

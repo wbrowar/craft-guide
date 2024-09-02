@@ -1,9 +1,11 @@
-import { Guide, PluginSettings, PluginUserOperations, ShowGuideSlideoutOptions } from './types'
+import { GuideListGuide, PluginSettings, PluginUserOperations, ShowGuideSlideoutOptions } from './types'
 
 const globalsElement = document.getElementById('guide-admin-globals')
 
 export const devMode: boolean = globalsElement?.dataset?.devMode ? globalsElement.dataset.devMode === 'true' : false
-export const guides: Guide[] = globalsElement?.dataset?.guides ? JSON.parse(globalsElement.dataset.guides) : null
+export const guides: GuideListGuide[] = globalsElement?.dataset?.guides
+  ? JSON.parse(globalsElement.dataset.guides)
+  : null
 export const proEdition: boolean = globalsElement?.dataset?.proEdition
   ? globalsElement.dataset.proEdition === 'true'
   : false
@@ -12,8 +14,8 @@ export async function showGuideSlideout({ docs = false, slug = '' }: ShowGuideSl
     await window.Craft?.postActionRequest(
       'guide/slideout',
       { docs, slug },
-      (response: { data: string }, textStatus: string, request: { statusText: string }) => {
-        if (request.statusText === 'OK') {
+      (response: { data: string }, textStatus: string) => {
+        if (textStatus === 'success') {
           const slideout = new window.Craft.Slideout(response.data)
           slideout.open()
           slideout.on('close', function () {
