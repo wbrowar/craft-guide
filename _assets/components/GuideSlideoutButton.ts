@@ -70,10 +70,10 @@ export class GuideSlideoutButton extends LitElement {
   }
 
   disconnectedCallback() {
-    super.disconnectedCallback()
-
     const guideButton = this.querySelector('button')
     guideButton?.removeEventListener('click', () => this._onButtonClick())
+
+    super.disconnectedCallback()
   }
 
   render() {

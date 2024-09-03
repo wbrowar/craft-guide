@@ -101,10 +101,9 @@ export interface Placement {
   groupId: string | null
   guideId: number
   id: number
-  portalMethod: EditPageLocation
   selector: string | null
-  theme: 'default' | 'frame'
   uri: string | null
+  weight: number
 }
 
 export enum PlacementAccess {

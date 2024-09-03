@@ -58,6 +58,67 @@ export class GuideOrganizer extends LitElement {
    * =========================================================================
    */
   /**
+   * TODO
+   */
+  private async _addPlacement(event: Event | undefined, group: OrganizerGroup) {
+    this._getAllPlacementsStatus = ApiStatus.Loading
+    const guideId = parseInt((event?.target as HTMLSelectElement)?.value)
+    if (guideId) {
+      const guideSelected = guides.find((guide) => guide.id === guideId)
+
+      if (guideSelected) {
+        await window.Craft?.postActionRequest(
+          'guide/placement/save-placement',
+          {
+            data: {
+              access: 'all',
+              group: group.name,
+              groupId: group.groupId ?? null,
+              guideId: guideSelected.id,
+            },
+          },
+          (response: object, textStatus: string) => {
+            if (textStatus === 'success') {
+              window.Craft.cp.displayNotice(
+                this.tMessages.placementSaveSuccess
+                  ?.replace('[guide]', guideSelected.title)
+                  .replace('[group]', group.name)
+              )
+              this._getAllPlacements()
+              this._getAllPlacementsStatus = ApiStatus.Success
+              if (event?.target) {
+                event.target.value = '__none__'
+              }
+            }
+          }
+        )
+      }
+    }
+  }
+
+  /**
+   * TODO
+   */
+  private async _deletePlacement(placementId: number, guide: GuideListGuide) {
+    this._getAllPlacementsStatus = ApiStatus.Loading
+    await window.Craft?.postActionRequest(
+      'guide/placement/delete-placement',
+      {
+        data: {
+          id: placementId,
+        },
+      },
+      (response: object, textStatus: string) => {
+        if (textStatus === 'success') {
+          this._getAllPlacements()
+          window.Craft.cp.displayNotice(this.tMessages.placementDeleteSuccess?.replace('[guide]', guide.title))
+          this._getAllPlacementsStatus = ApiStatus.Success
+        }
+      }
+    )
+  }
+
+  /**
    * Gets the list of placements from the database.
    */
   private async _getAllPlacements() {
@@ -133,7 +194,6 @@ export class GuideOrganizer extends LitElement {
   render() {
     return html`
       ${this._groupsDataStructured.map((group) => {
-        log(group)
         const placementsInGroup = this._placements.filter((placement) => placement.group === group.name)
         const guidesInGroup: Record<number, GuideListGuide> = {}
         placementsInGroup.forEach((placement) => {
@@ -143,8 +203,6 @@ export class GuideOrganizer extends LitElement {
           }
         })
         const guideOptions = guides.filter((guide) => !Object.keys(guidesInGroup).includes(guide.id.toString()))
-
-        log('huh', placementsInGroup, guidesInGroup)
 
         return html`
           <div class="guide-organizer-header guide-organizer-header-${group.headerSize}">
@@ -166,7 +224,13 @@ export class GuideOrganizer extends LitElement {
                                   ${this.tMessages.preview}
                                 </button>
                               </guide-slideout-button>
-                              <button class="btn icon delete small" type="button">${this.tMessages.remove}</button>
+                              <button
+                                class="btn icon delete small"
+                                type="button"
+                                @click="${() => this._deletePlacement(placement.id, guidesInGroup[placement.guideId])}"
+                              >
+                                ${this.tMessages.remove}
+                              </button>
                             </div>
                           </li>`
                         : nothing
@@ -178,10 +242,14 @@ export class GuideOrganizer extends LitElement {
               ? html`
                   <h3>${this.tMessages.addAGuide}</h3>
                   <div class="select">
-                    <select class="input">
-                      <option>${this.tMessages.addGuideToGroupOptionDefault}</option>
+                    <select
+                      class="input"
+                      ?disabled="${this._getAllPlacementsStatus === ApiStatus.Loading}"
+                      @input="${() => this._addPlacement(event, group)}"
+                    >
+                      <option value="__none__">${this.tMessages.addGuideToGroupOptionDefault}</option>
                       ${guideOptions.map((guide) => {
-                        return html`<option>${guide.title}</option>`
+                        return html`<option value="${guide.id}">${guide.title}</option>`
                       })}
                     </select>
                   </div>
@@ -190,6 +258,7 @@ export class GuideOrganizer extends LitElement {
           </div>
         `
       })}
+
       <hr />
       <h2>Placements:</h2>
       <ul>
