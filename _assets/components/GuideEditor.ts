@@ -62,7 +62,7 @@ export class GuideEditor extends LitElement {
     .guide-editor-content-editor {
       & > * {
         position: sticky;
-        top: 70px;
+        top: calc(var(--header-height) + 0.5rem);
       }
     }
   `

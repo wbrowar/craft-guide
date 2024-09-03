@@ -85,6 +85,16 @@ export enum GuideContentSource {
   Template = 'template',
 }
 
+export interface OrganizerGroup {
+  columns: number
+  description: string
+  groupId: string
+  header: string
+  headerSize: 'large' | 'small'
+  label: string
+  name: PlacementGroup
+}
+
 export interface Placement {
   access: PlacementAccess
   group: PlacementGroup

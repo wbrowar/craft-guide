@@ -12,12 +12,6 @@ export class GuideList extends LitElement {
    * ===========================================================================
    */
   /**
-   * The CP Trigger config setting used to format CP URLs.
-   */
-  @property({ attribute: 'cp-trigger' })
-  cpTrigger = ''
-
-  /**
    * Messages translated via Craft’s `t` filter.
    */
   @property({ attribute: 't-messages', type: Object })

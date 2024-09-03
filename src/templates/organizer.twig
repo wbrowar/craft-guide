@@ -29,10 +29,18 @@
   {% endif %}
 {% endblock %}
 
+{% set tMessages = {
+  'addAGuide': 'Add a Guide'|t('guide'),
+  'addGuideToGroupOptionDefault': 'Select a guide to add'|t('guide'),
+  'guidesDisplayed': 'Guides Displayed'|t('guide'),
+  'preview': 'Preview'|t('guide'),
+  'remove': 'Remove'|t('guide'),
+} %}
+
 {% set content %}
   <guide-organizer
       action-url-get-all-placements="{{ actionUrl('guide/placement/get-all-placements') }}"
-      cp-trigger="{{ craft.app.config.general.cpTrigger }}"
+      t-messages="{{ tMessages|json_encode }}"
       groups-data="{{ groupsData|json_encode }}"
   ></guide-organizer>
 {% endset %}

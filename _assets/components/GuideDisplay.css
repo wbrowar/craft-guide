@@ -39,7 +39,7 @@ guide-display {
   }
 
   #page-container:has(#header) & {
-    --guide-display-aside-top: 70px;
+    --guide-display-aside-top: calc(var(--header-height) + .5rem);
   }
 
   @container guide-display (width > 600px) {

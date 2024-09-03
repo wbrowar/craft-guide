@@ -8,7 +8,7 @@ guide-editor {
   }
   & > aside {
     position: sticky;
-    top: 70px;
+    top: calc(var(--header-height) + .5rem);
   }
   & .guide-tab-icon {
     width: 20px;

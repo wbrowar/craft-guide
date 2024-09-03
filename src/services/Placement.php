@@ -69,8 +69,8 @@ class Placement extends Component
     {
         $colMd = 2;
         $colSm = 1;
-        $headerMd = 2;
-        $headerSm = 1;
+        $headerMd = 'large';
+        $headerSm = 'small';
         $groups = [];
         
         if (Guide::$pro) {
