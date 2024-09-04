@@ -150,5 +150,7 @@ export interface PluginUserOperations {
 
 export interface ShowGuideSlideoutOptions {
   docs?: boolean
+  elementId?: number
+  groupHandle?: string
   slug: string
 }

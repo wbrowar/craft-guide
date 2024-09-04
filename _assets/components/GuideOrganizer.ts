@@ -87,7 +87,7 @@ export class GuideOrganizer extends LitElement {
               window.Craft.cp.displayNotice(
                 this.tMessages.placementSaveSuccess
                   ?.replace('[guide]', guideSelected.title)
-                  .replace('[group]', group.name)
+                  .replace('[group]', group.header)
               )
               this._getAllPlacements()
               this._getAllPlacementsStatus = ApiStatus.Success

@@ -19,8 +19,32 @@ class SlideoutController extends Controller
 {
     public function actionIndex(): Response
     {
+        $elementId = Craft::$app->getRequest()->getBodyParams()['elementId'] ?? null;
+        $groupHandle = Craft::$app->getRequest()->getBodyParams()['groupHandle'] ?? null;
+
+        if ($elementId && $groupHandle) {
+            switch ($groupHandle) {
+                case 'asset':
+                    $element = Craft::$app->getAssets()->getAssetById($elementId);
+                    break;
+                case 'category':
+                    $element = Craft::$app->getCategories()->getCategoryById($elementId);
+                    break;
+                case 'entry':
+                    $element = Craft::$app->getEntries()->getEntryById($elementId);
+                    break;
+                case 'global':
+                    $element = Craft::$app->getGlobals()->getSetById($elementId);
+                    break;
+                case 'user':
+                    $element = Craft::$app->getUsers()->getUserById($elementId);
+                    break;
+            }
+        }
+
         return $this->asJson(['data' => Guide::$view->renderTemplate('guide/slideout.twig', [
             'docs' => Craft::$app->getRequest()->getBodyParams()['docs'] === 'true',
+            'element' => $element ?? null,
             'slug' => Craft::$app->getRequest()->getBodyParams()['slug'],
         ])]);
     }

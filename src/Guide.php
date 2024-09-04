@@ -291,7 +291,7 @@ class Guide extends Plugin
                                         ];
                                     }
                                 }
-                                $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element);
+                                $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element, 'asset');
                                 break;
                             case Category::class:
                                 $queries = [[
@@ -309,14 +309,13 @@ class Guide extends Plugin
                                         ];
                                     }
                                 }
-                                $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element);
+                                $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element, 'category');
                                 break;
                             case Entry::class:
                                 $queries = [[
                                     'group' => 'entry',
                                     'groupId' => null,
                                 ]];
-
 
                                 if ($event->element['sectionId'] ?? false) {
                                     $section = Craft::$app->getEntries()->getSectionById($event->element['sectionId']);
@@ -328,29 +327,29 @@ class Guide extends Plugin
                                         ];
                                     }
                                 }
-                                $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element);
+                                $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element, 'entry');
                                 break;
-                            case GlobalSet::class:
-                                $queries = [[
-                                    'group' => 'global',
-                                    'groupId' => null,
-                                ]];
-
-                                if ($context['globalSet']->id ?? false) {
-                                    $queries[] = [
-                                        'group' => 'globalSet',
-                                        'groupId' => $context['globalSet']->uid,
-                                    ];
-                                }
-                                $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element ?? null);
-                                break;
+//                            case GlobalSet::class:
+//                                $queries = [[
+//                                    'group' => 'global',
+//                                    'groupId' => null,
+//                                ]];
+//
+//                                if ($context['globalSet']->id ?? false) {
+//                                    $queries[] = [
+//                                        'group' => 'globalSet',
+//                                        'groupId' => $context['globalSet']->uid,
+//                                    ];
+//                                }
+//                                $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element ?? null);
+//                                break;
                             case User::class:
                                 $queries = [[
                                     'group' => 'user',
                                     'groupId' => null,
                                 ]];
 
-                                $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element ?? null);
+                                $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element ?? null, 'user');
                                 break;
                         }
                     }
@@ -370,7 +369,7 @@ class Guide extends Plugin
                     ];
                 }
 
-                return $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries);
+                return $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element ?? null, 'global');
             });
 
             // Add custom field UI elements
@@ -626,7 +625,7 @@ class Guide extends Plugin
      *
      * @return string
      */
-    private function renderGuidesForTemplateHook(string $template, $queries, $element = null): string
+    private function renderGuidesForTemplateHook(string $template, $queries, $element = null, string $group = null): string
     {
         $guideIds = [];
         $teleportMap = [];
@@ -650,6 +649,7 @@ class Guide extends Plugin
             // Render sidebar template
             return self::$view->renderTemplate($template, [
                 'element' => $element,
+                'group' => $group,
                 'guides' => $guides,
                 'settings' => self::$settings,
             ]);

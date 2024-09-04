@@ -1,6 +1,7 @@
-import { html, LitElement } from 'lit'
+import { LitElement } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { guides, showGuideSlideout } from '../globals.ts'
+import { log } from '../utils/console.ts'
 
 @customElement('guide-slideout-button')
 export class GuideSlideoutButton extends LitElement {
@@ -14,6 +15,18 @@ export class GuideSlideoutButton extends LitElement {
    */
   @property({ attribute: 'docs-page', type: Boolean })
   docs = false
+
+  /**
+   * TODO
+   */
+  @property({ attribute: 'element-id', type: Number })
+  elementId = 0
+
+  /**
+   * TODO
+   */
+  @property({ attribute: 'group-handle', type: String })
+  groupHandle = ''
 
   /**
    * The slug of the guide being opened in the slideout.
@@ -49,7 +62,8 @@ export class GuideSlideoutButton extends LitElement {
    */
   private _onButtonClick() {
     if (this._isValid) {
-      showGuideSlideout({ docs: this.docs, slug: this.slug })
+      log('welllllll', this.elementId, this.groupHandle)
+      showGuideSlideout({ docs: this.docs, elementId: this.elementId, groupHandle: this.groupHandle, slug: this.slug })
     } else {
       window.Craft.cp.displayError(this.tMessages.guideSlideoutSlugError?.replace('[slug]', this.slug))
     }
@@ -86,10 +100,6 @@ export class GuideSlideoutButton extends LitElement {
     guideButton?.removeEventListener('click', () => this._onButtonClick())
 
     super.disconnectedCallback()
-  }
-
-  render() {
-    return html``
   }
 
   /**

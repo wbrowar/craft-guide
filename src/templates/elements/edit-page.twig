@@ -19,7 +19,7 @@
       {% for guide in guides %}
         {% set guidesSlugs = guidesSlugs|merge([guide.slug]) %}
       {% endfor %}
-      {% include 'guide/_partials/slideout_button.twig' with { docs: false, label: settings.guideButtonLabel != '' ? settings.guideButtonLabel : 'Guide'|t('guide'), slug: guidesSlugs|join('|') } only %}
+      {% include 'guide/_partials/slideout_button.twig' with { docs: false, element: element ?? null, group: group ?? null, label: settings.guideButtonLabel != '' ? settings.guideButtonLabel : 'Guide'|t('guide'), slug: guidesSlugs|join('|') } only %}
 
       {% set guideContentMove %}
         var lpGuideMarkup = document.querySelector('.lp-content [data-guide-content]');

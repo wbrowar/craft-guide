@@ -9,11 +9,16 @@ export const guides: GuideListGuide[] = globalsElement?.dataset?.guides
 export const proEdition: boolean = globalsElement?.dataset?.proEdition
   ? globalsElement.dataset.proEdition === 'true'
   : false
-export async function showGuideSlideout({ docs = false, slug = '' }: ShowGuideSlideoutOptions) {
+export async function showGuideSlideout({
+  docs = false,
+  elementId = -1,
+  groupHandle = '',
+  slug = '',
+}: ShowGuideSlideoutOptions) {
   if (proEdition) {
     await window.Craft?.postActionRequest(
       'guide/slideout',
-      { docs, slug },
+      { docs, elementId: elementId ?? null, groupHandle: groupHandle ?? null, slug },
       (response: { data: string }, textStatus: string) => {
         if (textStatus === 'success') {
           const slideout = new window.Craft.Slideout(response.data)
