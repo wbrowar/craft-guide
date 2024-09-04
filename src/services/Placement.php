@@ -182,6 +182,17 @@ class Placement extends Component
                 }
             }
 
+            // URI
+            $groups[] = [
+                'columns' => $colSm,
+                'description' => 'Individual pages in the Control Panel',
+                'header' => 'Control Panel Pages',
+                'headerSize' => $headerMd,
+                'label' => 'Control Panel Pages',
+                'name' => 'uri',
+                'groupId' => null,
+            ];
+
             // Users
             $groups[] = [
                 'columns' => $colSm,

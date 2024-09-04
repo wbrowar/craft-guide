@@ -183,6 +183,10 @@ export class GuideOrganizer extends LitElement {
     if (user) {
       this._groupsDataStructured.push(user)
     }
+    const uri = this.groupsData.find((group) => group.name === PlacementGroup.Uri)
+    if (uri) {
+      this._groupsDataStructured.push(uri)
+    }
 
     log('structured', this._groupsDataStructured)
 
@@ -207,7 +211,10 @@ export class GuideOrganizer extends LitElement {
             guidesInGroup[guide.id] = guide
           }
         })
-        const guideOptions = guides.filter((guide) => !Object.keys(guidesInGroup).includes(guide.id.toString()))
+        const guideOptions =
+          group.name === PlacementGroup.Uri
+            ? guides
+            : guides.filter((guide) => !Object.keys(guidesInGroup).includes(guide.id.toString()))
 
         return html`
           <div class="guide-organizer-header guide-organizer-header-${group.headerSize}">
@@ -222,7 +229,23 @@ export class GuideOrganizer extends LitElement {
                     ${placementsInGroup.map((placement) => {
                       return guidesInGroup[placement.guideId]
                         ? html`<li>
-                            <span>${guidesInGroup[placement.guideId].title}</span>
+                            <div>
+                              <span>${guidesInGroup[placement.guideId].title}</span>
+
+                              ${group.name === PlacementGroup.Uri
+                                ? html`
+                                    <span>displayed on page, ✅</span>
+                                    <input type="text" placeholder="uri" />
+                                    <span>,</span>
+                                    <select>
+                                      <option value="before">Before</option>
+                                      <option value="after">After</option>
+                                    </select>
+                                    <span>CSS selector, </span>
+                                    <input type="text" placeholder="uri" />
+                                  `
+                                : nothing}
+                            </div>
                             <div class="buttons">
                               <guide-slideout-button page-slug="${guidesInGroup[placement.guideId].slug}">
                                 <button class="btn small" data-icon="eye" type="button">
