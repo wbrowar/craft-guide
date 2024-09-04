@@ -95,12 +95,20 @@ export interface OrganizerGroup {
   name: PlacementGroup
 }
 
+export enum MoveMethod {
+  After = 'after',
+  Append = 'append',
+  Before = 'before',
+  Prepend = 'prepend',
+}
+
 export interface Placement {
   access: PlacementAccess
   group: PlacementGroup
   groupId: string | null
   guideId: number
   id: number
+  moveMethod: MoveMethod
   selector: string | null
   uri: string | null
   weight: number

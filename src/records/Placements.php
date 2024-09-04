@@ -18,7 +18,7 @@ use craft\db\ActiveRecord;
  * @property integer $id
  * @property string $access
  * @property string $group
- * @property integer $groupId
+ * @property string $groupId
  * @property integer $guideId
  * @property string $selector
  * @property string $uri

@@ -585,7 +585,7 @@ class Guide extends Plugin
     /**
      * Render admin globals used by Guide and Organizer editors
      */
-    public function renderGuideDisplaysForPage()
+    public function renderGuideDisplaysForPage(): void
     {
         $uri = self::$plugin->placement->formatUri(Craft::$app->getRequest()->getFullUri());
 
@@ -593,24 +593,22 @@ class Guide extends Plugin
 
         if ($placements ?? false) {
             $guideIds = [];
-            $teleportMap = [];
+            $moveMap = [];
 
             foreach ($placements as $placement) {
                 if ($placement['selector'] ?? false) {
-                    $teleportMap['id-' . $placement['guideId']] = $placement['selector'];
                     $guideIds[] = $placement['guideId'];
+                    $moveMap[$placement['id'] . '-' . $placement['guideId']] = $placement['selector'] ?? '#content';
                 }
             }
 
             if (!empty($guideIds)) {
                 $guides = self::$plugin->guide->getGuides(['id' => $guideIds]);
 
-//                TODO replace this
                 if (!empty($guides)) {
-                    echo self::$view->renderTemplate('guide/_partials/guide_display', [
-                        'displayId' => 'uri',
+                    echo self::$view->renderTemplate('guide/_partials/move_guides.twig', [
                         'guides' => $guides,
-                        'teleportMap' => $teleportMap,
+                        'moveMap' => $moveMap,
                     ]);
                 }
             }

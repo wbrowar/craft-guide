@@ -22,16 +22,16 @@
       {% include 'guide/_partials/slideout_button.twig' with { docs: false, element: element ?? null, group: group ?? null, label: settings.guideButtonLabel != '' ? settings.guideButtonLabel : 'Guide'|t('guide'), slug: guidesSlugs|join('|') } only %}
 
       {% set guideContentMove %}
-        var lpGuideMarkup = document.querySelector('.lp-content [data-guide-content]');
-        if (lpGuideMarkup) {
-          lpGuideMarkup.remove();
+        var guideLpGuideMarkup = document.querySelector('.lp-content [data-guide-content]');
+        if (guideLpGuideMarkup) {
+          guideLpGuideMarkup.remove();
         }
 
         var guideMarkup = document.querySelector('#content [data-guide-content]');
-        var contentContainer = document.querySelector('#action-buttons');
+        var guideContentContainer = document.querySelector('#action-buttons');
 
-        if (guideMarkup && contentContainer) {
-          contentContainer.prepend(guideMarkup);
+        if (guideMarkup && guideContentContainer) {
+          guideContentContainer.prepend(guideMarkup);
         }
       {% endset %}
       {% js guideContentMove %}
@@ -44,19 +44,19 @@
       } only %}
 
       {% set guideContentMove %}
-        var lpGuideMarkup = document.querySelector('.lp-content [data-guide-content]');
-        if (lpGuideMarkup) {
-          lpGuideMarkup.remove();
+        var guideLpGuideMarkup = document.querySelector('.lp-content [data-guide-content]');
+        if (guideLpGuideMarkup) {
+          guideLpGuideMarkup.remove();
         }
 
         var guideMarkup = document.querySelector('#content [data-guide-content]');
-        var contentContainer = document.querySelector('.content-grid__main');
+        var guideContentContainer = document.querySelector('.content-grid__main');
 
-        if (guideMarkup && contentContainer) {
+        if (guideMarkup && guideContentContainer) {
         {% if settings.editPageLocation == 'append' %}
-          contentContainer.append(guideMarkup);
+          guideContentContainer.append(guideMarkup);
         {% elseif settings.editPageLocation == 'prepend' %}
-          contentContainer.prepend(guideMarkup);
+          guideContentContainer.prepend(guideMarkup);
         {% endif %}
         }
       {% endset %}
