@@ -213,7 +213,7 @@ class Placement extends Component
      *
      * @return Placements | null
      */
-    public function getPlacements(array $params = [], string $queryType = 'all')
+    public function getPlacements(array $params = [], string $queryType = 'all'): array|Placements|null
     {
         if (!Guide::$pro) {
             $params['group'] = 'nav';
@@ -297,7 +297,7 @@ class Placement extends Component
         $record->groupId = $model->groupId;
         $record->guideId = $model->guideId;
         $record->selector = $model->selector;
-        $record->weight = $model->weight;
+        $record->weight = $model->weight ?? 1;
         $record->uri = $this->formatUri($model->uri);
 
         $record->save();

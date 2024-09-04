@@ -105,12 +105,10 @@ class Guide extends Widget
     public function getSettingsHtml(): ?string
     {
         if (GuidePlugin::$pro) {
-            $placements = GuidePlugin::$plugin->placement->getPlacements(['group' => 'widget']);
-
             return Craft::$app->getView()->renderTemplate(
                 'guide/widgets/guide_settings',
                 [
-                    'selectableGuides' => GuidePlugin::$plugin->guide->getGuidesForUserFromPlacements($placements),
+                    'selectableGuides' => $this->getSelectableGuides(),
                     'userOperations' => GuidePlugin::$plugin->getUserOperations(),
                     'widget' => $this,
                 ]
@@ -139,8 +137,22 @@ class Guide extends Widget
     /**
      * @inheritdoc
      */
+    public function getSelectableGuides()
+    {
+        $placements = GuidePlugin::$plugin->placement->getPlacements(['group' => 'widget']);
+        return GuidePlugin::$plugin->guide->getGuidesForUserFromPlacements($placements);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getGuideFromGuideId()
     {
-        return GuidePlugin::$plugin->guide->getGuides(['id' => $this->guideId], 'one');
+        foreach ($this->getSelectableGuides() as $getSelectableGuide) {
+            if ($getSelectableGuide['id'] == $this->guideId) {
+                return $getSelectableGuide;
+            }
+        }
+        return null;
     }
 }

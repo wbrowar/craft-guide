@@ -1,3 +1,15 @@
+[data-guide-content] {
+  #content + & {
+    margin-block-start: var(--l);
+  }
+  &:has(+ #content){
+    margin-block-end: var(--l);
+  }
+
+  #action-buttons & + .activity-container:empty {
+    display: none;
+  }
+}
 .guide-display {
   container-name: guide-display;
   container-type: inline-size;

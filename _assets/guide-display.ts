@@ -1,6 +1,7 @@
-import "./components/GuideDisplay.ts";
-import "./components/GuideSlideoutButton.ts"
-import './global.css';
+import './components/GuideDisplay.ts'
+import './components/GuideSlideoutButton.ts'
+import './components/GuideUIElement.ts'
+import './global.css'
 
 // Add guides to the page
 // const guideDisplays: NodeListOf<HTMLElement> = document.querySelectorAll('[data-guide-display]');

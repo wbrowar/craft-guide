@@ -60,7 +60,7 @@ class GuideDisplay extends BaseUiElement
      */
     public function settingsHtml(): null|string
     {
-        return Craft::$app->getView()->renderTemplate('guide/fieldlayoutelements/guide_display_settings');
+        return Craft::$app->getView()->renderTemplate('guide/fieldlayoutelements/guide_display_settings.twig');
     }
 
     /**
@@ -80,7 +80,6 @@ class GuideDisplay extends BaseUiElement
                 'guide' => $guide ?? null,
                 'placementId' => $placement->id ?? null,
                 'proEdition' => Guide::$pro,
-                'static' => $static,
                 'uid' => $this->uid,
             ]));
         } catch (\Throwable $e) {

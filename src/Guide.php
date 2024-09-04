@@ -273,84 +273,86 @@ class Guide extends Plugin
                 ElementsController::class,
                 ElementsController::EVENT_DEFINE_EDITOR_CONTENT,
                 function (DefineElementEditorHtmlEvent $event) {
-                    switch (get_class($event->element)) {
-                        case Asset::class:
-                            $queries = [[
-                                'group' => 'asset',
-                                'groupId' => null,
-                            ]];
+                    if (!Craft::$app->getRequest()->isPreview) {
+                        switch (get_class($event->element)) {
+                            case Asset::class:
+                                $queries = [[
+                                    'group' => 'asset',
+                                    'groupId' => null,
+                                ]];
 
-                            if ($event->element->volumeId ?? false) {
-                                $volume = Craft::$app->getVolumes()->getVolumeById($event->element->volumeId);
+                                if ($event->element->volumeId ?? false) {
+                                    $volume = Craft::$app->getVolumes()->getVolumeById($event->element->volumeId);
 
-                                if ($volume) {
+                                    if ($volume) {
+                                        $queries[] = [
+                                            'group' => 'assetVolume',
+                                            'groupId' => $volume->uid,
+                                        ];
+                                    }
+                                }
+                                $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element);
+                                break;
+                            case Category::class:
+                                $queries = [[
+                                    'group' => 'category',
+                                    'groupId' => null,
+                                ]];
+
+                                if ($event->element->groupId ?? false) {
+                                    $group = Craft::$app->getCategories()->getGroupById($event->element['groupId']);
+
+                                    if ($group->uid) {
+                                        $queries[] = [
+                                            'group' => 'categoryGroup',
+                                            'groupId' => $group->uid,
+                                        ];
+                                    }
+                                }
+                                $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element);
+                                break;
+                            case Entry::class:
+                                $queries = [[
+                                    'group' => 'entry',
+                                    'groupId' => null,
+                                ]];
+
+
+                                if ($event->element['sectionId'] ?? false) {
+                                    $section = Craft::$app->getEntries()->getSectionById($event->element['sectionId']);
+
+                                    if ($section->uid ?? false) {
+                                        $queries[] = [
+                                            'group' => 'section',
+                                            'groupId' => $section->uid,
+                                        ];
+                                    }
+                                }
+                                $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element);
+                                break;
+                            case GlobalSet::class:
+                                $queries = [[
+                                    'group' => 'global',
+                                    'groupId' => null,
+                                ]];
+
+                                if ($context['globalSet']->id ?? false) {
                                     $queries[] = [
-                                        'group' => 'assetVolume',
-                                        'groupId' => $volume->uid,
+                                        'group' => 'globalSet',
+                                        'groupId' => $context['globalSet']->uid,
                                     ];
                                 }
-                            }
-                            $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element);
-                            break;
-                        case Category::class:
-                            $queries = [[
-                                'group' => 'category',
-                                'groupId' => null,
-                            ]];
+                                $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element ?? null);
+                                break;
+                            case User::class:
+                                $queries = [[
+                                    'group' => 'user',
+                                    'groupId' => null,
+                                ]];
 
-                            if ($event->element->groupId ?? false) {
-                                $group = Craft::$app->getCategories()->getGroupById($event->element['groupId']);
-
-                                if ($group->uid) {
-                                    $queries[] = [
-                                        'group' => 'categoryGroup',
-                                        'groupId' => $group->uid,
-                                    ];
-                                }
-                            }
-                            $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element);
-                            break;
-                        case Entry::class:
-                            $queries = [[
-                                'group' => 'entry',
-                                'groupId' => null,
-                            ]];
-                            
-
-                            if ($event->element['sectionId'] ?? false) {
-                                $section = Craft::$app->getEntries()->getSectionById($event->element['sectionId']);
-
-                                if ($section->uid ?? false) {
-                                    $queries[] = [
-                                        'group' => 'section',
-                                        'groupId' => $section->uid,
-                                    ];
-                                }
-                            }
-                            $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element);
-                            break;
-//                        case GlobalSet::class:
-//                            $queries = [[
-//                                'group' => 'global',
-//                                'groupId' => null,
-//                            ]];
-//
-//                            if ($context['globalSet']->id ?? false) {
-//                                $queries[] = [
-//                                    'group' => 'globalSet',
-//                                    'groupId' => $context['globalSet']->uid,
-//                                ];
-//                            }
-//                            $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element ?? null);
-//                            break;
-                        case User::class:
-                            $queries = [[
-                                'group' => 'user',
-                                'groupId' => null,
-                            ]];
-
-                            $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element ?? null);
-                            break;
+                                $event->html .= $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $event->element ?? null);
+                                break;
+                        }
                     }
                 });
 
@@ -370,14 +372,6 @@ class Guide extends Plugin
 
                 return $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries);
             });
-//            Craft::$app->view->hook('cp.users.edit.content', function(&$context) {
-//                $queries = [[
-//                    'group' => 'user',
-//                    'groupId' => null,
-//                ]];
-//
-//                return $this->renderGuidesForTemplateHook('guide/elements/edit-page.twig', $queries, $context['user'] ?? null);
-//            });
 
             // Add custom field UI elements
             Event::on(
@@ -644,6 +638,7 @@ class Guide extends Plugin
                 $guideIds[] = $placement->guideId;
 
                 if ($placement->selector) {
+                    // TODO update this
                     $teleportMap['id-' . $placement->guideId] = $placement->selector;
                 }
             }
@@ -656,8 +651,7 @@ class Guide extends Plugin
             return self::$view->renderTemplate($template, [
                 'element' => $element,
                 'guides' => $guides,
-                'teleportMap' => $teleportMap,
-                'teleportMethod' => self::$settings->defaultTeleportMethod,
+                'settings' => self::$settings,
             ]);
         }
 

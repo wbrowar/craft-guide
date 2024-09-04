@@ -22,6 +22,7 @@ use craft\db\ActiveRecord;
  * @property integer $guideId
  * @property string $selector
  * @property string $uri
+ * @property integer $weight
  * 
  * @author    Will Browar
  * @package   Guide

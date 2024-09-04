@@ -10,17 +10,57 @@
  * @since     2.0.0
  */ #}
 
-{% set teleportMethod = teleportMethod ?? 'prepend' %}
+{#{% dd _context %}#}
 
 {% if guides|length %}
-  {% include 'guide/_partials/guide_display.twig' with {
-    guideDisplayArea: 'elementEdit',
-    displayId: 'page',
-    element: element ?? null,
-    guides: guides,
-    teleportContainerClass: 'content-pane ' ~ (teleportMethod == 'prepend' ? 'g-mb-3' : 'g-mt-3'),
-    teleportMap: teleportMap ?? false,
-    teleportMethod: teleportMethod,
-    teleportSelector: '#content-container'
-  } only %}
+  <div data-guide-content>
+    {% if settings.editPageLocation == 'slideout' %}
+      {% set guidesSlugs = [] %}
+      {% for guide in guides %}
+        {% set guidesSlugs = guidesSlugs|merge([guide.slug]) %}
+      {% endfor %}
+      {% include 'guide/_partials/slideout_button.twig' with { docs: false, label: settings.guideButtonLabel != '' ? settings.guideButtonLabel : 'Guide'|t('guide'), slug: guidesSlugs|join('|') } only %}
+
+      {% set guideContentMove %}
+        var lpGuideMarkup = document.querySelector('.lp-content [data-guide-content]');
+        if (lpGuideMarkup) {
+          lpGuideMarkup.remove();
+        }
+
+        var guideMarkup = document.querySelector('#content [data-guide-content]');
+        var contentContainer = document.querySelector('#action-buttons');
+
+        if (guideMarkup && contentContainer) {
+          contentContainer.prepend(guideMarkup);
+        }
+      {% endset %}
+      {% js guideContentMove %}
+    {% else %}
+      {% include 'guide/_partials/guide_display.twig' with {
+        guideDisplayArea: 'elementEdit',
+        displayId: 'page',
+        element: element ?? null,
+        guides: guides,
+      } only %}
+
+      {% set guideContentMove %}
+        var lpGuideMarkup = document.querySelector('.lp-content [data-guide-content]');
+        if (lpGuideMarkup) {
+          lpGuideMarkup.remove();
+        }
+
+        var guideMarkup = document.querySelector('#content [data-guide-content]');
+        var contentContainer = document.querySelector('.content-grid__main');
+
+        if (guideMarkup && contentContainer) {
+        {% if settings.editPageLocation == 'append' %}
+          contentContainer.append(guideMarkup);
+        {% elseif settings.editPageLocation == 'prepend' %}
+          contentContainer.prepend(guideMarkup);
+        {% endif %}
+        }
+      {% endset %}
+      {% js guideContentMove %}
+    {% endif %}
+  </div>
 {% endif %}

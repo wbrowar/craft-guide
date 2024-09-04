@@ -63,7 +63,19 @@ export class GuideSlideoutButton extends LitElement {
   connectedCallback() {
     super.connectedCallback()
 
-    this._isValid = this.docs || guides.find((guide) => guide.slug === this.slug) !== undefined
+    if (this.docs) {
+      this._isValid = true
+    } else {
+      this._isValid = true
+      this.slug.split('|').forEach((slug) => {
+        // If it continues to be valid and a guide with the slug can be found then keep the `_isValid` setting to `true`.
+        if (this._isValid && guides.find((guide) => guide.slug === slug) !== undefined) {
+          this._isValid = true
+        } else {
+          this._isValid = false
+        }
+      })
+    }
 
     const guideButton = this.querySelector('button')
     guideButton?.addEventListener('click', () => this._onButtonClick())

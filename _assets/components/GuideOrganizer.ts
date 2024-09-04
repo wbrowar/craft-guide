@@ -67,15 +67,20 @@ export class GuideOrganizer extends LitElement {
       const guideSelected = guides.find((guide) => guide.id === guideId)
 
       if (guideSelected) {
+        const params = {
+          access: 'all',
+          group: group.name,
+          guideId: guideSelected.id,
+        }
+
+        if (group.groupId) {
+          params['groupId'] = group.groupId
+        }
+
         await window.Craft?.postActionRequest(
           'guide/placement/save-placement',
           {
-            data: {
-              access: 'all',
-              group: group.name,
-              groupId: group.groupId ?? null,
-              guideId: guideSelected.id,
-            },
+            data: params,
           },
           (response: object, textStatus: string) => {
             if (textStatus === 'success') {

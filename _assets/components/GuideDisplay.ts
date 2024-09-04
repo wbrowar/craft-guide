@@ -1,6 +1,6 @@
 import { html, LitElement, nothing } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
-import { Guide } from '../plugins'
+import { Guide } from '../types.ts'
 import { guides, proEdition, settings } from '../globals.ts'
 
 @customElement('guide-display')

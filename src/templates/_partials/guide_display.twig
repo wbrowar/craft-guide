@@ -24,7 +24,17 @@
 } %}
 
 {% if guides|length or (inlineEditorId ?? false) %}
-  <div class="guide-display">
+  {% set containerClasses = ['guide-display'] %}
+
+  {% if guideDisplayArea == 'elementEdit' %}
+    {% set containerClasses = containerClasses|merge(['content-pane']) %}
+  {% endif %}
+
+  {% set containerAttr = {
+    class: containerClasses,
+  } %}
+
+  <div {{ attr(containerAttr) }}>
     <guide-display t-messages="{{ tMessages|json_encode }}">
       <div class="guides">
         {% for guide in guides %}
