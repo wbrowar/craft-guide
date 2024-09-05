@@ -36,12 +36,20 @@
       {% endset %}
       {% js guideContentMove %}
     {% else %}
-      {% include 'guide/_partials/guide_display.twig' with {
+      {% set params = {
         guideDisplayArea: 'elementEdit',
         displayId: 'page',
         element: element ?? null,
         guides: guides,
-      } only %}
+      } %}
+
+      {% if group == 'user' %}
+        {% set params = params|merge({ user: element ?? null }) %}
+      {% else %}
+        {% set params = params|merge({ element: element ?? null }) %}
+      {% endif %}
+
+      {% include 'guide/_partials/guide_display.twig' with params only %}
 
       {% set guideContentMove %}
         var guideLpGuideMarkup = document.querySelector('.lp-content [data-guide-content]');

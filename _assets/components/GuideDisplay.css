@@ -72,25 +72,29 @@ guide-display {
     margin-block-start: 2.4em;
   }
 
-  & :is(blockquote, dd, dl, h1, h2, h3, h4, h5, h6, hr, p, li, pre) {
+  & h1 {
+    font-size: 1.8rem;
+    font-weight: 400;
+  }
+
+  & :is(blockquote, dd, dl, h2, h3, h4, h5, h6, hr, p, li, pre) {
     max-width: 70ch;
     font-size: 1rem;
     line-height: 1.4rem;
     text-wrap: pretty;
-
-    & code {
-      padding: 0.4em;
-      background-color: color-mix(in srgb, var(--blue-100), transparent 40%);
-      border-radius: var(--guide-border-radius);
-      font-family: monospace;
-      user-select: all;
-    }
   }
   & blockquote {
     padding-inline: var(--l);
     padding-block: var(--s);
     background-color: color-mix(in srgb, var(--gray-100), transparent 70%);
     border-inline-start: 1px solid var(--gray-300);
+  }
+  & code {
+    padding: 0.4em;
+    background-color: color-mix(in srgb, var(--blue-100), transparent 40%);
+    border-radius: var(--guide-border-radius);
+    font-family: monospace;
+    user-select: all;
   }
   & iframe {
     aspect-ratio: var(--guide-iframe-aspect);

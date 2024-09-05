@@ -252,22 +252,27 @@ class Guide extends Plugin
             }
         );
 
+        // Add custom permissions
+        if (Craft::$app->edition->value > 0) {
+            Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
+                $permissions = [
+                    'editGuides' => ['label' => Craft::t('guide', 'Edit Guides')],
+                ];
+
+                if (self::$pro) {
+                    $permissions['deleteGuides'] = ['label' => Craft::t('guide', 'Delete Guides')];
+                    $permissions['useOrganizer'] = ['label' => Craft::t('guide', 'Use Organizer and UI Element Selector')];
+                }
+
+                $event->permissions[] = [
+                    'heading' => Craft::t('guide', 'Guide'),
+                    'permissions' => $permissions
+                ];
+            });
+        }
+
         // Register Pro features
         if (self::$pro && self::$schemaReady) {
-            // Add custom permissions
-            if (Craft::$app->edition > 0) {
-                Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
-                    $event->permissions[] = [
-                        'heading' => Craft::t('guide', 'Guide'),
-                        'permissions' => [
-                            'editGuides' => ['label' => Craft::t('guide', 'Edit Guides')],
-                            'deleteGuides' => ['label' => Craft::t('guide', 'Delete Guides')],
-                            'useOrganizer' => ['label' => Craft::t('guide', 'Use Organizer and UI Element Selector')],
-                        ]
-                    ];
-                });
-            }
-
             // Add Guides to CP Groups
             Event::on(
                 ElementsController::class,

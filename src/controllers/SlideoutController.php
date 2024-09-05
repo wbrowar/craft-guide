@@ -44,7 +44,7 @@ class SlideoutController extends Controller
 
         return $this->asJson(['data' => Guide::$view->renderTemplate('guide/slideout.twig', [
             'docs' => Craft::$app->getRequest()->getBodyParams()['docs'] === 'true',
-            'element' => $element ?? null,
+            ($groupHandle == 'user' ? 'user' : 'element') => $element ?? null,
             'slug' => Craft::$app->getRequest()->getBodyParams()['slug'],
         ])]);
     }
