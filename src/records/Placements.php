@@ -20,6 +20,7 @@ use craft\db\ActiveRecord;
  * @property string $group
  * @property string $groupId
  * @property integer $guideId
+ * @property string $moveMethod
  * @property string $selector
  * @property string $uri
  * @property integer $weight

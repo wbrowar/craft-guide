@@ -603,7 +603,10 @@ class Guide extends Plugin
             foreach ($placements as $placement) {
                 if ($placement['selector'] ?? false) {
                     $guideIds[] = $placement['guideId'];
-                    $moveMap[$placement['id'] . '-' . $placement['guideId']] = $placement['selector'] ?? '#content';
+                    $moveMap[$placement['id'] . '-' . $placement['guideId']] = [
+                        'moveMethod' => $placement['moveMethod'] ?? 'append',
+                        'selector' => $placement['selector'] ?? '#content',
+                    ];
                 }
             }
 

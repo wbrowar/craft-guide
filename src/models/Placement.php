@@ -54,6 +54,14 @@ class Placement extends Model
     public $guideId;
 
     /**
+     * The handle of the JavaScript method used to move a `uri` guide into its selector target.
+     * Options: `after`, `append`, `before`, `prepend`
+     *
+     * @var string
+     */
+    public $moveMethod = 'append';
+
+    /**
      * The CSS selector where the guide will be placed in the CP.
      *
      * @var string
@@ -86,9 +94,10 @@ class Placement extends Model
             ['guideId', 'required'],
 
             [['guideId', 'weight'], 'integer'],
-            [['access', 'group', 'groupId', 'selector', 'uri'], 'string'],
+            [['access', 'group', 'groupId', 'moveMethod', 'selector', 'uri'], 'string'],
 
             ['access', 'default', 'value' => 'all'],
+            ['moveMethod', 'default', 'value' => 'append'],
         ];
     }
 }

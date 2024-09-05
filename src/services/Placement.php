@@ -307,8 +307,9 @@ class Placement extends Component
         $record->group = $model->group;
         $record->groupId = $model->groupId;
         $record->guideId = $model->guideId;
+        $record->moveMethod = $model->moveMethod;
         $record->selector = $model->selector;
-        $record->weight = $model->weight ?? 1;
+        $record->weight = $model->weight;
         $record->uri = $this->formatUri($model->uri);
 
         $record->save();

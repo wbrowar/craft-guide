@@ -117,6 +117,7 @@ class PlacementController extends Controller
             'group' => $params['group'],
             'groupId' => $params['groupId'] ?? null,
             'guideId' => $params['guideId'],
+            'moveMethod' => $params['moveMethod'] ?? 'append',
             'selector' => $params['selector'] ?? null,
             'uri' => $params['uri'] ?? null,
             'weight' => $params['weight'] ?? 1,

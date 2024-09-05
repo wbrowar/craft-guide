@@ -109,6 +109,7 @@ class Install extends Migration
                     'access' => $this->string(255),
                     'group' => $this->string(255),
                     'groupId' => $this->string(255),
+                    'moveMethod' => $this->string(255)->defaultValue('append'),
                     'selector' => $this->string(255),
                     'uri' => $this->string(255),
                     'weight' => $this->integer()->defaultValue(1),

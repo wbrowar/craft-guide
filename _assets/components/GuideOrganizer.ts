@@ -2,7 +2,7 @@ import { html, LitElement, nothing } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { log } from '../utils/console.ts'
 import { guides, settings } from '../globals.ts'
-import { ApiStatus, GuideListGuide, OrganizerGroup, Placement, PlacementGroup } from '../types.ts'
+import { ApiStatus, GuideListGuide, MoveMethod, OrganizerGroup, Placement, PlacementGroup } from '../types.ts'
 
 @customElement('guide-organizer')
 export class GuideOrganizer extends LitElement {
@@ -140,7 +140,9 @@ export class GuideOrganizer extends LitElement {
   private async _saveUriPlacement(event: Event | undefined, field: string, placement: Placement) {
     const value = (event?.target as HTMLSelectElement)?.value
 
-    if (field === 'selector' && value === placement.selector) {
+    if (field === 'moveMethod' && value === placement.moveMethod) {
+      return
+    } else if (field === 'selector' && value === placement.selector) {
       return
     } else if (field === 'uri' && value === placement.uri) {
       return
@@ -153,6 +155,7 @@ export class GuideOrganizer extends LitElement {
       group: 'uri',
       guideId: placement.guideId,
       id: placement.id,
+      moveMethod: field === 'moveMethod' ? value : placement.moveMethod,
       selector: field === 'selector' ? value : placement.selector,
       uri: field === 'uri' ? value : placement.uri,
     }
@@ -294,11 +297,31 @@ export class GuideOrganizer extends LitElement {
                                         @blur="${() => this._saveUriPlacement(event, 'uri', placement)}"
                                     /></span>
                                     <div class="select">
-                                      <select class="input">
-                                        <option value="before">before</option>
-                                        <option value="prepend">at the top of</option>
-                                        <option value="append" selected>at the bottom of</option>
-                                        <option value="after">after</option>
+                                      <select
+                                        class="input"
+                                        @input="${() => this._saveUriPlacement(event, 'moveMethod', placement)}"
+                                      >
+                                        <option
+                                          value="before"
+                                          ?selected="${placement.moveMethod === MoveMethod.Before}"
+                                        >
+                                          before
+                                        </option>
+                                        <option
+                                          value="prepend"
+                                          ?selected="${placement.moveMethod === MoveMethod.Prepend}"
+                                        >
+                                          at the top of
+                                        </option>
+                                        <option
+                                          value="append"
+                                          ?selected="${placement.moveMethod === MoveMethod.Append}"
+                                        >
+                                          at the bottom of
+                                        </option>
+                                        <option value="after" ?selected="${placement.moveMethod === MoveMethod.After}">
+                                          after
+                                        </option>
                                       </select>
                                     </div>
 
