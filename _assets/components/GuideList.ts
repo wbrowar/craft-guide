@@ -46,7 +46,7 @@ export class GuideList extends LitElement {
    * =========================================================================
    */
   /**
-   * Formats a URI into a relative CP URL.
+   * TODO
    */
   private async _copyText(text: string) {
     await copyToClipboard(text)
@@ -119,10 +119,6 @@ export class GuideList extends LitElement {
   }
   connectedCallback() {
     super.connectedCallback()
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback()
   }
 
   render() {

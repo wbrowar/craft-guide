@@ -31,7 +31,7 @@ class ImportExport extends Utility
      */
     public static function displayName(): string
     {
-        return Craft::t('guide', 'Guide');
+        return Craft::t('guide', 'Guide Export + Import');
     }
 
     /**
@@ -63,8 +63,6 @@ class ImportExport extends Utility
      */
     public static function contentHtml(): string
     {
-//        Craft::$app->getView()->registerAssetBundle(ExportGuideTemplateUtilityAsset::class);
-
         return Craft::$app->getView()->renderTemplate(
             'guide/utilities/export-import',
             [

@@ -91,10 +91,6 @@ export class GuideDisplay extends LitElement {
     }
   }
 
-  disconnectedCallback() {
-    super.disconnectedCallback()
-  }
-
   render() {
     const nav = html`
       <nav>

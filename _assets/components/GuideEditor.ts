@@ -254,10 +254,6 @@ export class GuideEditor extends LitElement {
     }
   }
 
-  disconnectedCallback() {
-    super.disconnectedCallback()
-  }
-
   render() {
     const contentButtons = []
     if (this._componentLists.includes(EditorTabGroup.Components)) {

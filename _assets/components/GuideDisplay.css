@@ -70,18 +70,26 @@ guide-display {
   }
   & > * + :is(h1, h2, h3, h4, h5, h6) {
     margin-block-start: 2.4em;
+    text-wrap: balance;
   }
 
-  & h1 {
-    font-size: 1.8rem;
-    font-weight: 400;
-  }
-
-  & :is(blockquote, dd, dl, h2, h3, h4, h5, h6, hr, p, li, pre) {
+  & :is(blockquote, dd, dl, h1, h2, h3, h4, h5, h6, p, li, pre) {
     max-width: 70ch;
     font-size: 1rem;
     line-height: 1.4rem;
     text-wrap: pretty;
+  }
+  & h1 {
+    padding-block-end: .3em;
+    font-size: 1.8rem;
+    font-weight: 300;
+    border-block-end: 1px solid var(--hairline-color);
+  }
+  & h2 {
+    padding-block-end: .2em;
+    font-size: 1.3rem;
+    font-weight: 400;
+    border-block-end: 1px solid var(--hairline-color);
   }
   & blockquote {
     padding-inline: var(--l);

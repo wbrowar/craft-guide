@@ -2,6 +2,7 @@ import { GuideListGuide, PluginSettings, PluginUserOperations, ShowGuideSlideout
 
 const globalsElement = document.getElementById('guide-admin-globals')
 
+export const assetPath: string = globalsElement?.dataset?.assetPath || ''
 export const devMode: boolean = globalsElement?.dataset?.devMode ? globalsElement.dataset.devMode === 'true' : false
 export const guides: GuideListGuide[] = globalsElement?.dataset?.guides
   ? JSON.parse(globalsElement.dataset.guides)

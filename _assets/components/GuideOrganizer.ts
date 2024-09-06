@@ -237,10 +237,6 @@ export class GuideOrganizer extends LitElement {
     log('settings', settings)
   }
 
-  disconnectedCallback() {
-    super.disconnectedCallback()
-  }
-
   render() {
     return html`
       ${this._groupsDataStructured.map((group) => {

@@ -148,12 +148,6 @@ You may use templates to create your CMS guide in a way that's easily portable f
 1. Click the `Save` button.
 1. Use the **Guide Home** toggle to add your guide to the Guide home page or click on the title to visit the guide’s page within the CP.
 
-Guides in your Template Path can be included and imported by using the path `guide_template_path` in your Twig tags.
-
-For example, a Twig file at the location `./templates/_guide/header.twig` would be can be included using: `{% include 'guide_template_path/header.twig' %}`.
-
-This will allow you to move the Template Path to a different location without breaking your includes and imports.
-
 ## External Documentation
 
 Selecting `External Page` from the Content Source guide option will let you display an external page in an iframe.

@@ -22,9 +22,22 @@
 {% set content %}
   {% if guides ?? false %}
     {% include 'guide/_partials/guide_display.twig' with { guideDisplayArea: 'guide', displayId: 'nav', guides: guides } only %}
-  {% elseif userOperations.editGuides %}
-    {% redirect 'guide/list' %}
+{#  {% elseif userOperations.editGuides %}#}
+{#    {% redirect 'guide/list' %}#}
   {% else %}
-    {{ 'No guides have been added to the Guide home page yet. An admin or an author with the right permissions can add guides to this page.'|t('guide') }}
+    <guide-welcome></guide-welcome>
+    {{ 'Welcome to Guide! To get started you’ll need to head to Settings and configure a few things there. You can then use the Guides page to create your guides and then use the Organizer to move them around Craft’s Control Panel.'|t('guide') }}
+
+{#    {% dd welcomeAssets %}#}
+
+    {% if welcomeAssets['css'] ?? false %}
+      {% css welcomeAssets['css'] %}
+    {% endif %}
+
+    {% if welcomeAssets['js'] ?? false %}
+      {% js welcomeAssets['js'] with {
+        type: 'module'
+      } %}
+    {% endif %}
   {% endif %}
 {% endset %}

@@ -38,23 +38,22 @@ class ImportExport extends Component
         $data = [
             'guides' => [],
         ];
-        $guideSlugs = [];
 
         // Add guides to data
         $guides = Guide::$plugin->guide->getGuides();
         foreach ($guides as $guide) {
-            $data['guides'][] = [
+            $data['guides'][$guide['slug']] = [
                 'content' => $guide['content'],
+                'contentCss' => $guide['contentCss'],
+                'contentJavascript' => $guide['contentJavascript'],
                 'contentSource' => $guide['contentSource'],
                 'contentUrl' => $guide['contentUrl'],
+                'renderMarkdown' => $guide['renderMarkdown'] ? 'true' : 'false',
                 'slug' => $guide['slug'],
                 'summary' => $guide['summary'],
-                'title' => $guide['title'],
                 'template' => $guide['template'],
+                'title' => $guide['title'],
             ];
-            
-            // Record slugs for later
-            $guideSlugs[$guide['id']] = $guide['slug'];
         }
 
         return Json::encode($data);
@@ -75,10 +74,18 @@ class ImportExport extends Component
             if(!Guide::$plugin->guide->getGuides([
                 'slug' => $data['slug'],
             ], 'count')) {
+                $renderMarkdown = Guide::$settings->renderMarkdownDefault;
+                if ($data['renderMarkdown'] ?? false) {
+                    $renderMarkdown = $data['renderMarkdown'] == 'true';
+                }
+
                 $guide = new GuideModel([
                     'authorId' => Craft::$app->getUser()->getIdentity()->id ?? null,
                     'content' => $data['content'] ?? '',
+                    'contentCss' => $data['contentCss'] ?? '',
+                    'contentJavascript' => $data['contentJavascript'] ?? '',
                     'contentSource' => $data['contentSource'] ?? 'field',
+                    'renderMarkdown' => $renderMarkdown,
                     'contentUrl' => $data['contentUrl'] ?? '',
                     'slug' => $data['slug'],
                     'summary' => $data['summary'] ?? '',

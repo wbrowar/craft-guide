@@ -10,6 +10,7 @@
 
 <div
   id="guide-admin-globals"
+  data-asset-path="{{ view.getAssetManager().getPublishedUrl('@wbrowar/guide/assetbundles/static', true) }}"
   data-dev-mode="{{ craft.app.config.general.devMode ? 'true' : 'false' }}"
   data-guides="{{ guidesForJs|json_encode }}"
   data-pro-edition="{{ proEdition ? 'true' : 'false' }}"

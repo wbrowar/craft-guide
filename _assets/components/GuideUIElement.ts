@@ -9,8 +9,6 @@ export class GuideUIElement extends LitElement {
    * ===========================================================================
    */
   static styles = css`
-    :host {
-    }
     .settings {
       display: flex;
       justify-content: end;

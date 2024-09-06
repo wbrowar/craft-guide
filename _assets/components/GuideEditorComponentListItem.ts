@@ -76,10 +76,6 @@ export class GuideEditorComponentListItem extends LitElement {
     log('data', this.data)
   }
 
-  disconnectedCallback() {
-    super.disconnectedCallback()
-  }
-
   render() {
     let image
     let summary

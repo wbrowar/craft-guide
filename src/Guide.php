@@ -163,17 +163,8 @@ class Guide extends Plugin
                 // Admin-specific JavaScript
                 $routeIsGuideAdmin = Craft::$app->getRequest()->getSegment(1) == 'guide' && in_array(Craft::$app->getRequest()->getSegment(2), ['edit', 'list', 'new', 'organizer']);
                 $routeIsGuideUtilities = Craft::$app->getRequest()->getSegment(1) == 'utilities' && Craft::$app->getRequest()->getSegment(2) == 'guide-export-import';
-                $routeIsGuideWelcome = Craft::$app->getRequest()->getSegment(1) == 'guide' && Craft::$app->getRequest()->getSegment(2) == 'welcome';
                 if ($routeIsGuideAdmin || $routeIsGuideUtilities) {
                     $assets = self::$plugin->getPathsToAssetFiles('guide-admin.ts');
-                    if ($assets['css'] ?? false) {
-                        Craft::$app->getView()->registerCssFile($assets['css']);
-                    }
-                    if ($assets['js'] ?? false) {
-                        Craft::$app->getView()->registerJsFile($assets['js'], ['position' => Craft::$app->getView()::POS_BEGIN, 'type' => 'module']);
-                    }
-                } else if ($routeIsGuideWelcome) {
-                    $assets = self::$plugin->getPathsToAssetFiles('guide-welcome.ts');
                     if ($assets['css'] ?? false) {
                         Craft::$app->getView()->registerCssFile($assets['css']);
                     }
@@ -216,8 +207,7 @@ class Guide extends Plugin
                     $userOperations = $this->getUserOperations();
 
                     // Templates
-                    $event->rules['guide'] = ['template' => 'guide/index', 'variables' => ['cpNavPlacements' => self::$plugin->placement->getPlacements([ 'group' => 'nav' ], 'guideId'), 'settings' => self::$settings, 'userOperations' => $userOperations]];
-                    $event->rules['guide/welcome'] = ['template' => 'guide/welcome', 'variables' => ['settings' => self::$settings]];
+                    $event->rules['guide'] = ['template' => 'guide/index', 'variables' => ['cpNavPlacements' => self::$plugin->placement->getPlacements([ 'group' => 'nav' ], 'guideId'), 'settings' => self::$settings, 'userOperations' => $userOperations, 'welcomeAssets' => self::$plugin->getPathsToAssetFiles('guide-welcome.ts')]];
                     $event->rules['guide/page/<slug:(.*)>'] = ['template' => 'guide/page', 'variables' => ['proEdition' => self::$pro, 'settings' => self::$settings, 'userOperations' => $userOperations]];
                     $event->rules['guide/settings'] = ['template' => 'guide/settings', 'variables' => ['proEdition' => self::$pro, 'settings' => self::$settings]];
                     
@@ -405,7 +395,7 @@ class Guide extends Plugin
                     // Send users to our welcome screen
                     $request = Craft::$app->getRequest();
                     if ($request->isCpRequest) {
-                        Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('guide/welcome'))->send();
+                        Craft::$app->getResponse()->redirect(UrlHelper::cpUrl('guide'))->send();
                     }
                 }
             }
