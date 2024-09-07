@@ -8,26 +8,10 @@ When adding JavaScript to a guide, it will be wrapped in a callback function and
 
 ## Adding JavaScript to a Guide
 
-Guides provides two ways to target a specific guide with JavaScript:
-
-### Class
-
 Each guide is wrapped in a class that includes the guide’s slug in the name. For a guide with a slug, `my-guide`, it can be selected with the following selector:
 
 ```javascript
 const myGuide = document.querySelector('.guide-my-guide')
-
-if (myGuide) {
-  // Do something ...
-}
-```
-
-### Dataset attribute
-
-The `data-guide-slug` attribute is also added to all guides. The value of this attribute is the guide’s slug and you can use a selector like this to target a guide:
-
-```javascript
-const myGuide = document.querySelector('[data-guide-slug="my-guide"]')
 
 if (myGuide) {
   // Do something ...
@@ -84,6 +68,8 @@ guides.forEach((guide) => {
 
 Adding the `loaded` class will happen the first time this guide has been loaded. The next time the callback is fired the `:not(.loaded)` part of the selector will ignore any guide that has already been targeted by the callback.
 
+When the page is re-loaded (or when you move to another page) all of the `loaded` classes will disappear and the whole loop will start again.
+
 ### Using JavaScript with Included Guides
 
 Guides that are included into another guide—using the `{{ craft.guide.include() }}` Twig tag—do not get their callback called when they are displayed on the page.
@@ -103,9 +89,21 @@ window.guideCallback['child-guide']?.()
   <blockquote class="note tip">The `?.()` might look a little strange here, but what it is doing is checking to see if the callback for `child-guide` exists before trying to call it. If the guide with the slug, `child-guide`, gets deleted this will make sure the callback for `parent-guide` doesn’t throw an error.</blockquote>
 </div>
 
+Even when calling the callback for `child-guide` through `parent-guide` there is an issue in that any JavaScript code that targeted the `.guide-child-guide` class will fail because the wrapping container will now be `.guide-parent-guide`. This situation is a little trickier to solve and it depends on what your JavaScript code is trying to do.
 
+One way you could solve this is by handling multiple selectors in the `child-guide` callback:
 
+```javascript
+const guides = document.querySelectorAll('.guide-child-guide, .guide-parent-guide')
 
+guides.forEach((guide) => {
+  if (guide.classList.contains('guide-parent-guide')) {
+    // Do somethign specific for when `child-guide` is included ...
+  } else {
+    // Do somethign for when `child-guide` is directly displayed ...
+  }
+})
+```
 
 ## JavaScript Kill Switch
 

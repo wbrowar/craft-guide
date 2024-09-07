@@ -1,22 +1,16 @@
 {% extends 'guide/_partials/render_component.twig' %}
 
-{% set attributes = {
-  headers: headers ?? [],
-  rows: rows ?? [[]],
-} %}
-
-{#{% set classes = ['btn'] %}#}
 {% set element = 'table' %}
 
 {% block content -%}
-  {% if headers|length %}
+  {% if headers ?? false and headers|length %}
     <thead><tr>
       {% for cell in headers %}
         <th>{{ cell }}</th>
       {% endfor %}
     </tr></thead>
   {% endif %}
-  {% if rows|length %}
+  {% if rows ?? false and rows|length %}
     <tbody>
       {% for row in rows %}
         <tr>
@@ -27,7 +21,7 @@
       {% endfor %}
     </tbody>
   {% endif %}
-  {% if footers|length %}
+  {% if footers ?? false and footers|length %}
     <tfoot><tr>
       {% for cell in footers %}
         <td>{{ cell }}</td>

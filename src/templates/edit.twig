@@ -191,12 +191,13 @@
         }, "content-editor", {
           language: "twig",
           theme: "vs-dark",
+        }, {
+          maxEditorRows: 35,
         }) }}
       </div>
 
       <div class="guide-tab-icon" slot="icon-components">{{ svg('@appicons/icons.svg')|raw }}</div>
       <div class="guide-tab-icon" slot="icon-images">{{ svg('@appicons/image.svg')|raw }}</div>
-{#      <div class="guide-tab-icon" slot="icon-guides">{{ svg('@appicons/book.svg')|raw }}</div>#}
       <div class="guide-tab-icon" slot="icon-guides">{{ svg('@wbrowar/guide/assetbundles/static/icon-mask.svg')|raw }}</div>
       <div class="guide-tab-icon" slot="icon-settings">{{ svg('@appicons/gear.svg')|raw }}</div>
       <div class="guide-tab-icon" slot="icon-snippets">{{ svg('@appicons/code.svg')|raw }}</div>
@@ -213,8 +214,8 @@
 
       {{ codeEditor.textareaField({
         label: 'CSS'|t('guide'),
-        id: 'contentCss',
-        name: "contentCss",
+        id: 'cssEditor',
+        name: "cssEditor",
         placeholder: '',
         value: guide.contentCss,
         rows: 20,
@@ -238,8 +239,8 @@
       {{ codeEditor.textareaField({
         label: 'JavaScript'|t('guide'),
         instructions: "Code wrapped in a callback function—fired whenever this guide is displayed."|t('guide'),
-        id: 'contentJavascript',
-        name: "contentJavascript",
+        id: 'javascriptEditor',
+        name: "javascriptEditor",
         placeholder: '',
         value: guide.contentJavascript,
         rows: 20,

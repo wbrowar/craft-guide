@@ -2,7 +2,6 @@ import { html, LitElement, nothing } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { GuideListGuide } from '../types.ts'
 import { guides, proEdition, settings } from '../globals.ts'
-import { log } from '../utils/console.ts'
 
 @customElement('guide-display')
 export class GuideDisplay extends LitElement {
@@ -11,12 +10,6 @@ export class GuideDisplay extends LitElement {
    * PROPS
    * ===========================================================================
    */
-  /**
-   * Messages translated via Craft’s `t` filter.
-   */
-  @property({ attribute: 'cms-guide', type: Boolean })
-  cmsGuide = false
-
   /**
    * Messages translated via Craft’s `t` filter.
    */
@@ -41,12 +34,6 @@ export class GuideDisplay extends LitElement {
   private _selectedGuide?: GuideListGuide = undefined
 
   /**
-   * TODO
-   */
-  @state()
-  private _showBook = false
-
-  /**
    * Determines if TL;DR controls should appear.
    */
   @state()
@@ -68,8 +55,6 @@ export class GuideDisplay extends LitElement {
    */
   connectedCallback() {
     super.connectedCallback()
-
-    this._showBook = this.cmsGuide && settings.fun
 
     // Collect slugs from all rendered guides.
     const guideElements: NodeListOf<HTMLElement> = this.querySelectorAll('.guide')
@@ -135,10 +120,8 @@ export class GuideDisplay extends LitElement {
       `)
     }
 
-    log('cmsGuide', this.cmsGuide)
-
     return html`
-      ${(this._guides && this._guides?.length > 1) || this._showBook || options.length
+      ${(this._guides && this._guides?.length > 1) || options.length
         ? html`
             <aside>
               ${this._guides && this._guides?.length > 1 ? nav : nothing}
@@ -147,7 +130,6 @@ export class GuideDisplay extends LitElement {
                     return option
                   })
                 : nothing}
-              ${this._showBook && false ? html`<guide-book></guide-book>` : nothing}
             </aside>
           `
         : nothing}

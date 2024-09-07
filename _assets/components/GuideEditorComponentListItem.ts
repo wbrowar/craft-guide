@@ -42,12 +42,21 @@ export class GuideEditorComponentListItem extends LitElement {
   /**
    * Inserts component code into content editor.
    */
-  private _insertTextIntoContentEditor() {
-    const contentEditor = globalThis.monacoEditorInstances.contentEditor
-    if (contentEditor) {
-      const lineCount = contentEditor.getModel().getLineCount()
-      const lastLineLength = contentEditor.getModel().getLineMaxColumn(lineCount)
-      const selection = contentEditor.getSelection()
+  private _insertTextIntoEditor(textToInsert: string, editorHandle: 'content' | 'css' | 'javascript') {
+    let editor
+
+    if (editorHandle === 'content') {
+      editor = globalThis.monacoEditorInstances.contentEditor
+    } else if (editorHandle === 'css') {
+      editor = globalThis.monacoEditorInstances.cssEditor
+    } else if (editorHandle === 'javascript') {
+      editor = globalThis.monacoEditorInstances.javascriptEditor
+    }
+
+    if (editor) {
+      const lineCount = editor.getModel().getLineCount()
+      const lastLineLength = editor.getModel().getLineMaxColumn(lineCount)
+      const selection = editor.getSelection()
       const id = { major: 1, minor: 1 }
       const op = {
         identifier: id,
@@ -57,11 +66,11 @@ export class GuideEditorComponentListItem extends LitElement {
           endLineNumber: selection?.endLineNumber ?? lineCount,
           endColumn: selection?.endColumn ?? lastLineLength,
         },
-        text: this.data?.code,
+        text: textToInsert,
         forceMoveMarkers: true,
       }
-      contentEditor.executeEdits('my-source', [op])
-      contentEditor.focus()
+      editor.executeEdits('my-source', [op])
+      editor.focus()
     }
   }
 
@@ -108,9 +117,33 @@ export class GuideEditorComponentListItem extends LitElement {
               </div>
             </div>
             <div class="buttons">
-              <button class="btn icon add secondary" type="button" @click="${this._insertTextIntoContentEditor}">
-                ${this.tMessages.add}
+              <button
+                class="btn icon add secondary"
+                type="button"
+                @click="${() => this._insertTextIntoEditor(this.data?.contentCode ?? '', 'content')}"
+              >
+                ${this.tMessages.addContent}
               </button>
+              ${this.data.cssCode
+                ? html`<button
+                    class="btn icon add"
+                    type="button"
+                    style="--guide-editor-component-list-item-button-background-color: var(--green-300);"
+                    @click="${() => this._insertTextIntoEditor(this.data?.cssCode ?? '', 'css')}"
+                  >
+                    ${this.tMessages.addCss}
+                  </button>`
+                : nothing}
+              ${this.data.javascriptCode
+                ? html`<button
+                    class="btn icon add"
+                    type="button"
+                    style="--guide-editor-component-list-item-button-background-color: var(--yellow-300);"
+                    @click="${() => this._insertTextIntoEditor(this.data?.javascriptCode ?? '', 'javascript')}"
+                  >
+                    ${this.tMessages.addJavascript}
+                  </button>`
+                : nothing}
               ${this.data.props
                 ? html`<button
                     class="btn icon"

@@ -245,7 +245,8 @@ class Placement extends Component
             $orderBy = $params['orderBy'];
             unset($params['orderBy']);
         } else {
-            $orderBy = 'weight';
+//            $orderBy = 'weight';
+            $orderBy = 'id';
         }
 
         switch ($queryType) {

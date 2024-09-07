@@ -64,7 +64,7 @@ class GuideComponents extends Component
                             $list[] = [
                                 'title' => $asset->title,
                                 'group' => 'images',
-                                'code' => "{{ craft.guide.component('image', { asset: craft.assets.filename('" . $asset->filename . "').volume('" . $assetVolume->handle . "').one() }) }}",
+                                'contentCode' => "{{ craft.guide.component('image', { asset: craft.assets.filename('" . $asset->filename . "').volume('" . $assetVolume->handle . "').one() }) }}",
                                 'props' => [
                                     'asset' => 'An image asset.',
                                 ],
@@ -94,6 +94,7 @@ class GuideComponents extends Component
     {
         if (Guide::$pro) {
             $class = $options['attrs']['class'] ?? [];
+            $class[] = 'guide-component';
             $class[] = 'guide-component-' . $handle;
 
             $options['attrs'] = $options['attrs'] ?? [];

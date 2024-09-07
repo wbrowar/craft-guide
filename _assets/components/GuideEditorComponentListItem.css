@@ -18,6 +18,13 @@ guide-editor-component-list-item {
       border-radius: var(--guide-border-radius);
     }
   }
+  button.btn {
+    background-color: var(--guide-editor-component-list-item-button-background-color);
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--guide-editor-component-list-item-button-background-color), rgb(1, 16, 99) 10%);
+    }
+  }
   dl {
     display: grid;
     grid-template-columns: minmax(80px, max-content) auto;

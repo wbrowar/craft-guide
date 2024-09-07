@@ -13,6 +13,20 @@ declare global {
       getSelection: Function
       setPosition: Function
     }
+    cssEditor: {
+      executeEdits: Function
+      focus: Function
+      getModel: Function
+      getSelection: Function
+      setPosition: Function
+    }
+    javascriptEditor: {
+      executeEdits: Function
+      focus: Function
+      getModel: Function
+      getSelection: Function
+      setPosition: Function
+    }
   }
 }
 
@@ -28,8 +42,10 @@ export enum ApiStatus {
 }
 
 export interface EditorComponent {
-  code: string
+  cssCode?: string
+  contentCode: string
   documentation?: string
+  javascriptCode?: string
   group: EditorTabGroup
   summary?: string
   thumbnail1x?: string

@@ -211,12 +211,20 @@ export class GuideEditor extends LitElement {
       })
     }
 
-    // Make sure slug is formatted correctly.
+    // Make sure slug is formatted correctly and update all GuideCopyTextButton components on the page.
     if (this._slugInput) {
       this._slugInput.addEventListener('blur', () => {
+        // Format slug value
         if (this._slugInput) {
           this._slugHasBeenEdited = true
           this._slugInput.value = kebab(this._slugInput.value)
+
+          // Update GuideCopyTextButton values
+          const copyTextButtons = document.querySelectorAll('guide-copy-text-button')
+
+          copyTextButtons.forEach((button) => {
+            button.copyText = this._slugInput!.value
+          })
         }
       })
     }
