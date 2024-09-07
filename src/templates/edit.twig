@@ -207,6 +207,7 @@
     <div id="css" class="hidden">
       <div class="flex">
         <span class="flex-grow"></span>
+        {% include 'guide/_partials/copy_text_button.twig' with { text: guide.slug } only %}
         {% include 'guide/_partials/slideout_button.twig' with { docs: true, label: 'Guide CSS'|t('guide'), slug: 'guide-editor-css' } only %}
       </div>
 
@@ -230,6 +231,7 @@
     <div id="javascript" class="hidden">
       <div class="flex">
         <span class="flex-grow"></span>
+        {% include 'guide/_partials/copy_text_button.twig' with { text: guide.slug } only %}
         {% include 'guide/_partials/slideout_button.twig' with { docs: true, label: 'Guide JavaScript'|t('guide'), slug: 'guide-editor-javascript' } only %}
       </div>
 

@@ -13,7 +13,10 @@
 {% extends "_layouts/cp" %}
 
 {# The title of this CP section #}
-{% set title = "Guide"|t('guide') %}
+{% set title = "CMS Guide"|t('guide') %}
+
+{# The selected CP subnav item #}
+{% set selectedSubnavItem = 'home' %}
 
 {% if cpNavPlacements ?? false %}
   {% set guides = craft.guide.getAll({ id: cpNavPlacements }) %}
@@ -22,22 +25,52 @@
 {% set content %}
   {% if guides ?? false %}
     {% include 'guide/_partials/guide_display.twig' with { guideDisplayArea: 'guide', displayId: 'nav', guides: guides } only %}
-{#  {% elseif userOperations.editGuides %}#}
-{#    {% redirect 'guide/list' %}#}
+
+    {% if settings.fun %}
+      <div class="guide-book-binding"><guide-book style="margin-inline: auto;"></guide-book></div>
+
+      {% if bookAssets['css'] ?? false %}
+        {% css bookAssets['css'] %}
+      {% endif %}
+
+      {% if bookAssets['js'] ?? false %}
+        {% js bookAssets['js'] with {
+          type: 'module'
+        } %}
+      {% endif %}
+    {% endif %}
   {% else %}
-    <guide-welcome></guide-welcome>
-    {{ 'Welcome to Guide! To get started you’ll need to head to Settings and configure a few things there. You can then use the Guides page to create your guides and then use the Organizer to move them around Craft’s Control Panel.'|t('guide') }}
+    {% if settings.fun %}
+      {% set tMessages = {
+        'play': 'Play animation'|t('guide'),
+        'pause': 'Pause animation'|t('guide'),
+      } %}
 
-{#    {% dd welcomeAssets %}#}
-
-    {% if welcomeAssets['css'] ?? false %}
-      {% css welcomeAssets['css'] %}
+      <guide-welcome t-messages="{{ tMessages|json_encode }}">
+        <div class="guide-tab-icon-play" slot="play-icon">{{ svg('@appicons/play.svg')|raw }}</div>
+        <div class="guide-tab-icon-pause" slot="pause-icon">{{ svg('@appicons/square.svg')|raw }}</div>
+      </guide-welcome>
     {% endif %}
 
-    {% if welcomeAssets['js'] ?? false %}
-      {% js welcomeAssets['js'] with {
-        type: 'module'
-      } %}
+    <div class="readable">
+      <p>{{ 'Welcome to Guide! To get started you can head to <a href="{settingsUrl}">Settings</a> and configure a few things there. You can then use the <a href="{listUrl}">Guides</a> page to create your guides and then use the <a href="{organizerUrl}">Organizer</a> to move them around Craft’s Control Panel.'|t('guide', {
+          listUrl: cpUrl('guide/list'),
+          organizerUrl: cpUrl('guide/organizer'),
+          settingsUrl: cpUrl('guide/settings'),
+        })|raw }}</p>
+      <a class="go" href="{{ cpUrl('guide/settings') }}">{{ 'Set up Guide'|t('guide') }}</a>
+    </div>
+
+    {% if settings.fun %}
+      {% if welcomeAssets['css'] ?? false %}
+        {% css welcomeAssets['css'] %}
+      {% endif %}
+
+      {% if welcomeAssets['js'] ?? false %}
+        {% js welcomeAssets['js'] with {
+          type: 'module'
+        } %}
+      {% endif %}
     {% endif %}
   {% endif %}
 {% endset %}

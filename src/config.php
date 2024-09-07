@@ -5,7 +5,7 @@
  * A CMS Guide for Craft CMS.
  *
  * @link      https://wbrowar.com
- * @copyright Copyright (c) 2019 Will Browar
+ * @copyright Copyright (c) 2024 Will Browar
  */
 
 /**
@@ -23,8 +23,35 @@
  */
 
 return [
+    // Path to Guide CP Section templates.
+    'assetVolume' => '',
 
-    // This controls blah blah blah
-    "someAttribute" => true,
+    // The location of guides when displayed on element edit pages.
+    'editPageLocation' => 'slideout',
 
+    // Enable CSS and JavaScript fields to appear in the Guide Editor.
+    'enableGuideCss' => true,
+    'enableGuideJavascript' => false,
+
+    // Enable CSS and JavaScript to be displayed on the page.
+    // NOTE: These will be ignored if their respective field is disabled.
+    'registerGuideCss' => true,
+    'registerGuideJavascript' => true,
+
+    // Enables non-essential visual enhancements.
+    'fun' => true,
+
+    // The label shown on Guide Buttons on edit pages.
+    'guideButtonLabel' => '',
+
+    // Path to Guide CP Section templates.
+    'renderMarkdownDefault' => true,
+
+    // Path to Guide CP Section templates.
+    'templatePath' => '',
+
+    // Twig variables.
+    'clientName' => '',
+    'projectName' => '',
+    'myCompanyName' => '',
 ];

@@ -1,51 +1,57 @@
 {
-  "_SvgSettings-D8nBVKej.js": {
-    "file": "assets/SvgSettings-D8nBVKej.js",
-    "name": "SvgSettings",
-    "imports": [
-      "__plugin-vue_export-helper-B6mECTcI.js"
-    ]
+  "_GLTFLoader-CnsMw-IL.js": {
+    "file": "assets/GLTFLoader-CnsMw-IL.js",
+    "name": "GLTFLoader"
   },
-  "__plugin-vue_export-helper-B6mECTcI.js": {
-    "file": "assets/_plugin-vue_export-helper-B6mECTcI.js",
-    "name": "_plugin-vue_export-helper"
+  "_console-7TmJNlmx.js": {
+    "file": "assets/console-7TmJNlmx.js",
+    "name": "console"
+  },
+  "_types-BZdEkL9Y.js": {
+    "file": "assets/types-BZdEkL9Y.js",
+    "name": "types"
   },
   "guide-admin.ts": {
-    "file": "assets/guide-admin-CmGfesd2.js",
+    "file": "assets/guide-admin-D0xnDviA.js",
     "name": "guide-admin",
     "src": "guide-admin.ts",
     "isEntry": true,
     "imports": [
-      "__plugin-vue_export-helper-B6mECTcI.js",
-      "_SvgSettings-D8nBVKej.js"
-    ],
-    "css": [
-      "assets/guide-admin-DUUC3s4e.css"
+      "_console-7TmJNlmx.js",
+      "_types-BZdEkL9Y.js"
+    ]
+  },
+  "guide-book.ts": {
+    "file": "assets/guide-book-DoNDW5t2.js",
+    "name": "guide-book",
+    "src": "guide-book.ts",
+    "isEntry": true,
+    "imports": [
+      "_console-7TmJNlmx.js",
+      "_GLTFLoader-CnsMw-IL.js"
     ]
   },
   "guide-display.ts": {
-    "file": "assets/guide-display-BMRmsL8Q.js",
+    "file": "assets/guide-display-DTrb6_6Z.js",
     "name": "guide-display",
     "src": "guide-display.ts",
     "isEntry": true,
     "imports": [
-      "__plugin-vue_export-helper-B6mECTcI.js",
-      "_SvgSettings-D8nBVKej.js"
+      "_console-7TmJNlmx.js",
+      "_types-BZdEkL9Y.js"
     ],
     "css": [
-      "assets/guide-display-ClIN1na-.css"
+      "assets/guide-display-Bt8y38AZ.css"
     ]
   },
   "guide-welcome.ts": {
-    "file": "assets/guide-welcome-CWsTOD2f.js",
+    "file": "assets/guide-welcome-Dp31GvgS.js",
     "name": "guide-welcome",
     "src": "guide-welcome.ts",
     "isEntry": true,
     "imports": [
-      "__plugin-vue_export-helper-B6mECTcI.js"
-    ],
-    "css": [
-      "assets/guide-welcome-DCinEATt.css"
+      "_console-7TmJNlmx.js",
+      "_GLTFLoader-CnsMw-IL.js"
     ]
   }
 }

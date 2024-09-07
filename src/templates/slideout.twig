@@ -13,7 +13,7 @@
 
   {% if docs %}
     <div class="guide">
-      {{ source('guide/docs/' ~ slug ~ '.md')|md('gfm') }}
+      {{ source('guide/docs/en/' ~ slug ~ '.md')|md('gfm') }}
     </div>
   {% else %}
     {% set slugs = slug|split('|') %}
@@ -21,7 +21,7 @@
     {% set guides = craft.guide.getAll({ slug: slugs }) %}
 
     {% if guides ?? false %}
-      {% include 'guide/_partials/guide_display.twig' with { guideDisplayArea: 'page', displayId: 'page', element: element ?? null, guides: guides } %}
+      {% include 'guide/_partials/guide_display.twig' with { guideDisplayArea: 'slideout', displayId: 'page', element: element ?? null, guides: guides } %}
     {% endif %}
   {% endif %}
 {% endapply %}

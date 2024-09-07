@@ -1,12 +1,16 @@
+@import url('components/GuideBook.css');
 @import url('components/GuideDisplay.css');
 @import url('components/GuideEditor.css');
 @import url('components/GuideEditorComponentListItem.css');
 @import url('components/GuideList.css');
 @import url('components/GuideOrganizer.css');
 @import url('components/GuideSlideoutButton.css');
+@import url('components/GuideWelcome.css');
 
 :root {
   --guide-border-radius: 0.3rem;
+  --guide-color-blue: rgb(126, 159, 195);
+  --guide-color-blue: oklch(69.1% .065 250.97);
 }
 
 /* Enable scrolling on slideouts that render guides. */

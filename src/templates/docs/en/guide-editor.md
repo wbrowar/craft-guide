@@ -146,7 +146,7 @@ You may use templates to create your CMS guide in a way that's easily portable f
 1. Set **Content Source** to `Page Template`.
 1. Select your new template in the Template field in the Editor tab.
 1. Click the `Save` button.
-1. Use the **Guide Home** toggle to add your guide to the Guide home page or click on the title to visit the guide’s page within the CP.
+1. Use the **CMS Guide** toggle to add your guide to the CMS Guide page or click on the title to visit the guide’s page within the CP.
 
 ## External Documentation
 

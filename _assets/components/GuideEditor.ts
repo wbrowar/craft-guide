@@ -99,7 +99,7 @@ export class GuideEditor extends LitElement {
    * The code editor input for the Content tab.
    */
   @state()
-  private _contentEditor = {}
+  private _contentEditor: typeof globalThis.monacoEditorInstances.contentEditor | null = null
 
   /**
    * Indicates that the value of `contentSource` is set to `field`.

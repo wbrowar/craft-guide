@@ -25,8 +25,6 @@ guide-display {
     display: grid;
     align-items: start;
     gap: var(--xl);
-    position: sticky;
-    top: var(--guide-display-aside-top, 0px);
 
     & nav {
       & ul {
@@ -47,6 +45,14 @@ guide-display {
           }
         }
       }
+    }
+
+    @container guide-display (width <= 600px) {
+      grid-row: 1 / 2;
+    }
+    @container guide-display (width > 600px) {
+      position: sticky;
+      top: var(--guide-display-aside-top, 0px);
     }
   }
 
@@ -94,7 +100,7 @@ guide-display {
   & blockquote {
     padding-inline: var(--l);
     padding-block: var(--s);
-    background-color: color-mix(in srgb, var(--gray-100), transparent 70%);
+    background-color: color-mix(in srgb, currentColor, transparent 94%);
     border-inline-start: 1px solid var(--gray-300);
   }
   & code {

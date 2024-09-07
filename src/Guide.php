@@ -207,7 +207,13 @@ class Guide extends Plugin
                     $userOperations = $this->getUserOperations();
 
                     // Templates
-                    $event->rules['guide'] = ['template' => 'guide/index', 'variables' => ['cpNavPlacements' => self::$plugin->placement->getPlacements([ 'group' => 'nav' ], 'guideId'), 'settings' => self::$settings, 'userOperations' => $userOperations, 'welcomeAssets' => self::$plugin->getPathsToAssetFiles('guide-welcome.ts')]];
+                    $event->rules['guide'] = ['template' => 'guide/index', 'variables' => [
+                        'bookAssets' => self::$plugin->getPathsToAssetFiles('guide-book.ts'),
+                        'cpNavPlacements' => self::$plugin->placement->getPlacements([ 'group' => 'nav' ], 'guideId'),
+                        'settings' => self::$settings,
+                        'userOperations' => $userOperations,
+                        'welcomeAssets' => self::$plugin->getPathsToAssetFiles('guide-welcome.ts')
+                    ]];
                     $event->rules['guide/page/<slug:(.*)>'] = ['template' => 'guide/page', 'variables' => ['proEdition' => self::$pro, 'settings' => self::$settings, 'userOperations' => $userOperations]];
                     $event->rules['guide/settings'] = ['template' => 'guide/settings', 'variables' => ['proEdition' => self::$pro, 'settings' => self::$settings]];
                     
@@ -420,18 +426,20 @@ class Guide extends Plugin
         $user = Craft::$app->getUser()->getIdentity();
         $userOperations = $this->getUserOperations();
 
-        $navItem['subnav'] = [];
+        $navItem['subnav'] = [
+            'home' => ['label' => Craft::t('guide','CMS Guide'), 'url' => 'guide'],
+        ];
 
         if ($userOperations['editGuides']) {
-            $navItem['subnav']['list'] = ['label' => 'Guides', 'url' => 'guide/list'];
+            $navItem['subnav']['list'] = ['label' => Craft::t('guide','Guides'), 'url' => 'guide/list'];
         }
 
         if ($userOperations['useOrganizer']) {
-            $navItem['subnav']['organizer'] = ['label' => 'Organizer', 'url' => 'guide/organizer'];
+            $navItem['subnav']['organizer'] = ['label' => Craft::t('guide','Organizer'), 'url' => 'guide/organizer'];
         }
 
         if ($user->admin && Craft::$app->getConfig()->getGeneral()->allowAdminChanges) {
-            $navItem['subnav']['settings'] = ['label' => 'Settings', 'url' => 'guide/settings'];
+            $navItem['subnav']['settings'] = ['label' => Craft::t('guide','Settings'), 'url' => 'guide/settings'];
         }
 
         return $navItem;

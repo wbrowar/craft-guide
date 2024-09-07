@@ -67,7 +67,7 @@ export class GuideList extends LitElement {
   /**
    * Creates a new `nav` placement for the guideId.
    */
-  private async _onInGuideDisabled(guideId: number, guideTitle: string) {
+  private async _onCmsGuideDisabled(guideId: number, guideTitle: string) {
     const placement = this._placements.find((placement) => placement.guideId === guideId)
     if (placement) {
       await window.Craft?.postActionRequest(
@@ -77,7 +77,7 @@ export class GuideList extends LitElement {
             id: placement.id,
           },
         },
-        (response: object, textStatus: string) => {
+        (_response: object, textStatus: string) => {
           if (textStatus === 'success') {
             this._getAllPlacements()
             window.Craft.cp.displayNotice(this.tMessages.placementDeleteSuccess?.replace('[guide]', guideTitle))
@@ -90,7 +90,7 @@ export class GuideList extends LitElement {
   /**
    * Creates a new `nav` placement for the guideId.
    */
-  private async _onInGuideEnabled(guideId: number, guideTitle: string) {
+  private async _onCmsGuideEnabled(guideId: number, guideTitle: string) {
     await window.Craft?.postActionRequest(
       'guide/placement/save-placement',
       {
@@ -100,7 +100,7 @@ export class GuideList extends LitElement {
           guideId,
         },
       },
-      (response: object, textStatus: string) => {
+      (_response: object, textStatus: string) => {
         if (textStatus === 'success') {
           this._getAllPlacements()
           window.Craft.cp.displayNotice(this.tMessages.placementSaveSuccess?.replace('[guide]', guideTitle))
@@ -114,11 +114,10 @@ export class GuideList extends LitElement {
    * LIFECYCLE
    * =========================================================================
    */
-  async firstUpdated() {
-    await this._getAllPlacements()
-  }
-  connectedCallback() {
+  async connectedCallback() {
     super.connectedCallback()
+
+    await this._getAllPlacements()
   }
 
   render() {
@@ -136,31 +135,25 @@ export class GuideList extends LitElement {
       items.push(html`<p>${guide.summary ?? ''}</p>`)
 
       // Slug
-      items.push(html`
-        <div
-          class="code small light copytextbtn"
-          title="${this.tMessages.copyToClipboard}"
-          role="button"
-          @click="${() => this._copyText(guide.slug)}"
-        >
-          <span class="copytextbtn__value">${guide.slug}</span>
-          <span class="visually-hidden">${this.tMessages.copyToClipboard}</span>
-          <span class="copytextbtn__icon" data-icon="clipboard" aria-hidden="true"></span>
-        </div>
-      `)
+      items.push(
+        html`<guide-copy-text-button
+          copy-text="${guide.slug}"
+          t-messages="${JSON.stringify(this.tMessages)}"
+        ></guide-copy-text-button>`
+      )
 
-      // In Guide
+      // CMS Guide
       const checked = this._placements.find((placement) => placement.guideId === guide.id) !== undefined
       items.push(
         html`<input
           type="checkbox"
           switch
-          name="in-guide-${guide.slug}"
+          name="cms-guide-${guide.slug}"
           ?checked="${checked}"
           ?disabled="${this._getAllPlacementsStatus === ApiStatus.Loading}"
           @change="${checked
-            ? () => this._onInGuideDisabled(guide.id, guide.title)
-            : () => this._onInGuideEnabled(guide.id, guide.title)}"
+            ? () => this._onCmsGuideDisabled(guide.id, guide.title)
+            : () => this._onCmsGuideEnabled(guide.id, guide.title)}"
         />`
       )
 

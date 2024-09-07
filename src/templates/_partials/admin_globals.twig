@@ -1,8 +1,9 @@
 {% set settingsData = {
   assetVolume: settings.assetVolume ?? '',
   clientName: settings.clientName,
-  enableGuideCss: settings.enableGuideCss == true ? true : false,
-  enableGuideJavascript: settings.enableGuideJavascript == true ? true : false,
+  enableGuideCss: settings.enableGuideCss == true,
+  enableGuideJavascript: settings.enableGuideJavascript == true,
+  fun: settings.fun == true,
   myCompanyName: settings.myCompanyName,
   projectName: settings.projectName,
   templatePath: settings.templatePath ?? '',
@@ -20,17 +21,17 @@
 
 {% if proEdition and settings.enableGuideJavascript %}
   {% set guideGlobalJs %}
-    window.guideCallback = [];
+    window.guideCallback = {};
   {% endset %}
   {% js guideGlobalJs at beginBody %}
 {% endif %}
 
 {% for guide in guides %}
-  {% if proEdition and settings.enableGuideCss and guide.contentSource == 'field' and guide.contentCss ?? false %}
+  {% if proEdition and settings.enableGuideCss and settings.registerGuideCss and guide.contentCss ?? false %}
     {% css guide.contentCss %}
   {% endif %}
 
-  {% if proEdition and settings.enableGuideJavascript and guide.contentSource == 'field' and guide.contentJavascript ?? false %}
+  {% if proEdition and settings.enableGuideJavascript and settings.registerGuideJavascript and guide.contentJavascript ?? false %}
 {% set guideJs %}window.guideCallback['{{ guide.slug }}'] = () => {
 {{ guide.contentJavascript|raw }}
 }{% endset %}

@@ -1,5 +1,6 @@
 import { css, html, LitElement, nothing } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
+import { Placement, PlacementAccess, PlacementGroup } from '../types.ts'
 
 @customElement('guide-ui-element')
 export class GuideUIElement extends LitElement {
@@ -74,11 +75,11 @@ export class GuideUIElement extends LitElement {
     if (!this._guideSelected) {
       if (guideId === '__none__') {
       } else {
-        const params = {
-          access: 'all',
-          group: 'uiElement',
+        const params: Partial<Placement> = {
+          access: PlacementAccess.All,
+          group: PlacementGroup.UiElement,
           groupId: this.groupId,
-          guideId,
+          guideId: parseInt(guideId),
         }
 
         if (this.placementId) {
@@ -90,7 +91,7 @@ export class GuideUIElement extends LitElement {
           {
             data: params,
           },
-          (response: object, textStatus: string) => {
+          (_response: object, textStatus: string) => {
             if (textStatus === 'success') {
               window.Craft.cp.displayNotice(this.tMessages.placementSaveSuccess)
 

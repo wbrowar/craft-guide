@@ -77,13 +77,57 @@
       instructions: assetVolumeInstructions,
     }) }}
 
-    {{ forms.textField({
-      label: 'Guide Button Label'|t('guide'),
-      id: 'guideButtonLabel',
-      name: 'guideButtonLabel',
-      placeholder: 'Guide',
-      value: settings.guideButtonLabel,
-      instructions: 'The label shown on Guide Buttons on edit pages.'|t('guide'),
+
+    {% if proEdition %}
+      <hr>
+      {% set options = [
+        { label: 'Slideout (opened by a button in the sidebar)'|t('guide'), value: 'slideout' },
+        { label: 'Above edit fields'|t('guide'), value: 'prepend' },
+        { label: 'Below edit fields'|t('guide'), value: 'append' },
+      ] %}
+      {{ forms.selectField({
+        label: 'Edit Page Guide Location'|t('guide'),
+        id: 'editPageLocation',
+        name: 'editPageLocation',
+        options: options,
+        value: settings.editPageLocation,
+        instructions: 'Determine where guides should be displayed on element edit pages.'|t('guide'),
+      }) }}
+
+      {{ forms.textField({
+        label: 'Guide Button Label'|t('guide'),
+        id: 'guideButtonLabel',
+        name: 'guideButtonLabel',
+        placeholder: 'Guide',
+        value: settings.guideButtonLabel,
+        instructions: 'The label shown on Guide Buttons on edit pages.'|t('guide'),
+      }) }}
+    {% else %}
+      <input type="hidden" name="editPageLocation" value="slideout">
+      <input type="hidden" name="guideButtonLabel" value="">
+    {% endif %}
+
+    {% if settings.fun %}
+      <hr>
+      {% set instructionsShuffle = shuffle([
+        'A feature, not a bug.'|t('guide'),
+        'Got 100 problems, but a one-off error ain’t one.'|t('guide'),
+        'Reticulates splines.'|t('guide'),
+        'Turning this off reduces Guide asset file sizes.'|t('guide'),
+        'Turns it up to 11.'|t('guide'),
+      ]) %}
+
+      {% set funInstructions = instructionsShuffle|last %}
+    {% else %}
+      {% set funInstructions = 'Enables non-essential visual enhancements.'|t('guide') %}
+    {% endif %}
+
+    {{ forms.lightswitchField({
+      label: 'Fun'|t('guide'),
+      id: 'fun',
+      name: 'fun',
+      on: settings.fun,
+      instructions: funInstructions,
     }) }}
   </div>
 
@@ -101,7 +145,6 @@
         label: 'Enable CSS Field'|t('guide'),
         id: 'enableGuideCss',
         name: 'enableGuideCss',
-        options: options,
         on: settings.enableGuideCss,
         instructions: 'Enable CSS field to appear in the Guide Editor.'|t('guide'),
       }) }}
@@ -110,30 +153,14 @@
         label: 'Enable JavaScript Field'|t('guide'),
         id: 'enableGuideJavascript',
         name: 'enableGuideJavascript',
-        options: options,
         on: settings.enableGuideJavascript,
         instructions: 'Enable JavaScript field to appear in the Guide Editor.'|t('guide'),
-      }) }}
-
-      {% set options = [
-        { label: 'Slideout (opened by a button in the sidebar)'|t('guide'), value: 'slideout' },
-        { label: 'Above edit fields'|t('guide'), value: 'prepend' },
-        { label: 'Below edit fields'|t('guide'), value: 'append' },
-      ] %}
-      {{ forms.selectField({
-        label: 'Edit Page Guide Location'|t('guide'),
-        id: 'editPageLocation',
-        name: 'editPageLocation',
-        options: options,
-        value: settings.editPageLocation,
-        instructions: 'Determine where guides should be displayed on element edit pages.'|t('guide'),
       }) }}
     </div>
   {% else %}
     <input type="hidden" name="renderMarkdownDefault" value="0">
     <input type="hidden" name="enableGuideCss" value="0">
     <input type="hidden" name="enableGuideJavascript" value="0">
-    <input type="hidden" name="editPageLocation" value="slideout">
   {% endif %}
 
   <div id="variables" class="hidden">
@@ -150,7 +177,7 @@
       name: 'projectName',
       value: settings.projectName,
       instructions: 'The name of the project. Twig tag:'|t('guide') ~ ' <strong class="guide-select-string">{{ craft.guide.var("projectName") }}</strong>',
-      placeholder: classicCompanies|last ~ '’s Website'
+      placeholder: settings.fun ? classicCompanies|last ~ '’s Website' : '',
     }) }}
 
     {{ forms.textField({
@@ -159,7 +186,7 @@
       name: 'clientName',
       value: settings.clientName,
       instructions: 'The name of the person or organization that the website is built for. Twig tag:'|t('guide') ~ ' <strong class="guide-select-string">{{ craft.guide.var("clientName") }}</strong>',
-      placeholder: classicCompanies|last
+      placeholder: settings.fun ? classicCompanies|last : '',
     }) }}
 
     {% set classicCompaniesLast = classicCompanies|last %}
@@ -170,7 +197,7 @@
       name: 'myCompanyName',
       value: settings.myCompanyName,
       instructions: 'The name of the person or organization that built the website. Twig tag:'|t('guide') ~ ' <strong class="guide-select-string">{{ craft.guide.var("myCompanyName") }}</strong>',
-      placeholder: classicCompanies|last
+      placeholder: settings.fun ? classicCompanies|last : '',
     }) }}
   </div>
 

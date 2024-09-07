@@ -1,16 +1,16 @@
 # Guides
 
-Guides are the pieces of content you can move around the Craft CMS CP (Control Panel). A guide can appear in the Guide homepage, in a dashboard widget, on their own pages, in slideouts, or any other page within the Craft CMS CP.
+Guides are the pieces of content you can move around the Craft CMS CP (Control Panel). A guide can appear on the CMS Guide page, in a dashboard widget, on their own pages, popped out in slideouts, or any other page within the Craft CMS CP.
 
 ## Guide Home Page
 
-Multiple Guides can be collected together to form a CMS Manual on the Guide home page. To get to this page click on the **Guide** menu item in the main menu.
+Multiple Guides can be collected together to form a CMS Manual on the CMS Guide. To get to this page click on the **Guide** menu item in the main menu.
 
-If there are no guides in the Guide home page, clicking on the **Guide** menu item will take you to the **Guides** list page.
+If there are no guides on the CMS Guide page, clicking on the **Guide** menu item will take you to the **Guides** list page.
 
 ## Guides List Page
 
-The **Guides** page shows a list of the guides created in your Craft CMS project. From here you may manage your guides, create a new guide, and add guides to the Guide home page. The buttons in the **Actions** column let you preview a guide in a slideout, edit a guide’s content, or delete a guide that is no longer needed.
+The **Guides** page shows a list of the guides created in your Craft CMS project. From here you may manage your guides, create a new guide, and add guides to the CMS Guide page. The buttons in the **Actions** column let you preview a guide in a slideout, edit a guide’s content, or delete a guide that is no longer needed.
 
 In order to view the **Guides** page, a Craft CMS user will need the `Edit Guides` permission, in addition to permissions for `Access the control panel` and `Access Guide`.
 
@@ -28,9 +28,9 @@ Just like entries, each guide has a unique, machine-readable slug that identifie
 
 The slug is generated from the guide’s **Title** field when a guide is brand new but you can customize it. Because a slug can be used in guide content, it’s a good idea to keep a slug once it’s created, but if you change a slug you can always go through your content and update it. The slug is also used as part of the page’s URL for a guide.
 
-### Adding a Guide to the Guide Home Page
+### Adding a Guide to the CMS Guide Page
 
-When Guide is first installed the Guide home page will be empty. To add guides to the **Guide** page, click on the toggle in the **Guide Home** column. A message will pop up confirming that the guide has been added. Next time you visit the **Guide** page you should see your guide there.
+When Guide is first installed the CMS Guide page will be empty. To add guides to the **Guide** page, click on the toggle in the **CMS Guide** column. A message will pop up confirming that the guide has been added. Next time you visit the **Guide** page you should see your guide there.
 
 ### Editing a Guide
 

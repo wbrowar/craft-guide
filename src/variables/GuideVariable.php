@@ -58,7 +58,7 @@ class GuideVariable
         if ($guide && in_array($guide->contentSource, ['field', 'template'])) {
             $oldMode = Guide::$view->getTemplateMode();
             Guide::$view->setTemplateMode(Guide::$view::TEMPLATE_MODE_CP);
-            $renderedTemplate = Template::raw(Guide::$view->renderTemplate('guide/_partials/render_content.twig', ['guide' => $guide]));
+            $renderedTemplate = Template::raw(Guide::$view->renderTemplate('guide/_partials/render_content.twig', ['guide' => $guide, 'guideIncluded' => true]));
             Guide::$view->setTemplateMode($oldMode);
             return $renderedTemplate;
         }

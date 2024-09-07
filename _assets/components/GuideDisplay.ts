@@ -1,7 +1,8 @@
 import { html, LitElement, nothing } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
-import { Guide } from '../types.ts'
+import { GuideListGuide } from '../types.ts'
 import { guides, proEdition, settings } from '../globals.ts'
+import { log } from '../utils/console.ts'
 
 @customElement('guide-display')
 export class GuideDisplay extends LitElement {
@@ -10,6 +11,12 @@ export class GuideDisplay extends LitElement {
    * PROPS
    * ===========================================================================
    */
+  /**
+   * Messages translated via Craft’s `t` filter.
+   */
+  @property({ attribute: 'cms-guide', type: Boolean })
+  cmsGuide = false
+
   /**
    * Messages translated via Craft’s `t` filter.
    */
@@ -25,13 +32,19 @@ export class GuideDisplay extends LitElement {
    * List of guides being displayed, along with their related information.
    */
   @state()
-  private _guides: Guide[] = []
+  private _guides: GuideListGuide[] = []
 
   /**
    * List of guides being displayed, along with their related information.
    */
   @state()
-  private _selectedGuide?: Guide = undefined
+  private _selectedGuide?: GuideListGuide = undefined
+
+  /**
+   * TODO
+   */
+  @state()
+  private _showBook = false
 
   /**
    * Determines if TL;DR controls should appear.
@@ -56,6 +69,8 @@ export class GuideDisplay extends LitElement {
   connectedCallback() {
     super.connectedCallback()
 
+    this._showBook = this.cmsGuide && settings.fun
+
     // Collect slugs from all rendered guides.
     const guideElements: NodeListOf<HTMLElement> = this.querySelectorAll('.guide')
     const guideSlugs: string[] = []
@@ -66,8 +81,11 @@ export class GuideDisplay extends LitElement {
     })
 
     // Map rendered guides with guides in JavaScript object.
-    this._guides = guideSlugs.map((slug) => {
-      return guides.find((guide) => guide.slug === slug)
+    guideSlugs.forEach((slug) => {
+      const guide = guides.find((guide) => guide.slug === slug)
+      if (guide) {
+        this._guides.push(guide)
+      }
     })
 
     // Select the first guide to update navigation.
@@ -83,6 +101,7 @@ export class GuideDisplay extends LitElement {
     if (proEdition && settings.enableGuideJavascript) {
       guideSlugs.forEach((slug) => {
         try {
+          // @ts-ignore
           window.guideCallback[slug]?.()
         } catch (error) {
           window.Craft.cp.displayError(this.tMessages.guideJsCallbackError.replace('[slug]', slug))
@@ -96,7 +115,7 @@ export class GuideDisplay extends LitElement {
       <nav>
         <h2>${this.tMessages.guides}</h2>
         <ul>
-          ${this._guides.map((guide) => {
+          ${this._guides?.map((guide) => {
             return html`<li class="${this._selectedGuide?.slug === guide.slug ? 'selected' : nothing}">
               <button type="button" @click="${() => this._selectGuide(guide.slug)}">${guide.title}</button>
             </li>`
@@ -116,16 +135,19 @@ export class GuideDisplay extends LitElement {
       `)
     }
 
+    log('cmsGuide', this.cmsGuide)
+
     return html`
-      ${this._guides?.length > 1 || options.length
+      ${(this._guides && this._guides?.length > 1) || this._showBook || options.length
         ? html`
             <aside>
-              ${this._guides?.length > 1 ? nav : nothing}
+              ${this._guides && this._guides?.length > 1 ? nav : nothing}
               ${options.length
                 ? options.map((option) => {
                     return option
                   })
                 : nothing}
+              ${this._showBook && false ? html`<guide-book></guide-book>` : nothing}
             </aside>
           `
         : nothing}

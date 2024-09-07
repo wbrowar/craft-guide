@@ -171,6 +171,10 @@ export class GuideUtilities extends LitElement {
 
       <p><b>${this.tMessages.step4Title}</b> ${this.tMessages.step4Text}</p>
 
+      <div class="readable guide-component-tip">
+        <blockquote class="note tip">${this.tMessages.importSkipSlugTip}</blockquote>
+      </div>
+
       <div class="field">
         <div class="heading">
           <label for="import-data">${this.tMessages.importData}</label>

@@ -32,6 +32,14 @@ class Settings extends Model
     public $enableGuideCss = true;
     public $enableGuideJavascript = false;
 
+    // Enable CSS and JavaScript to be displayed on the page.
+    // NOTE: These will be ignored if their respective field is disabled.
+    public $registerGuideCss = true;
+    public $registerGuideJavascript = true;
+
+    // Enables non-essential visual enhancements.
+    public $fun = true;
+
     // The label shown on Guide Buttons on edit pages.
     public $guideButtonLabel = '';
 
@@ -55,8 +63,8 @@ class Settings extends Model
     public function rules(): array
     {
         return [
-            [['enableGuideCss', 'enableGuideJavascript', 'renderMarkdownDefault'], 'boolean'],
-            [['assetVolume', 'editPageLocation', 'templatePath', 'clientName', 'projectName', 'myCompanyName'], 'string'],
+            [['enableGuideCss', 'enableGuideJavascript', 'fun', 'registerGuideCss', 'registerGuideJavascript', 'renderMarkdownDefault'], 'boolean'],
+            [['assetVolume', 'editPageLocation', 'guideButtonLabel', 'templatePath', 'clientName', 'projectName', 'myCompanyName'], 'string'],
 
             ['editPageLocation', 'default', 'value' => 'slideout'],
         ];

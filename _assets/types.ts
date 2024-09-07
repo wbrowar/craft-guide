@@ -1,14 +1,18 @@
 declare global {
-  namespace NodeJS {
-    interface Global {
-      monacoEditorInstances: {
-        contentEditor?: any
-      }
-    }
-  }
   interface Window {
     guideCallback: Function[]
     Craft: any
+  }
+}
+declare global {
+  var monacoEditorInstances: {
+    contentEditor: {
+      executeEdits: Function
+      focus: Function
+      getModel: Function
+      getSelection: Function
+      setPosition: Function
+    }
   }
 }
 
@@ -143,6 +147,7 @@ export interface PluginSettings {
   editPageLocation: EditPageLocation
   enableGuideCss: boolean
   enableGuideJavascript: boolean
+  fun: boolean
   renderMarkdownDefault: boolean
   myCompanyName: string
   projectName: string

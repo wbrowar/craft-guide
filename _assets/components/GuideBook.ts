@@ -73,8 +73,8 @@ interface SceneSettings {
   }
 }
 
-@customElement('guide-welcome')
-export class GuideWelcome extends LitElement {
+@customElement('guide-book')
+export class GuideBook extends LitElement {
   private _ambientLight!: HemisphereLight
   private _container: HTMLElement | null = null
   private _camera!: PerspectiveCamera
@@ -83,11 +83,11 @@ export class GuideWelcome extends LitElement {
   private _renderer!: WebGLRenderer
   private _scene!: Scene
 
-  private _book!: Object3D
+  // private _book!: Object3D
   private _bookTop!: Object3D
   private _bookLoose!: Object3D
   private _bookLoose2!: Object3D
-  private _timeline!: GSAPTimeline
+  // private _timeline!: GSAPTimeline
 
   /**
    * ===========================================================================
@@ -95,33 +95,13 @@ export class GuideWelcome extends LitElement {
    * ===========================================================================
    */
   static styles = css`
-    .guide-welcome-scene-wrapper {
+    .guide-book-scene-wrapper {
       display: block;
-      aspect-ratio: 16 / 9;
+      aspect-ratio: 5 / 6;
       max-width: 100%;
       position: relative;
-
-      & > button {
-        appearance: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 44px;
-        height: 44px;
-        position: absolute;
-        bottom: var(--l);
-        right: var(--l);
-        background-color: rgba(255, 255, 255, 0.9);
-        border: 1px solid var(--hairline-color);
-        border-radius: 50%;
-        cursor: pointer;
-
-        &:hover {
-          background-color: color-mix(in srgb, rgba(255, 255, 255, 0.9), rgb(1, 16, 99) 10%);
-        }
-      }
     }
-    #guide-welcome-scene-container {
+    #guide-book-scene-container {
       position: absolute;
       top: 0;
       left: 0;
@@ -202,19 +182,7 @@ export class GuideWelcome extends LitElement {
    * TODO
    */
   @state()
-  private _hasBeenInteractedWith = false
-
-  /**
-   * TODO
-   */
-  @state()
   private _objectUrl = `${assetPath}/guide-book.gltf`
-
-  /**
-   * TODO
-   */
-  @state()
-  private _playing = true
 
   /**
    * TODO
@@ -240,13 +208,13 @@ export class GuideWelcome extends LitElement {
       near: 0.1,
       far: 30,
       position: {
-        x: 0,
-        y: 10,
-        z: 0,
+        x: 2.4889,
+        y: 9.19,
+        z: 1.25,
       },
       rotation: {
-        x: 4.7,
-        y: 0,
+        x: 4.89,
+        y: 0.249,
         z: 0,
       },
     },
@@ -279,7 +247,7 @@ export class GuideWelcome extends LitElement {
       },
     },
     scene: {
-      bgColor: 'rgb(66, 97, 130)',
+      bgColor: import.meta.env.DEV ? 'fuchsia' : 'white',
     },
   }
 
@@ -298,14 +266,13 @@ export class GuideWelcome extends LitElement {
    * TODO
    */
   private _animateOpenBook() {
+    log('opening book')
     if (this._bookTop && this._bookLoose && this._bookLoose2) {
-      this._hasBeenInteractedWith = true
-
       this._animationState = 'animating'
       const speed = 3
       gsap.to(this._bookTop.rotation, {
         duration: speed,
-        z: 1.9,
+        z: 0.6,
         ease: 'elastic.out(1, 0.3)',
         onComplete: () => {
           this._animationState = 'opened'
@@ -328,9 +295,8 @@ export class GuideWelcome extends LitElement {
    * TODO
    */
   private _animateCloseBook() {
+    log('closing book')
     if (this._bookTop && this._bookLoose && this._bookLoose2) {
-      this._hasBeenInteractedWith = true
-
       this._animationState = 'animating'
       const speed = 1
       gsap.to(this._bookTop.rotation, {
@@ -351,45 +317,6 @@ export class GuideWelcome extends LitElement {
         z: -0.05,
         ease: 'power4.in',
       })
-    }
-  }
-
-  /**
-   * TODO
-   */
-  private _animateSlideInBook() {
-    if (this._book) {
-      this._animationState = 'animating'
-      const speed = 1.2
-      gsap.to(this._book.position, {
-        duration: speed,
-        x: 0,
-        startAt: {
-          x: -10,
-        },
-        ease: 'power2.out',
-        onComplete: () => {
-          this._animationState = 'closed'
-        },
-      })
-      gsap.to(this._book.rotation, {
-        duration: speed,
-        y: Math.random() - 0.5,
-        startAt: {
-          y: Math.random() - 0.5,
-        },
-        ease: 'power2.out',
-      })
-
-      setTimeout(() => {
-        if (!this._hasBeenInteractedWith) {
-          this._animateOpenBook()
-        }
-      }, 2500)
-
-      setTimeout(() => {
-        this._playCameraLoop()
-      }, 5000)
     }
   }
 
@@ -465,6 +392,7 @@ export class GuideWelcome extends LitElement {
 
     if (action === 'close') {
       this._showDebugControls = false
+      this._scene.background = new THREE.Color('white')
     }
   }
 
@@ -473,7 +401,7 @@ export class GuideWelcome extends LitElement {
    */
   private _init() {
     // set container
-    this._container = this.renderRoot?.querySelector('#guide-welcome-scene-container') ?? null
+    this._container = this.renderRoot?.querySelector('#guide-book-scene-container') ?? null
 
     log('contianer', this._container)
 
@@ -553,12 +481,10 @@ export class GuideWelcome extends LitElement {
             log('Scened objects', children)
           }
 
-          this._book = this._object.scene.getObjectByName('Scene')
+          // this._book = this._object.scene.getObjectByName('Scene')
           this._bookTop = this._object.scene.getObjectByName('Top')
           this._bookLoose = this._object.scene.getObjectByName('Loose')
           this._bookLoose2 = this._object.scene.getObjectByName('Loose_2')
-
-          this._animateSlideInBook()
 
           log('Objects from scene', this._bookTop, this._bookLoose, this._bookLoose2)
         },
@@ -589,6 +515,8 @@ export class GuideWelcome extends LitElement {
       if (this._resizeObserver) {
         this._resizeObserver.observe(this._container)
       }
+
+      this._animationState = 'closed'
     }
   }
 
@@ -600,284 +528,6 @@ export class GuideWelcome extends LitElement {
       this._animateCloseBook()
     } else if (this._animationState === 'closed') {
       this._animateOpenBook()
-    }
-  }
-
-  /**
-   * TODO
-   */
-  private _pause() {
-    if (this._timeline) {
-      log('pausing')
-      this._timeline.pause()
-      this._playing = false
-    }
-  }
-
-  /**
-   * TODO
-   */
-  private _play() {
-    if (this._timeline) {
-      log('playing')
-      this._timeline.play()
-      this._playing = true
-    }
-  }
-
-  /**
-   * TODO
-   */
-  private _playCameraLoop() {
-    if (this._camera) {
-      const animations: string[] = []
-      // timeline = gsap.timeline({ repeat: -1, repeatDelay: 1 });
-      this._timeline = gsap.timeline({
-        onComplete: () => {
-          gsap.set(this._book.rotation, {
-            y: () => {
-              return Math.random() - 0.5
-            },
-          })
-          this._timeline.restart()
-        },
-      })
-
-      animations.push('leftToRight')
-      animations.push('zoomFromTop')
-      animations.push('downRightSide')
-      animations.push('acrossFront')
-      animations.push('cornerUp')
-
-      // Slide from left to right
-      if (animations.includes('leftToRight')) {
-        const leftToRightDuration = 16
-        this._timeline
-          .add('leftToRight')
-          .set(
-            this._camera.position,
-            {
-              x: -15,
-              y: 0.7,
-              z: 5,
-            },
-            'leftToRight'
-          )
-          .set(
-            this._camera.rotation,
-            {
-              x: 0,
-              y: 0,
-              z: 0,
-            },
-            'leftToRight'
-          )
-          .to(
-            this._camera.position,
-            {
-              x: 15,
-              y: 0.7,
-              z: 5,
-              ease: 'power1.inOut',
-              duration: leftToRightDuration,
-            },
-            'leftToRight'
-          )
-          .to(
-            this._camera.rotation,
-            {
-              x: 0,
-              y: 0,
-              z: 0,
-              duration: leftToRightDuration,
-            },
-            'leftToRight'
-          )
-      }
-
-      if (animations.includes('zoomFromTop')) {
-        const zoomFromTopDuration = 15
-        this._timeline
-          .add('zoomFromTop')
-          .set(
-            this._camera.position,
-            {
-              x: 0,
-              y: 31,
-              z: 0,
-            },
-            'zoomFromTop'
-          )
-          .set(
-            this._camera.rotation,
-            {
-              x: 4.7,
-              y: 0,
-              z: 0,
-            },
-            'zoomFromTop'
-          )
-          .to(
-            this._camera.position,
-            {
-              x: 0,
-              y: 1,
-              z: 1.5,
-              ease: 'power4.out',
-              duration: zoomFromTopDuration,
-            },
-            'zoomFromTop'
-          )
-          .to(
-            this._camera.rotation,
-            {
-              x: 5.99,
-              y: 0,
-              z: 0,
-              ease: 'power1.in',
-              duration: zoomFromTopDuration,
-            },
-            'zoomFromTop'
-          )
-      }
-
-      if (animations.includes('downRightSide')) {
-        const downRightSideDuration = 10
-        this._timeline
-          .add('downRightSide')
-          .set(
-            this._camera.position,
-            {
-              x: 6.3,
-              y: 1,
-              z: -13,
-            },
-            'downRightSide'
-          )
-          .set(
-            this._camera.rotation,
-            {
-              x: -6.66,
-              y: 1.499,
-              z: 0,
-            },
-            'downRightSide'
-          )
-          .to(
-            this._camera.position,
-            {
-              x: 4.3,
-              y: 1,
-              z: 4.447071,
-              ease: 'power1.inOut',
-              duration: downRightSideDuration,
-            },
-            'downRightSide'
-          )
-          .to(
-            this._camera.rotation,
-            {
-              x: -6.46,
-              y: 1.299,
-              z: 0,
-              ease: 'power1.inOut',
-              duration: downRightSideDuration,
-            },
-            'downRightSide'
-          )
-      }
-
-      if (animations.includes('acrossFront')) {
-        const acrossFrontDuration = 15
-        this._timeline
-          .add('acrossFront')
-          .set(
-            this._camera.position,
-            {
-              x: 0,
-              y: 2,
-              z: -5.5,
-            },
-            'acrossFront'
-          )
-          .set(
-            this._camera.rotation,
-            {
-              x: 4.7,
-              y: 0,
-              z: 0,
-            },
-            'acrossFront'
-          )
-          .to(
-            this._camera.position,
-            {
-              x: 0,
-              y: 2,
-              z: 5.5,
-              ease: 'power1.inOut',
-              duration: acrossFrontDuration,
-            },
-            'acrossFront'
-          )
-          .to(
-            this._camera.rotation,
-            {
-              x: 4.7,
-              y: 0,
-              z: 0,
-              ease: 'power1.inOut',
-              duration: acrossFrontDuration,
-            },
-            'acrossFront'
-          )
-      }
-
-      if (animations.includes('cornerUp')) {
-        const cornerUpDuration = 15
-        this._timeline
-          .add('cornerUp')
-          .set(
-            this._camera.position,
-            {
-              x: 3.499,
-              y: 0,
-              z: 3.1,
-            },
-            'cornerUp'
-          )
-          .set(
-            this._camera.rotation,
-            {
-              x: 6.7,
-              y: 0.8,
-              z: -0.3,
-            },
-            'cornerUp'
-          )
-          .to(
-            this._camera.position,
-            {
-              x: 2.99,
-              y: 1.8,
-              z: 2.7,
-              ease: 'power1.inOut',
-              duration: cornerUpDuration,
-            },
-            'cornerUp'
-          )
-          .to(
-            this._camera.rotation,
-            {
-              x: 5.5,
-              y: 0.8,
-              z: 0.7,
-              ease: 'power1.inOut',
-              duration: cornerUpDuration,
-            },
-            'cornerUp'
-          )
-      }
     }
   }
 
@@ -894,15 +544,8 @@ export class GuideWelcome extends LitElement {
 
   render() {
     return html`
-      <div class="guide-welcome-scene-wrapper">
-        <div id="guide-welcome-scene-container" @click="${this._onContainerClicked}"></div>
-        ${this._playing
-          ? html`<button type="button" @click="${this._pause}" title="${this.tMessages.pause}">
-              <slot name="pause-icon"></slot>
-            </button>`
-          : html`<button type="button" @click="${this._play}" title="${this.tMessages.pause}">
-              <slot name="play-icon"></slot>
-            </button>`}
+      <div class="guide-book-scene-wrapper">
+        <div id="guide-book-scene-container" @click="${this._onContainerClicked}"></div>
       </div>
       ${this._showDebugControls
         ? html`
@@ -957,6 +600,6 @@ export class GuideWelcome extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'guide-welcome': GuideWelcome
+    'guide-book': GuideBook
   }
 }

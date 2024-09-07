@@ -3,11 +3,11 @@ guide-slideout-button {
 
   & > button.btn {
     gap: .3em;
-    background-color: rgb(126, 159, 195);
+    background-color: var(--guide-color-blue);
     color: white;
 
     &:hover {
-      background-color: color-mix(in srgb, rgb(126, 159, 195), rgb(1, 16, 99) 10%);
+      background-color: color-mix(in srgb, var(--guide-color-blue), rgb(1, 16, 99) 10%);
     }
     & > svg {
       display: block;

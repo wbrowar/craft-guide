@@ -38,6 +38,7 @@ class SettingsController extends Controller
         $settings['templatePath'] = $this->removeSlashFromEnd($params['templatePath']);
         $settings['assetVolume'] = $params['assetVolume'];
         $settings['guideButtonLabel'] = $params['guideButtonLabel'];
+        $settings['fun'] = $params['fun'];
 
         $settings['renderMarkdownDefault'] = $params['renderMarkdownDefault'];
         $settings['enableGuideCss'] = $params['enableGuideCss'];

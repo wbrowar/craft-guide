@@ -2,7 +2,15 @@ import { html, LitElement, nothing } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { log } from '../utils/console.ts'
 import { guides, settings } from '../globals.ts'
-import { ApiStatus, GuideListGuide, MoveMethod, OrganizerGroup, Placement, PlacementGroup } from '../types.ts'
+import {
+  ApiStatus,
+  GuideListGuide,
+  MoveMethod,
+  OrganizerGroup,
+  Placement,
+  PlacementAccess,
+  PlacementGroup,
+} from '../types.ts'
 
 @customElement('guide-organizer')
 export class GuideOrganizer extends LitElement {
@@ -67,14 +75,14 @@ export class GuideOrganizer extends LitElement {
       const guideSelected = guides.find((guide) => guide.id === guideId)
 
       if (guideSelected) {
-        const params = {
-          access: 'all',
+        const params: Partial<Placement> = {
+          access: PlacementAccess.All,
           group: group.name,
           guideId: guideSelected.id,
         }
 
         if (group.groupId) {
-          params['groupId'] = group.groupId
+          params.groupId = group.groupId
         }
 
         await window.Craft?.postActionRequest(
@@ -82,7 +90,7 @@ export class GuideOrganizer extends LitElement {
           {
             data: params,
           },
-          async (response: object, textStatus: string) => {
+          async (_response: object, textStatus: string) => {
             if (textStatus === 'success') {
               window.Craft.cp.displayNotice(
                 this.tMessages.placementSaveSuccess
@@ -92,7 +100,7 @@ export class GuideOrganizer extends LitElement {
               await this._getAllPlacements()
               this._getAllPlacementsStatus = ApiStatus.Success
               if (event?.target) {
-                event.target.value = '__none__'
+                ;(event.target as HTMLSelectElement).value = '__none__'
               }
             }
           }
@@ -113,7 +121,7 @@ export class GuideOrganizer extends LitElement {
           id: placementId,
         },
       },
-      async (response: object, textStatus: string) => {
+      async (_response: object, textStatus: string) => {
         if (textStatus === 'success') {
           await this._getAllPlacements()
           window.Craft.cp.displayNotice(this.tMessages.placementDeleteSuccess?.replace('[guide]', guide.title))
@@ -165,7 +173,7 @@ export class GuideOrganizer extends LitElement {
       {
         data: params,
       },
-      async (response: object, textStatus: string) => {
+      async (_response: object, textStatus: string) => {
         if (textStatus === 'success') {
           window.Craft.cp.displayNotice(this.tMessages.placementUriSaveSuccess)
           await this._getAllPlacements()
@@ -290,11 +298,13 @@ export class GuideOrganizer extends LitElement {
                                         type="text"
                                         placeholder="uri"
                                         value="${placement.uri ?? ''}"
+                                        ?disabled="${this._getAllPlacementsStatus === ApiStatus.Loading}"
                                         @blur="${() => this._saveUriPlacement(event, 'uri', placement)}"
                                     /></span>
                                     <div class="select">
                                       <select
                                         class="input"
+                                        ?disabled="${this._getAllPlacementsStatus === ApiStatus.Loading}"
                                         @input="${() => this._saveUriPlacement(event, 'moveMethod', placement)}"
                                       >
                                         <option
@@ -329,6 +339,7 @@ export class GuideOrganizer extends LitElement {
                                         type="text"
                                         placeholder="#content"
                                         value="${placement.selector ?? ''}"
+                                        ?disabled="${this._getAllPlacementsStatus === ApiStatus.Loading}"
                                         @blur="${() => this._saveUriPlacement(event, 'selector', placement)}"
                                     /></span>
                                   </div>

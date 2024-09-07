@@ -1,0 +1,9 @@
+{% set tMessages = {
+  'copyToClipboard': 'Copy guide slug to clipboard'|t('guide'),
+  'copiedToClipboard': 'Copied to clipboard'|t('guide'),
+} %}
+
+<guide-copy-text-button
+    copy-text="{{ text }}"
+    t-messages="{{ tMessages|json_encode }}"
+></guide-copy-text-button>
