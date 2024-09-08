@@ -2,8 +2,8 @@
 
 {% set attributes = {
   href: url ?? null,
-  rel: target ?? true ? "noopener" : null,
-  target: target ?? true,
+  rel: target ?? false ? "noopener" : null,
+  target: target ?? false,
 } %}
 
 {% set classes = ['btn'] %}

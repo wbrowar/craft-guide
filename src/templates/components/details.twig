@@ -1,0 +1,12 @@
+{% extends 'guide/_partials/render_component.twig' %}
+
+{% set attributes = {
+  open: open ?? false,
+} %}
+
+{% set content = content ?? '' %}
+{% set summary = summary ?? 'Details'|t('guide') %}
+
+{% set element = 'details' %}
+
+{% block content -%}<summary>{{ summary }}</summary>{{ content }}{%- endblock %}

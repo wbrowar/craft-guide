@@ -110,6 +110,31 @@ guide-display {
     font-family: monospace;
     user-select: all;
   }
+  & details {
+    border: 1px solid var(--dark-hairline-color);
+    border-radius: var(--guide-border-radius);
+    padding: 0.5em 0.5em 0;
+
+    & summary {
+      font-weight: bold;
+      margin: -0.5em -0.5em 0;
+      padding: 0.5em;
+      cursor: pointer;
+    }
+
+    p:nth-child(2) {
+      margin-top: 0;
+    }
+
+    &[open] {
+      padding: 0.5em;
+
+      & summary {
+        border-bottom: 1px solid var(--dark-hairline-color);
+        margin-bottom: 0.5em;
+      }
+    }
+  }
   & iframe {
     aspect-ratio: var(--guide-iframe-aspect);
     max-width: 100%;

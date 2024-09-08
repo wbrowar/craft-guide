@@ -1,4 +1,4 @@
-import { html, LitElement, nothing } from 'lit'
+import { html, LitElement, nothing, TemplateResult } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { GuideListGuide } from '../types.ts'
 import { guides, proEdition, settings } from '../globals.ts'
@@ -32,12 +32,6 @@ export class GuideDisplay extends LitElement {
    */
   @state()
   private _selectedGuide?: GuideListGuide = undefined
-
-  /**
-   * Determines if TL;DR controls should appear.
-   */
-  @state()
-  private _showTldr = false
 
   /**
    * =========================================================================
@@ -78,10 +72,6 @@ export class GuideDisplay extends LitElement {
       this._selectedGuide = this._guides[0]
     }
 
-    // Detect TL;DR classes.
-    const tldrElements = this.querySelectorAll('.tldr-hide, .tldr-show')
-    this._showTldr = tldrElements.length > 0
-
     // Fire callback for guide.
     if (proEdition && settings.enableGuideJavascript) {
       guideSlugs.forEach((slug) => {
@@ -109,16 +99,8 @@ export class GuideDisplay extends LitElement {
       </nav>
     `
 
-    const options = []
-
-    if (this._showTldr) {
-      options.push(html`
-        <div>
-          <input switch type="checkbox" id="tldr" name="tldr" />
-          <label for="tldr">TL;DR <span class="info">HI</span></label>
-        </div>
-      `)
-    }
+    // TODO add options or remove
+    const options: TemplateResult[] = []
 
     return html`
       ${(this._guides && this._guides?.length > 1) || options.length

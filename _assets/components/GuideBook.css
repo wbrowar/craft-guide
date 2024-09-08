@@ -6,7 +6,7 @@
 
 guide-book {
   display: block;
-  max-width: 110px;
+  max-width: 90px;
 
   @container guide-display (width>600px) {
     transform: translateX(-16px);

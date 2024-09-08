@@ -38,6 +38,22 @@
   },
 }]) %}
 
+{% set contentCode %}{% verbatim %}{% set detailsContent %}{% apply markdown('gfm') %}
+REPLACE_TEXT
+{% endapply %}{% endset %}
+{{ craft.guide.component('details', { content: detailsContent }) }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Details'|t('guide'),
+  contentCode,
+  group: 'components',
+  summary: '<p>Hide extra information within a details element.</p>'|t('guide'),
+  props: {
+    content: 'Text displayed when the details element is opened.'|t('guide'),
+    open: 'A boolean that toggles the details element to be opened or closed. Defaults to `false`'|t('guide'),
+    summary: 'The label of the button that toggles the details element open and close.'|t('guide'),
+  },
+}]) %}
+
 {% set contentCode %}{% verbatim %}{{ craft.guide.component('guide-button', { slug: 'REPLACE_SLUG' }) }}{% endverbatim %}{% endset %}
 {% set components = components|merge([{
   title: 'Guide Button'|t('guide'),
@@ -104,22 +120,6 @@ Content
   props: {
     message: 'Text displayed in the tip.'|t('guide'),
   },
-}]) %}
-
-{% set contentCode %}{% verbatim %}<div class="tldr-hide"></div>{% endverbatim %}{% endset %}
-{% set components = components|merge([{
-  title: 'TL;DR Hide'|t('guide'),
-  contentCode,
-  group: 'components',
-  summary: '<p>Show a <strong>TL;DR</strong> button on your guide and hide this content when <strong>TL;DR</strong> is active.</p>'|t('guide'),
-}]) %}
-
-{% set contentCode %}{% verbatim %}<div class="tldr-show"></div>{% endverbatim %}{% endset %}
-{% set components = components|merge([{
-  title: 'TL;DR Show'|t('guide'),
-  contentCode,
-  group: 'components',
-  summary: '<p>Show a <strong>TL;DR</strong> button on your guide, hide this content and show it when <strong>TL;DR</strong> is active.</p>'|t('guide'),
 }]) %}
 
 {% set contentCode %}{% verbatim %}{{ craft.guide.var('clientName') }}{% endverbatim %}{% endset %}

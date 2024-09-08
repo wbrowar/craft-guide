@@ -651,13 +651,13 @@ export class GuideWelcome extends LitElement {
 
       // Slide from left to right
       if (animations.includes('leftToRight')) {
-        const leftToRightDuration = 16
+        const leftToRightDuration = 15
         this._timeline
           .add('leftToRight')
           .set(
             this._camera.position,
             {
-              x: -15,
+              x: -13,
               y: 0.7,
               z: 5,
             },

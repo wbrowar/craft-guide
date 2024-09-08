@@ -19,10 +19,10 @@ guide-editor-component-list-item {
     }
   }
   button.btn {
-    background-color: var(--guide-editor-component-list-item-button-background-color);
+    background-color: var(--guide-editor-component-list-item-button-background-color, var(--ui-control-bg-color));
 
     &:hover {
-      background-color: color-mix(in srgb, var(--guide-editor-component-list-item-button-background-color), rgb(1, 16, 99) 10%);
+      background-color: color-mix(in srgb, var(--guide-editor-component-list-item-button-background-color, var(--ui-control-bg-color)), rgb(1, 16, 99) 10%);
     }
   }
   dl {
