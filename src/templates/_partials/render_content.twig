@@ -1,5 +1,5 @@
 {% apply spaceless %}{% if guide.contentSource == 'iframe' and (guide.contentUrl ?? false) %}
-  <iframe class="g-iframe" src="{{ guide.contentUrl }}"></iframe>
+  <iframe src="{{ guide.contentUrl }}"></iframe>
 {% else %}
   {% if guide.contentSource == 'template' and (guide.template ?? false) %}
     {% if guide.template starts with 'guide/' %}

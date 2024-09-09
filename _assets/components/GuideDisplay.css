@@ -68,32 +68,33 @@ guide-display {
 }
 
 .guide {
+  --guide-prose-max-width: 70ch;
   container-name: guide;
   container-type: inline-size;
 
   & > * + * {
-    margin-block-start: 1.6em;
+    margin-block-start: var(--guide-prose-elements-margin-block-start, 1.6em);
   }
   & > * + :is(h1, h2, h3, h4, h5, h6) {
-    margin-block-start: 2.4em;
+    margin-block-start: var(--guide-prose-headers-margin-block-start, 2.4em);
     text-wrap: balance;
   }
 
   & :is(blockquote, dd, dl, h1, h2, h3, h4, h5, h6, p, li, pre) {
-    max-width: 70ch;
-    font-size: 1rem;
-    line-height: 1.4rem;
+    max-width: var(--guide-prose-max-width);
+    font-size: var(--guide-prose-font-size, 1rem);
+    line-height: var(--guide-prose-line-height, 1.4rem);
     text-wrap: pretty;
   }
   & h1 {
     padding-block-end: .3em;
-    font-size: 1.8rem;
+    font-size: var(--guide-prose-h1-font-size, 1.8rem);
     font-weight: 300;
     border-block-end: 1px solid var(--hairline-color);
   }
   & h2 {
     padding-block-end: .2em;
-    font-size: 1.3rem;
+    font-size: var(--guide-prose-h2-font-size, 1.3rem);
     font-weight: 400;
     border-block-end: 1px solid var(--hairline-color);
   }
@@ -136,15 +137,14 @@ guide-display {
     }
   }
   & iframe {
-    aspect-ratio: var(--guide-iframe-aspect);
-    max-width: 100%;
+    aspect-ratio: var(--guide-prose-iframe-aspect, 16 / 9);
+    max-width: var(--guide-prose-iframe-max-width, 100%);
+    width: 100%;
     height: auto;
-
-    &:is([src^="https://player.vimeo.com"], [src^="https://www.youtube.com"]) {
-      --guide-iframe-aspect: 16 / 9;
-    }
+    border-radius: var(--guide-border-radius);
   }
   & img {
+    max-width: var(--guide-prose-img-max-width, 700px);
     border-radius: var(--guide-border-radius);
   }
   & pre {
@@ -153,7 +153,7 @@ guide-display {
 
     & > code {
       padding: 1em;
-      font-size: 1rem;
+      font-size: var(--guide-prose-font-size, 1rem);
       white-space: pre;
     }
   }
@@ -208,7 +208,7 @@ guide-display {
     }
   }
   & video {
-    aspect-ratio: var(--guide-video-aspect, 16 / 9);
+    aspect-ratio: var(--guide-prose-video-aspect, 16 / 9);
     border-radius: var(--guide-border-radius);
   }
 }
