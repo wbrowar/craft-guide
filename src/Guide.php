@@ -103,7 +103,7 @@ class Guide extends Plugin
     /**
      * @var string
      */
-    public string $schemaVersion = '3.0.0';
+    public string $schemaVersion = '5.0.0';
 
     /**
      * @var string
@@ -481,17 +481,13 @@ class Guide extends Plugin
      */
     public function getUserOperations():array
     {
-        $operations = [
-            'deleteGuides' => false,
-            'editGuides' => false,
-            'useOrganizer' => false,
-        ];
+        $operations = [];
 
         $user = Craft::$app->getUser();
 
         $operations['deleteGuides'] = $user->getIsAdmin() || $user->checkPermission('deleteGuides');
         $operations['editGuides'] = $user->getIsAdmin() || $user->checkPermission('editGuides');
-        $operations['useOrganizer'] = $user->getIsAdmin() || $user->checkPermission('useOrganizer');
+        $operations['useOrganizer'] = self::$pro && ($user->getIsAdmin() || $user->checkPermission('useOrganizer'));
 
         return $operations;
     }

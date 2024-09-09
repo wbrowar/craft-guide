@@ -11,6 +11,9 @@
  */ #}
 
 {% extends "_layouts/cp" %}
+{% if not userOperations.useOrganizer %}
+  {% redirect 'guide/list' %}
+{% endif %}
 {% requirePermission 'useOrganizer' %}
 
 {# The title of this CP section #}

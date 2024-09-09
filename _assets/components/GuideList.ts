@@ -1,7 +1,6 @@
 import { html, LitElement } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { guides, userOperations } from '../globals.ts'
-import { copyToClipboard } from '../utils/clipboard.ts'
 import { ApiStatus, Placement, PlacementGroup } from '../types.ts'
 
 @customElement('guide-list')
@@ -45,14 +44,6 @@ export class GuideList extends LitElement {
    * METHODS
    * =========================================================================
    */
-  /**
-   * TODO
-   */
-  private async _copyText(text: string) {
-    await copyToClipboard(text)
-    window.Craft.cp.displayNotice(`${this.tMessages.copiedToClipboard}: ${text}`)
-  }
-
   /**
    * Gets the list of placements from the database and filters them down to only ones in the `nav` group.
    */
