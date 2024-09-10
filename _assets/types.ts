@@ -1,7 +1,8 @@
 declare global {
   interface Window {
-    guideCallback: Function[]
     Craft: any
+    Garnish: any
+    guideCallback: Function[]
   }
 }
 declare global {

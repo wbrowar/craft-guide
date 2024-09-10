@@ -64,9 +64,11 @@ class GuideComponents extends Component
                             $list[] = [
                                 'title' => $asset->title,
                                 'group' => 'images',
-                                'contentCode' => "{{ craft.guide.component('image', { asset: craft.assets.filename('" . $asset->filename . "').volume('" . $assetVolume->handle . "').one() }) }}",
+                                'contentCode' => "{{ craft.guide.component('image', { asset: craft.assets.filename('" . $asset->filename . "').volume('" . $assetVolume->handle . "').one(), modal: true }) }}",
                                 'props' => [
-                                    'asset' => 'An image asset.',
+                                    'asset' => Craft::t('guide', 'An image asset uploaded to this Craft CMS project.'),
+                                    'modal' => Craft::t('guide', 'Enables a modal to show when the image is clicked.'),
+                                    'src' => Craft::t('guide', 'The URL of the image to be displayed.'),
                                 ],
                                 'thumbnail1x' => $thumbnailUrl1x ?? false,
                                 'thumbnail2x' => $thumbnailUrl2x ?? false,

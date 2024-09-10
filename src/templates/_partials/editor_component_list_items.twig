@@ -66,13 +66,15 @@ REPLACE_TEXT
   },
 }]) %}
 
-{% set contentCode %}{% verbatim %}{{ craft.guide.component('image', { url: 'REPLACE_URL' }) }}{% endverbatim %}{% endset %}
+{% set contentCode %}{% verbatim %}{{ craft.guide.component('image', { modal: true, url: 'REPLACE_URL' }) }}{% endverbatim %}{% endset %}
 {% set components = components|merge([{
   title: 'Image'|t('guide'),
   contentCode,
   group: 'components',
   summary: '<p>Display an image or a screenshot from a URL.</p>'|t('guide'),
   props: {
+    asset: 'An image asset uploaded to this Craft CMS project.'|t('guide'),
+    modal: 'Enables a modal to show when the image is clicked.'|t('guide'),
     src: 'The URL of the image to be displayed.'|t('guide'),
   },
 }]) %}

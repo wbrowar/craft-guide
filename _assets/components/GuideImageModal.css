@@ -1,0 +1,20 @@
+.guide-image-modal {
+  width: 90vw !important;
+  height: 90vh !important;
+
+  & img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+guide-image-modal {
+  display: block;
+
+  & img {
+    cursor: zoom-in;
+  }
+}
