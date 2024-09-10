@@ -19,7 +19,7 @@ By default, guides that are added to edit pages are embedded above the edit page
 Guides can be added to any other page in the CP by providing the page URI and a CSS selector in a guide dragged to the Control Panel Pages area.
 
 <div class="readable guide-component-tip">
-  <blockquote class="note tip">The page URI should not include the `cpTrigger` segment. In most Craft sites this is set to `admin`, unless it has been changed in the General config. For example, if you want add a guide to the Field Settings page at `/admin/settings/fields`, enter `settings/fields` as the Page URI.</blockquote>
+  <blockquote class="note tip">The page URI should not include the <code>cpTrigger</code> segment. In most Craft sites this is set to <code>admin</code>, unless it has been changed in the General config. For example, if you want add a guide to the Field Settings page at <code>/admin/settings/fields</code>, enter <code>settings/fields</code> as the Page URI.</blockquote>
 </div>
 
 For the CSS Selector field, enter valid CSS selector (a class, id, or `data` attribute) of the element where the guide should be added to. The guide content will be appended to the bottom of the element and custom CSS in the guide can help you position it or style it to fit in with its surroundings.

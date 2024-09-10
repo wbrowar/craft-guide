@@ -152,6 +152,7 @@ export enum PlacementGroup {
   GlobalSet = 'globalSet',
   Section = 'section',
   UiElement = 'uiElement',
+  UiElementEnabled = 'uiElementEnabled',
   Uri = 'uri',
   User = 'user',
   Widget = 'widget',

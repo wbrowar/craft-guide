@@ -1,7 +1,7 @@
 import { html, LitElement, nothing } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { log } from '../utils/console.ts'
-import { guides, settings } from '../globals.ts'
+import { guides } from '../globals.ts'
 import {
   ApiStatus,
   GuideListGuide,
@@ -11,6 +11,7 @@ import {
   PlacementAccess,
   PlacementGroup,
 } from '../types.ts'
+import { unsafeHTML } from 'lit-html/directives/unsafe-html.js'
 
 @customElement('guide-organizer')
 export class GuideOrganizer extends LitElement {
@@ -196,6 +197,10 @@ export class GuideOrganizer extends LitElement {
     if (widget) {
       this._groupsDataStructured.push(widget)
     }
+    const uiElementEnabled = this.groupsData.find((group) => group.name === PlacementGroup.UiElementEnabled)
+    if (uiElementEnabled) {
+      this._groupsDataStructured.push(uiElementEnabled)
+    }
     const entries = this.groupsData.find((group) => group.name === PlacementGroup.Entry)
     if (entries) {
       this._groupsDataStructured.push(entries)
@@ -237,18 +242,15 @@ export class GuideOrganizer extends LitElement {
       this._groupsDataStructured.push(uri)
     }
 
-    log('structured', this._groupsDataStructured)
-
     this._getAllPlacements()
-
-    log('guides', guides)
-    log('settings', settings)
   }
 
   render() {
     return html`
       ${this._groupsDataStructured.map((group) => {
-        const placementsInGroup = this._placements.filter((placement) => placement.group === group.name)
+        const placementsInGroup = this._placements.filter((placement) => {
+          return placement.group === group.name && placement.groupId === group.groupId
+        })
         const guidesInGroup: Record<number, GuideListGuide> = {}
         placementsInGroup.forEach((placement) => {
           const guide = guides.find((guide) => guide.id === placement.guideId)
@@ -264,27 +266,17 @@ export class GuideOrganizer extends LitElement {
         return html`
           <div class="guide-organizer-header guide-organizer-header-${group.headerSize}">
             <h2>${group.header}</h2>
-            <p>${group.description}</p>
+            <p>${unsafeHTML(group.description)}</p>
           </div>
           <div class="guide-organizer-section" data-organizer-group="${group.name}">
             ${placementsInGroup.length
               ? html`
-                  <h3>${this.tMessages.guidesDisplayed}</h3>
                   <ul>
                     ${placementsInGroup.map((placement) => {
                       return guidesInGroup[placement.guideId]
                         ? html`<li>
-                            <div>
-                              ${group.name === PlacementGroup.Uri
-                                ? placement.uri && placement.selector
-                                  ? html`<span class="guide-uri-valid" title="${this.tMessages.uriPlacementIsValid}"
-                                      >✓</span
-                                    >`
-                                  : html`<span class="guide-uri-invalid" title="${this.tMessages.uriPlacementIsInvalid}"
-                                      >ⓧ</span
-                                    >`
-                                : nothing}
-                              <span class="guide-organizer-title">${guidesInGroup[placement.guideId].title}</span>
+                            <div class="guide-organizer-title">
+                              <span>${guidesInGroup[placement.guideId].title}</span>
                             </div>
 
                             ${group.name === PlacementGroup.Uri
@@ -337,14 +329,24 @@ export class GuideOrganizer extends LitElement {
                                         id="guide-selector-${placement.id}"
                                         class="text"
                                         type="text"
-                                        placeholder="#content"
+                                        placeholder="selector"
                                         value="${placement.selector ?? ''}"
                                         ?disabled="${this._getAllPlacementsStatus === ApiStatus.Loading}"
                                         @blur="${() => this._saveUriPlacement(event, 'selector', placement)}"
                                     /></span>
+
+                                    ${placement.uri && placement.selector
+                                      ? html`<span class="guide-uri-valid" title="${this.tMessages.uriPlacementIsValid}"
+                                          >✓</span
+                                        >`
+                                      : html`<span
+                                          class="guide-uri-invalid"
+                                          title="${this.tMessages.uriPlacementIsInvalid}"
+                                          >ⓧ</span
+                                        >`}
                                   </div>
                                 `
-                              : nothing}
+                              : html`<div><span>${guidesInGroup[placement.guideId].summary}</span></div>`}
 
                             <div class="buttons">
                               <guide-slideout-button page-slug="${guidesInGroup[placement.guideId].slug}">
@@ -365,17 +367,18 @@ export class GuideOrganizer extends LitElement {
                     })}
                   </ul>
                 `
-              : nothing}
+              : html`<div class="guide-organizer-group-empty">
+                  <p>${this.tMessages.emptyGroup}</p>
+                </div>`}
             ${guideOptions.length
               ? html`
-                  <h3>${this.tMessages.addAGuide}</h3>
                   <div class="select">
                     <select
                       class="input"
                       ?disabled="${this._getAllPlacementsStatus === ApiStatus.Loading}"
                       @input="${() => this._addPlacement(event, group)}"
                     >
-                      <option value="__none__">${this.tMessages.addGuideToGroupOptionDefault}</option>
+                      <option value="__none__">${this.tMessages.addGuideToGroupOptionDefault} ${group.header}</option>
                       ${guideOptions.map((guide) => {
                         return html`<option value="${guide.id}">${guide.title}</option>`
                       })}

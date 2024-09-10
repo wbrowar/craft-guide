@@ -1,8 +1,8 @@
 [data-guide-content] {
-  #content + & {
+  #content + &, .so-content .flex-fields + & {
     margin-block-start: var(--l);
   }
-  &:has(+ #content){
+  &:has(+ #content), .so-content &:has(+ .flex-fields) {
     margin-block-end: var(--l);
   }
 
@@ -144,7 +144,8 @@ guide-display {
     border-radius: var(--guide-border-radius);
   }
   & img {
-    max-width: var(--guide-prose-img-max-width, 700px);
+    width: 100%;
+    max-width: var(--guide-prose-img-max-width, 900px);
     border-radius: var(--guide-border-radius);
   }
   & pre {

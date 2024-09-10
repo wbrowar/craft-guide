@@ -47,8 +47,8 @@
       } %}
 
       <guide-welcome t-messages="{{ tMessages|json_encode }}">
-        <div class="guide-tab-icon-play" slot="play-icon">{{ svg('@appicons/play.svg')|raw }}</div>
-        <div class="guide-tab-icon-pause" slot="pause-icon">{{ svg('@appicons/square.svg')|raw }}</div>
+        <div class="guide-tab-icon-play" style="width: 16px; height: 16px;" slot="play-icon">{{ svg('@appicons/play.svg')|raw }}</div>
+        <div class="guide-tab-icon-pause" style="width: 16px; height: 16px;" slot="pause-icon">{{ svg('@appicons/square.svg')|raw }}</div>
       </guide-welcome>
     {% endif %}
 

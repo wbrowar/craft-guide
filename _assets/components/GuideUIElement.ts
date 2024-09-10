@@ -11,9 +11,11 @@ export class GuideUIElement extends LitElement {
    */
   static styles = css`
     .settings {
-      display: flex;
-      justify-content: end;
+      float: inline-end;
+      position: relative;
       margin-block-end: var(--m);
+      margin-inline-start: var(--m);
+      z-index: 1;
     }
   `
 
@@ -73,7 +75,22 @@ export class GuideUIElement extends LitElement {
    */
   private async _onGuideIdSelected(guideId: string) {
     if (!this._guideSelected) {
-      if (guideId === '__none__') {
+      if (guideId === '__none__' && this.placementId) {
+        await window.Craft?.postActionRequest(
+          'guide/placement/delete-placement',
+          {
+            data: {
+              id: this.placementId,
+            },
+          },
+          async (_response: object, textStatus: string) => {
+            if (textStatus === 'success') {
+              window.Craft.cp.displayNotice(this.tMessages.placementDeleteSuccess)
+
+              this._guideSelected = true
+            }
+          }
+        )
       } else {
         const params: Partial<Placement> = {
           access: PlacementAccess.All,
@@ -118,6 +135,10 @@ export class GuideUIElement extends LitElement {
   connectedCallback() {
     super.connectedCallback()
 
+    if (!this.placementId) {
+      this._showSettings = true
+    }
+
     this._guideIdSelect = this.querySelector('guide-ui-element select[name="guideId"]')
 
     // Show or hide fields based on selected `contentSource` value.
@@ -138,10 +159,12 @@ export class GuideUIElement extends LitElement {
 
   render() {
     return html`
-      ${!this._guideSelected ? html`<div class="settings"><slot name="settings-button"></slot></div>` : nothing}
+      ${!this._guideSelected && this.placementId
+        ? html`<div class="settings"><slot name="settings-button"></slot></div>`
+        : nothing}
       ${this._showSettings && !this._guideSelected ? html`<slot name="settings-display"></slot>` : nothing}
       ${this._showSettings && this._guideSelected ? html`<slot name="guide-selected"></slot>` : nothing}
-      ${!this._showSettings ? html`<slot name="guide-display"></slot>` : nothing}
+      ${!this._showSettings && this.placementId ? html`<slot name="guide-display"></slot>` : nothing}
     `
   }
 }

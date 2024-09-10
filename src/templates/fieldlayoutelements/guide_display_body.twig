@@ -28,19 +28,23 @@
   >
     <button slot="settings-button" class="btn small icon settings" type="button">{{ 'Settings'|t('guide') }}</button>
     <div slot="guide-display">
-      {% include 'guide/_partials/guide_display.twig' with {
-        guideDisplayArea: 'uiElement',
-        element: element ?? null,
-        guides: guide ?? false ? [guide] : null,
-        placementId: placementId ?? false,
-      } only %}
+      {% if guide ?? false %}
+        {% include 'guide/_partials/guide_display.twig' with {
+          guideDisplayArea: 'uiElement',
+          element: element ?? null,
+          guides: guide ?? false ? [guide] : null,
+          placementId: placementId ?? false,
+        } only %}
+      {% else %}
+        {{ 'No guides are available for UI Elements right now.'|t('guide') }}{% if userOperations.useOrganizer %}
+        <a href="{{ url('guide/organizer') }}">{{ 'Use the Organizer to enable guides for UI Elements.'|t('guide') }}</a>{% endif %}
+      {% endif %}
     </div>
 
     <div slot="settings-display">
-      {% set guides = craft.guide.getAll() %}
-      {% if guides|length %}
+      {% if allowedGuides ?? false and allowedGuides|length %}
         {% set guideOptions = [{ label: 'None'|t('guide'), value: '__none__' }] %}
-        {% for item in guides %}
+        {% for item in allowedGuides %}
           {% set guideOptions = guideOptions|merge([{
             label: item.title,
             value: item.id,
@@ -62,7 +66,7 @@
     </div>
 
     <div slot="guide-selected">
-      <p>{{ 'A guide has been selected. Please reload the page in order to view it.'|t('guide') }}</p>
+      <p>{{ 'A settings has been changed. Please reload the page when you are ready and the changes will appear.'|t('guide') }}</p>
     </div>
   </guide-ui-element>
 {% else %}

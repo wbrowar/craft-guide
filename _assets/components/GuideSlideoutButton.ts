@@ -91,8 +91,9 @@ export class GuideSlideoutButton extends LitElement {
       })
     }
 
-    const guideButton = this.querySelector('button')
+    const guideButton = this.querySelector('button:not([data-guide-slidout-button-button])')
     guideButton?.addEventListener('click', () => this._onButtonClick())
+    guideButton?.setAttribute('data-guide-slidout-button-button', '')
   }
 
   disconnectedCallback() {

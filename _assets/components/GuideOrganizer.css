@@ -6,57 +6,63 @@ guide-organizer {
     align-items: baseline;
     justify-content: space-between;
     gap: var(--l);
-    margin-block-end: 1rem;
     padding-block-start: 1em;
     position: sticky;
     top: var(--header-height);
     line-height: 32px;
     background-color: white;
-    border-block-end: 1px solid var(--hairline-color);
     z-index: 2;
 
     &.guide-organizer-header-large {
+      &:not(:first-child) {
+        margin-block-start: 6rem;
+      }
       & h2 {
-        font-size: 1.5rem;
+        font-size: 2.4rem;
       }
     }
     &.guide-organizer-header-small {
       padding-inline-start: var(--xl);
 
+      &:not(:first-child) {
+        margin-block-start: 2rem;
+      }
       & h2 {
-        font-size: 1.2rem;
+        font-size: 1.8rem;
       }
       & + .guide-organizer-section {
-        --guide-organizer-section-margin-block-end: 1rem;
         padding-inline-start: var(--xl);
       }
     }
   }
   .guide-organizer-section {
-    margin-block-end: var(--guide-organizer-section-margin-block-end, 2rem);
     z-index: 1;
 
-    &[data-organizer-group="uri"] {
-      --organizer-section-list-columns: max-content minmax(auto, max-content) max-content;
-      --organizer-section-list-span: 1 / 4;
-    }
-
-    & > * + * {
-      margin-block-start: 1em;
-    }
     & ul {
       display: grid;
-      grid-template-columns: var(--organizer-section-list-columns, max-content 1fr);
+      grid-template-columns: max-content 1fr max-content;
       align-items: center;
-      gap: var(--s);
+      gap-column: var(--s);
+      border: 1px solid var(--hairline-color);
+      border-radius: var(--guide-border-radius);
 
       & li {
         display: grid;
         grid-template-columns: subgrid;
-        grid-column: var(--organizer-section-list-span, 1 / 3);
+        grid-column: 1 / 4;
         align-items: center;
         gap: 1rem;
+        padding: var(--s);
 
+        &:nth-child(odd) {
+          background-color: color-mix(in srgb, var(--guide-color-blue), transparent 94%);
+        }
+        &:hover {
+          background-color: color-mix(in srgb, var(--guide-color-blue), transparent 88%);
+        }
+        & + li {
+          border-block-start: 1px solid color-mix(in srgb, var(--guide-color-blue), transparent 80%);
+        }
         & .guide-uri-valid {
           color: var(--enabled-color);
         }
@@ -77,6 +83,16 @@ guide-organizer {
           margin-top: 0;
         }
       }
+    }
+
+    & .guide-organizer-group-empty {
+      padding: var(--s);
+      border: 1px dashed var(--dark-hairline-color);
+      border-radius: var(--guide-border-radius);
+    }
+
+    .select:last-child {
+      margin-block-start: 1em;
     }
   }
 }

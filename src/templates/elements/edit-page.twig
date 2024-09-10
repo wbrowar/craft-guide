@@ -11,29 +11,14 @@
  */ #}
 
 {% if guides|length %}
-  <div data-guide-content>
-    {% if settings.editPageLocation == 'slideout' %}
-      {% set guidesSlugs = [] %}
-      {% for guide in guides %}
-        {% set guidesSlugs = guidesSlugs|merge([guide.slug]) %}
-      {% endfor %}
-      {% include 'guide/_partials/slideout_button.twig' with { docs: false, element: element ?? null, group: group ?? null, label: settings.guideButtonLabel != '' ? settings.guideButtonLabel : 'Guide'|t('guide'), slug: guidesSlugs|join('|') } only %}
+  <div class="hidden" data-guide-content>
+    {% set guidesSlugs = [] %}
+    {% for guide in guides %}
+      {% set guidesSlugs = guidesSlugs|merge([guide.slug]) %}
+    {% endfor %}
+    {% include 'guide/_partials/slideout_button.twig' with { docs: false, element: element ?? null, group: group ?? null, label: settings.guideButtonLabel != '' ? settings.guideButtonLabel : 'Guide'|t('guide'), slug: guidesSlugs|join('|') } only %}
 
-      {% set guideContentMove %}
-        var guideLpGuideMarkup = document.querySelector('.lp-content [data-guide-content]');
-        if (guideLpGuideMarkup) {
-          guideLpGuideMarkup.remove();
-        }
-
-        var guideMarkup = document.querySelector('#content [data-guide-content]');
-        var guideContentContainer = document.querySelector('#action-buttons');
-
-        if (guideMarkup && guideContentContainer) {
-          guideContentContainer.prepend(guideMarkup);
-        }
-      {% endset %}
-      {% js guideContentMove %}
-    {% else %}
+    <div data-guide-content-guides>
       {% set params = {
         guideDisplayArea: 'elementEdit',
         displayId: 'page',
@@ -48,25 +33,69 @@
       {% endif %}
 
       {% include 'guide/_partials/guide_display.twig' with params only %}
+    </div>
 
-      {% set guideContentMove %}
-        var guideLpGuideMarkup = document.querySelector('.lp-content [data-guide-content]');
-        if (guideLpGuideMarkup) {
-          guideLpGuideMarkup.remove();
+    {% set guideContentMove %}
+      {# Remove guide content from a Live Preview form, if there is one. #}
+      var guideLpGuideMarkup = document.querySelector('.lp-content [data-guide-content]');
+      if (guideLpGuideMarkup) {
+        guideLpGuideMarkup.remove();
+      }
+
+      var guideButton;
+      var guideContent;
+      var guideContentContainer;
+
+      {# Check to see if slideout exists and if so select the wrapper inside. #}
+      var slideoutGuideContent = document.querySelector('.cp-screen.slideout.showing-sidebar [data-guide-content]');
+
+      if (slideoutGuideContent) {
+        guideButton = slideoutGuideContent.querySelector('guide-slideout-button');
+        guideContentContainer = slideoutGuideContent.closest('.slideout').querySelector('.so-footer div:has(.btn.submit)');
+
+        if (guideButton && guideContentContainer) {
+          {# Move guide button next to action buttons. #}
+          guideContentContainer.prepend(guideButton);
+
+          {# Remove wrapper from DOM. #}
+          slideoutGuideContent.remove();
         }
+      } else {
+        var guideContentWrapper = document.querySelector('#content [data-guide-content]');
 
-        var guideMarkup = document.querySelector('#content [data-guide-content]');
-        var guideContentContainer = document.querySelector('.content-grid__main');
+        if (guideContentWrapper) {
+          {% if settings.editPageLocation == 'slideout' %}
+            var guideContentContainer = document.querySelector('#action-buttons');
 
-        if (guideMarkup && guideContentContainer) {
-        {% if settings.editPageLocation == 'append' %}
-          guideContentContainer.append(guideMarkup);
-        {% elseif settings.editPageLocation == 'prepend' %}
-          guideContentContainer.prepend(guideMarkup);
-        {% endif %}
+            {# Remove unused elements from DOM. #}
+            guideContentWrapper.querySelector('[data-guide-content-guides]')?.remove();
+
+            if (guideContentContainer) {
+              {# Move guide content into wrapper. #}
+              guideContentContainer.prepend(guideContentWrapper);
+            }
+          {% else %}
+            var guideContentContainer = document.querySelector('.content-grid__main');
+
+            {# Remove unused elements from DOM. #}
+            guideContentWrapper.querySelector('guide-slideout-button')?.remove();
+
+            if (guideContentContainer) {
+              {# Move guide content into wrapper. #}
+            {% if settings.editPageLocation == 'append' %}
+              guideContentContainer.append(guideContentWrapper);
+            {% elseif settings.editPageLocation == 'prepend' %}
+              guideContentContainer.prepend(guideContentWrapper);
+            {% endif %}
+            }
+          {% endif %}
+
+          {# Remove `.hidden` class to show guide content. #}
+          guideContentWrapper.classList.remove('hidden');
         }
-      {% endset %}
-      {% js guideContentMove %}
-    {% endif %}
+      }
+
+    {% endset %}
+    {% js guideContentMove on ready %}
   </div>
 {% endif %}

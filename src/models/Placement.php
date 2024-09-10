@@ -33,7 +33,7 @@ class Placement extends Model
 
     /**
      * The placement group that determines display presets.
-     * Options: 'nav', 'assets', 'assetVolume', 'categories', 'categoryGroup', 'entryType', 'section', 'uiElement', 'uri', 'users', 'widget'
+     * Options: 'nav', 'assets', 'assetVolume', 'categories', 'categoryGroup', 'entryType', 'section', 'uiElement', 'uiElementEnabled', 'uri', 'users', 'widget'
      *
      * @var string
      */
