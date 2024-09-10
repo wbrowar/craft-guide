@@ -55,7 +55,7 @@
       name: 'templatePath',
       placeholder: '_guide',
       value: settings.templatePath,
-      instructions: 'A path inside of the **templates** directory where Guide will look for templates.'|t('guide'),
+      instructions: 'A path inside the **templates** directory where Guide will look for templates.'|t('guide'),
     }) }}
 
     {% set volumes = craft.app.volumes.allVolumes %}
@@ -64,7 +64,7 @@
       {% set options = options|merge([{ label: item.name, value: item.uid }]) %}
     {% endfor %}
 
-    {% set assetVolumeInstructions = 'An asset volume that stores all images and videos used in guides.'|t('guide') %}
+    {% set assetVolumeInstructions = 'An asset volume where Guide will look for images.'|t('guide') %}
     {% if settings.assetVolume == '' %}
       {% set assetVolumeInstructions = assetVolumeInstructions ~ ' ' ~ '<a class="go" href="' ~ cpUrl('settings/assets/volumes/new') ~ '">' ~ 'Create a New Volume'|t('guide') ~ '</a>' %}
     {% endif %}

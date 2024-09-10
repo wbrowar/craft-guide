@@ -7,18 +7,18 @@
     "file": "assets/console-3gNWUiwH.js",
     "name": "console"
   },
-  "_types-BZdEkL9Y.js": {
-    "file": "assets/types-BZdEkL9Y.js",
+  "_types-BjkgCq3a.js": {
+    "file": "assets/types-BjkgCq3a.js",
     "name": "types"
   },
   "guide-admin.ts": {
-    "file": "assets/guide-admin-BsD9_y-W.js",
+    "file": "assets/guide-admin-B0LWhX-n.js",
     "name": "guide-admin",
     "src": "guide-admin.ts",
     "isEntry": true,
     "imports": [
       "_console-3gNWUiwH.js",
-      "_types-BZdEkL9Y.js"
+      "_types-BjkgCq3a.js"
     ]
   },
   "guide-book.ts": {
@@ -32,16 +32,16 @@
     ]
   },
   "guide-display.ts": {
-    "file": "assets/guide-display-BfonV7Bd.js",
+    "file": "assets/guide-display-BkHS71eq.js",
     "name": "guide-display",
     "src": "guide-display.ts",
     "isEntry": true,
     "imports": [
       "_console-3gNWUiwH.js",
-      "_types-BZdEkL9Y.js"
+      "_types-BjkgCq3a.js"
     ],
     "css": [
-      "assets/guide-display-ygVsRbV9.css"
+      "assets/guide-display-D8r2gFtv.css"
     ]
   },
   "guide-welcome.ts": {

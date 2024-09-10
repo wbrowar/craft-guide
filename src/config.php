@@ -23,7 +23,7 @@
  */
 
 return [
-    // Path to Guide CP Section templates.
+    // An asset volume where Guide will look for images.
     'assetVolume' => '',
 
     // The location of guides when displayed on element edit pages.
@@ -34,7 +34,7 @@ return [
     'enableGuideJavascript' => false,
 
     // Enable CSS and JavaScript to be displayed on the page.
-    // NOTE: These will be ignored if their respective field is disabled.
+    // NOTE: These settings will be ignored if their respective field is disabled.
     'registerGuideCss' => true,
     'registerGuideJavascript' => true,
 
@@ -47,10 +47,10 @@ return [
     // Path to Guide CP Section templates.
     'renderMarkdownDefault' => true,
 
-    // Path to Guide CP Section templates.
+    // A path inside the templates directory where Guide will look for templates.
     'templatePath' => '',
 
-    // Twig variables.
+    // Twig variables that can be used across all guides.
     'clientName' => '',
     'projectName' => '',
     'myCompanyName' => '',

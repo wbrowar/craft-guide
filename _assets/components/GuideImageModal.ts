@@ -57,7 +57,7 @@ export class GuideImageModal extends LitElement {
 
       const container = this.querySelector(`#${this.modalId}`)
 
-      this._modal = new Garnish.Modal(container, {
+      this._modal = new window.Garnish.Modal(container, {
         autoShow: false,
       })
     }
