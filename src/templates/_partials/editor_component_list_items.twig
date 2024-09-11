@@ -330,7 +330,7 @@ Content
   {% endif %}
 </div>{% endverbatim %}{% endset %}
 {% set cssCode %}{% verbatim %}.guide {
-    .guide-snippet-content-stats-header {
+    & .guide-snippet-content-stats-header {
         margin-inline: auto;
         text-align: center;
 
@@ -342,15 +342,13 @@ Content
             font-size: 1rem;
         }
     }
-    .guide-snippet-content-stats-body {
+    & .guide-snippet-content-stats-body {
         display: grid;
         grid-template-columns: max-content 1fr;
         align-items: center;
         gap: var(--l);
         margin-inline: auto;
 
-        & .element {
-        }
         & .element + div {
             font-size: 1.7rem;
             text-align: right;

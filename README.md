@@ -1,4 +1,4 @@
-![Guide 3](resources/img/guide-3-header.png)
+<!-- ![Guide 3](resources/img/guide-3-header.png) -->
 
 Craft CMS is intuitive. Marketing plans, processes, and organizational workflows—not so much.
 
