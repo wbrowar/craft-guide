@@ -225,7 +225,7 @@
       }) }}
     </div>
   {% else %}
-    <input type="hidden" name="contentCss" value="{{ guide.contentCss }}" />
+    <input type="hidden" name="cssEditor" value="{{ guide.contentCss }}" />
   {% endif %}
 
   {% if proEdition and settings.enableGuideJavascript %}
@@ -250,6 +250,6 @@
       }) }}
     </div>
   {% else %}
-    <input type="hidden" name="contentJavascript" value="{{ guide.contentJavascript }}" />
+    <input type="hidden" name="javascriptEditor" value="{{ guide.contentJavascript }}" />
   {% endif %}
 {% endset %}
