@@ -15,12 +15,11 @@ export class GuideEditor extends LitElement {
       display: grid;
       grid-template-columns: var(--grid-template-columns, minmax(1px, 1fr));
       position: relative;
-
-      @container guide-editor (width > 800px) {
-        & {
-          --grid-template-columns: 400px minmax(1px, 1fr);
-          gap: calc(var(--xl) * 2);
-        }
+    }
+    @container guide-editor (width > 800px) {
+      :host {
+        --grid-template-columns: 400px minmax(1px, 1fr);
+        gap: calc(var(--xl) * 2);
       }
     }
     .guide-editor-content-buttons {
