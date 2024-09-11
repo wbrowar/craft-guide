@@ -32,6 +32,7 @@
           <img src="{{ src }}" loading="lazy" alt="{{ alt }}" />
         {% endif %}
       </picture>
+    {% if modal ?? false %}
       <div class="hidden">
         <div id="{{ imageModalId }}" class="guide-image-modal modal">
           <div id="modal">
@@ -39,7 +40,7 @@
           </div>
         </div>
       </div>
-    {% if modal ?? false %}</guide-image-modal>{% endif %}
+    </guide-image-modal>{% endif %}
     {% if caption ?? false -%}
       <figcaption class="{{ rootClass }}__caption">{{ caption }}</figcaption>
     {%- endif %}

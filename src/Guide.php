@@ -252,11 +252,11 @@ class Guide extends Plugin
         if (Craft::$app->edition->value > 0) {
             Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
                 $permissions = [
+                    'deleteGuides' => ['label' => Craft::t('guide', 'Delete Guides')],
                     'editGuides' => ['label' => Craft::t('guide', 'Edit Guides')],
                 ];
 
                 if (self::$pro) {
-                    $permissions['deleteGuides'] = ['label' => Craft::t('guide', 'Delete Guides')];
                     $permissions['useOrganizer'] = ['label' => Craft::t('guide', 'Use Organizer and UI Element Selector')];
                 }
 

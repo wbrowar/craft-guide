@@ -37,13 +37,13 @@ class SettingsController extends Controller
 
         $settings['templatePath'] = $this->removeSlashFromEnd($params['templatePath']);
         $settings['assetVolume'] = $params['assetVolume'];
+        $settings['editPageLocation'] = $params['editPageLocation'];
         $settings['guideButtonLabel'] = $params['guideButtonLabel'];
         $settings['fun'] = $params['fun'];
 
         $settings['renderMarkdownDefault'] = $params['renderMarkdownDefault'];
         $settings['enableGuideCss'] = $params['enableGuideCss'];
         $settings['enableGuideJavascript'] = $params['enableGuideJavascript'];
-        $settings['editPageLocation'] = $params['editPageLocation'];
 
         $settings['clientName'] = $params['clientName'];
         $settings['myCompanyName'] = $params['myCompanyName'];
