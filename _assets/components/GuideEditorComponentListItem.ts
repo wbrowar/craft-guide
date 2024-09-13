@@ -48,9 +48,14 @@ export class GuideEditorComponentListItem extends LitElement {
     if (editorHandle === 'content') {
       editor = globalThis.monacoEditorInstances.contentEditor
     } else if (editorHandle === 'css') {
-      editor = globalThis.monacoEditorInstances.cssEditor
+      editor = globalThis.monacoEditorInstances.contentCss
     } else if (editorHandle === 'javascript') {
-      editor = globalThis.monacoEditorInstances.javascriptEditor
+      editor = globalThis.monacoEditorInstances.contentJavascript
+    }
+
+    const guideSlug = document.querySelector('guide-editor')?.dataset.guideSlug
+    if (guideSlug) {
+      textToInsert = textToInsert.replace(/REPLACE_GUIDE_SLUG/g, guideSlug)
     }
 
     if (editor) {

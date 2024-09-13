@@ -87,7 +87,7 @@ guide-organizer {
 
     & .guide-organizer-group-empty {
       padding: var(--s);
-      border: 1px dashed var(--dark-hairline-color);
+      border: 1px dashed color-mix(in srgb, var(--guide-color-blue), transparent 50%);
       border-radius: var(--guide-border-radius);
     }
 

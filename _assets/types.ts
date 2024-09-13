@@ -14,14 +14,14 @@ declare global {
       getSelection: Function
       setPosition: Function
     }
-    cssEditor: {
+    contentCss: {
       executeEdits: Function
       focus: Function
       getModel: Function
       getSelection: Function
       setPosition: Function
     }
-    javascriptEditor: {
+    contentJavascript: {
       executeEdits: Function
       focus: Function
       getModel: Function

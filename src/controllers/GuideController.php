@@ -75,8 +75,8 @@ class GuideController extends Controller
         $guide = new GuideModel([
             'authorId' => $params['authorId'],
             'content' => $params['contentEditor'],
-            'contentCss' => $params['cssEditor'],
-            'contentJavascript' => $params['javascriptEditor'],
+            'contentCss' => $params['contentCss'],
+            'contentJavascript' => $params['contentJavascript'],
             'contentSource' => $params['contentSource'] ?? 'field',
             'contentUrl' => $params['contentUrl'],
             'renderMarkdown' => $params['renderMarkdown'],

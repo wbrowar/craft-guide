@@ -61,10 +61,14 @@
 
 {% set tMessages = {
   'components': 'Components'|t('guide'),
+  'iframeLabel': 'Preview'|t('guide'),
+  'iframeEmpty': 'Enter a Page URL to embed that page in an iframe. A preview of your URL will appear below.'|t('guide'),
   'images': 'Images'|t('guide'),
   'guides': 'Guides'|t('guide'),
   'settings': 'Settings'|t('guide'),
   'snippets': 'Snippets'|t('guide'),
+  'templateLabel': 'Template Code Preview'|t('guide'),
+  'templateEmpty': 'Select a template from the Page Template field. A preview of the source code from the selected template will appear below.'|t('guide'),
 } %}
 
 {% set content %}
@@ -84,6 +88,7 @@
     <guide-editor
         {{ isNew ? ' is-new' : '' }}
         t-messages="{{ tMessages|json_encode }}"
+        templates-data="{{ templates.contents|json_encode }}"
     >
       <div slot="settings">
         {{ forms.textField({
@@ -214,8 +219,9 @@
 
       {{ codeEditor.textareaField({
         label: 'CSS'|t('guide'),
-        id: 'cssEditor',
-        name: "cssEditor",
+        id: 'contentCss',
+        instructions: "CSS code that will be loaded on every page in the control panel."|t('guide'),
+        name: "contentCss",
         placeholder: '',
         value: guide.contentCss,
         rows: 20,
@@ -225,7 +231,7 @@
       }) }}
     </div>
   {% else %}
-    <input type="hidden" name="cssEditor" value="{{ guide.contentCss }}" />
+    <input type="hidden" name="contentCss" value="{{ guide.contentCss }}" />
   {% endif %}
 
   {% if proEdition and settings.enableGuideJavascript %}
@@ -238,9 +244,9 @@
 
       {{ codeEditor.textareaField({
         label: 'JavaScript'|t('guide'),
+        id: 'contentJavascript',
         instructions: "Code wrapped in a callback function—fired whenever this guide is displayed."|t('guide'),
-        id: 'javascriptEditor',
-        name: "javascriptEditor",
+        name: "contentJavascript",
         placeholder: '',
         value: guide.contentJavascript,
         rows: 20,
@@ -250,6 +256,6 @@
       }) }}
     </div>
   {% else %}
-    <input type="hidden" name="javascriptEditor" value="{{ guide.contentJavascript }}" />
+    <input type="hidden" name="contentJavascript" value="{{ guide.contentJavascript }}" />
   {% endif %}
 {% endset %}

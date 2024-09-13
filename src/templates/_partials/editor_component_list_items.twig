@@ -54,7 +54,7 @@ REPLACE_TEXT
   },
 }]) %}
 
-{% set contentCode %}{% verbatim %}{{ craft.guide.component('guide-button', { slug: 'REPLACE_SLUG' }) }}{% endverbatim %}{% endset %}
+{% set contentCode %}{% verbatim %}{{ craft.guide.component('guide-button', { slug: 'REPLACE_GUIDE_SLUG' }) }}{% endverbatim %}{% endset %}
 {% set components = components|merge([{
   title: 'Guide Button'|t('guide'),
   contentCode,
@@ -329,7 +329,7 @@ Content
     <div><b>{{ expired }}</b></div>
   {% endif %}
 </div>{% endverbatim %}{% endset %}
-{% set cssCode %}{% verbatim %}.guide {
+{% set cssCode %}{% verbatim %}.guide-REPLACE_GUIDE_SLUG {
     & .guide-snippet-content-stats-header {
         margin-inline: auto;
         text-align: center;

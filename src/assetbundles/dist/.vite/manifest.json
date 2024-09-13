@@ -12,7 +12,7 @@
     "name": "types"
   },
   "guide-admin.ts": {
-    "file": "assets/guide-admin-CP02J8fo.js",
+    "file": "assets/guide-admin-Q2-Qs_d2.js",
     "name": "guide-admin",
     "src": "guide-admin.ts",
     "isEntry": true,
@@ -32,7 +32,7 @@
     ]
   },
   "guide-display.ts": {
-    "file": "assets/guide-display-BM-USpJZ.js",
+    "file": "assets/guide-display-e-sfZwC8.js",
     "name": "guide-display",
     "src": "guide-display.ts",
     "isEntry": true,
@@ -41,11 +41,11 @@
       "_types-BjkgCq3a.js"
     ],
     "css": [
-      "assets/guide-display-q-JhT0Vc.css"
+      "assets/guide-display-C-6yFtjZ.css"
     ]
   },
   "guide-welcome.ts": {
-    "file": "assets/guide-welcome-DerhKLPJ.js",
+    "file": "assets/guide-welcome-C8L9KF5l.js",
     "name": "guide-welcome",
     "src": "guide-welcome.ts",
     "isEntry": true,

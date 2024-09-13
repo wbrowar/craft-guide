@@ -53,15 +53,36 @@ export class GuideEditor extends LitElement {
           --guide-tab-icon-svg-fill: var(--primary-color);
         }
       }
-
-      &:has(:nth-child(4)) {
-        --guide-editor-content-buttons-columns: 5;
-      }
     }
     .guide-editor-content-editor {
       & > * {
         position: sticky;
         top: calc(var(--header-height) + 0.5rem);
+      }
+    }
+    .guide-editor-content-iframe {
+      iframe {
+        aspect-ratio: 16 / 9;
+        width: 100%;
+        border: 1px solid var(--hairline-color);
+        border-radius: var(--guide-border-radius);
+      }
+    }
+    .guide-editor-content-template {
+      pre {
+        aspect-ratio: 16 / 9;
+        padding: var(--s);
+        position: relative;
+        width: 100%;
+        border: 1px solid var(--hairline-color);
+        border-radius: var(--guide-border-radius);
+        overflow: hidden;
+
+        & div {
+          position: absolute;
+          inset: 0;
+          background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+        }
       }
     }
   `
@@ -84,6 +105,12 @@ export class GuideEditor extends LitElement {
   tMessages: Record<string, string> = {}
 
   /**
+   * Messages translated via Craft’s `t` filter.
+   */
+  @property({ attribute: 'templates-data', type: Object })
+  templatesData: Record<string, string> = {}
+
+  /**
    * =========================================================================
    * STATE
    * =========================================================================
@@ -104,7 +131,7 @@ export class GuideEditor extends LitElement {
    * Indicates that the value of `contentSource` is set to `field`.
    */
   @state()
-  private _contentSourceIsField = false
+  private _contentSource = GuideContentSource.Field
 
   /**
    * The `contentSource` select field.
@@ -117,6 +144,12 @@ export class GuideEditor extends LitElement {
    */
   @state()
   private _contentUrlField: HTMLElement | null = null
+
+  /**
+   * The `contentUrl` input field.
+   */
+  @state()
+  private _contentUrl = ''
 
   /**
    * The wrapper of the `renderMarkdown` field.
@@ -149,6 +182,12 @@ export class GuideEditor extends LitElement {
   private _templateField: HTMLElement | null = null
 
   /**
+   * The `template` select field.
+   */
+  @state()
+  private _template = '__none__'
+
+  /**
    * The `title` input field.
    */
   @state()
@@ -168,19 +207,19 @@ export class GuideEditor extends LitElement {
         this._contentUrlField?.classList.add('hidden')
         this._renderMarkdownField?.classList.remove('hidden')
         this._templateField?.classList.add('hidden')
-        this._contentSourceIsField = true
+        this._contentSource = GuideContentSource.Field
         break
       case GuideContentSource.Iframe:
         this._contentUrlField?.classList.remove('hidden')
         this._renderMarkdownField?.classList.add('hidden')
         this._templateField?.classList.add('hidden')
-        this._contentSourceIsField = false
+        this._contentSource = GuideContentSource.Iframe
         break
       case GuideContentSource.Template:
         this._contentUrlField?.classList.add('hidden')
         this._renderMarkdownField?.classList.add('hidden')
         this._templateField?.classList.remove('hidden')
-        this._contentSourceIsField = false
+        this._contentSource = GuideContentSource.Template
         break
     }
   }
@@ -211,21 +250,26 @@ export class GuideEditor extends LitElement {
     }
 
     // Make sure slug is formatted correctly and update all GuideCopyTextButton components on the page.
-    if (this._slugInput) {
-      this._slugInput.addEventListener('blur', () => {
-        // Format slug value
-        if (this._slugInput) {
-          this._slugHasBeenEdited = true
-          this._slugInput.value = kebab(this._slugInput.value)
+    this._slugInput?.addEventListener('blur', () => {
+      // Format slug value
+      if (this._slugInput) {
+        this._slugHasBeenEdited = true
+        this._slugInput.value = kebab(this._slugInput.value)
 
-          // Update GuideCopyTextButton values
-          const copyTextButtons = document.querySelectorAll('guide-copy-text-button')
+        // Update GuideCopyTextButton values
+        const copyTextButtons = document.querySelectorAll('guide-copy-text-button')
+        const newGuideSlug = this._slugInput!.value
 
-          copyTextButtons.forEach((button) => {
-            button.copyText = this._slugInput!.value
-          })
-        }
-      })
+        copyTextButtons.forEach((button) => {
+          button.copyText = newGuideSlug
+        })
+
+        // Updade `guide-editor` with guide slug
+        this.setAttribute('data-guide-slug', newGuideSlug)
+      }
+    })
+    if (this._slugInput?.value) {
+      this.setAttribute('data-guide-slug', this._slugInput.value)
     }
 
     // Show or hide fields based on selected `contentSource` value.
@@ -234,6 +278,28 @@ export class GuideEditor extends LitElement {
         this._onContentSourceChange(this._contentSourceSelect?.value as GuideContentSource)
       })
       this._onContentSourceChange(this._contentSourceSelect.value as GuideContentSource)
+    }
+
+    // Set up `contentUrl` field.
+    const contentUrlInput = this._contentUrlField?.querySelector('input')
+    if (contentUrlInput) {
+      contentUrlInput.addEventListener('blur', () => {
+        if (contentUrlInput?.value) {
+          this._contentUrl = contentUrlInput.value
+        }
+      })
+      this._contentUrl = contentUrlInput.value
+    }
+
+    // Set up `template` field.
+    const templateSelect = this._templateField?.querySelector('select')
+    if (templateSelect) {
+      templateSelect.addEventListener('change', () => {
+        if (templateSelect?.value) {
+          this._template = templateSelect.value
+        }
+      })
+      this._template = templateSelect.value
     }
 
     // Set up code editors and set their starting position to the end of the current content.
@@ -314,15 +380,31 @@ export class GuideEditor extends LitElement {
 
     let content = html`<div></div>`
 
-    if (this._contentSourceIsField) {
-      content = html`<slot name="editor"></slot>`
+    if (this._contentSource === GuideContentSource.Field) {
+      content = html`<div class="guide-editor-content-editor"><slot name="editor"></slot></div>`
+    } else if (this._contentSource === GuideContentSource.Iframe) {
+      content = html`<div class="guide-editor-content-iframe">
+        <h3>${this.tMessages.iframeLabel}</h3>
+        ${this._contentUrl
+          ? html`<iframe src="${this._contentUrl ?? ''}"></iframe>`
+          : html`<p>${this.tMessages.iframeEmpty}</p>`}
+      </div>`
+    } else if (this._contentSource === GuideContentSource.Template) {
+      content = html`<div class="guide-editor-content-template">
+        <h3>${this.tMessages.templateLabel}</h3>
+        ${this._template !== '__none__'
+          ? html`<pre><code>${this.templatesData[this._template] ?? ''}</code><div><!-- Mask --></div></pre>`
+          : html`<p>${this.tMessages.templateEmpty}</p>`}
+      </div>`
     }
 
     return html`
       <aside>
         <div
           class="guide-editor-content-buttons"
-          style="--guide-editor-content-buttons-columns: ${this._componentLists.length};"
+          style="--guide-editor-content-buttons-columns: ${this._contentSource === GuideContentSource.Field
+            ? 1 + contentButtons.length
+            : 1};"
         >
           <button
             class="${this._selectedTabGroup === EditorTabGroup.Settings ? 'active' : nothing}"
@@ -332,7 +414,7 @@ export class GuideEditor extends LitElement {
           >
             <slot name="icon-settings"></slot><span>${this.tMessages.settings}</span>
           </button>
-          ${proEdition && this._contentSourceIsField ? contentButtons : nothing}
+          ${proEdition && this._contentSource === GuideContentSource.Field ? contentButtons : nothing}
         </div>
         ${this._selectedTabGroup === EditorTabGroup.Settings ? html`<slot name="settings"></slot>` : nothing}
         ${this._selectedTabGroup === EditorTabGroup.Components ? html`<slot name="components"></slot>` : nothing}
@@ -340,7 +422,7 @@ export class GuideEditor extends LitElement {
         ${this._selectedTabGroup === EditorTabGroup.Guides ? html`<slot name="guides"></slot>` : nothing}
         ${this._selectedTabGroup === EditorTabGroup.Snippets ? html`<slot name="snippets"></slot>` : nothing}
       </aside>
-      <div class="guide-editor-content-editor"><div>${content}</div></div>
+      ${content}
     `
   }
 }

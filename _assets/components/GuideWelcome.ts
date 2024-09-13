@@ -114,6 +114,7 @@ export class GuideWelcome extends LitElement {
         background-color: rgba(255, 255, 255, 0.9);
         border: 1px solid var(--hairline-color);
         border-radius: 50%;
+        transition: opacity 0.5s ease-out;
         cursor: pointer;
 
         &:hover {
@@ -290,6 +291,12 @@ export class GuideWelcome extends LitElement {
   private _showDebugControls = import.meta.env.DEV
 
   /**
+   * TODO
+   */
+  @state()
+  private _showPlayToggle = false
+
+  /**
    * =========================================================================
    * METHODS
    * =========================================================================
@@ -389,6 +396,7 @@ export class GuideWelcome extends LitElement {
 
       setTimeout(() => {
         this._playCameraLoop()
+        this._showPlayToggle = true
       }, 5000)
     }
   }
@@ -897,10 +905,20 @@ export class GuideWelcome extends LitElement {
       <div class="guide-welcome-scene-wrapper">
         <div id="guide-welcome-scene-container" @click="${this._onContainerClicked}"></div>
         ${this._playing
-          ? html`<button type="button" @click="${this._pause}" title="${this.tMessages.pause}">
+          ? html`<button
+              type="button"
+              style="${!this._showPlayToggle ? 'cursor: default; opacity: 0;' : nothing}"
+              @click="${this._pause}"
+              title="${this.tMessages.pause}"
+            >
               <slot name="pause-icon"></slot>
             </button>`
-          : html`<button type="button" @click="${this._play}" title="${this.tMessages.pause}">
+          : html`<button
+              type="button"
+              style="${!this._showPlayToggle ? 'cursor: default; opacity: 0;' : nothing}"
+              @click="${this._play}"
+              title="${this.tMessages.pause}"
+            >
               <slot name="play-icon"></slot>
             </button>`}
       </div>
