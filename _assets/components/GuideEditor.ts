@@ -265,11 +265,11 @@ export class GuideEditor extends LitElement {
         })
 
         // Updade `guide-editor` with guide slug
-        this.setAttribute('data-guide-slug', newGuideSlug)
+        document.querySelector('guide-editor')?.setAttribute('data-guide-slug', newGuideSlug)
       }
     })
     if (this._slugInput?.value) {
-      this.setAttribute('data-guide-slug', this._slugInput.value)
+      document.querySelector('guide-editor')?.setAttribute('data-guide-slug', this._slugInput.value)
     }
 
     // Show or hide fields based on selected `contentSource` value.
@@ -381,7 +381,9 @@ export class GuideEditor extends LitElement {
     let content = html`<div></div>`
 
     if (this._contentSource === GuideContentSource.Field) {
-      content = html`<div class="guide-editor-content-editor"><slot name="editor"></slot></div>`
+      content = html`<div class="guide-editor-content-editor">
+        <div><slot name="editor"></slot></div>
+      </div>`
     } else if (this._contentSource === GuideContentSource.Iframe) {
       content = html`<div class="guide-editor-content-iframe">
         <h3>${this.tMessages.iframeLabel}</h3>
