@@ -16,7 +16,7 @@ export async function showGuideSlideout({
   groupHandle = '',
   slug = '',
 }: ShowGuideSlideoutOptions) {
-  if (proEdition) {
+  if (proEdition || docs) {
     await window.Craft?.postActionRequest(
       'guide/slideout',
       { docs, elementId: elementId ?? null, groupHandle: groupHandle ?? null, slug },

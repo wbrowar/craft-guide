@@ -24,7 +24,10 @@
     {% include 'guide/_partials/slideout_button.twig' with { docs: true, label: 'Docs'|t('guide'), slug: 'guide-list' } only %}
 
     {% if userOperations.editGuides %}
-      <a class="btn add icon secondary" href="{{ cpUrl('utilities/guide-export-import') }}">{{ 'Import Guides'|t('guide') }}</a>
+      {% if proEdition %}
+        <a class="btn add icon secondary" href="{{ cpUrl('utilities/guide-export-import') }}">{{ 'Import Guides'|t('guide') }}</a>
+      {% endif %}
+
       <a class="btn add icon submit" href="{{ cpUrl('guide/new') }}">{{ 'New Guide'|t('guide') }}</a>
     {% endif %}
   </div>

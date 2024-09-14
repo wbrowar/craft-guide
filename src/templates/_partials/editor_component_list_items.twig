@@ -323,7 +323,7 @@ Content
 {% paginate query as pageInfo, assets %}
 
 {% if assets|length %}
-  {% if guideDisplayArea == 'page' and (pageInfo.prevUrl or pageInfo.nextUrl) %}
+  {% if guideDisplayArea in ['guide', 'page'] and (pageInfo.prevUrl or pageInfo.nextUrl) %}
     <header>
       {% if pageInfo.prevUrl %}
         {{ craft.guide.component('button', { label: 'Previous Page', url: pageInfo.prevUrl }) }}
@@ -368,16 +368,13 @@ No images were found for this asset volume.
         display: flex;
         align-items: center;
         gap: var(--m);
+        position: sticky;
+        top: var(--header-height);
+        padding: var(--s) var(--padding);
+        margin-inline: calc(-1 * var(--padding));
+        background-color: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
         z-index: 1;
-
-        .guide-display-area-page & {
-            position: sticky;
-            top: var(--header-height);
-            padding: var(--s) var(--padding);
-            margin-inline: calc(-1 * var(--padding));
-            background-color: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-        }
     }
     & ul {
         --grid-template-columns: 1;

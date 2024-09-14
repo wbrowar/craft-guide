@@ -77,7 +77,7 @@ class GuideController extends Controller
             'content' => $params['contentEditor'],
             'contentCss' => $params['contentCss'],
             'contentJavascript' => $params['contentJavascript'],
-            'contentSource' => $params['contentSource'] ?? 'field',
+            'contentSource' => $params['contentSource'] ?? Guide::$pro ? 'field' : 'template',
             'contentUrl' => $params['contentUrl'],
             'renderMarkdown' => $params['renderMarkdown'],
             'slug' => $slug,

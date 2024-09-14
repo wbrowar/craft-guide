@@ -3,8 +3,8 @@
     "file": "assets/GLTFLoader-CnsMw-IL.js",
     "name": "GLTFLoader"
   },
-  "_console-3gNWUiwH.js": {
-    "file": "assets/console-3gNWUiwH.js",
+  "_console-D77ky1jy.js": {
+    "file": "assets/console-D77ky1jy.js",
     "name": "console"
   },
   "_types-BjkgCq3a.js": {
@@ -12,32 +12,32 @@
     "name": "types"
   },
   "guide-admin.ts": {
-    "file": "assets/guide-admin-CJ_lLB5P.js",
+    "file": "assets/guide-admin-n69_Htl7.js",
     "name": "guide-admin",
     "src": "guide-admin.ts",
     "isEntry": true,
     "imports": [
-      "_console-3gNWUiwH.js",
+      "_console-D77ky1jy.js",
       "_types-BjkgCq3a.js"
     ]
   },
   "guide-book.ts": {
-    "file": "assets/guide-book-Ap9W-gpV.js",
+    "file": "assets/guide-book-DLmmMLTu.js",
     "name": "guide-book",
     "src": "guide-book.ts",
     "isEntry": true,
     "imports": [
-      "_console-3gNWUiwH.js",
+      "_console-D77ky1jy.js",
       "_GLTFLoader-CnsMw-IL.js"
     ]
   },
   "guide-display.ts": {
-    "file": "assets/guide-display-CvIUJWzL.js",
+    "file": "assets/guide-display-8pN6XWso.js",
     "name": "guide-display",
     "src": "guide-display.ts",
     "isEntry": true,
     "imports": [
-      "_console-3gNWUiwH.js",
+      "_console-D77ky1jy.js",
       "_types-BjkgCq3a.js"
     ],
     "css": [
@@ -45,12 +45,12 @@
     ]
   },
   "guide-welcome.ts": {
-    "file": "assets/guide-welcome-C8L9KF5l.js",
+    "file": "assets/guide-welcome-BKH0gTlI.js",
     "name": "guide-welcome",
     "src": "guide-welcome.ts",
     "isEntry": true,
     "imports": [
-      "_console-3gNWUiwH.js",
+      "_console-D77ky1jy.js",
       "_GLTFLoader-CnsMw-IL.js"
     ]
   }

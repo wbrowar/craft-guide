@@ -92,6 +92,18 @@
         templates-data="{{ templates.contents|json_encode }}"
     >
       <div slot="settings">
+        {% if not proEdition and not settings.templatePath %}
+          <div class="readable">
+            <blockquote class="note warn">
+              <strong>{{ 'Template Path is Required'|t('guide') }}</strong>
+              <p>{{ 'A Template Path is needed to load guides in the LITE edition of Guide.'|t('guide') }}</p>
+              <p>
+                <a class="go" href="{{ cpUrl('guide/settings') }}">{{ 'Set a Template Path in Guide Settings.'|t('guide') }}</a>
+              </p>
+            </blockquote>
+          </div>
+        {% endif %}
+
         {{ forms.textField({
           label: 'Title'|t('guide'),
           id: 'title',
@@ -133,7 +145,6 @@
           label: 'Render Markdown'|t('guide'),
           id: 'renderMarkdown',
           name: 'renderMarkdown',
-          disabled: not proEdition,
           options: options,
           on: isNew ? settings.renderMarkdownDefault : guide.renderMarkdown,
         }) }}
@@ -142,22 +153,9 @@
           label: 'Page URL'|t('guide'),
           id: 'contentUrl',
           name: 'contentUrl',
-          disabled: not proEdition,
           value: guide.contentUrl,
           instructions: 'A URL that is loaded in an iframe.'|t('guide'),
         }) }}
-
-        {% if not proEdition %}
-          <div class="readable">
-            <blockquote class="note warn">
-              <strong>{{ 'Template Path is Required'|t('guide') }}</strong>
-              <p>{{ 'A Template Path is needed to load guides in the LITE edition of Guide.'|t('guide') }}</p>
-              <p>
-                <a class="go" href="{{ cpUrl('guide/settings') }}">{{ 'Set a Template Path in Guide Settings.'|t('guide') }}</a>
-              </p>
-            </blockquote>
-          </div>
-        {% endif %}
 
         {{ forms.selectField({
           label: 'Page Template'|t('guide'),
