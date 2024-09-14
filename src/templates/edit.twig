@@ -23,9 +23,10 @@
 {% if not (guide is defined) %}
   {% if (guideId ?? false) %}
     {% set guide = craft.guide.getOne({ id: guideId }) %}
+    {% set title = guide ?? false ? "Guide Editor"|t('guide') ~ ': ' ~ guide.title : title %}
     {% set isNew = false %}
   {% else %}
-    {% set title = "New Guide"|t('guide') %}
+    {% set title = "Guide Editor: New Guide"|t('guide') %}
     {% set guide = craft.guide.getAll([], 'new') %}
     {% set isNew = true %}
   {% endif %}
