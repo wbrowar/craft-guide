@@ -11,23 +11,23 @@
 {% set label = label ?? null %}
 
 {% block content -%}{% if type == 'assets' %}
-  {% set labelDefault = 'Assets' %}
+  {% set labelDefault = 'Assets'|t('guide') %}
   {% set statuses = ['live'] %}
   {% set live = craft.assets.limit(null).volume(subType ?? null).status('live').count() %}
 {% elseif type == 'categories' %}
-  {% set labelDefault = 'Categories' %}
+  {% set labelDefault = 'Categories'|t('guide') %}
   {% set statuses = ['live', 'disabled'] %}
   {% set live = craft.categories.limit(null).group(subType ?? null).status('enabled').count() %}
   {% set disabled = craft.categories.limit(null).group(subType ?? null).status('disabled').count() %}
 {% elseif type == 'entries' %}
-  {% set labelDefault = 'Entries' %}
+  {% set labelDefault = 'Entries'|t('guide') %}
   {% set statuses = ['live', 'disabled', 'pending', 'expired'] %}
   {% set live = craft.entries.limit(null).section(subType ?? "*").status('live').count() %}
   {% set disabled = craft.entries.limit(null).section(subType ?? "*").status('disabled').count() %}
   {% set pending = craft.entries.limit(null).section(subType ?? "*").status('pending').count() %}
   {% set expired = craft.entries.limit(null).section(subType ?? "*").status('expired').count() %}
 {% elseif type == 'users' %}
-  {% set labelDefault = 'Users' %}
+  {% set labelDefault = 'Users'|t('guide') %}
   {% set statuses = ['live', 'disabled'] %}
   {% set live = craft.users.limit(null).status('enabled').count() %}
   {% set disabled = craft.users.limit(null).status('disabled').count() %}
@@ -40,22 +40,22 @@
 
 <div>
 {% if 'live' in statuses %}
-  <div class="element small hasstatus" title="Live elements"><span class="status live"></span><span class="label"><span class="title">Live</span></span></div>
+  <div class="element small hasstatus" title="Live elements"><span class="status live"></span><span class="label"><span class="title">{{ 'Live'|t('guide') }}</span></span></div>
   <div><b>{{ live }}</b></div>
 {% endif %}
 
 {% if 'disabled' in statuses %}
-  <div class="element small hasstatus" title="Disabled elements"><span class="status disabled"></span><span class="label"><span class="title">Disabled</span></span></div>
+  <div class="element small hasstatus" title="Disabled elements"><span class="status disabled"></span><span class="label"><span class="title">{{ 'Disabled'|t('guide') }}</span></span></div>
   <div><b>{{ disabled }}</b></div>
 {% endif %}
 
 {% if 'pending' in statuses %}
-  <div class="element small hasstatus" title="Pending elements"><span class="status pending"></span><span class="label"><span class="title">Pending</span></span></div>
+  <div class="element small hasstatus" title="Pending elements"><span class="status pending"></span><span class="label"><span class="title">{{ 'Pending'|t('guide') }}</span></span></div>
   <div><b>{{ pending }}</b></div>
 {% endif %}
 
 {% if 'expired' in statuses %}
-  <div class="element small hasstatus" title="Expired elements"><span class="status expired"></span><span class="label"><span class="title">Expired</span></span></div>
+  <div class="element small hasstatus" title="Expired elements"><span class="status expired"></span><span class="label"><span class="title">{{ 'Expired'|t('guide') }}</span></span></div>
   <div><b>{{ expired }}</b></div>
 {% endif %}
 </div>{%- endblock %}

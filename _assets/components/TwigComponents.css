@@ -39,7 +39,8 @@
       grid-template-columns: max-content 1fr;
       align-items: center;
       gap: var(--l);
-      margin-inline: auto;
+      margin: var(--s) auto 0;
+      line-height: 1.2rem;
 
       & .element + div {
         font-size: 1.7rem;
