@@ -22,10 +22,10 @@
 {% elseif type == 'entries' %}
   {% set labelDefault = 'Entries' %}
   {% set statuses = ['live', 'disabled', 'pending', 'expired'] %}
-  {% set live = craft.entries.limit(null).section(subType ?? null).status('live').count() %}
-  {% set disabled = craft.entries.limit(null).section(subType ?? null).status('disabled').count() %}
-  {% set pending = craft.entries.limit(null).section(subType ?? null).status('pending').count() %}
-  {% set expired = craft.entries.limit(null).section(subType ?? null).status('expired').count() %}
+  {% set live = craft.entries.limit(null).section(subType ?? "*").status('live').count() %}
+  {% set disabled = craft.entries.limit(null).section(subType ?? "*").status('disabled').count() %}
+  {% set pending = craft.entries.limit(null).section(subType ?? "*").status('pending').count() %}
+  {% set expired = craft.entries.limit(null).section(subType ?? "*").status('expired').count() %}
 {% elseif type == 'users' %}
   {% set labelDefault = 'Users' %}
   {% set statuses = ['live', 'disabled'] %}
