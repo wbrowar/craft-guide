@@ -55,7 +55,10 @@ export class GuideEditorComponentListItem extends LitElement {
 
     const guideSlug = document.querySelector('guide-editor')?.dataset.guideSlug
     if (guideSlug) {
-      textToInsert = textToInsert.replace(/REPLACE_GUIDE_SLUG/g, guideSlug)
+      const now = new Date()
+      textToInsert = textToInsert
+        .replace(/REPLACE_DATE/g, now.toISOString().split('T')[0])
+        .replace(/REPLACE_GUIDE_SLUG/g, guideSlug)
     }
 
     if (editor) {
