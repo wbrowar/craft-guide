@@ -1,7 +1,7 @@
 .guide-image-modal {
   width: 90vw !important;
   height: 90vh !important;
-  background-color: color-mix(in srgb, var(--guide-color-blue-bg), transparent 10%);
+  background-color: color-mix(in srgb, var(--guide-color-blue-bg), transparent 10%) !important;
   backdrop-filter: blur(15px);
 
   & img {
