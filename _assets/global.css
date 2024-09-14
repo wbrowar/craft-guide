@@ -6,12 +6,15 @@
 @import url('components/GuideList.css');
 @import url('components/GuideOrganizer.css');
 @import url('components/GuideSlideoutButton.css');
+@import url('components/TwigComponents.css');
 @import url('components/GuideWelcome.css');
 
 :root {
   --guide-border-radius: 0.3rem;
   --guide-color-blue: rgb(126, 159, 195);
   --guide-color-blue: oklch(69.1% .065 250.97);
+  --guide-color-blue-bg: rgb(66, 97, 130);
+  --guide-color-blue-bg: oklch(48.37% .065 250.97);
 }
 
 /* Enable scrolling on slideouts that render guides. */

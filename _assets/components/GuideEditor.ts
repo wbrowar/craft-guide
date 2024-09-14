@@ -245,6 +245,7 @@ export class GuideEditor extends LitElement {
       this._titleInput.addEventListener('input', () => {
         if (!this._slugHasBeenEdited && this._slugInput) {
           this._slugInput.value = kebab(this._titleInput?.value ?? '')
+          document.querySelector('guide-editor')?.setAttribute('data-guide-slug', this._slugInput.value)
         }
       })
     }

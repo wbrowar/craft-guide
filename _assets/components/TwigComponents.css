@@ -1,0 +1,50 @@
+.guide-component {
+  &.guide-component-changelog {
+    & h2 {
+      font-size: 2rem;
+
+      & span:nth-child(2) {
+        margin-inline-start: var(--s);
+        font-size: 1rem;
+      }
+    }
+    & > ul {
+      & > li + li {
+        margin-block-start: 4rem;
+      }
+      & > li {
+        margin-left: 0;
+        list-style: none;
+      }
+    }
+    & > a {
+      margin-block-start: 2rem;
+    }
+  }
+  &.guide-component-content-stats {
+    & > div:first-child {
+      margin-inline: auto;
+      text-align: center;
+
+      & div:first-child {
+        font-size: 5rem;
+        line-height: .9em;
+      }
+      & div:last-child {
+        font-size: 1rem;
+      }
+    }
+    & > div:nth-child(2) {
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      align-items: center;
+      gap: var(--l);
+      margin-inline: auto;
+
+      & .element + div {
+        font-size: 1.7rem;
+        text-align: right;
+      }
+    }
+  }
+}

@@ -1,0 +1,91 @@
+{% extends 'guide/_partials/render_component.twig' %}
+{% import _self as self %}
+
+{% set items = versions ?? [] %}
+{% set total = versions|length %}
+
+{% block content -%}
+  {% if limit ?? false %}
+    {% set versions = versions|slice(0, limit) %}
+  {% endif %}
+
+  {% if versions|length %}
+    <ul>
+      {% for version in versions %}
+        <li>
+          {{ self.versionFormatted(version) }}
+        </li>
+      {% endfor %}
+    </ul>
+
+    {% if limit and limit < total and slug ?? false %}
+      {{ craft.guide.component('button', { label: 'See all changes'|t('guide'), url: url('guide/page/' ~ slug) }) }}
+    {% endif %}
+  {% endif %}
+
+  {# ------------------------------------------------------------------------ #}
+
+  {% macro versionFormatted(version) %}{% apply spaceless %}
+    <h2>
+      {% if version.version ?? false %}
+        <span>{{ version.version ?? '' }}</span>
+      {% endif %}
+
+      {% if version.date ?? false %}
+        <span>{{ version.date|date }}</span>
+      {% endif %}
+    </h2>
+
+    {% if version.added ?? false %}
+      <h3>🚀 {{ 'Added'|t('guide') }}</h3>
+      {% if version.added is string %}
+        {{ version.added|md('gfm') }}
+      {% elseif version.added is array %}
+        <ul>
+          {% for item in version.added %}
+            <li>{{ item|md(flavor='gfm', inlineOnly=true) }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endif %}
+
+    {% if version.changed ?? false %}
+      <h3>🔧 {{ 'Changed'|t('guide') }}</h3>
+      {% if version.changed is string %}
+        {{ version.changed|md('gfm') }}
+      {% elseif version.changed is array %}
+        <ul>
+          {% for item in version.changed %}
+            <li>{{ item|md(flavor='gfm', inlineOnly=true) }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endif %}
+
+    {% if version.fixed ?? false %}
+      <h3>🚧 {{ 'Fixed'|t('guide') }}</h3>
+      {% if version.fixed is string %}
+        {{ version.fixed|md('gfm') }}
+      {% elseif version.fixed is array %}
+        <ul>
+          {% for item in version.fixed %}
+            <li>{{ item|md(flavor='gfm', inlineOnly=true) }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endif %}
+
+    {% if version.removed ?? false %}
+      <h3>🔥 {{ 'Removed'|t('guide') }}</h3>
+      {% if version.removed is string %}
+        {{ version.removed|md('gfm') }}
+      {% elseif version.removed is array %}
+        <ul>
+          {% for item in version.removed %}
+            <li>{{ item|md(flavor='gfm', inlineOnly=true) }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endif %}
+  {% endapply %}{% endmacro %}
+{%- endblock %}

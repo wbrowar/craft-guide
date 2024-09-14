@@ -38,6 +38,21 @@
   },
 }]) %}
 
+{% set contentCode %}{% verbatim %}{{ craft.guide.component('content-stats', { type: 'entries' }) }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Content Stats'|t('guide'),
+  contentCode,
+  group: 'components',
+  summary: '<p>See the total number of entries and their statuses for an element type.</p>'|t('guide'),
+  props: {
+    group: 'If showing content stats for categories, specifcy the group handle.'|t('guide'),
+    label: 'A label that sits under the total number.'|t('guide'),
+    section: 'If showing content stats for entries, specifcy the section handle.'|t('guide'),
+    type: 'The type of element to be displayed. Options: assets, categories, entries, users'|t('guide'),
+    volume: 'If showing content stats for assets, specifcy the asset volume handle.'|t('guide'),
+  },
+}]) %}
+
 {% set contentCode %}{% verbatim %}{% set detailsContent %}{% apply markdown('gfm') %}
 REPLACE_TEXT
 {% endapply %}{% endset %}
@@ -209,158 +224,245 @@ Content
 
 
 {# Snippets #}
-{% set contentCode %}{% verbatim %}{# VERSION START  For each version, make a copy of this block and place it at the top of this guide. #}
-{% set version %}{% apply markdown('gfm') %}
+{% set contentCode %}{% verbatim %}{# Add newer items to the top of the array. Each item should include at least a date (in ISO format) and a version number. #}
+{% set versions = [
+  {
+    added: [
+      'Item 1',
+      'Item 2',
+    ],
+    changed: [
+      'Item 1',
+      'Item 2',
+    ],
+    fixed: [
+      'Item 1',
+      'Item 2',
+    ],
+    removed: [
+      'Item 1',
+      'Item 2',
+    ],
+    date: '2024-09-14',
+    version: '1.0.0',
+  },
+] %}
 
-<h2><span>1.0.0</span> Sep 27, 2024</h2>
+{{ craft.guide.component('changelog', {
+  limit: guideDisplayArea == 'widget' ? 1 : null,
+  slug: 'changelog',
+  versions,
+}) }}{% endverbatim %}{% endset %}
+{% set snippets = snippets|merge([{
+  title: 'Changelog – Array'|t('guide'),
+  contentCode,
+  group: 'snippets',
+  summary: '<p>Display updates to your Craft project using simple lists.</p>'|t('guide'),
+}]) %}
 
-### 🚀 Added
+{% set contentCode %}{% verbatim %}{# For each version in the changelog, copy the block of code starting from the START comment to the END comment and add newer items to the top. Each item should include at least a `date` value (in ISO format) and a `version` number value. #}
 
-- Features that have been added.
+{# START version ------------------------------------------------------ #}
 
-### 🔧 Changed
+{% set added %}
+- Item 1
+- Item 2
+{% endset %}
 
-- Things that have changed.
+{% set changed %}
+- Item 1
+- Item 2
+{% endset %}
 
-### 🚧 Fixed
+{% set fixed %}
+- Item 1
+- Item 2
+{% endset %}
 
-- Bugs that have been fixed.
+{% set removed %}
+- Item 1
+- Item 2
+{% endset %}
 
-### 🔥 Deleted
+{# If the `versions` array doesnt exist, create a new array. #}
+{% set versions = versions ?? [] %}
 
-{% endapply %}{% endset %}
-{% set versions = versions is defined ? versions|merge([version]) : [version] %}
-{# VERSION END #}
+{# Add the items above to the `versions` array. #}
+{% set versions = versions|merge([{
+  added: added|nl2br,
+  changed: changed|nl2br,
+  fixed: fixed|nl2br,
+  removed: removed|nl2br,
+  date: '2024-09-14',
+  version: '1.0.0',
+}]) %}
 
-{# -------------------------------------------------------------------------- #}
+{# END version -------------------------------------------------------- #}
 
-{# Display changelog versions  Do not edit this part. #}
+{# limit: Render all of the items when on a page and limit the amount of items everywhere else. #}
+{# slug: When set, and when the amount of items is higher than the limit, a button will appear that brings you to the guide’s page. #}
+{{ craft.guide.component('changelog', {
+  limit: guideDisplayArea == 'page' ? null : 1,
+  slug: guide.slug,
+  versions,
+}) }}{% endverbatim %}{% endset %}
+{% set snippets = snippets|merge([{
+  title: 'Changelog – Markdown'|t('guide'),
+  contentCode,
+  group: 'snippets',
+  summary: '<p>Display updates to your Craft project using Markdown blocks.</p>'|t('guide'),
+}]) %}
 
-{% if guideDisplayArea == 'widget' %}
-  <div class="version">
-    {{ versions[0] }}
-  </div>
-{% else %}
-  {% for version in versions %}
-    <div class="version">
-      {{ version }}
-    </div>
+{% set contentCode %}{% verbatim %}{# Set the asset volume you would like to check for images in. #}
+{% set volume = null %}
+
+{% set limit = 100 %}
+
+{# Display a contact sheet of assets along with their title and alt text. #}
+{% set query = craft.assets.limit(limit).volume(volume ?? null).kind('image') %}
+{% paginate query as pageInfo, assets %}
+
+{% if assets|length %}
+  {% if pageInfo.prevUrl or pageInfo.nextUrl %}
+    <header>
+      {% if pageInfo.prevUrl %}
+        {{ craft.guide.component('button', { label: 'Previous Page', url: pageInfo.prevUrl }) }}
+      {% endif %}
+      <span>{{ pageInfo.currentPage }} / {{ pageInfo.totalPages }}</span>
+      {% if pageInfo.nextUrl %}
+        {{ craft.guide.component('button', { label: 'Next Page', url: pageInfo.nextUrl }) }}
+      {% endif %}
+    </header>
+  {% endif %}
+
+  <ul>
+  {% for asset in assets %}
+    <li>
+      {{ craft.guide.component('image', { asset, modal: true, transforms: [
+        { mode: 'fit', quality: 80, width: 430 },
+        { mode: 'fit', quality: 80, width: 860 },
+      ] }) }}
+      {% set assetInfo = [
+        ['Title', asset.title ?? ''],
+        ['Alt', asset.alt ?? ''],
+        ['Size', asset.width ?? '' ~ ' x ' ~ asset.height ?? ''],
+      ] %}
+      <dl>
+        {% for item in assetInfo %}
+        <dt>{{ item[0] }}</dt>
+        <dd>{{ item[1] }}</dd>
+        {% endfor %}
+      </dl>
+    </li>
   {% endfor %}
-{% endif %}
+  </ul>
+{% else %}
+{% apply markdown('gfm') %}
 
+No images were found for this asset volume.
 
-{% if guideDisplayArea == 'widget' %}
-  {{ craft.guide.component('button', { label: 'See all changes', url: url('guide/page/' ~ guide.slug) }) }}
+{% endapply %}
 {% endif %}{% endverbatim %}{% endset %}
-{% set cssCode %}{% verbatim %}.guide-REPLACE_GUIDE_SLUG {
-  & .version {
-    & + .version {
-      margin-block-start: 3rem;
+{% set cssCode %}{% verbatim %}.guide.guide-REPLACE_GUIDE_SLUG {
+    & header {
+        display: flex;
+        align-items: center;
+        gap: var(--m);
+        padding: var(--s) var(--padding);
+        margin-inline: calc(-1 * var(--padding));
+        position: sticky;
+        top: var(--header-height);
+        background-color: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        z-index: 1;
     }
-    & h2 span {
-      font-size: 2rem;
+    & ul {
+        --grid-template-columns: 1;
+        display: grid;
+        grid-template-columns: repeat(var(--grid-template-columns, 1), 1fr);
+        grid-auto-rows: max-content;
+        gap: calc(var(--xl) * 2);
+
+        & li {
+            display: grid;
+            grid-template-columns: auto;
+            grid-template-rows: subgrid;
+            grid-row: span 2;
+            gap: var(--s);
+            margin-left: 0;
+            list-style: none;
+
+            & figure {
+                align-self: flex-end;
+            }
+        }
+
+        @container guide-display (width > 600px) {
+            --grid-template-columns: 2;
+        }
+        @container guide-display (width > 900px) {
+            --grid-template-columns: 3;
+        }
+        @container guide-display (width > 1200px) {
+            --grid-template-columns: 4;
+        }
+        @container guide-display (width > 1800px) {
+            --grid-template-columns: 5;
+        }
     }
+    & dl {
+        display: grid;
+        grid-template-columns: max-content 1fr;
+        column-gap: var(--m);
+        padding-block-start: var(--s);
+        border-block-start: 1px solid var(--hairline-color);
+        font-size: 1rem;
+
+        & dt {
+            font-weight: 700;
+        }
+        & dd {
+            text-wrap: balance;
+        }
+    }
+}{% endverbatim %}{% endset %}
+{% set snippets = snippets|merge([{
+  title: 'Contact Sheet - Images'|t('guide'),
+  contentCode,
+  cssCode,
+  group: 'snippets',
+  summary: '<p>Display a grid of images, their title, and alt text. Clicking an image will display the full size image in a modal.</p>'|t('guide'),
+}]) %}
+
+{% set contentCode %}{% verbatim %}<div class="guide-snippet-content-stats">
+  {{ craft.guide.component('content-stats') }}
+
+  {{ craft.guide.component('content-stats', { type: 'assets' }) }}
+
+  {{ craft.guide.component('content-stats', { type: 'categories' }) }}
+
+  {{ craft.guide.component('content-stats', { type: 'users' }) }}
+</div>{% endverbatim %}{% endset %}
+{% set cssCode %}{% verbatim %}.guide.guide-REPLACE_GUIDE_SLUG {
+  & .guide-snippet-content-stats {
+      display: flex;
+      flex-flow: row wrap;
+      gap: var(--xl);
+
+      & > * {
+          flex: 1 1 200px;
+          padding: var(--l);
+          border-radius: var(--guide-border-radius);
+          background-color: color-mix(in srgb, var(--guide-color-blue-bg), transparent 95%);
+      }
   }
 }{% endverbatim %}{% endset %}
 {% set snippets = snippets|merge([{
-  title: 'Changelog'|t('guide'),
-  cssCode,
-  contentCode,
-  group: 'snippets',
-  summary: '<p>Display updates to your Craft project.</p>'|t('guide'),
-}]) %}
-
-{% set contentCode %}{% verbatim %}{# Set the type of element to be displayed. Options: assets, categories, entries, users #}
-{% set elementType = 'entries' %}
-
-{# If showing content stats for entries, specifcy the section; for assets, the volume, or for categories, the group. #}
-{# Leave this as null to get all entries, assets, or category groups. #}
-{% set subType = null %}
-
-{# Set a label that sits under the total number. Leave this as blank to default to the element type. #}
-{% set label = null %}
-
-{% if elementType == 'assets' %}
-  {% set labelDefault = 'Assets' %}
-  {% set statuses = ['live'] %}
-  {% set live = craft.assets.limit(null).volume(subType ?? null).status('live').count() %}
-{% elseif elementType == 'categories' %}
-  {% set labelDefault = 'Categories' %}
-  {% set statuses = ['live', 'disabled'] %}
-  {% set live = craft.categories.limit(null).group(subType ?? null).status('enabled').count() %}
-  {% set disabled = craft.categories.limit(null).group(subType ?? null).status('disabled').count() %}
-{% elseif elementType == 'entries' %}
-  {% set labelDefault = 'Entries' %}
-  {% set statuses = ['live', 'disabled', 'pending', 'expired'] %}
-  {% set live = craft.entries.limit(null).section(subType ?? null).status('live').count() %}
-  {% set disabled = craft.entries.limit(null).section(subType ?? null).status('disabled').count() %}
-  {% set pending = craft.entries.limit(null).section(subType ?? null).status('pending').count() %}
-  {% set expired = craft.entries.limit(null).section(subType ?? null).status('expired').count() %}
-{% elseif elementType == 'users' %}
-  {% set labelDefault = 'Users' %}
-  {% set statuses = ['live', 'disabled'] %}
-  {% set live = craft.users.limit(null).status('enabled').count() %}
-  {% set disabled = craft.users.limit(null).status('disabled').count() %}
-{% endif %}
-
-<div class="guide-snippet-content-stats-header">
-  <div><b>{{ live|default('') }}</b></div>
-  <div>{{ label|default(labelDefault) }}</div>
-</div>
-
-<div class="guide-snippet-content-stats-body">
-  {% if 'live' in statuses %}
-    <div class="element small hasstatus" title="Live elements"><span class="status live"></span><span class="label"><span class="title">Live</span></span></div>
-    <div><b>{{ live }}</b></div>
-  {% endif %}
-
-  {% if 'disabled' in statuses %}
-    <div class="element small hasstatus" title="Disabled elements"><span class="status disabled"></span><span class="label"><span class="title">Disabled</span></span></div>
-    <div><b>{{ disabled }}</b></div>
-  {% endif %}
-
-  {% if 'pending' in statuses %}
-    <div class="element small hasstatus" title="Pending elements"><span class="status pending"></span><span class="label"><span class="title">Pending</span></span></div>
-    <div><b>{{ pending }}</b></div>
-  {% endif %}
-
-  {% if 'expired' in statuses %}
-    <div class="element small hasstatus" title="Expired elements"><span class="status expired"></span><span class="label"><span class="title">Expired</span></span></div>
-    <div><b>{{ expired }}</b></div>
-  {% endif %}
-</div>{% endverbatim %}{% endset %}
-{% set cssCode %}{% verbatim %}.guide-REPLACE_GUIDE_SLUG {
-    & .guide-snippet-content-stats-header {
-        margin-inline: auto;
-        text-align: center;
-
-        & div:first-child {
-            font-size: 5rem;
-            line-height: .9em;
-        }
-        & div:last-child {
-            font-size: 1rem;
-        }
-    }
-    & .guide-snippet-content-stats-body {
-        display: grid;
-        grid-template-columns: max-content 1fr;
-        align-items: center;
-        gap: var(--l);
-        margin-inline: auto;
-
-        & .element + div {
-            font-size: 1.7rem;
-            text-align: right;
-        }
-    }
-}{% endverbatim %}{% endset %}
-{% set snippets = snippets|merge([{
-  title: 'Content Stats'|t('guide'),
+  title: 'Content Stats Layout'|t('guide'),
   contentCode,
   cssCode,
   group: 'snippets',
-  summary: '<p>Show a total of entries that are currently published.</p>'|t('guide'),
+  summary: '<p>Show stats for entries, assets, categories, and users.</p>'|t('guide'),
 }]) %}
 
 {% set contentCode %}{% verbatim %}{# Set the asset volume you would like to check for images in. #}
@@ -504,9 +606,6 @@ These assets should be replaced with files using the extension: **{{ acceptedExt
 
 {# Set this to "true" to find elements with the field filled out, or "false" to find elements that are missing this field. #}
 {% set filledOut = true %}
-
-{# Import _self to use macro below #}
-{% import _self as self %}
 
 {# Start Snippet Display #}
 {% cache %}
