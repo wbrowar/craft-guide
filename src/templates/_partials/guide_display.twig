@@ -38,7 +38,7 @@
     <guide-display{{ guideDisplayArea == 'guide' ? ' cms-guide' : '' }} t-messages="{{ tMessages|json_encode }}">
       <div class="guides">
         {% for guide in guides %}
-          <section data-guide-slug="{{ guide.slug }}" class="guide guide-{{ guide.slug}} visually-hidden">
+          <section data-guide data-guide-slug="{{ guide.slug }}" class="guide guide-{{ guide.slug}}">
             {% if guide.contentSource == 'field' and guide.renderMarkdown %}
               {{ include('guide/_partials/render_content', { guide: guide })|md('gfm') }}
             {% else %}

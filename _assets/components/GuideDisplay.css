@@ -17,9 +17,13 @@
 guide-display {
   display: grid;
   grid-template-columns: var(--grid-template-columns, 1fr);
+  align-items: start;
   gap: calc(var(--xl) * 2);
   position: relative;
-  align-items: start;
+
+  [data-guide]:not([data-guide-displayed]) {
+    display: none;
+  }
 
   & > aside {
     display: grid;
@@ -69,8 +73,6 @@ guide-display {
 
 .guide {
   --guide-prose-max-width: 70ch;
-  container-name: guide;
-  container-type: inline-size;
 
   & > * + * {
     margin-block-start: var(--guide-prose-elements-margin-block-start, 1.6em);
@@ -155,7 +157,7 @@ guide-display {
     & > code {
       padding: 1em;
       font-size: var(--guide-prose-font-size, 1rem);
-      white-space: pre;
+      white-space: pre-wrap;
     }
   }
   & :is(ol, ul) {

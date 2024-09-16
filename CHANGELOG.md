@@ -19,6 +19,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - Just like widgets, you can use the Guide Organizer to decide what guides are available in UI Elements.
 - A new **Details** Twig component has been added, letting you hide content via a styled `<details>` tag.
 - A new `modal` variable has been added to **Image** components—letting you view the full-size image in a Craft CMS modal.
+- A new **Image Contact Sheet** Snippet has been created to provide a paginated contact sheet of images in a certain asset volume.
+  - It shows the image as a thumbnail, title, alt, and dimensions of each image and it displays the uploaded original image in a modal when you click on an image thumbnail.
+- A new Component and a new Snippet have been created to make it easier to create Content Stats.
+  - The component lets you pick the element type and it will display live, disabled, pending, and expired totals (based on the element picked).
+  - The snippet provides a wrapper element and some CSS that lets you put multiple **Content Stats** components together in a flex layout.
+- A new component and two new snippets have been created to create changelogs for your project.
+  - The snippets show either a simple way to create a changelog using arrays or a more complicated way of using Markdown and HTML.
 - Guides can now include custom CSS and JavaScript via code fields added to the Guide Editor.
   - New settings have been created to enable or disable custom CSS and JavaScript. Setting these to **off** will disable the CSS or JavaScript from rendering on the page, along with hiding their respective field.
   - **Enable CSS Field** is **on** by default.

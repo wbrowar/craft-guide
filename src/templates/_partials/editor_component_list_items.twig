@@ -445,16 +445,16 @@ No images were found for this asset volume.
 </div>{% endverbatim %}{% endset %}
 {% set cssCode %}{% verbatim %}.guide.guide-REPLACE_GUIDE_SLUG {
   & .guide-snippet-content-stats {
-      display: flex;
-      flex-flow: row wrap;
-      gap: var(--xl);
+    display: flex;
+    flex-flow: row wrap;
+    gap: var(--xl);
 
-      & > * {
-          flex: 1 1 200px;
-          padding: var(--l);
-          border-radius: var(--guide-border-radius);
-          background-color: color-mix(in srgb, var(--guide-color-blue-bg), transparent 95%);
-      }
+    & > * {
+      flex: 1 1 200px;
+      padding: var(--l);
+      border-radius: var(--guide-border-radius);
+      background-color: color-mix(in srgb, var(--gray-100), transparent 50%);
+    }
   }
 }{% endverbatim %}{% endset %}
 {% set snippets = snippets|merge([{

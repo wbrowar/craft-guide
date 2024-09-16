@@ -51,9 +51,9 @@ export class GuideDisplay extends LitElement {
     super.connectedCallback()
 
     // Collect slugs from all rendered guides.
-    const guideElements: NodeListOf<HTMLElement> = this.querySelectorAll('.guide')
+    const guideElements: NodeListOf<HTMLElement> = this.querySelectorAll('[data-guide]')
     const guideSlugs: string[] = []
-    ;[...guideElements].forEach((guideElement) => {
+    guideElements.forEach((guideElement) => {
       if (guideElement.dataset.guideSlug) {
         guideSlugs.push(guideElement.dataset.guideSlug)
       }
@@ -124,9 +124,11 @@ export class GuideDisplay extends LitElement {
 
       guideElements.forEach((guide) => {
         if (guide.dataset.guideSlug === this._selectedGuide?.slug) {
-          guide.classList.remove('visually-hidden')
+          guide.setAttribute('data-guide-displayed', '')
+          // guide.classList.remove('visually-hidden')
         } else {
-          guide.classList.add('visually-hidden')
+          guide.removeAttribute('data-guide-displayed')
+          // guide.classList.add('visually-hidden')
         }
       })
     }
