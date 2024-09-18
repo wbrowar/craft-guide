@@ -55,9 +55,7 @@ class Guide extends Component
             $orderBy = $params['orderBy'];
             unset($params['orderBy']);
         } else {
-            // TODO change this when guide ordering is implemented.
-//            $orderBy = 'weight ASC, title ASC';
-            $orderBy = 'title ASC';
+            $orderBy = 'weight ASC, title ASC';
         }
 
         switch ($queryType) {

@@ -79,6 +79,9 @@ class ImportExport extends Component
                     $renderMarkdown = $data['renderMarkdown'] == 'true';
                 }
 
+                $totalGuides = Guide::$plugin->guide->getGuides([], 'count') ?? 0;
+                $weight = $params['weight'] ?? ($totalGuides + 1);
+
                 $guide = new GuideModel([
                     'authorId' => Craft::$app->getUser()->getIdentity()->id ?? null,
                     'content' => $data['content'] ?? '',
@@ -91,6 +94,7 @@ class ImportExport extends Component
                     'summary' => $data['summary'] ?? '',
                     'template' => $data['template'] ?? '',
                     'title' => $data['title'],
+                    'weight' => $weight,
                 ]);
 
                 if ($guide->validate()) {

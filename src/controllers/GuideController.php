@@ -68,8 +68,8 @@ class GuideController extends Controller
     {
         $params = Craft::$app->getRequest()->getBodyParams();
 
-        $slug = ($params['slug'] ?? false) ? $params['slug'] : $this->generateSlugFromTitle($title);
         $title = !empty($params['title']) ? $params['title'] : 'Untitled Guide saved on ' . Date('F jS \a\t g:ia');
+        $slug = ($params['slug'] ?? false) ? $params['slug'] : $this->generateSlugFromTitle($title);
         $totalGuides = Guide::$plugin->guide->getGuides([], 'count') ?? 0;
         $weight = $params['weight'] ?? ($totalGuides + 1);
 
@@ -92,7 +92,6 @@ class GuideController extends Controller
             Guide::$plugin->guide->saveGuide($guide, $params['id'] ?? null);
 
             return $this->redirect(UrlHelper::url($params['redirect'] ?? 'guide/list'));
-        } else {
         }
     }
 

@@ -556,9 +556,7 @@ class Guide extends Plugin
     public function renderAdminGlobals()
     {
         $guidesForJs = [];
-        $guides = self::$plugin->guide->getGuides([
-            'orderBy' => 'title asc',
-        ]);
+        $guides = self::$plugin->guide->getGuides();
         foreach ($guides as $guide) {
             $guidesForJs[] = [
                 'deleteUrl' => UrlHelper::url('guide/delete/' . $guide->id),
