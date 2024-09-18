@@ -83,6 +83,7 @@ export interface Guide {
   summary: string | null
   template: string
   title: string
+  weight: number
 }
 
 export interface GuideListGuide {
@@ -92,6 +93,7 @@ export interface GuideListGuide {
   title: string
   slug: string
   summary: string
+  weight: number
   viewUrl: string
 }
 
@@ -132,7 +134,6 @@ export interface Placement {
   moveMethod: MoveMethod
   selector: string | null
   uri: string | null
-  weight: number
 }
 
 export enum PlacementAccess {

@@ -75,13 +75,6 @@ class Placement extends Model
      */
     public $uri;
 
-    /**
-     * When guides are re-ordered in their group they will be displayed in that order by default.
-     *
-     * @var integer
-     */
-    public $weight = 1;
-
     // Public Methods
     // =========================================================================
 
@@ -93,7 +86,7 @@ class Placement extends Model
         return [
             ['guideId', 'required'],
 
-            [['guideId', 'weight'], 'integer'],
+            [['guideId'], 'integer'],
             [['access', 'group', 'groupId', 'moveMethod', 'selector', 'uri'], 'string'],
 
             ['access', 'default', 'value' => 'all'],

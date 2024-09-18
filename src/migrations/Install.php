@@ -67,7 +67,6 @@ class Install extends Migration
         $tablesCreatedForGuides = false;
         $tablesCreatedForPlacements = false;
 
-        // TODO add contentJavascript, contentSource, renderMarkdown
         $tableSchema = Craft::$app->db->schema->getTableSchema('{{%guide_guides}}');
         if ($tableSchema === null) {
             $tablesCreatedForGuides = true;
@@ -89,12 +88,11 @@ class Install extends Migration
                     'content' => $this->text(),
                     'contentCss' => $this->text(),
                     'contentJavascript' => $this->text(),
+                    'weight' => $this->integer()->defaultValue(1),
                 ]
             );
         }
 
-        // TODO add weight
-        // TODO remove portalMethod, theme
         $tableSchema = Craft::$app->db->schema->getTableSchema('{{%guide_placements}}');
         if ($tableSchema === null) {
             $tablesCreatedForPlacements = true;
@@ -112,7 +110,6 @@ class Install extends Migration
                     'moveMethod' => $this->string(255)->defaultValue('append'),
                     'selector' => $this->string(255),
                     'uri' => $this->string(255),
-                    'weight' => $this->integer()->defaultValue(1),
                 ]
             );
         }

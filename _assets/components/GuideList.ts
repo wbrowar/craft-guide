@@ -173,6 +173,7 @@ export class GuideList extends LitElement {
     })
 
     return html`
+      ${rows.length ? html`
       <div class="tableview tablepane">
         <table class="data fullwidth">
           <thead>
@@ -190,6 +191,7 @@ export class GuideList extends LitElement {
           </tbody>
         </table>
       </div>
+      ` : html`<p>${this.tMessages.listEmpty}</p>`}
     `
   }
 

@@ -27,6 +27,7 @@ use craft\db\ActiveRecord;
  * @property string $summary
  * @property string $template
  * @property string $title
+ * @property integer $weight
  * 
  * @author    Will Browar
  * @package   Guide

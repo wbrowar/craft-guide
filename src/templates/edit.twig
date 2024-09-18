@@ -164,8 +164,10 @@
           disabled: not settings.templatePath,
           options: templates.filenames,
           value: guide.template,
-          instructions: 'Load a template found in your <strong>{path}</strong> directory.'|t('guide', { path: settings.templatePath }),
+          instructions: 'Load a template found in your <strong>/templates/{path}/</strong> directory.'|t('guide', { path: settings.templatePath }),
         }) }}
+
+        <input type="hidden" name="weight" value="{{ guide.weight }}">
       </div>
       <div slot="components">
         <p>{{ 'Add basic building blocks to your guide using Twig and Vue components.'|t('guide') }}</p>

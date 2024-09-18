@@ -64,8 +64,6 @@ export class GuideUtilities extends LitElement {
       }) ?? []
 
     this._exportData = JSON.stringify(exportData)
-
-    log('guides', this.guidesData, exportData)
   }
 
   /**
@@ -79,7 +77,6 @@ export class GuideUtilities extends LitElement {
         'guide/import-export/import-json',
         { guideData: importTextarea.value },
         (response: { error: string; status: string }) => {
-          log('Saving placement', response)
           if (response.status === 'success') {
             window.Craft.cp.displayNotice(this.tMessages.guidesImported)
           } else {

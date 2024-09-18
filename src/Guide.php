@@ -567,6 +567,7 @@ class Guide extends Plugin
                 'title' => $guide->title,
                 'slug' => $guide->slug,
                 'summary' => $guide->summary,
+                'weight' => $guide->weight,
                 'viewUrl' => UrlHelper::url('guide/page/' . $guide->slug),
             ];
         }

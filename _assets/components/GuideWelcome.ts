@@ -483,8 +483,6 @@ export class GuideWelcome extends LitElement {
     // set container
     this._container = this.renderRoot?.querySelector('#guide-welcome-scene-container') ?? null
 
-    log('contianer', this._container)
-
     if (this._container) {
       // add camera
       const fov = this._settings.camera.fov // Field of view
@@ -558,7 +556,6 @@ export class GuideWelcome extends LitElement {
             this._object.scene.traverse((child: any) => {
               children.push(child)
             })
-            log('Scened objects', children)
           }
 
           this._book = this._object.scene.getObjectByName('Scene')
@@ -567,8 +564,6 @@ export class GuideWelcome extends LitElement {
           this._bookLoose2 = this._object.scene.getObjectByName('Loose_2')
 
           this._animateSlideInBook()
-
-          log('Objects from scene', this._bookTop, this._bookLoose, this._bookLoose2)
         },
         undefined,
         undefined
@@ -589,8 +584,6 @@ export class GuideWelcome extends LitElement {
               this._renderer.setSize(this._container.clientWidth, this._container.clientHeight)
             }
           }
-
-          log('Size changed')
         }
       })
 
@@ -616,7 +609,6 @@ export class GuideWelcome extends LitElement {
    */
   private _pause() {
     if (this._timeline) {
-      log('pausing')
       this._timeline.pause()
       this._playing = false
     }
@@ -627,7 +619,6 @@ export class GuideWelcome extends LitElement {
    */
   private _play() {
     if (this._timeline) {
-      log('playing')
       this._timeline.play()
       this._playing = true
     }

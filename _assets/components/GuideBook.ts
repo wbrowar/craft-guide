@@ -266,7 +266,6 @@ export class GuideBook extends LitElement {
    * TODO
    */
   private _animateOpenBook() {
-    log('opening book')
     if (this._bookTop && this._bookLoose && this._bookLoose2) {
       this._animationState = 'animating'
       const speed = 3
@@ -295,7 +294,6 @@ export class GuideBook extends LitElement {
    * TODO
    */
   private _animateCloseBook() {
-    log('closing book')
     if (this._bookTop && this._bookLoose && this._bookLoose2) {
       this._animationState = 'animating'
       const speed = 1
@@ -403,8 +401,6 @@ export class GuideBook extends LitElement {
     // set container
     this._container = this.renderRoot?.querySelector('#guide-book-scene-container') ?? null
 
-    log('contianer', this._container)
-
     if (this._container) {
       // add camera
       const fov = this._settings.camera.fov // Field of view
@@ -478,15 +474,12 @@ export class GuideBook extends LitElement {
             this._object.scene.traverse((child: any) => {
               children.push(child)
             })
-            log('Scened objects', children)
           }
 
           // this._book = this._object.scene.getObjectByName('Scene')
           this._bookTop = this._object.scene.getObjectByName('Top')
           this._bookLoose = this._object.scene.getObjectByName('Loose')
           this._bookLoose2 = this._object.scene.getObjectByName('Loose_2')
-
-          log('Objects from scene', this._bookTop, this._bookLoose, this._bookLoose2)
         },
         undefined,
         undefined
@@ -507,8 +500,6 @@ export class GuideBook extends LitElement {
               this._renderer.setSize(this._container.clientWidth, this._container.clientHeight)
             }
           }
-
-          log('Size changed')
         }
       })
 

@@ -89,8 +89,6 @@ export class GuideEditorComponentListItem extends LitElement {
    */
   connectedCallback() {
     super.connectedCallback()
-
-    log('data', this.data)
   }
 
   render() {

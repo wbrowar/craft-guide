@@ -120,7 +120,6 @@ class PlacementController extends Controller
             'moveMethod' => $params['moveMethod'] ?? 'append',
             'selector' => $params['selector'] ?? null,
             'uri' => $params['uri'] ?? null,
-            'weight' => $params['weight'] ?? 1,
         ]);
 
         if ($placement->validate()) {

@@ -55,7 +55,9 @@ class Guide extends Component
             $orderBy = $params['orderBy'];
             unset($params['orderBy']);
         } else {
-            $orderBy = 'title';
+            // TODO change this when guide ordering is implemented.
+//            $orderBy = 'weight ASC, title ASC';
+            $orderBy = 'title ASC';
         }
 
         switch ($queryType) {
@@ -171,6 +173,7 @@ class Guide extends Component
         $record->slug = $this->getUniqueSlug($model->slug, $id ?? 0);
         $record->template = $model->template;
         $record->title = $model->title;
+        $record->weight = $model->weight;
 
         $record->save();
 

@@ -23,7 +23,6 @@ use craft\db\ActiveRecord;
  * @property string $moveMethod
  * @property string $selector
  * @property string $uri
- * @property integer $weight
  * 
  * @author    Will Browar
  * @package   Guide

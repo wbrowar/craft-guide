@@ -55,14 +55,11 @@ class Guide extends Widget
     {
         $guide = $this->getGuideFromGuideId();
 
-        if ($this->showTitle) {
-            if ($guide ?? false) {
-                return $guide->title;
-            } else {
-                return Craft::t('guide', 'Guide');
-            }
+        if ($guide ?? false) {
+            return $guide->title;
+        } else {
+            return Craft::t('guide', 'Guide');
         }
-        return '';
     }
 
     /**
@@ -128,6 +125,7 @@ class Guide extends Widget
             [
                 'guide' => $this->getGuideFromGuideId(),
                 'proEdition' => GuidePlugin::$pro,
+                'showTitle' => $this->showTitle,
                 'widgetId' => $this->id,
             ]
         );

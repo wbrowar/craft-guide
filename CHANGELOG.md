@@ -40,6 +40,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - If a **Template Path** isn’t set, using templates as a guide source is disabled.
 - **Slideout** is now set as the default value for the **Edit Page Guide Location** setting.
 - **Table** component is now Twig-based.
+- Guide widgets now display the title of the guide regardless of whether or not the title field is hidden.
 - The `Edit Guides` and `Delete Guides` permissions can now be set in Guide LITE.
 
 ### Removed

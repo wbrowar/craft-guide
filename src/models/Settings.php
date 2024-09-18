@@ -47,7 +47,7 @@ class Settings extends Model
     public $renderMarkdownDefault = true;
 
     // Path to Guide CP Section templates.
-    public $templatePath = '';
+    public $templatePath = '_guide';
 
     // Twig variables.
     public $clientName = '';
@@ -67,6 +67,7 @@ class Settings extends Model
             [['assetVolume', 'editPageLocation', 'guideButtonLabel', 'templatePath', 'clientName', 'projectName', 'myCompanyName'], 'string'],
 
             ['editPageLocation', 'default', 'value' => 'slideout'],
+            ['templatePath', 'default', 'value' => '_guide'],
         ];
     }
 }

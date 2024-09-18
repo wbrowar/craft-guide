@@ -14,6 +14,9 @@
   container-name: guide-display;
   container-type: inline-size;
 }
+.widget:has(.guide-display[data-widget-hide-title]) .widget-heading {
+  display: none;
+}
 guide-display {
   display: grid;
   grid-template-columns: var(--grid-template-columns, 1fr);

@@ -101,6 +101,13 @@ class Guide extends Model
      */
     public $title;
 
+    /**
+     * When guides are re-ordered in their group they will be displayed in that order by default.
+     *
+     * @var integer
+     */
+    public $weight = 1;
+
     // Public Methods
     // =========================================================================
 
@@ -113,10 +120,11 @@ class Guide extends Model
             [['authorId', 'slug', 'title'], 'required'],
 
             ['renderMarkdown', 'boolean'],
-            ['authorId', 'integer'],
+            [['authorId', 'weight'], 'integer'],
             [['content', 'contentCss', 'contentJavascript', 'slug', 'summary', 'title'], 'string'],
 
             ['authorId', 'default', 'value' => 1],
+            ['weight', 'default', 'value' => 1],
         ];
     }
 }

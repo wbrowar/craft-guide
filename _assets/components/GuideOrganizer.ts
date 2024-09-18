@@ -158,7 +158,6 @@ export class GuideOrganizer extends LitElement {
     }
 
     this._getAllPlacementsStatus = ApiStatus.Loading
-    log('gonna save it', value)
     const params = {
       access: 'all',
       group: 'uri',
@@ -192,7 +191,6 @@ export class GuideOrganizer extends LitElement {
   connectedCallback() {
     super.connectedCallback()
 
-    log('groupsData', this.groupsData)
     const widget = this.groupsData.find((group) => group.name === PlacementGroup.Widget)
     if (widget) {
       this._groupsDataStructured.push(widget)

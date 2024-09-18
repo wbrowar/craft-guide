@@ -62,7 +62,6 @@ export class GuideSlideoutButton extends LitElement {
    */
   private _onButtonClick() {
     if (this._isValid) {
-      log('welllllll', this.elementId, this.groupHandle)
       showGuideSlideout({ docs: this.docs, elementId: this.elementId, groupHandle: this.groupHandle, slug: this.slug })
     } else {
       window.Craft.cp.displayError(this.tMessages.guideSlideoutSlugError?.replace('[slug]', this.slug))
