@@ -1,6 +1,5 @@
 import { html, LitElement } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
-import { log } from '../utils/console.ts'
 import { Guide } from '../types.ts'
 import { copyToClipboard } from '../utils/clipboard.ts'
 

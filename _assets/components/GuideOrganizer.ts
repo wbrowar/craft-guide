@@ -1,6 +1,5 @@
 import { html, LitElement, nothing } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
-import { log } from '../utils/console.ts'
 import { guides } from '../globals.ts'
 import {
   ApiStatus,

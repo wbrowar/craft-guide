@@ -31,6 +31,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - **Enable CSS Field** is **on** by default.
   - **Enable JavaScript Field** is **off** by default.
 - Static text can now be translated via Craft CMS’s translation tools.
+- Rows in the `guide_placements` table are now cleaned up whenever a guide is deleted from the system.
 
 ### Changed
 - The Guide index page has been renamed, **CMS Guide**.

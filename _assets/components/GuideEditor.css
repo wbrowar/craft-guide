@@ -6,10 +6,6 @@ guide-editor {
   &:not(:defined) * {
     display: none;
   }
-  & > aside {
-    position: sticky;
-    top: calc(var(--header-height) + .5rem);
-  }
   & .guide-tab-icon {
     width: 20px;
     height: 20px;

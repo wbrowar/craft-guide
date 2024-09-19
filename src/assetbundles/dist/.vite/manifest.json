@@ -1,57 +1,57 @@
 {
-  "_GLTFLoader-CnsMw-IL.js": {
-    "file": "assets/GLTFLoader-CnsMw-IL.js",
+  "_GLTFLoader-MnDJ9iMv.js": {
+    "file": "assets/GLTFLoader-MnDJ9iMv.js",
     "name": "GLTFLoader"
   },
-  "_console-D77ky1jy.js": {
-    "file": "assets/console-D77ky1jy.js",
-    "name": "console"
+  "_globals-Bxb8cv8b.js": {
+    "file": "assets/globals-Bxb8cv8b.js",
+    "name": "globals"
   },
   "_types-BjkgCq3a.js": {
     "file": "assets/types-BjkgCq3a.js",
     "name": "types"
   },
   "guide-admin.ts": {
-    "file": "assets/guide-admin-n69_Htl7.js",
+    "file": "assets/guide-admin-C_qhZUlg.js",
     "name": "guide-admin",
     "src": "guide-admin.ts",
     "isEntry": true,
     "imports": [
-      "_console-D77ky1jy.js",
+      "_globals-Bxb8cv8b.js",
       "_types-BjkgCq3a.js"
     ]
   },
   "guide-book.ts": {
-    "file": "assets/guide-book-DLmmMLTu.js",
+    "file": "assets/guide-book-DHOMN9z6.js",
     "name": "guide-book",
     "src": "guide-book.ts",
     "isEntry": true,
     "imports": [
-      "_console-D77ky1jy.js",
-      "_GLTFLoader-CnsMw-IL.js"
+      "_globals-Bxb8cv8b.js",
+      "_GLTFLoader-MnDJ9iMv.js"
     ]
   },
   "guide-display.ts": {
-    "file": "assets/guide-display-DoMQpBwR.js",
+    "file": "assets/guide-display-B9bV3de0.js",
     "name": "guide-display",
     "src": "guide-display.ts",
     "isEntry": true,
     "imports": [
-      "_console-D77ky1jy.js",
+      "_globals-Bxb8cv8b.js",
       "_types-BjkgCq3a.js"
     ],
     "css": [
-      "assets/guide-display-BI7tsIOB.css"
+      "assets/guide-display-CLfEUpao.css"
     ]
   },
   "guide-welcome.ts": {
-    "file": "assets/guide-welcome-BKH0gTlI.js",
+    "file": "assets/guide-welcome-BdiRuosi.js",
     "name": "guide-welcome",
     "src": "guide-welcome.ts",
     "isEntry": true,
     "imports": [
-      "_console-D77ky1jy.js",
-      "_GLTFLoader-CnsMw-IL.js"
+      "_globals-Bxb8cv8b.js",
+      "_GLTFLoader-MnDJ9iMv.js"
     ]
   }
 }

@@ -54,6 +54,9 @@ class GuideController extends Controller
             $guide->delete();
         }
 
+        // Remove placements associated with all deleted guides.
+        Guide::$plugin->placement->cleanUpOrphanedPlacements();
+
         return $this->redirect(UrlHelper::url($params['redirect'] ?? 'guide/list'));
     }
 

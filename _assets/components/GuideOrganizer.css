@@ -8,7 +8,7 @@ guide-organizer {
     gap: var(--l);
     padding-block-start: 1em;
     position: sticky;
-    top: var(--header-height);
+    top: var(--guide-top);
     line-height: 32px;
     background-color: white;
     z-index: 2;

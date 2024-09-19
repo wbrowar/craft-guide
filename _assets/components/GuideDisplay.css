@@ -39,7 +39,7 @@ guide-display {
         gap: var(--s);
 
         & li {
-          transition: font-weight .1s ease-out, color .1s ease-out;
+          transition: font-weight var(--guide-duration) ease-out, color var(--guide-duration) ease-out;
 
           &.selected {
             font-weight: bold;
@@ -58,13 +58,10 @@ guide-display {
       grid-row: 1 / 2;
     }
     @container guide-display (width > 600px) {
+      padding-block-start: 0.5rem;
       position: sticky;
-      top: var(--guide-display-aside-top, 0px);
+      top: var(--guide-top);
     }
-  }
-
-  #page-container:has(#header) & {
-    --guide-display-aside-top: calc(var(--header-height) + .5rem);
   }
 
   @container guide-display (width > 600px) {

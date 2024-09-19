@@ -57,7 +57,7 @@ export class GuideEditor extends LitElement {
     .guide-editor-content-editor {
       & > * {
         position: sticky;
-        top: calc(var(--header-height) + 0.5rem);
+        top: calc(var(--guide-top) + 0.5rem);
       }
     }
     .guide-editor-content-iframe {

@@ -26,6 +26,20 @@ class Placement extends Component
     // Public Methods
     // =========================================================================
 
+    /**
+     * Removes placements for guides that have been deleted.
+     *
+     * @return void
+     */
+    public function cleanUpOrphanedPlacements()
+    {
+        $guideIds = Guide::$plugin->guide->getGuides([], 'ids');
+        $placements = $this->getPlacements(['not in', 'guideId', $guideIds]);
+
+        foreach ($placements as $placement) {
+            $placement->delete();
+        }
+    }
 
     /**
      * Format URI to be stored as a Placement URI

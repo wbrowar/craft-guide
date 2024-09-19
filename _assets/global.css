@@ -15,6 +15,17 @@
   --guide-color-blue: oklch(69.1% .065 250.97);
   --guide-color-blue-bg: rgb(66, 97, 130);
   --guide-color-blue-bg: oklch(48.37% .065 250.97);
+  --guide-top: 0;
+  --guide-duration: 0.1s;
+}
+
+@media(prefers-reduced-motion) {
+  --guide-duration: 0.001s;
+}
+
+/* Override `--guide-top` based on other elements rendered nearby. */
+#main:has(#header) #content {
+  --guide-top: var(--header-height);
 }
 
 /* Enable scrolling on slideouts that render guides. */

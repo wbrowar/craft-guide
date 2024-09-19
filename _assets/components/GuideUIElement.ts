@@ -1,6 +1,7 @@
-import { css, html, LitElement, nothing } from 'lit'
+import { css, html, LitElement, nothing, PropertyValues } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { Placement, PlacementAccess, PlacementGroup } from '../types.ts'
+import { log } from '../utils/console.ts'
 
 @customElement('guide-ui-element')
 export class GuideUIElement extends LitElement {
@@ -10,12 +11,21 @@ export class GuideUIElement extends LitElement {
    * ===========================================================================
    */
   static styles = css`
+    :host(:hover) {
+      --settings-opacity: 1;
+    }
     .settings {
       float: inline-end;
       position: relative;
       margin-block-end: var(--m);
       margin-inline-start: var(--m);
+      opacity: var(--settings-opacity, 0.3);
+      transition: opacity calc(var(--guide-duration) * 2) ease-out;
       z-index: 1;
+
+      &:focus-within {
+        --settings-opacity: 1;
+      }
     }
   `
 
@@ -74,6 +84,7 @@ export class GuideUIElement extends LitElement {
    * TODO
    */
   private async _onGuideIdSelected(guideId: string) {
+    log('slelected', guideId)
     if (!this._guideSelected) {
       if (guideId === '__none__' && this.placementId) {
         await window.Craft?.postActionRequest(
@@ -132,6 +143,10 @@ export class GuideUIElement extends LitElement {
    * LIFECYCLE
    * =========================================================================
    */
+  protected firstUpdated(_changedProperties: PropertyValues) {
+    super.firstUpdated(_changedProperties)
+  }
+
   connectedCallback() {
     super.connectedCallback()
 
@@ -139,7 +154,7 @@ export class GuideUIElement extends LitElement {
       this._showSettings = true
     }
 
-    this._guideIdSelect = this.querySelector('guide-ui-element select[name="guideId"]')
+    this._guideIdSelect = this.querySelector('guide-ui-element .field[data-attribute="guideId"] select')
 
     // Show or hide fields based on selected `contentSource` value.
     if (this._guideIdSelect) {

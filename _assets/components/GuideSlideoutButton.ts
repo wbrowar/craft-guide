@@ -1,7 +1,6 @@
 import { LitElement } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { guides, showGuideSlideout } from '../globals.ts'
-import { log } from '../utils/console.ts'
 
 @customElement('guide-slideout-button')
 export class GuideSlideoutButton extends LitElement {

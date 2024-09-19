@@ -1,7 +1,6 @@
 import { html, LitElement, nothing } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { EditorComponent, EditorTabGroup } from '../types.ts'
-import { log } from '../utils/console.ts'
 import { unsafeHTML } from 'lit-html/directives/unsafe-html.js'
 
 @customElement('guide-editor-component-list-item')

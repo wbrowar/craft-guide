@@ -114,7 +114,7 @@ export class GuideWelcome extends LitElement {
         background-color: rgba(255, 255, 255, 0.9);
         border: 1px solid var(--hairline-color);
         border-radius: 50%;
-        transition: opacity 0.5s ease-out;
+        transition: opacity calc(var(--guide-duration) * 5) ease-out;
         cursor: pointer;
 
         &:hover {
