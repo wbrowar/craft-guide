@@ -19,6 +19,7 @@
   data-user-operations="{{ userOperations|json_encode }}"
 ></div>
 
+{# Register CSS and JavaScript for guides. #}
 {% if proEdition and settings.enableGuideJavascript %}
   {% set guideGlobalJs %}
     window.guideCallback = {};
@@ -38,3 +39,12 @@
     {% js guideJs at beginBody %}
   {% endif %}
 {% endfor %}
+
+
+{# Hide Web Components until defined. #}
+{% set webComponentCss %}
+:is(guide-display, guide-ui-element, guide-welcome):not(:defined) {
+  display: none;
+}
+{% endset %}
+{% css webComponentCss %}
