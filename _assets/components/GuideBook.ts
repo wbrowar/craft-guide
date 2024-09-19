@@ -207,15 +207,25 @@ export class GuideBook extends LitElement {
       fov: 60,
       near: 0.1,
       far: 30,
+      // position: {
+      //   x: 2.4889,
+      //   y: 9.19,
+      //   z: 1.25,
+      // },
+      // rotation: {
+      //   x: 4.89,
+      //   y: 0.249,
+      //   z: 0,
+      // },
       position: {
-        x: 2.4889,
+        x: 3.5889,
         y: 9.19,
-        z: 1.25,
+        z: -0.35,
       },
       rotation: {
-        x: 4.89,
-        y: 0.249,
-        z: 0,
+        x: 4.69,
+        y: 0.349,
+        z: 0.2,
       },
     },
     lights: {
@@ -271,6 +281,7 @@ export class GuideBook extends LitElement {
       const speed = 3
       gsap.to(this._bookTop.rotation, {
         duration: speed,
+        // z: 0.6,
         z: 0.6,
         ease: 'elastic.out(1, 0.3)',
         onComplete: () => {
@@ -279,12 +290,14 @@ export class GuideBook extends LitElement {
       })
       gsap.to(this._bookLoose.rotation, {
         duration: speed,
-        z: 0.15,
+        // z: 0.15,
+        z: 0.3,
         ease: 'elastic.out(1, 0.3)',
       })
       gsap.to(this._bookLoose2.rotation, {
         duration: speed,
-        z: 0.02,
+        // z: 0.02,
+        z: 0.1,
         ease: 'elastic.out(1, 0.3)',
       })
     }

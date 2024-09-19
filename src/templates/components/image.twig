@@ -20,7 +20,7 @@
 
   {% if asset ?? false or src ?? false %}
     {% set imageModalId = asset ?? false ? 'modal-image-' ~ asset.id : 'modal-' ~ (src ?? '')|kebab %}
-    {% if modal ?? false %}<guide-image-modal modal-id="{{ imageModalId }}">{% endif %}
+    {% if modal ?? false %}<guide-image-modal>{% endif %}
       <picture>
         {% if asset ?? false %}
           {% if transforms|length %}

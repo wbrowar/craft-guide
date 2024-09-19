@@ -1,0 +1,5 @@
+guide-ui-element {
+  & svg {
+    fill: var(--text-color);
+  }
+}

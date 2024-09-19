@@ -1,19 +1,8 @@
 import { LitElement, PropertyValues } from 'lit'
-import { customElement, property, state } from 'lit/decorators.js'
+import { customElement, state } from 'lit/decorators.js'
 
 @customElement('guide-image-modal')
 export class GuideImageModal extends LitElement {
-  /**
-   * ===========================================================================
-   * PROPS
-   * ===========================================================================
-   */
-  /**
-   * TODO
-   */
-  @property({ attribute: 'modal-id', type: String })
-  modalId = ''
-
   /**
    * =========================================================================
    * STATE
@@ -55,7 +44,7 @@ export class GuideImageModal extends LitElement {
     if (this._image) {
       this._image.addEventListener('click', () => this._enlargeImage())
 
-      const container = this.querySelector(`#${this.modalId}`)
+      const container = this.querySelector(`.guide-image-modal`)
 
       this._modal = new window.Garnish.Modal(container, {
         autoShow: false,

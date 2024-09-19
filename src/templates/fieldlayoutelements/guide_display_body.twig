@@ -19,6 +19,7 @@
     'placementSaveSuccess': 'Guide selected for UI Element'|t('guide'),
     'placementDeleteSuccess': 'Guide removed from UI Element'|t('guide'),
     'preview': 'Preview'|t('guide'),
+    'settings': 'Settings'|t('guide'),
   } %}
 
   <guide-ui-element
@@ -26,7 +27,8 @@
       placement-id="{{ placementId }}"
       t-messages="{{ tMessages|json_encode }}"
   >
-    <button slot="settings-button" class="btn small icon settings" type="button">{{ 'Settings'|t('guide') }}</button>
+    <span slot="settings-button" style="color: var(--text-color)">{{ svg('@appicons/gear.svg') }}</span>
+{#    <button slot="settings-button" class="btn small icon settings" type="button">{{ 'Settings'|t('guide') }}</button>#}
     <div slot="guide-display">
       {% if guide ?? false %}
         {% include 'guide/_partials/guide_display.twig' with {

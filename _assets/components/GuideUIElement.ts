@@ -16,14 +16,21 @@ export class GuideUIElement extends LitElement {
     }
     .settings {
       float: inline-end;
+      appearance: none;
       position: relative;
       margin-block-end: var(--m);
       margin-inline-start: var(--m);
-      opacity: var(--settings-opacity, 0.3);
+      padding: 7px;
+      height: 30px;
+      width: 30px;
+      background-color: transparent;
+      border: none;
+      opacity: var(--settings-opacity, 0);
       transition: opacity calc(var(--guide-duration) * 2) ease-out;
+      cursor: pointer;
       z-index: 1;
 
-      &:focus-within {
+      &:focus {
         --settings-opacity: 1;
       }
     }
@@ -175,7 +182,14 @@ export class GuideUIElement extends LitElement {
   render() {
     return html`
       ${!this._guideSelected && this.placementId
-        ? html`<div class="settings"><slot name="settings-button"></slot></div>`
+        ? html`<button
+            class="settings"
+            type="button"
+            title="${this.tMessages.settings}"
+            @click="${this._onSettingsButtonClicked}"
+          >
+            <slot name="settings-button"></slot>
+          </button>`
         : nothing}
       ${this._showSettings && !this._guideSelected ? html`<slot name="settings-display"></slot>` : nothing}
       ${this._showSettings && this._guideSelected ? html`<slot name="guide-selected"></slot>` : nothing}

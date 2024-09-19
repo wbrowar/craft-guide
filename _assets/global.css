@@ -6,8 +6,9 @@
 @import url('components/GuideList.css');
 @import url('components/GuideOrganizer.css');
 @import url('components/GuideSlideoutButton.css');
-@import url('components/TwigComponents.css');
+@import url('components/GuideUIElement.css');
 @import url('components/GuideWelcome.css');
+@import url('components/TwigComponents.css');
 
 :root {
   --guide-border-radius: 0.3rem;
