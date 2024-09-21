@@ -36,7 +36,7 @@
       <div class="hidden">
         <div id="{{ imageModalId }}" class="guide-image-modal modal">
           <div id="modal">
-            <img src="{{ asset ?? false ? asset.url : (src ?? '') }}" />
+            <img data-src="{{ asset ?? false ? asset.url : (src ?? '') }}" />
           </div>
         </div>
       </div>

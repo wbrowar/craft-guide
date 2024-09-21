@@ -29,6 +29,12 @@ export class GuideImageModal extends LitElement {
    * Inserts component code into content editor.
    */
   private _enlargeImage() {
+    const modalImage: HTMLImageElement | null = this.querySelector(`.guide-image-modal img`)
+
+    if (modalImage?.dataset.src) {
+      modalImage.src = modalImage.dataset.src
+      modalImage.removeAttribute('data-src')
+    }
     this._modal?.show()
   }
 

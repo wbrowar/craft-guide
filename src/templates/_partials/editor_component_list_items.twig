@@ -343,7 +343,7 @@ Content
         { mode: 'fit', quality: 80, width: 860 },
       ] }) }}
       {% set assetInfo = [
-        ['Title', asset.title ?? ''],
+        ['Title', '<a href="' ~ asset.cpEditUrl ~ '">' ~ asset.title ~ '</a>' ?? ''],
         ['Alt', asset.alt ?? ''],
         ['Size', asset.width ?? '' ~ ' x ' ~ asset.height ?? ''],
       ] %}
@@ -423,6 +423,10 @@ No images were found for this asset volume.
         }
         & dd {
             text-wrap: balance;
+
+            &:empty {
+                background-color: rgba(242, 0, 255, 0.997);
+            }
         }
     }
 }{% endverbatim %}{% endset %}
