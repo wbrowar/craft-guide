@@ -1,10 +1,18 @@
 <!-- ![Guide 3](resources/img/guide-3-header.png) -->
 
-Craft CMS is intuitive. Marketing plans, processes, and organizational workflows—not so much.
+**Guide is an author’s notebook and a developer’s best friend.**
 
-Guide lets you create a CMS manual or put important information right on edit pages, as Slidouts or UI Elements. Authors don‘t need to go far to get the answers they need.
+Content authors can create and manage their own CMS Guide, create pages in Craft CMS’s Control Panel, and manage their own content shown in widgets and slideout panels on entry edit pages.
 
-Guide is also a quick way to create widgets and unique Craft CMS CP pages, without the use of a custom module or knowledge of PHP.
+Developers can use Guide instead of writing custom modules and site-specific plugins that provide reports, content-editing warnings, and tools that customize the author-experience around Craft CMS’s Control Panel.
+
+Guide makes it easy to share helpful information all around the Craft CMS Control panel, so content authors don‘t need to go far to get the answers they need.
+
+---
+
+Guide content, AKA guides, can be written in Markdown or Twig using the built-in text editor. When using Twig you can use anything available in Craft CMS’s Twig tags, methods, and filters—and you can even use Twig code provided by other plugins.
+
+The Guide Organizer shows you all of the guides in your CMS and makes it easy to add them around the Craft CMS Control Panel. Guides can appear on their own standalone pages, in slideouts, as widgets, and amongst editing fields in UI Elements. With a little CSS know-how you can even use Guide to add HTML elements to the Control Panel UI.
 
 ## Guide 5 for Craft CMS 5+
 
@@ -14,14 +22,14 @@ Guide is also a quick way to create widgets and unique Craft CMS CP pages, witho
 
 ## Editions
 
-The PRO edition of Guide includes a code editor and Twig components that make it easy to place helpful information around the Craft CMS Control Panel (slideouts, standalone CP pages, widgets, UI elements, and any CP URL you specify).
+The **PRO** edition of Guide includes the Guide Organizer and a code editor with Twig components that make it easy to create guides and distribute them throughout the Craft CMS Control Panel (edit page slideouts, standalone CP pages, widgets, UI elements, and any CP URL you specify).
 
-The LITE edition is offered for developers who prefer to write their own guide templates and to display them in the CMS Guide section.
+The **LITE** edition is offered for developers who prefer to write their own guide Twig templates in their favorite code editor and to display them on the CMS Guide page.
 
 > [!TIP]
-> Guide’s edition can be upgraded to PRO at any time.
+> Guide’s edition can be upgraded to **PRO** at any time.
 
-Guide PRO can be purchased in the [Craft Plugin Store](https://plugins.craftcms.com/guide).
+**Guide PRO** can be purchased in the [Craft Plugin Store](https://plugins.craftcms.com/guide).
 
 This documentation includes the features available in the **LITE** edition, but it is written based on all of the features found in the **PRO** edition.
 
@@ -47,7 +55,7 @@ To install the plugin, you can find it in the [Craft Plugin Store](https://plugi
 ## Setup
 
 1. Visit the **Guide Settings** page to configure a couple of setup options. The **Template Path** setting is required for guides to be displayed from Twig files in your project’s `/templates` directory. The `Asset Volume` setting is recommended when screenshots and other images are used in your guide content.
-2. Create your guides using the built-in editor or by selecting templates added to your **Template Path**.
+2. Create your guides using the built-in editor or by selecting templates added to your **Template Path** directory.
 3. Use the **Guide Organizer** to place your guides around the Craft CMS Control Panel.
 
 ---

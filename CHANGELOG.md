@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## 5.0.0 - 2024-12-25
+## 5.0.0 - 2024-10-06
 ### Added
 - Guides in slideouts!
   - On edit pages, guides can be displayed in slideouts or above or below the editing fields.
@@ -14,10 +14,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - A new setting, **Render Markdown Default** sets the initial value when a new guide is created.
 - A new **Guides** list page has been added.
   - Guides can now be created and managed here, instead of in the Guide Organizer.
-- The Guide Organizer has been completely redesigned.
+- The Guide Organizer has been completely redesigned with a focus on keyboard navigation and accessibility.
 - UI Elements have been added as a group in the Guide Organizer.
   - Just like widgets, you can use the Guide Organizer to decide what guides are available in UI Elements.
-- A new **Details** Twig component has been added, letting you hide content via a styled `<details>` tag.
+- A new **Details** Twig component has been added, letting you hide content via a styled `<details>` element.
 - A new `modal` variable has been added to **Image** components—letting you view the full-size image in a Craft CMS modal.
 - A new **Image Contact Sheet** Snippet has been created to provide a paginated contact sheet of images in a certain asset volume.
   - It shows the image as a thumbnail, title, alt, and dimensions of each image and it displays the uploaded original image in a modal when you click on an image thumbnail.
@@ -41,8 +41,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   - If a **Template Path** isn’t set, using templates as a guide source is disabled.
 - **Slideout** is now set as the default value for the **Edit Page Guide Location** setting.
 - **Table** component is now Twig-based.
-- Guide widgets now display the title of the guide regardless of whether or not the title field is hidden.
-- The `Edit Guides` and `Delete Guides` permissions can now be set in Guide LITE.
+- Guide widgets now display the title of the guide in the Dashboard widget manager UI regardless of whether or not the title field is hidden.
+- The `Edit Guides` and `Delete Guides` permissions can now be set in Guide **LITE**.
 
 ### Removed
 - Vue.js and TailwindCSS are no longer used to render guides.
