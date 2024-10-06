@@ -1,0 +1,62 @@
+{# /**
+ * Guide plugin for Craft CMS
+ *
+ * Guide Widget Body
+ *
+ * @author    Will Browar
+ * @copyright Copyright (c) 2019 Will Browar
+ * @link      https://wbrowar.com
+ * @package   Guide
+ * @since     2.0.0
+ */ #}
+
+{% extends "_layouts/cp" %}
+{% requirePermission 'editGuides' %}
+
+{# The title of this CP section #}
+{% set title = "Guides"|t('guide') %}
+
+{# The selected CP subnav item #}
+{% set selectedSubnavItem = 'list' %}
+
+{% block actionButton %}
+  <div class="buttons">
+    {% include 'guide/_partials/slideout_button.twig' with { docs: true, label: 'Docs'|t('guide'), slug: 'guide-list' } only %}
+
+    {% if userOperations.editGuides %}
+      {% if proEdition %}
+        <a class="btn add icon secondary" href="{{ cpUrl('utilities/guide-export-import') }}">{{ 'Import Guides'|t('guide') }}</a>
+      {% endif %}
+
+      <a class="btn add icon submit" href="{{ cpUrl('guide/new') }}">{{ 'New Guide'|t('guide') }}</a>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% set tMessages = {
+  'copyToClipboard': 'Copy guide slug to clipboard'|t('guide'),
+  'copiedToClipboard': 'Copied to clipboard'|t('guide'),
+  'edit': 'Edit'|t('guide'),
+  'delete': 'Delete'|t('guide'),
+  'listEmpty': 'No guides have been created yet. Use the New Guide button to create your first guide.'|t('guide'),
+  'tooltipInGuide': 'Determines if guide is included on the main Guide page.'|t('guide'),
+  'tooltipSlug': 'The slug is used when embedding one guide into another.'|t('guide'),
+  'placementDeleteSuccess': '[guide] has been removed from the Guide home page.'|t('guide'),
+  'placementSaveSuccess': '[guide] has been added to the Guide home page.'|t('guide'),
+  'preview': 'Preview'|t('guide'),
+} %}
+
+{% set tableHeaders = [
+  { handle: 'title', label: 'Title'|t('guide') },
+  { handle: 'summary', label: 'Summary'|t('guide') },
+  { handle: 'slug', label: 'Slug'|t('guide') },
+  { handle: 'cmsGuide', label: 'CMS Guide'|t('guide') },
+  { handle: 'actions', label: 'Actions'|t('guide') },
+] %}
+
+{% set content %}
+  <guide-list
+      t-messages="{{ tMessages|json_encode }}"
+      table-headers="{{ tableHeaders|json_encode }}"
+  ></guide-list>
+{% endset %}

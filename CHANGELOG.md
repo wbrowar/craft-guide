@@ -4,6 +4,53 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.0.0 - 2024-10-06
+### Added
+- Guides in slideouts!
+  - On edit pages, guides can be displayed in slideouts or above or below the editing fields.
+  - Added **Slideout** option to **Edit Page Guide Location** setting to set this location.
+- Guides can now be rendered in Markdown without using Twig filters.
+  - This can be turned on or off on a per-guide basis.
+  - A new setting, **Render Markdown Default** sets the initial value when a new guide is created.
+- A new **Guides** list page has been added.
+  - Guides can now be created and managed here, instead of in the Guide Organizer.
+- The Guide Organizer has been completely redesigned with a focus on keyboard navigation and accessibility.
+- UI Elements have been added as a group in the Guide Organizer.
+  - Just like widgets, you can use the Guide Organizer to decide what guides are available in UI Elements.
+- A new **Details** Twig component has been added, letting you hide content via a styled `<details>` element.
+- A new `modal` variable has been added to **Image** components—letting you view the full-size image in a Craft CMS modal.
+- A new **Image Contact Sheet** Snippet has been created to provide a paginated contact sheet of images in a certain asset volume.
+  - It shows the image as a thumbnail, title, alt, and dimensions of each image and it displays the uploaded original image in a modal when you click on an image thumbnail.
+- A new Component and a new Snippet have been created to make it easier to create Content Stats.
+  - The component lets you pick the element type and it will display live, disabled, pending, and expired totals (based on the element picked).
+  - The snippet provides a wrapper element and some CSS that lets you put multiple **Content Stats** components together in a flex layout.
+- A new component and two new snippets have been created to create changelogs for your project.
+  - The snippets show either a simple way to create a changelog using arrays or a more complicated way of using Markdown and HTML.
+- Guides can now include custom CSS and JavaScript via code fields added to the Guide Editor.
+  - New settings have been created to enable or disable custom CSS and JavaScript. Setting these to **off** will disable the CSS or JavaScript from rendering on the page, along with hiding their respective field.
+  - **Enable CSS Field** is **on** by default.
+  - **Enable JavaScript Field** is **off** by default.
+- Static text can now be translated via Craft CMS’s translation tools.
+- Rows in the `guide_placements` table are now cleaned up whenever a guide is deleted from the system.
+
+### Changed
+- The Guide index page has been renamed, **CMS Guide**.
+  - When no guides have been added to the site you no longer get redirected off of the page.
+- The settings page now submits all settings at once, instead of having one page per setting tab.
+- The **Template Path** and **Asset Volume** settings are no longer required.
+  - If a **Template Path** isn’t set, using templates as a guide source is disabled.
+- **Slideout** is now set as the default value for the **Edit Page Guide Location** setting.
+- **Table** component is now Twig-based.
+- Guide widgets now display the title of the guide in the Dashboard widget manager UI regardless of whether or not the title field is hidden.
+- The `Edit Guides` and `Delete Guides` permissions can now be set in Guide **LITE**.
+
+### Removed
+- Vue.js and TailwindCSS are no longer used to render guides.
+  - Vue Variables and Guide Utility Classes have been removed.
+- Removed `TL;DR` toggle button.
+  - The concept for this has been replaced by the new **Details** Twig component.
+
+
 ## 4.0.0 - 2024-08-11
 ### Added
 - Added support for Craft 5.

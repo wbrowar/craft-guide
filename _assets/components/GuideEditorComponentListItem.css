@@ -1,0 +1,40 @@
+guide-editor-component-list-item {
+  display: block;
+  border-block-start: 1px solid var(--hairline-color);
+  padding-block: 2em;
+
+  &:hover {
+    background-color: var(--gray-050);
+    outline: 10px solid var(--gray-050);
+  }
+
+  div:first-child:has(img) {
+    display: grid;
+    grid-template-columns: 40% 1fr;
+    gap: var(--m);
+
+    img {
+      width: 100%;
+      border-radius: var(--guide-border-radius);
+    }
+  }
+  button.btn {
+    background-color: var(--guide-editor-component-list-item-button-background-color, var(--ui-control-bg-color));
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--guide-editor-component-list-item-button-background-color, var(--ui-control-bg-color)), rgb(1, 16, 99) 10%);
+    }
+  }
+  dl {
+    display: grid;
+    grid-template-columns: minmax(80px, max-content) auto;
+    gap: var(--s);
+    border: 2px solid var(--hairline-color);
+    border-radius: var(--guide-border-radius);
+    padding: var(--s);
+
+    & dt {
+      font-weight: 600;
+    }
+  }
+}

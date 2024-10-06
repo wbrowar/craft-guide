@@ -1,151 +1,44 @@
-/*
- * Add global CSS
- */
+@import url('components/GuideBook.css');
+@import url('components/GuideDisplay.css');
+@import url('components/GuideEditor.css');
+@import url('components/GuideEditorComponentListItem.css');
+@import url('components/GuideImageModal.css');
+@import url('components/GuideList.css');
+@import url('components/GuideOrganizer.css');
+@import url('components/GuideSlideoutButton.css');
+@import url('components/GuideUIElement.css');
+@import url('components/GuideWelcome.css');
+@import url('components/TwigComponents.css');
 
-@tailwind base;
+:root {
+  --guide-border-radius: 0.3rem;
+  --guide-color-blue: rgb(126, 159, 195);
+  --guide-color-blue: oklch(69.1% .065 250.97);
+  --guide-color-blue-bg: rgb(66, 97, 130);
+  --guide-color-blue-bg: oklch(48.37% .065 250.97);
+  --guide-top: 0;
+  --guide-duration: 0.1s;
+}
+
+@media(prefers-reduced-motion) {
+  --guide-duration: 0.001s;
+}
+
+/* Override `--guide-top` based on other elements rendered nearby. */
+#main:has(#header) #content {
+  --guide-top: var(--header-height);
+}
+
+/* Enable scrolling on slideouts that render guides. */
+[data-slideout]:has(.guide) {
+  overflow: auto;
+}
 
 .fpo {
   background-color: rgba(255, 0, 255, 0.9);
   outline: rgba(255, 0, 255, 0.9) solid 4px;
   color: white !important;
 }
-.guide-accent-primary {
-  accent-color: #7e9fc3;
-}
-
-/* Wrapper */
-.guide {}
-/* Same as `g-space-y-6` with .guide-edit-button included */
-.guide > :not([hidden]):not(.guide-edit-button) ~ :not([hidden]) {
-  --tw-space-y-reverse: 0;
-  margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
-  margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
-}
-
-/* Elements */
-.guide code {
-  background-color: hsla(209, 20%, 25%, 0.2);
-  outline: 4px solid hsla(209, 20%, 25%, 0.2);
-  word-break: break-word;
-  color: hsl(209, 20%, 25%);
-}
-.guide pre {
-  padding: 15px;
-  background-color: hsla(209, 20%, 25%, 0.2);
-  border-radius: 5px;
-  white-space: pre-wrap;
-}
-.guide pre code {
-  background-color: transparent;
-  outline-color: transparent;
-}
-
-/* Components */
-.guide .g-heading {
-  position: relative;
-  scroll-margin-top: 70px;
-}
-.guide .g-heading:hover::before {
-  content: '#';
-  display: block;
-  position: absolute;
-  top: 0;
-  left: calc(-1ch * 1.3);
-}
-.guide .g-heading a {
-  @apply g-text-text g-no-underline;
-}
-
-.guide .g-image {
-  @apply g-rounded-lg g-shadow-lg g-text-text;
-  display: block;
-  max-width: 100%;
-  height: auto;
-  line-height: 0;
-}
-
-.guide :is(.g-iframe, .g-video) {
-  @apply g-rounded-lg g-shadow-lg g-text-text;
-  display: block;
-  aspect-ratio: var(--aspect-ratio, 16 / 9);
-  width: 100%;
-  height: auto;
-  line-height: 0;
-}
-@media (max-width: 1199px) {
-  .guide .g-iframe {
-    aspect-ratio: var(--aspect-ratio, 1 / 1);
-  }
-}
-@media (max-width: 699px) {
-  .guide .g-iframe {
-    aspect-ratio: var(--aspect-ratio, 3 / 5);
-  }
-}
-
-.guide .g-table {
-  width: 100%;
-  border: 1px solid hsla(209, 20%, 25%, 0.9);
-  border-radius: 5px;
-}
-.guide .g-table thead {
-  border-radius: calc(5px * .5) calc(5px * .5) 0 0;
-  background-color: hsla(209, 20%, 25%, 0.9);
-}
-.guide .g-table thead :is(th, td) {
-  padding: 10px;
-  font-weight: 500;
-  color: #FFFFFF;
-}
-/* todo fix this*/
-.guide .g-table th:first-child {
-  border-radius: calc(5px * .5) 0 0 0;
-}
-.guide .g-table td:last-child {
-  border-radius: 0 calc(5px * .5) 0 0;
-}
-
-.guide .g-table tbody tr {
-  border-bottom: 1px solid hsla(209, 20%, 25%, 0.9);
-  border-right: 1px solid hsla(209, 20%, 25%, 0.9);
-}
-.guide .g-table tbody td {
-  padding: 10px;
-  border-top: 1px solid hsla(209, 20%, 25%, 0.9);
-  border-left: 1px solid hsla(209, 20%, 25%, 0.9);
-}
-.guide .g-table tbody td:first-child {
-  border-left: none;
-}
-.guide .g-table tbody tr:first-child td {
-  border-top: none;
-}
-
-@tailwind components;
-@tailwind utilities;
-
-/* Tailwind Typography overrides */
-body.ltr .g-prose ol {
-  padding-left: 0;
-}
-.g-prose ol li {
-  list-style: none;
-}
-
-/* Hide scrollbar for Chrome, Safari and Opera */
-.g-scoll-hide::-webkit-scrollbar {
-  display: none;
-}
-/* Hide scrollbar for IE, Edge and Firefox */
-.g-scoll-hide {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-}
-
-/* TL;DR */
-.guide:not(.guide-tldr) .tldr-show {
-  display: none;
-}
-.guide.guide-tldr .tldr-hide {
-  display: none;
+.guide-select-string {
+  user-select: all;
 }

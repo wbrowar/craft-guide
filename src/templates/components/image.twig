@@ -11,25 +11,36 @@
 
 {% set alt = alt ?? image.title ?? '' %}
 {% set transforms = transforms ?? [
-  { mode: 'fit', quality: 90, width: 700 },
-  { mode: 'fit', quality: 90, width: 1400 },
+  { mode: 'fit', quality: 85, width: 900 },
+  { mode: 'fit', quality: 85, width: 1800 },
 ] %}
 
 {% block content -%}
   {% import _self as self %}
 
   {% if asset ?? false or src ?? false %}
-    <picture>
-      {% if asset ?? false %}
-        {% if transforms|length %}
-          <img class="g-image" srcset="{{ self.getSrcSetFromObject({ image: asset, transforms: transforms }) }}" src="{{ placeholder }}" loading="lazy" width="{{ asset.width }}" height="{{ asset.height }}" sizes="{{ sizes }}" alt="{{ alt ?? asset.title }}" />
-        {% else %}
-          <img class="g-image" src="{{ asset.url }}" loading="lazy" width="{{ asset.width }}" height="{{ asset.height }}" alt="{{ alt ?? asset.title }}" />
+    {% set imageModalId = asset ?? false ? 'modal-image-' ~ asset.id : 'modal-' ~ (src ?? '')|kebab %}
+    {% if modal ?? false %}<guide-image-modal>{% endif %}
+      <picture>
+        {% if asset ?? false %}
+          {% if transforms|length %}
+            <img srcset="{{ self.getSrcSetFromObject({ image: asset, transforms: transforms }) }}" src="{{ placeholder }}" loading="lazy" width="{{ asset.width }}" height="{{ asset.height }}" sizes="{{ sizes }}" alt="{{ alt ?? asset.title }}" />
+          {% else %}
+            <img src="{{ asset.url }}" loading="lazy" width="{{ asset.width }}" height="{{ asset.height }}" alt="{{ alt ?? asset.title }}" />
+          {% endif %}
+        {% elseif src ?? false %}
+          <img src="{{ src }}" loading="lazy" alt="{{ alt }}" />
         {% endif %}
-      {% elseif src ?? false %}
-        <img class="g-image" src="{{ src }}" loading="lazy" alt="{{ alt }}" />
-      {% endif %}
-    </picture>
+      </picture>
+    {% if modal ?? false %}
+      <div class="hidden">
+        <div id="{{ imageModalId }}" class="guide-image-modal modal">
+          <div id="modal">
+            <img data-src="{{ asset ?? false ? asset.url : (src ?? '') }}" />
+          </div>
+        </div>
+      </div>
+    </guide-image-modal>{% endif %}
     {% if caption ?? false -%}
       <figcaption class="{{ rootClass }}__caption">{{ caption }}</figcaption>
     {%- endif %}

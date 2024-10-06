@@ -19,16 +19,17 @@
 {% endif %}
 
 {# The title of this CP section #}
-{% set title = guide.title ?? "Guide" %}
+{% set title = guide.title ?? "Guide"|t('guide') %}
 
-{# The URL to this plugin's base CP section #}
-{% set pluginCpUrl = url('guide') %}
+{# The selected CP subnav item #}
+{% set selectedSubnavItem = 'list' %}
 
 {% block actionButton %}
   <div class="buttons">
     {% if userOperations.editGuides %}
       <a class="btn edit icon" href="{{ url('guide/edit/' ~ guide.id, 'return=' ~ craft.app.request.url) }}">Edit Guide</a>
     {% endif %}
+
     {% if userOperations.deleteGuides %}
       <a class="btn delete icon" href="{{ url('guide/delete/' ~ guide.id, 'return=' ~ craft.app.request.url) }}">Delete Guide</a>
     {% endif %}

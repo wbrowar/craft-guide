@@ -18,20 +18,28 @@
 {% endif %}
 
 {# The title of this CP section #}
-{% set title = "Guide Settings" %}
+{% set title = "Guide Settings"|t('guide') %}
 
 {# The selected CP subnav item #}
 {% set selectedSubnavItem = 'settings' %}
 
-{# {% set selectedTab = 'ho' %} #}
 {% set tabs = {
-  'general': { label: 'General', url: 'general' },
-  'variables': { label: 'Variables', url: 'variables' },
+  "general": {label: "General"|t('guide'), url: "#general"},
 } %}
+{% if proEdition %}
+  {% set tabs = tabs|merge({
+    "editing": {label: "Editing"|t('guide'), url: "#editing"},
+  }) %}
+{% endif %}
+{% set tabs = tabs|merge({
+  "variables": {label: "Variables"|t('guide'), url: "#variables"},
+}) %}
 
 {% set fullPageForm = true %}
 
 {% block actionButton %}
+  {% include 'guide/_partials/slideout_button.twig' with { docs: true, label: 'Docs'|t('guide'), slug: 'guide-settings' } only %}
+
   <input class="btn submit" type="submit" value="Save">
 {% endblock %}
 
@@ -39,60 +47,123 @@
   {% import _self as self %}
 
   <input type="hidden" name="action" value="guide/settings">
-  <input type="hidden" name="page" value="{{ selectedTab }}">
 
-  {% switch selectedTab %}
-  {% case 'general' %}
+  <div id="general">
     {{ forms.textField({
-      label: 'Template Path',
+      label: 'Template Path'|t('guide'),
       id: 'templatePath',
       name: 'templatePath',
-      required: true,
+      placeholder: '_guide',
       value: settings.templatePath,
-      instructions: 'A path inside of the **templates** directory where Guide will look for templates.',
+      instructions: 'A path inside the **templates** directory where Guide will look for templates.'|t('guide'),
     }) }}
 
     {% set volumes = craft.app.volumes.allVolumes %}
-    {% set options = [{ label: 'Select One', value: 0 }] %}
+    {% set options = [{ label: 'Select A Volume'|t('guide'), value: '' }] %}
     {% for item in volumes %}
       {% set options = options|merge([{ label: item.name, value: item.uid }]) %}
     {% endfor %}
 
+    {% set assetVolumeInstructions = 'An asset volume where Guide will look for images.'|t('guide') %}
+    {% if settings.assetVolume == '' %}
+      {% set assetVolumeInstructions = assetVolumeInstructions ~ ' ' ~ '<a class="go" href="' ~ cpUrl('settings/assets/volumes/new') ~ '">' ~ 'Create a New Volume'|t('guide') ~ '</a>' %}
+    {% endif %}
     {{ forms.selectField({
-      label: 'Asset Volume',
+      label: 'Asset Volume'|t('guide'),
       id: 'assetVolume',
       name: 'assetVolume',
       options: options,
-      required: true,
       value: settings.assetVolume,
-      instructions: 'An asset volume that stores all images and videos used in guides.',
+      instructions: assetVolumeInstructions,
     }) }}
 
-    {% if settings.assetVolume == '0' %}
-      <p>An asset volume is required to view guides. Please create a new volume and select it here.</p>
-      <p>
-        <a class="go" href="{{ url('settings/assets/volumes/new') }}">Create a New Volume</a>
-      </p>
-    {% endif %}
 
     {% if proEdition %}
+      <hr>
       {% set options = [
-        { label: 'Above edit fields', value: 'prepend' },
-        { label: 'Below edit fields', value: 'append' },
+        { label: 'Slideout (opened by a button in the sidebar)'|t('guide'), value: 'slideout' },
+        { label: 'Above edit fields'|t('guide'), value: 'prepend' },
+        { label: 'Below edit fields'|t('guide'), value: 'append' },
       ] %}
       {{ forms.selectField({
-        label: 'Edit Page Guide Location',
-        id: 'defaultTeleportMethod',
-        name: 'defaultTeleportMethod',
+        label: 'Edit Page Guide Location'|t('guide'),
+        id: 'editPageLocation',
+        name: 'editPageLocation',
         options: options,
-        required: true,
-        value: settings.defaultTeleportMethod,
-        instructions: 'Determine if guides should appear above or below content editing fields on element edit pages.',
+        value: settings.editPageLocation,
+        instructions: 'Determine where guides should be displayed on element edit pages.'|t('guide'),
+      }) }}
+
+      {{ forms.textField({
+        label: 'Guide Button Label'|t('guide'),
+        id: 'guideButtonLabel',
+        name: 'guideButtonLabel',
+        placeholder: 'Guide',
+        value: settings.guideButtonLabel,
+        instructions: 'The label shown on Guide Buttons on edit pages.'|t('guide'),
       }) }}
     {% else %}
-      <input type="hidden" name="defaultTeleportMethod" value="prepend">
+      <input type="hidden" name="editPageLocation" value="slideout">
+      <input type="hidden" name="guideButtonLabel" value="">
     {% endif %}
-  {% case 'variables' %}
+
+    {% if settings.fun %}
+      <hr>
+      {% set instructionsShuffle = shuffle([
+        'A feature, not a bug.'|t('guide'),
+        'Got 100 problems, but a one-off error ain’t one.'|t('guide'),
+        'Reticulates splines.'|t('guide'),
+        'Turning this off reduces Guide asset file sizes.'|t('guide'),
+        'Turns it up to 11.'|t('guide'),
+      ]) %}
+
+      {% set funInstructions = instructionsShuffle|last %}
+    {% else %}
+      {% set funInstructions = 'Enables non-essential visual enhancements.'|t('guide') %}
+    {% endif %}
+
+    {{ forms.lightswitchField({
+      label: 'Fun'|t('guide'),
+      id: 'fun',
+      name: 'fun',
+      on: settings.fun,
+      instructions: funInstructions,
+    }) }}
+  </div>
+
+  {% if proEdition %}
+    <div id="editing" class="hidden">
+      {{ forms.lightswitchField({
+        label: 'Render Markdown Default'|t('guide'),
+        id: 'renderMarkdownDefault',
+        name: 'renderMarkdownDefault',
+        on: settings.renderMarkdownDefault,
+        instructions: 'The default value of the Render Markdown field in the Guide Editor. This can be overridden on a per-guide basis.'|t('guide'),
+      }) }}
+
+      {{ forms.lightswitchField({
+        label: 'Enable CSS Field'|t('guide'),
+        id: 'enableGuideCss',
+        name: 'enableGuideCss',
+        on: settings.enableGuideCss,
+        instructions: 'Enable CSS field to appear in the Guide Editor.'|t('guide'),
+      }) }}
+
+      {{ forms.lightswitchField({
+        label: 'Enable JavaScript Field'|t('guide'),
+        id: 'enableGuideJavascript',
+        name: 'enableGuideJavascript',
+        on: settings.enableGuideJavascript,
+        instructions: 'Enable JavaScript field to appear in the Guide Editor.'|t('guide'),
+      }) }}
+    </div>
+  {% else %}
+    <input type="hidden" name="renderMarkdownDefault" value="0">
+    <input type="hidden" name="enableGuideCss" value="0">
+    <input type="hidden" name="enableGuideJavascript" value="0">
+  {% endif %}
+
+  <div id="variables" class="hidden">
     {% set classicCompanies = shuffle([
       'Happy Lager',
       'The Museum of Euro Art',
@@ -101,43 +172,43 @@
     ]) %}
 
     {{ forms.textField({
-      label: 'Project Name',
+      label: 'Project Name'|t('guide'),
       id: 'projectName',
       name: 'projectName',
       value: settings.projectName,
-      instructions: 'The name of the project. Twig tag: **{{ craft.guide.var("projectName") }}**',
-      placeholder: classicCompanies|last ~ '’s Website'
+      instructions: 'The name of the project. Twig tag:'|t('guide') ~ ' <strong class="guide-select-string">{{ craft.guide.var("projectName") }}</strong>',
+      placeholder: settings.fun ? classicCompanies|last ~ '’s Website' : '',
     }) }}
 
     {{ forms.textField({
-      label: 'Client Name',
+      label: 'Client Name'|t('guide'),
       id: 'clientName',
       name: 'clientName',
       value: settings.clientName,
-      instructions: 'The name of the person or organization that the website is built for. Twig tag: **{{ craft.guide.var("clientName") }}**',
-      placeholder: classicCompanies|last
+      instructions: 'The name of the person or organization that the website is built for. Twig tag:'|t('guide') ~ ' <strong class="guide-select-string">{{ craft.guide.var("clientName") }}</strong>',
+      placeholder: settings.fun ? classicCompanies|last : '',
     }) }}
 
     {% set classicCompaniesLast = classicCompanies|last %}
     {% set classicCompanies = classicCompanies|without(classicCompaniesLast) %}
     {{ forms.textField({
-      label: 'My Company Name',
+      label: 'My Company Name'|t('guide'),
       id: 'myCompanyName',
       name: 'myCompanyName',
       value: settings.myCompanyName,
-      instructions: 'The name of the person or organization that built the website. Twig tag: **{{ craft.guide.var("myCompanyName") }}**',
-      placeholder: classicCompanies|last
+      instructions: 'The name of the person or organization that built the website. Twig tag:'|t('guide') ~ ' <strong class="guide-select-string">{{ craft.guide.var("myCompanyName") }}</strong>',
+      placeholder: settings.fun ? classicCompanies|last : '',
     }) }}
-  {% endswitch %}
+  </div>
 
   {% if not proEdition and currentUser.admin %}
     <hr>
     <div class="readable">
       <blockquote class="note tip">
-        <strong>Thanks for using the LITE edition of Guide!</strong>
-        <p>The PRO edition of Guide offers a drag-and-drop editor that includes snippets and components, lets you display guides—and contextually useful information—on content edit pages or on any page within the Craft CP, and makes it easy to create standalone CP pages, widgets, and UI elements.</p>
+        <strong>{{ 'Thanks for using the LITE edition of Guide!'|t('guide') }}</strong>
+{#        <p>{{ 'The PRO edition of Guide offers a drag-and-drop editor that includes snippets and components, lets you display guides—and contextually useful information—on content edit pages or on any page within the Craft CP, and makes it easy to create standalone CP pages, widgets, and UI elements.'|t('guide') }}</p>#}
         <p>
-          <a class="go" href="{{ url('plugin-store/guide') }}">Check out Guide PRO in the Plugin Store</a>
+          <a class="go" href="{{ url('plugin-store/guide') }}">{{ 'Check out Guide PRO in the Plugin Store'|t('guide') }}</a>
         </p>
       </blockquote>
     </div>

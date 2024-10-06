@@ -1,0 +1,23 @@
+.guide-editor {
+  container-name: guide-editor;
+  container-type: inline-size;
+}
+guide-editor {
+  &:not(:defined) * {
+    display: none;
+  }
+  & .guide-tab-icon {
+    width: 20px;
+    height: 20px;
+
+    & svg {
+      fill: var(--guide-tab-icon-svg-fill);
+    }
+  }
+}
+
+#content:has(guide-editor) {
+  & .monaco-editor {
+    border-radius: var(--guide-border-radius);
+  }
+}

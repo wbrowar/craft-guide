@@ -1,0 +1,25 @@
+guide-welcome {
+  display: block;
+  margin-block-end: var(--xl);
+
+  & + div {
+    max-width: 70ch;
+    margin-inline: auto;
+    text-wrap: pretty;
+  }
+
+  & :is(.guide-tab-icon-pause, .guide-tab-icon-play) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & svg {
+      width: 100%;
+      height: 100%;
+      fill: var(--guide-color-blue);
+    }
+  }
+  & .guide-tab-icon-play {
+    transform: translateX(2px);
+  }
+}

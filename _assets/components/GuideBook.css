@@ -1,0 +1,14 @@
+.guide-book-binding {
+  margin-block-start: calc(var(--xl) * 2);
+  padding-block-start: var(--s);
+  border-block-start: 1px solid var(--hairline-color);
+}
+
+guide-book {
+  display: block;
+  max-width: 90px;
+
+  @container guide-display (width>600px) {
+    transform: translateX(-16px);
+  }
+}

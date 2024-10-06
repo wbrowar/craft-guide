@@ -1,6 +1,6 @@
 <?php
 /**
- * Guide plugin for Craft CMS 3.x
+ * Guide plugin for Craft CMS 5.x
  *
  * A CMS Guide for Craft CMS.
  *
@@ -10,13 +10,12 @@
 
 namespace wbrowar\guide\controllers;
 
+use Craft;
 use craft\helpers\StringHelper;
 use craft\helpers\UrlHelper;
+use craft\web\Controller;
 use wbrowar\guide\Guide;
 use wbrowar\guide\models\Guide as GuideModel;
-
-use Craft;
-use craft\web\Controller;
 
 /**
  * @author    Will Browar
@@ -55,7 +54,10 @@ class GuideController extends Controller
             $guide->delete();
         }
 
-        return $this->redirect(UrlHelper::url($params['redirect'] ?? 'guide/organizer'));
+        // Remove placements associated with all deleted guides.
+        Guide::$plugin->placement->cleanUpOrphanedPlacements();
+
+        return $this->redirect(UrlHelper::url($params['redirect'] ?? 'guide/list'));
     }
 
     /**
@@ -69,28 +71,30 @@ class GuideController extends Controller
     {
         $params = Craft::$app->getRequest()->getBodyParams();
 
-        $title = !empty($params['title']) ? $params['title'] : 'Guide saved on ' . Date('F jS \a\t g:ia');
-
+        $title = !empty($params['title']) ? $params['title'] : 'Untitled Guide saved on ' . Date('F jS \a\t g:ia');
         $slug = ($params['slug'] ?? false) ? $params['slug'] : $this->generateSlugFromTitle($title);
+        $totalGuides = Guide::$plugin->guide->getGuides([], 'count') ?? 0;
+        $weight = $params['weight'] ?? ($totalGuides + 1);
 
         $guide = new GuideModel([
             'authorId' => $params['authorId'],
-            'content' => $params['content'],
-            'contentSource' => $params['contentSource'] ?? 'field',
+            'content' => $params['contentEditor'],
+            'contentCss' => $params['contentCss'],
+            'contentJavascript' => $params['contentJavascript'],
+            'contentSource' => !empty($params['contentSource']) && Guide::$pro ? $params['contentSource'] : 'template',
             'contentUrl' => $params['contentUrl'],
+            'renderMarkdown' => $params['renderMarkdown'],
             'slug' => $slug,
             'summary' => $params['summary'],
             'template' => $params['template'],
             'title' => $title,
+            'weight' => $weight,
         ]);
 
         if ($guide->validate()) {
             Guide::$plugin->guide->saveGuide($guide, $params['id'] ?? null);
 
-            return $this->redirect(UrlHelper::url($params['redirect'] ?? 'guide/organizer'));
-        } else {
-            // @TODO handle error correctly
-//            Craft::dd('Error');
+            return $this->redirect(UrlHelper::url($params['redirect'] ?? 'guide/list'));
         }
     }
 

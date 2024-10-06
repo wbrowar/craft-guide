@@ -11,23 +11,45 @@
  */ #}
 
 {% extends "_layouts/cp" %}
+{% if not userOperations.useOrganizer %}
+  {% redirect 'guide/list' %}
+{% endif %}
 {% requirePermission 'useOrganizer' %}
 
 {# The title of this CP section #}
-{% set title = "Guide Organizer" %}
+{% set title = "Guide Organizer"|t('guide') %}
 
 {# The selected CP subnav item #}
 {% set selectedSubnavItem = 'organizer' %}
 
 {% block actionButton %}
-  <div id="guide-action-buttons"></div>
+  {% include 'guide/_partials/slideout_button.twig' with { docs: true, label: 'Docs'|t('guide'), slug: 'guide-organizer' } only %}
+
+  {% if userOperations.editGuides %}
+    <div id="guide-action-buttons">
+      <a class="btn add icon submit" href="{{ cpUrl('guide/new') }}">New Guide</a>
+    </div>
+  {% endif %}
 {% endblock %}
 
+{% set tMessages = {
+  'addAGuide': 'Add a Guide'|t('guide'),
+  'addGuideToGroupOptionDefault': 'Select a guide to add it to'|t('guide'),
+  'emptyGroup': 'No guides have been added to this group. Select a guide from the select field below.'|t('guide'),
+  'guidesDisplayed': 'Guides'|t('guide'),
+  'placementDeleteSuccess': '[guide] has been removed.'|t('guide'),
+  'placementSaveSuccess': '[guide] has been added to [group].'|t('guide'),
+  'placementUriSaveSuccess': 'Control Panel Page guide has been updated.'|t('guide'),
+  'preview': 'Preview'|t('guide'),
+  'remove': 'Remove'|t('guide'),
+  'uriPlacementIsValid': 'The settings for this guide are valid. A uri and a selector have been added.'|t('guide'),
+  'uriPlacementIsInvalid': 'The settings for this guide are not valid. Please add both a uri and a selector.'|t('guide'),
+} %}
+
 {% set content %}
-  <div
-    id="guide-organizer"
-    data-action-url-get-all-placements="{{ actionUrl('guide/placement/get-all-placements') }}"
-    data-cp-trigger="{{ craft.app.config.general.cpTrigger }}"
-    data-groups-data="{{ groupsData|json_encode }}"
-  ></div>
+  <guide-organizer
+      action-url-get-all-placements="{{ actionUrl('guide/placement/get-all-placements') }}"
+      t-messages="{{ tMessages|json_encode }}"
+      groups-data="{{ groupsData|json_encode }}"
+  ></guide-organizer>
 {% endset %}

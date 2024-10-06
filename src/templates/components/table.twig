@@ -1,0 +1,31 @@
+{% extends 'guide/_partials/render_component.twig' %}
+
+{% set element = 'table' %}
+
+{% block content -%}
+  {% if headers ?? false and headers|length %}
+    <thead><tr>
+      {% for cell in headers %}
+        <th>{{ cell }}</th>
+      {% endfor %}
+    </tr></thead>
+  {% endif %}
+  {% if rows ?? false and rows|length %}
+    <tbody>
+      {% for row in rows %}
+        <tr>
+          {% for cell in row %}
+            <td>{{ cell }}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  {% endif %}
+  {% if footers ?? false and footers|length %}
+    <tfoot><tr>
+      {% for cell in footers %}
+        <td>{{ cell }}</td>
+      {% endfor %}
+    </tr></tfoot>
+  {% endif %}
+{%- endblock %}

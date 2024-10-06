@@ -1,0 +1,671 @@
+{# /**
+ * Guide plugin for Craft CMS
+ *
+ * @author    Will Browar
+ * @copyright Copyright (c) 2021 Will Browar
+ * @link      https://wbrowar.com
+ * @package   Guide
+ * @since     5.0.0
+ */ #}
+
+{% set components = [] %}
+{% set guides = [] %}
+{% set images = [] %}
+{% set snippets = [] %}
+
+
+{# Components #}
+{% set contentCode %}{% verbatim %}{{ craft.guide.component('audio', { src: 'REPLACE_URL' }) }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Audio'|t('guide'),
+  contentCode,
+  group: 'components',
+  summary: '<p>Play audio in the browser’s audio player.</p>'|t('guide'),
+  props: {
+    src: 'A absolute URL to your audio file.'|t('guide'),
+  },
+}]) %}
+
+{% set contentCode %}{% verbatim %}{{ craft.guide.component('button', { label: 'REPLACE_LABEL', url: url('REPLACE_URL') }) }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Button'|t('guide'),
+  contentCode,
+  group: 'components',
+  summary: '<p>A call-to-action link that looks like a button.</p>'|t('guide'),
+  props: {
+    label: 'The label text for the button.'|t('guide'),
+    href: 'The URL that the button goes to when clicked.'|t('guide'),
+  },
+}]) %}
+
+{% set contentCode %}{% verbatim %}{{ craft.guide.component('content-stats', { type: 'entries' }) }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Content Stats'|t('guide'),
+  contentCode,
+  group: 'components',
+  summary: '<p>See the total number of entries and their statuses for an element type.</p>'|t('guide'),
+  props: {
+    group: 'If showing content stats for categories, specifcy the group handle.'|t('guide'),
+    label: 'A label that sits under the total number.'|t('guide'),
+    section: 'If showing content stats for entries, specifcy the section handle.'|t('guide'),
+    type: 'The type of element to be displayed. Options: assets, categories, entries, users'|t('guide'),
+    volume: 'If showing content stats for assets, specifcy the asset volume handle.'|t('guide'),
+  },
+}]) %}
+
+{% set contentCode %}{% verbatim %}{% set detailsContent %}{% apply markdown('gfm') %}
+REPLACE_TEXT
+{% endapply %}{% endset %}
+{{ craft.guide.component('details', { content: detailsContent }) }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Details'|t('guide'),
+  contentCode,
+  group: 'components',
+  summary: '<p>Hide extra information within a details element.</p>'|t('guide'),
+  props: {
+    content: 'Text displayed when the details element is opened.'|t('guide'),
+    open: 'A boolean that toggles the details element to be opened or closed. Defaults to `false`'|t('guide'),
+    summary: 'The label of the button that toggles the details element open and close.'|t('guide'),
+  },
+}]) %}
+
+{% set contentCode %}{% verbatim %}{{ craft.guide.component('guide-button', { slug: 'REPLACE_GUIDE_SLUG' }) }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Guide Button'|t('guide'),
+  contentCode,
+  group: 'components',
+  summary: '<p>A button that opens up a guide in a slideout.</p>'|t('guide'),
+  props: {
+    label: 'The label of the button.'|t('guide'),
+    slug: 'The slug of the guide that is displayed in the slideout.'|t('guide'),
+  },
+}]) %}
+
+{% set contentCode %}{% verbatim %}{{ craft.guide.component('image', { modal: true, url: 'REPLACE_URL' }) }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Image'|t('guide'),
+  contentCode,
+  group: 'components',
+  summary: '<p>Display an image or a screenshot from a URL.</p>'|t('guide'),
+  props: {
+    asset: 'An image asset uploaded to this Craft CMS project.'|t('guide'),
+    modal: 'Enables a modal to show when the image is clicked.'|t('guide'),
+    src: 'The URL of the image to be displayed.'|t('guide'),
+  },
+}]) %}
+
+{% set contentCode %}{% verbatim %}{% apply markdown('gfm') %}
+
+## Heading
+
+Content
+
+{% endapply %}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Markdown'|t('guide'),
+  contentCode,
+  group: 'components',
+  summary: '<p>Use Craft’s "markdown" Twig filter to render markdown content.</p>'|t('guide'),
+}]) %}
+
+{% set contentCode %}{% verbatim %}{{ craft.guide.component('table', {
+  headers: ['REPLACE_TEXT', 'REPLACE_TEXT', 'REPLACE_TEXT'],
+  rows: [
+    ['REPLACE_TEXT', 'REPLACE_TEXT', 'REPLACE_TEXT'],
+    ['REPLACE_TEXT', 'REPLACE_TEXT', 'REPLACE_TEXT'],
+    ['REPLACE_TEXT', 'REPLACE_TEXT', 'REPLACE_TEXT'],
+  ],
+}) }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Table'|t('guide'),
+  contentCode,
+  group: 'components',
+  summary: '<p>A styled HTML table.</p>'|t('guide'),
+  props: {
+    headers: 'An array of table header cells.'|t('guide'),
+    rows: 'An array of arrays that populate the table body.'|t('guide'),
+    footers: 'An array of table footer cells.'|t('guide'),
+  }
+}]) %}
+
+{% set contentCode %}{% verbatim %}{{ craft.guide.component('tip', { text: 'REPLACE_TEXT' }) }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Tip'|t('guide'),
+  contentCode,
+  group: 'components',
+  summary: '<p>Inform content authors in a way that stands out from surrounding text.</p>'|t('guide'),
+  props: {
+    message: 'Text displayed in the tip.'|t('guide'),
+  },
+}]) %}
+
+{% set contentCode %}{% verbatim %}{{ craft.guide.var('clientName') }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Variable: Client Name'|t('guide'),
+  contentCode,
+  group: 'components',
+  summary: '<p>Display the value of the <strong>Client Name</strong> variable.</p>'|t('guide'),
+}]) %}
+
+{% set contentCode %}{% verbatim %}{{ craft.guide.var('myCompanyName') }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Variable: My Company Name'|t('guide'),
+  contentCode,
+  group: 'components',
+  summary: '<p>Display the value of the <strong>My Company Name</strong> variable.</p>'|t('guide'),
+}]) %}
+
+{% set contentCode %}{% verbatim %}{{ craft.guide.var('projectName') }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Variable: Project Name'|t('guide'),
+  contentCode,
+  group: 'components',
+  summary: '<p>Display the value of the <strong>Project Name</strong> variable.</p>'|t('guide'),
+}]) %}
+
+{% set contentCode %}{% verbatim %}{{ craft.guide.component('video', { source: 'vimeo', videoId: 'REPLACE_VIDEO_ID' }) }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Vimeo Video'|t('guide'),
+  contentCode,
+  group: 'components',
+  summary: '<p>Play a Vimeo video in an iframe.</p>'|t('guide'),
+  props: {
+    source: 'Determine the video hosting service’s embed code.'|t('guide'),
+    videoId: 'The ID of the Vimeo video, found in the URL or embed code provided by Vimeo.'|t('guide'),
+  },
+  }]) %}
+
+{% set contentCode %}{% verbatim %}{{ craft.guide.component('warning', { text: 'REPLACE_TEXT' }) }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'Warning'|t('guide'),
+  contentCode,
+  group: 'components',
+  summary: '<p>Warn content authors about potential content issues.</p>'|t('guide'),
+  props: {
+    message: 'Text displayed in the warning.'|t('guide'),
+  },
+}]) %}
+
+{% set contentCode %}{% verbatim %}{{ craft.guide.component('video', { source: 'youtube', videoId: 'REPLACE_VIDEO_ID' }) }}{% endverbatim %}{% endset %}
+{% set components = components|merge([{
+  title: 'YouTube Video'|t('guide'),
+  contentCode,
+  group: 'components',
+  summary: '<p>Play a YouTube video in an iframe.</p>'|t('guide'),
+  props: {
+    source: 'Determine the video hosting service’s embed code.'|t('guide'),
+    videoId: 'The ID of the Vimeo video, found in the URL or embed code provided by YouTube.'|t('guide'),
+  },
+}]) %}
+
+
+{# Guides #}
+{% set guidesData = craft.guide.getAll() %}
+{% for item in guidesData %}
+  {% if item.id != guide.id %}
+    {% set contentCode %}{% verbatim %}{{ craft.guide.include({ slug: '{% endverbatim %}{{ item.slug }}{% verbatim %}' }) }}{% endverbatim %}{% endset %}
+    {% set guides = guides|merge([{
+      title: item.title,
+      contentCode,
+      group: 'guides',
+      summary: item.summary,
+      props: {
+        slug: 'The slug of the guide being included.'|t('guide'),
+      },
+    }]) %}
+  {% endif %}
+{% endfor %}
+
+
+{# Images #}
+{% if assetComponents|length %}
+  {% set images = assetComponents %}
+{% endif %}
+
+
+{# Snippets #}
+{% set contentCode %}{% verbatim %}{# Add newer items to the top of the array. Each item should include at least a date (in ISO format) and a version number. #}
+{% set versions = [
+  {
+    added: [
+      'Item 1',
+      'Item 2',
+    ],
+    changed: [
+      'Item 1',
+      'Item 2',
+    ],
+    fixed: [
+      'Item 1',
+      'Item 2',
+    ],
+    removed: [
+      'Item 1',
+      'Item 2',
+    ],
+    date: 'REPLACE_DATE',
+    version: '1.0.0',
+  },
+] %}
+
+{{ craft.guide.component('changelog', {
+  limit: guideDisplayArea == 'widget' ? 1 : null,
+  slug: 'changelog',
+  versions,
+}) }}{% endverbatim %}{% endset %}
+{% set snippets = snippets|merge([{
+  title: 'Changelog – Array'|t('guide'),
+  contentCode,
+  group: 'snippets',
+  summary: '<p>Display updates to your Craft project using simple lists.</p>'|t('guide'),
+}]) %}
+
+{% set contentCode %}{% verbatim %}{# For each version in the changelog, copy the block of code starting from the START comment to the END comment and add newer items to the top. Each item should include at least a `date` value (in ISO format) and a `version` number value. #}
+
+{# START version ------------------------------------------------------ #}
+
+{% set added %}
+- Item 1
+- Item 2
+{% endset %}
+
+{% set changed %}
+- Item 1
+- Item 2
+{% endset %}
+
+{% set fixed %}
+- Item 1
+- Item 2
+{% endset %}
+
+{% set removed %}
+- Item 1
+- Item 2
+{% endset %}
+
+{# If the `versions` array doesnt exist, create a new array. #}
+{% set versions = versions ?? [] %}
+
+{# Add the items above to the `versions` array. #}
+{% set versions = versions|merge([{
+  added: added|nl2br,
+  changed: changed|nl2br,
+  fixed: fixed|nl2br,
+  removed: removed|nl2br,
+  date: 'REPLACE_DATE',
+  version: '1.0.0',
+}]) %}
+
+{# END version -------------------------------------------------------- #}
+
+{# limit: Render all of the items when on a page and limit the amount of items everywhere else. #}
+{# slug: When set, and when the amount of items is higher than the limit, a button will appear that brings you to the guide’s page. #}
+{{ craft.guide.component('changelog', {
+  limit: guideDisplayArea == 'page' ? null : 1,
+  slug: guide.slug,
+  versions,
+}) }}{% endverbatim %}{% endset %}
+{% set snippets = snippets|merge([{
+  title: 'Changelog – Markdown'|t('guide'),
+  contentCode,
+  group: 'snippets',
+  summary: '<p>Display updates to your Craft project using Markdown blocks.</p>'|t('guide'),
+}]) %}
+
+{% set contentCode %}{% verbatim %}{# Set the asset volume you would like to check for images in. #}
+{% set volume = null %}
+
+{% set limit = 100 %}
+
+{# Display a contact sheet of assets along with their title and alt text. #}
+{% set query = craft.assets.limit(limit).volume(volume ?? null).kind('image') %}
+{% paginate query as pageInfo, assets %}
+
+{% if assets|length %}
+  {% if guideDisplayArea in ['guide', 'page'] and (pageInfo.prevUrl or pageInfo.nextUrl) %}
+    <header>
+      {% if pageInfo.prevUrl %}
+        {{ craft.guide.component('button', { label: 'Previous Page', url: pageInfo.prevUrl }) }}
+      {% endif %}
+      <span>{{ pageInfo.currentPage }} / {{ pageInfo.totalPages }}</span>
+      {% if pageInfo.nextUrl %}
+        {{ craft.guide.component('button', { label: 'Next Page', url: pageInfo.nextUrl }) }}
+      {% endif %}
+    </header>
+  {% endif %}
+
+  <ul>
+  {% for asset in assets %}
+    <li>
+      {{ craft.guide.component('image', { asset, modal: true, transforms: [
+        { mode: 'fit', quality: 80, width: 430 },
+        { mode: 'fit', quality: 80, width: 860 },
+      ] }) }}
+      {% set assetInfo = [
+        ['Title', '<a href="' ~ asset.cpEditUrl ~ '">' ~ asset.title ~ '</a>' ?? ''],
+        ['Alt', asset.alt ?? ''],
+        ['Size', asset.width ?? '' ~ ' x ' ~ asset.height ?? ''],
+      ] %}
+      <dl>
+        {% for item in assetInfo %}
+        <dt>{{ item[0] }}</dt>
+        <dd>{{ item[1] }}</dd>
+        {% endfor %}
+      </dl>
+    </li>
+  {% endfor %}
+  </ul>
+{% else %}
+{% apply markdown('gfm') %}
+
+No images were found for this asset volume.
+
+{% endapply %}
+{% endif %}{% endverbatim %}{% endset %}
+{% set cssCode %}{% verbatim %}.guide.guide-REPLACE_GUIDE_SLUG {
+    & header {
+        display: flex;
+        align-items: center;
+        gap: var(--m);
+        position: sticky;
+        top: var(--header-height);
+        padding: var(--s) var(--padding);
+        margin-inline: calc(-1 * var(--padding));
+        background-color: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        z-index: 1;
+    }
+    & ul {
+        --grid-template-columns: 1;
+        display: grid;
+        grid-template-columns: repeat(var(--grid-template-columns, 1), 1fr);
+        grid-auto-rows: max-content;
+        gap: calc(var(--xl) * 2);
+
+        & li {
+            display: grid;
+            grid-template-columns: auto;
+            grid-template-rows: subgrid;
+            grid-row: span 2;
+            gap: var(--s);
+            margin-left: 0;
+            list-style: none;
+
+            & figure {
+                align-self: flex-end;
+            }
+        }
+
+        @container guide-display (width > 600px) {
+            --grid-template-columns: 2;
+        }
+        @container guide-display (width > 900px) {
+            --grid-template-columns: 3;
+        }
+        @container guide-display (width > 1200px) {
+            --grid-template-columns: 4;
+        }
+        @container guide-display (width > 1800px) {
+            --grid-template-columns: 5;
+        }
+    }
+    & dl {
+        display: grid;
+        grid-template-columns: max-content 1fr;
+        column-gap: var(--m);
+        padding-block-start: var(--s);
+        border-block-start: 1px solid var(--hairline-color);
+        font-size: 1rem;
+
+        & dt {
+            font-weight: 700;
+        }
+        & dd {
+            text-wrap: balance;
+
+            &:empty {
+                background-color: rgba(242, 0, 255, 0.997);
+            }
+        }
+    }
+}{% endverbatim %}{% endset %}
+{% set snippets = snippets|merge([{
+  title: 'Contact Sheet – Images'|t('guide'),
+  contentCode,
+  cssCode,
+  group: 'snippets',
+  summary: '<p>Display a grid of images, their title, and alt text. Clicking an image will display the full size image in a modal.</p>'|t('guide'),
+}]) %}
+
+{% set contentCode %}{% verbatim %}<div class="guide-snippet-content-stats">
+  {{ craft.guide.component('content-stats') }}
+
+  {{ craft.guide.component('content-stats', { type: 'assets' }) }}
+
+  {{ craft.guide.component('content-stats', { type: 'categories' }) }}
+
+  {{ craft.guide.component('content-stats', { type: 'users' }) }}
+</div>{% endverbatim %}{% endset %}
+{% set cssCode %}{% verbatim %}.guide.guide-REPLACE_GUIDE_SLUG {
+  & .guide-snippet-content-stats {
+    display: flex;
+    flex-flow: row wrap;
+    gap: var(--xl);
+
+    & > * {
+      flex: 1 1 200px;
+      padding: var(--l);
+      border-radius: var(--guide-border-radius);
+      background-color: color-mix(in srgb, var(--gray-100), transparent 50%);
+    }
+  }
+}{% endverbatim %}{% endset %}
+{% set snippets = snippets|merge([{
+  title: 'Content Stats Layout'|t('guide'),
+  contentCode,
+  cssCode,
+  group: 'snippets',
+  summary: '<p>Show stats for entries, assets, categories, and users.</p>'|t('guide'),
+}]) %}
+
+{% set contentCode %}{% verbatim %}{# Set the asset volume you would like to check for images in. #}
+{% set volume = null %}
+
+{# Display a list of invalid images that are missing alt text. #}
+{% cache %}
+  {% set assets = craft.assets.volume(volume ?? null).hasAlt(false).kind('image').all() %}
+
+  {% if assets|length %}
+{% apply markdown('gfm') %}
+
+These images are missing alt text.
+
+{% endapply %}
+    {% set rows = [] %}
+
+    {% for asset in assets %}
+      {% set cell1 %}
+        {% if asset.kind == 'image' %}
+          <a href="{{ asset.cpEditUrl }}" style="display: block; max-width: 300px" title="Edit image">{{ craft.guide.component('image', { url: asset.url }) }}</a>
+        {% endif %}
+      {% endset %}
+      {% set cell2 %}<a href="{{ asset.cpEditUrl }}">{{ asset.title }}</a>{% endset %}
+      {% set cell3 %}{{ asset.filename }}{% endset %}
+      {% set row = [cell1, cell2, cell3] %}
+      {% set rows = rows|merge([row]) %}
+    {% endfor %}
+
+    {{ craft.guide.component('table', {
+      headers: ['Preview', 'Title', 'File name'],
+      rows,
+    }) }}
+  {% else %}
+{% apply markdown('gfm') %}
+
+All images in this volume have alt values!
+
+{% endapply %}
+  {% endif %}
+{% endcache %}{% endverbatim %}{% endset %}
+{% set snippets = snippets|merge([{
+  title: 'Images Missing Alt Text'|t('guide'),
+  contentCode,
+  group: 'snippets',
+  summary: '<p>Find images where the <strong>alt</strong> field is empty.</p>'|t('guide'),
+}]) %}
+
+{% set contentCode %}{% verbatim %}{# Set the asset volume you would like to check for images in. #}
+{% set volume = null %}
+
+{# Display a list of invalid images that are missing focal points. #}
+{% cache %}
+  {% set assets = craft.assets.volume(volume ?? null).kind('image').all() %}
+
+  {% if assets|length %}>
+{% apply markdown('gfm') %}
+
+These images are missing a focal point and might get cropped incorrectly.
+
+{% endapply %}
+    {% set rows = [] %}
+
+    {% for asset in assets %}
+      {% if not asset.hasFocalPoint %}
+        {% set cell1 %}
+          {% if asset.kind == 'image' %}
+            <a href="{{ asset.cpEditUrl }}" style="display: block; max-width: 300px" title="Edit image">{{ craft.guide.component('image', { url: asset.url }) }}</a>
+          {% endif %}
+        {% endset %}
+        {% set cell2 %}<a href="{{ asset.cpEditUrl }}">{{ asset.title }}</a>{% endset %}
+        {% set cell3 %}{{ asset.filename }}{% endset %}
+        {% set row = [cell1, cell2, cell3] %}
+        {% set rows = rows|merge([row]) %}
+      {% endif %}
+    {% endfor %}
+
+    {{ craft.guide.component('table', {
+      headers: ['Preview', 'Title', 'File name'],
+      rows,
+    }) }}
+  {% endif %}
+{% endcache %}{% endverbatim %}{% endset %}
+{% set snippets = snippets|merge([{
+  title: 'Images Missing Focal Points'|t('guide'),
+  contentCode,
+  group: 'snippets',
+  summary: '<p>Find images that are missing focal points.</p>'|t('guide'),
+}]) %}
+
+{% set contentCode %}{% verbatim %}{# Set the asset volume you would like to check for images in. #}
+{% set volume = null %}
+
+{# Set file types that should assets should be uplaoded as. #}
+{% set acceptedExtensions = ['jpg', 'jpeg'] %}
+
+{# Display a list of invalid assets and instruct authors on what extension is required. #}
+{% cache %}
+  {% set assets = craft.assets.volume(volume ?? null).all() %}
+
+  {% if assets|length %}
+{% apply markdown('gfm') %}
+
+These assets should be replaced with files using the extension: **{{ acceptedExtensions|join(', ') }}**
+
+{% endapply %}
+    {% set rows = [] %}
+
+    {% for asset in assets %}
+      {% if asset.extension|lower not in acceptedExtensions %}
+        {% set cell1 %}
+          {% if asset.kind == 'image' %}
+            <a href="{{ asset.cpEditUrl }}" style="display: block; max-width: 300px" title="Edit image">{{ craft.guide.component('image', { url: asset.url }) }}</a>
+          {% endif %}
+        {% endset %}
+        {% set cell2 %}<a href="{{ asset.cpEditUrl }}">{{ asset.title }}</a>{% endset %}
+        {% set cell3 %}{{ asset.filename }}{% endset %}
+        {% set row = [cell1, cell2, cell3] %}
+        {% set rows = rows|merge([row]) %}
+      {% endif %}
+    {% endfor %}
+
+    {{ craft.guide.component('table', {
+      headers: ['Preview', 'Title', 'File name'],
+      rows,
+    }) }}
+  {% endif %}
+{% endcache %}{% endverbatim %}{% endset %}
+{% set snippets = snippets|merge([{
+  title: 'Incorrect File Type'|t('guide'),
+  contentCode,
+  group: 'snippets',
+  summary: '<p>Find assets that have the wrong file type for a given volume.</p>'|t('guide'),
+}]) %}
+
+{% set contentCode %}{% verbatim %}{# Set the fields handle. #}
+{% set handle = 'REPLACE_HANDLE' %}
+
+{# Set the field label for this guide. #}
+{% set label = 'REPLACE_LABEL' %}
+
+{# Set this to "true" to find elements with the field filled out, or "false" to find elements that are missing this field. #}
+{% set filledOut = true %}
+
+{# Start Snippet Display #}
+{% cache %}
+<div>
+  <h2>{{ label }}</h2>
+  {% set elements = craft.entries({
+    (handle): filledOut ? ':notempty:' : ':empty:',
+  }).all() %}
+
+  {% set rows = [] %}
+  {% for row in elements %}
+    {% set cell1 %}<a href="{{ row.url }}" target="_blank" rel="nofollow noopener" title="View elements page in a new window.">{{ row.title }}</a>{% endset %}
+    {% set cell2 %}<a class="btn icon edit" href="{{ row.cpEditUrl }}" target="_blank" rel="nofollow noopener" title="Go to element edit page.">Edit</a>{% endset %}
+    {% set row = [cell1, cell2] %}
+    {% set rows = rows|merge([row]) %}
+  {% endfor %}
+
+  {# Display table #}
+  {{ craft.guide.component('table', {
+    headers: ['Entries that ' ~ (filledOut ? 'include' : 'are missing') ~ ' the ' ~ label ~ ' field', 'Edit Page'],
+    rows,
+  }) }}
+</div>
+{% endcache %}{% endverbatim %}{% endset %}
+{% set snippets = snippets|merge([{
+  title: 'Filled-Out Fields'|t('guide'),
+  contentCode,
+  group: 'snippets',
+  summary: '<p>Find elements where a field is either filled out or empty.</p>'|t('guide'),
+}]) %}
+
+
+{# Render list items #}
+{% if group == 'components' %}
+  {% set listItems = components %}
+{% elseif group == 'guides' %}
+  {% set listItems = guides %}
+{% elseif group == 'images' %}
+  {% set listItems = images %}
+{% elseif group == 'snippets' %}
+  {% set listItems = snippets %}
+{% endif %}
+
+{% set tMessages = {
+  'addContent': 'Content'|t('guide'),
+  'addCss': 'CSS'|t('guide'),
+  'addJavascript': 'JS'|t('guide'),
+  'variables': 'Variables'|t('guide'),
+} %}
+
+{% if listItems|length %}
+  <ul id="editor-component-list-{{ group }}">
+    {% for item in listItems %}
+      <li>
+        <guide-editor-component-list-item component-data="{{ item|json_encode }}" t-messages="{{ tMessages|json_encode }}"></guide-editor-component-list-item>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}

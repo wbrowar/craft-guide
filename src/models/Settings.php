@@ -1,6 +1,6 @@
 <?php
 /**
- * Guide plugin for Craft CMS 3.x
+ * Guide plugin for Craft CMS 5.x
  *
  * A CMS Guide for Craft CMS.
  *
@@ -22,16 +22,34 @@ class Settings extends Model
     // Public Properties
     // =========================================================================
 
-    // Path to Guide CP Section templates
+    // Path to Guide CP Section templates.
     public $assetVolume = '';
 
-    // Path to Guide CP Section templates
-    public $defaultTeleportMethod = 'prepend';
+    // The location of guides when displayed on element edit pages.
+    public $editPageLocation = 'slideout';
 
-    // Path to Guide CP Section templates
+    // Enable CSS and JavaScript fields to appear in the Guide Editor.
+    public $enableGuideCss = true;
+    public $enableGuideJavascript = false;
+
+    // Enable CSS and JavaScript to be displayed on the page.
+    // NOTE: These will be ignored if their respective field is disabled.
+    public $registerGuideCss = true;
+    public $registerGuideJavascript = true;
+
+    // Enables non-essential visual enhancements.
+    public $fun = true;
+
+    // The label shown on Guide Buttons on edit pages.
+    public $guideButtonLabel = '';
+
+    // Path to Guide CP Section templates.
+    public $renderMarkdownDefault = true;
+
+    // Path to Guide CP Section templates.
     public $templatePath = '_guide';
 
-    // Twig variables
+    // Twig variables.
     public $clientName = '';
     public $projectName = '';
     public $myCompanyName = '';
@@ -45,11 +63,10 @@ class Settings extends Model
     public function rules(): array
     {
         return [
-            [['assetVolume', 'defaultTeleportMethod', 'templatePath'], 'required'],
+            [['enableGuideCss', 'enableGuideJavascript', 'fun', 'registerGuideCss', 'registerGuideJavascript', 'renderMarkdownDefault'], 'boolean'],
+            [['assetVolume', 'editPageLocation', 'guideButtonLabel', 'templatePath', 'clientName', 'projectName', 'myCompanyName'], 'string'],
 
-            [['assetVolume', 'defaultTeleportMethod', 'templatePath'], 'string'],
-
-            ['defaultTeleportMethod', 'default', 'value' => 'prepend'],
+            ['editPageLocation', 'default', 'value' => 'slideout'],
             ['templatePath', 'default', 'value' => '_guide'],
         ];
     }

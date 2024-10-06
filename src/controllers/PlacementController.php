@@ -1,6 +1,6 @@
 <?php
 /**
- * Guide plugin for Craft CMS 3.x
+ * Guide plugin for Craft CMS 5.x
  *
  * A CMS Guide for Craft CMS.
  *
@@ -10,11 +10,10 @@
 
 namespace wbrowar\guide\controllers;
 
-use craft\helpers\Json;
-use wbrowar\guide\Guide;
-
 use Craft;
+use craft\helpers\Json;
 use craft\web\Controller;
+use wbrowar\guide\Guide;
 use wbrowar\guide\models\Placement as PlacementModel;
 
 /**
@@ -116,11 +115,11 @@ class PlacementController extends Controller
         $placement = new PlacementModel([
             'access' => $params['access'],
             'group' => $params['group'],
-            'groupId' => $params['groupId'],
+            'groupId' => $params['groupId'] ?? null,
             'guideId' => $params['guideId'],
-            'portalMethod' => $params['portalMethod'],
-            'selector' => $params['selector'],
-            'uri' => $params['uri'],
+            'moveMethod' => $params['moveMethod'] ?? 'append',
+            'selector' => $params['selector'] ?? null,
+            'uri' => $params['uri'] ?? null,
         ]);
 
         if ($placement->validate()) {

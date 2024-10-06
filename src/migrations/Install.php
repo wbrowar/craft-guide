@@ -1,6 +1,6 @@
 <?php
 /**
- * Guide plugin for Craft CMS 3.x
+ * Guide plugin for Craft CMS 5.x
  *
  * A CMS Guide for Craft CMS.
  *
@@ -10,10 +10,7 @@
 
 namespace wbrowar\guide\migrations;
 
-use wbrowar\guide\Guide;
-
 use Craft;
-use craft\config\DbConfig;
 use craft\db\Migration;
 
 /**
@@ -85,9 +82,13 @@ class Install extends Migration
                     'template' => $this->string(255),
                     'contentSource' => $this->string(255),
                     'contentUrl' => $this->string(255),
+                    'renderMarkdown' => $this->boolean()->defaultValue(false),
                     'title' => $this->string(255)->notNull(),
                     'summary' => $this->string(255),
                     'content' => $this->text(),
+                    'contentCss' => $this->text(),
+                    'contentJavascript' => $this->text(),
+                    'weight' => $this->integer()->defaultValue(1),
                 ]
             );
         }
@@ -106,9 +107,8 @@ class Install extends Migration
                     'access' => $this->string(255),
                     'group' => $this->string(255),
                     'groupId' => $this->string(255),
-                    'portalMethod' => $this->string(255),
+                    'moveMethod' => $this->string(255)->defaultValue('append'),
                     'selector' => $this->string(255),
-                    'theme' => $this->string(255),
                     'uri' => $this->string(255),
                 ]
             );

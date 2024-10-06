@@ -11,9 +11,32 @@
  */ #}
 
 {# The title of this CP section #}
-{% set title = "Import and Export Guides" %}
+{% set title = "Guide Import + Export"|t('guide') %}
 
-<div
-  id="guide-utilities"
-  {% if guidesJson ?? false %}data-export-data="{{ guidesJson }}"{% endif %}
-></div>
+{% set guidesData = guidesJson ?? [] %}
+
+{% set tMessages = {
+  'copiedToClipboard': 'Export Data copied to clipboard'|t('guide'),
+  'exportButton': 'Copy Guide Export Data to Clipboard'|t('guide'),
+  'exportData': 'Export Data'|t('guide'),
+  'importButton': 'Import Data into Guide'|t('guide'),
+  'importData': 'Import Data'|t('guide'),
+  'guidesImported': 'Guide Data Imported'|t('guide'),
+  'importSkipSlugTip': 'Guide will only add new guides into the database. The import process will ignore guides with a slug that matches an existing guide’s slug.'|t('guide'),
+  'instructions': 'Guides and their content can be moved from one environment to another to make it easier to re-use guides across multiple projects.'|t('guide'),
+  'instructionsTip': 'NOTE: Twig templates and assets will need to be migrated manually.'|t('guide'),
+  'step1Text': 'Select Guides to export.'|t('guide'),
+  'step1Title': 'Step 1.'|t('guide'),
+  'step2Text': 'Copy Guide export data.'|t('guide'),
+  'step2Title': 'Step 2.'|t('guide'),
+  'step3Text': 'Log into another environment and visit this Utilities → Guide Export + Import page.'|t('guide'),
+  'step3Title': 'Step 3.'|t('guide'),
+  'step4Text': 'In that environment, paste the JSON into this field and click "Import Data into Guide".'|t('guide'),
+  'step4Title': 'Step 4.'|t('guide'),
+  'title': 'Guide Import + Export'|t('guide'),
+} %}
+
+<guide-utilities
+    guides-data="{{ guidesData }}"
+    t-messages="{{ tMessages|json_encode }}"
+></guide-utilities>

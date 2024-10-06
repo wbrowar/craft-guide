@@ -10,17 +10,67 @@
  * @since     3.0.0
  */ #}
 
+{% import "_includes/forms" as forms %}
+
 {% if proEdition %}
   {% set displayId = 'uiElement-' ~ uid %}
 
-  {% include 'guide/_partials/guide_display.twig' with {
-    guideDisplayArea: 'uiElement',
-    displayId: displayId,
-    element: element ?? null,
-    guides: guide ?? false ? [guide] : null,
-    inlineEditorId: displayId,
-    placementId: placementId ?? false,
-  } only %}
+  {% set tMessages = {
+    'placementSaveSuccess': 'Guide selected for UI Element'|t('guide'),
+    'placementDeleteSuccess': 'Guide removed from UI Element'|t('guide'),
+    'preview': 'Preview'|t('guide'),
+    'settings': 'Settings'|t('guide'),
+  } %}
+
+  <guide-ui-element
+      group-id="{{ displayId }}"
+      placement-id="{{ placementId }}"
+      t-messages="{{ tMessages|json_encode }}"
+  >
+    <span slot="settings-button" style="color: var(--text-color)">{{ svg('@appicons/gear.svg') }}</span>
+{#    <button slot="settings-button" class="btn small icon settings" type="button">{{ 'Settings'|t('guide') }}</button>#}
+    <div slot="guide-display">
+      {% if guide ?? false %}
+        {% include 'guide/_partials/guide_display.twig' with {
+          guideDisplayArea: 'uiElement',
+          element: element ?? null,
+          guides: guide ?? false ? [guide] : null,
+          placementId: placementId ?? false,
+        } only %}
+      {% else %}
+        {{ 'No guides are available for UI Elements right now.'|t('guide') }}{% if userOperations.useOrganizer %}
+        <a href="{{ url('guide/organizer') }}">{{ 'Use the Organizer to enable guides for UI Elements.'|t('guide') }}</a>{% endif %}
+      {% endif %}
+    </div>
+
+    <div slot="settings-display">
+      {% if allowedGuides ?? false and allowedGuides|length %}
+        {% set guideOptions = [{ label: 'None'|t('guide'), value: '__none__' }] %}
+        {% for item in allowedGuides %}
+          {% set guideOptions = guideOptions|merge([{
+            label: item.title,
+            value: item.id,
+          }]) %}
+        {% endfor %}
+
+        {{ forms.selectField({
+          label: 'Guide'|t('guide'),
+          id: 'guideId',
+          name: 'guideId',
+          options: guideOptions,
+          value: guide.id ?? '__none__',
+          instructions: 'Choose a guide to be displayed in this UI Element.'|t('guide'),
+        }) }}
+      {% else %}
+        {{ 'No guides are available for UI Elements right now.'|t('guide') }}{% if userOperations.useOrganizer %}
+        <a href="{{ url('guide/organizer') }}">{{ 'Use the Organizer to enable guides for UI Elements.'|t('guide') }}</a>{% endif %}
+      {% endif %}
+    </div>
+
+    <div slot="guide-selected">
+      <p>{{ 'A settings has been changed. Please reload the page when you are ready and the changes will appear.'|t('guide') }}</p>
+    </div>
+  </guide-ui-element>
 {% else %}
-  <p>Guide UI elements are available in the PRO edition of Guide. <a href="{{ url('plugin-store/guide') }}">Please upgrade the Guide plugin</a> to add guides to UI elements.</p>
+  <p>{{ 'Guide UI elements are available in the PRO edition of Guide.'|t('guide') }} <a href="{{ url('plugin-store/guide') }}">{{ 'Please upgrade the Guide plugin to add guides to UI elements.'|t('guide') }}</a></p>
 {% endif %}

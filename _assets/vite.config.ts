@@ -1,5 +1,4 @@
-import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
+import { defineConfig } from 'vite'
 
 export default defineConfig({
   build: {
@@ -9,14 +8,13 @@ export default defineConfig({
     rollupOptions: {
       input: {
         'guide-admin': './guide-admin.ts',
+        'guide-book': './guide-book.ts',
         'guide-display': './guide-display.ts',
         'guide-welcome': './guide-welcome.ts',
       },
     },
   },
-  plugins: [vue()],
-  resolve: { alias: { vue: 'vue/dist/vue.esm-bundler.js' } },
   server: {
     port: 3100,
   },
-});
+})

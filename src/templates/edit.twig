@@ -11,51 +11,252 @@
  */ #}
 
 {% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+{% import "codeeditor/codeEditor" as codeEditor %}
 
 {# The title of this CP section #}
-{% set title = title ?? "Guide Edit" %}
+{% set title = title ?? "Guide Editor"|t('guide') %}
 
 {# The selected CP subnav item #}
-{% set selectedSubnavItem = 'organizer' %}
+{% set selectedSubnavItem = 'list' %}
 
 {% if not (guide is defined) %}
   {% if (guideId ?? false) %}
     {% set guide = craft.guide.getOne({ id: guideId }) %}
+    {% set title = guide ?? false ? "Guide Editor"|t('guide') ~ ': ' ~ guide.title : title %}
     {% set isNew = false %}
   {% else %}
-    {% set title = "New Guide" %}
+    {% set title = "Guide Editor: New Guide"|t('guide') %}
     {% set guide = craft.guide.getAll([], 'new') %}
     {% set isNew = true %}
   {% endif %}
 {% endif %}
 
+{% set cpTrigger = craft.app.config.general.cpTrigger %}
+{% set fullPageForm = true %}
+
+{% set tabs = {
+  "content": {label: "Content"|t('guide'), url: "#guide"},
+} %}
+{% if proEdition %}
+  {% if settings.enableGuideCss %}
+    {% set tabs = tabs|merge({
+      "css": {label: "CSS"|t('guide'), url: "#css"},
+    }) %}
+  {% endif %}
+
+  {% if settings.enableGuideJavascript %}
+    {% set tabs = tabs|merge({
+      "javascript": {label: "JavaScript"|t('guide'), url: "#javascript"},
+    }) %}
+  {% endif %}
+{% endif %}
+
+{% set fullPageForm = true %}
+
 {% block actionButton %}
-  <div id="guide-action-buttons"></div>
+  {% include 'guide/_partials/slideout_button.twig' with { docs: true, label: 'Docs'|t('guide'), slug: 'guide-editor' } only %}
+
+  <input class="btn submit" type="submit" value="Save">
 {% endblock %}
 
+{% set tMessages = {
+  'components': 'Components'|t('guide'),
+  'iframeLabel': 'Preview'|t('guide'),
+  'iframeEmpty': 'Enter a Page URL to embed that page in an iframe. A preview of your URL will appear below.'|t('guide'),
+  'images': 'Images'|t('guide'),
+  'guides': 'Guides'|t('guide'),
+  'settings': 'Settings'|t('guide'),
+  'snippets': 'Snippets'|t('guide'),
+  'templateLabel': 'Template Code Preview'|t('guide'),
+  'templateEmpty': 'Select a template from the Page Template field. A preview of the source code from the selected template will appear below.'|t('guide'),
+} %}
+
 {% set content %}
-  {% set formData = {
-    action: 'guide/guide/save-guide',
-    authorId: guide.authorId ?? currentUser.id,
-    redirect: craft.app.request.param('return') ?? false ? craft.app.request.param('return') : null,
-    csrf: craft.app.config.general.csrfTokenName ~ '|' ~ craft.app.request.csrfToken,
-  } %}
+  <input type="hidden" name="action" value="guide/guide/save-guide" />
+  <input type="hidden" name="authorId" value="{{ guide.authorId ?? currentUser.id }}" />
 
-  {% set guideData = {
-    content: guide.content ?? '',
-    contentSource: guide.contentSource ?? 'field',
-    contentUrl: guide.contentUrl ?? '',
-    id: guide.id ?? -1,
-    slug: guide.slug ?? '',
-    summary: guide.summary ?? '',
-    template: guide.template ?? '__none__',
-    title: guide.title ?? '',
-  } %}
+  {% if guideId ?? false %}
+    <input type="hidden" name="id" value="{{ guideId }}" />
+  {% endif %}
 
-  <div
-    id="guide-editor"
-    {% if isNew %}data-is-new{% endif %}
-    data-form-data="{{ formData|json_encode }}"
-    data-guide-data="{{ guideData|json_encode }}"
-  ></div>
+  {% set redirect = craft.app.request.param('return') ?? false ? craft.app.request.param('return') : null %}
+  {% if redirect ?? false %}
+    <input type="hidden" name="redirect" value="{{ redirect }}" />
+  {% endif %}
+
+  <div id="guide" class="guide-editor">
+    <guide-editor
+        {{ isNew ? ' is-new' : '' }}
+        t-messages="{{ tMessages|json_encode }}"
+        templates-data="{{ templates.contents|json_encode }}"
+    >
+      <div slot="settings">
+        {% if not proEdition and not settings.templatePath %}
+          <div class="readable">
+            <blockquote class="note warn">
+              <strong>{{ 'Template Path is Required'|t('guide') }}</strong>
+              <p>{{ 'A Template Path is needed to load guides in the LITE edition of Guide.'|t('guide') }}</p>
+              <p>
+                <a class="go" href="{{ cpUrl('guide/settings') }}">{{ 'Set a Template Path in Guide Settings.'|t('guide') }}</a>
+              </p>
+            </blockquote>
+          </div>
+        {% endif %}
+
+        {{ forms.textField({
+          label: 'Title'|t('guide'),
+          id: 'title',
+          name: 'title',
+          value: guide.title,
+        }) }}
+
+        {{ forms.textField({
+          label: 'Slug'|t('guide'),
+          id: 'slug',
+          name: 'slug',
+          value: guide.slug,
+          instructions: 'Used to import one guide into another.'|t('guide'),
+        }) }}
+
+        {{ forms.textField({
+          label: 'Summary'|t('guide'),
+          id: 'summary',
+          name: 'summary',
+          value: guide.summary,
+          instructions: 'An internal note about the purpose of this guide.'|t('guide'),
+        }) }}
+
+        {% set options = [
+          { label: 'Code Editor'|t('guide'), value: 'field' },
+          { label: 'Twig Template'|t('guide'), value: 'template' },
+          { label: 'External Page (iframe)'|t('guide'), value: 'iframe' },
+        ] %}
+        {{ forms.selectField({
+          label: 'Content Source'|t('guide'),
+          id: 'contentSource',
+          name: 'contentSource',
+          disabled: not proEdition,
+          options: options,
+          value: proEdition ? guide.contentSource : 'template',
+        }) }}
+
+        {{ forms.lightswitchField({
+          label: 'Render Markdown'|t('guide'),
+          id: 'renderMarkdown',
+          name: 'renderMarkdown',
+          options: options,
+          on: isNew ? settings.renderMarkdownDefault : guide.renderMarkdown,
+        }) }}
+
+        {{ forms.textField({
+          label: 'Page URL'|t('guide'),
+          id: 'contentUrl',
+          name: 'contentUrl',
+          value: guide.contentUrl,
+          instructions: 'A URL that is loaded in an iframe.'|t('guide'),
+        }) }}
+
+        {{ forms.selectField({
+          label: 'Page Template'|t('guide'),
+          id: 'template',
+          name: 'template',
+          disabled: not settings.templatePath,
+          options: templates.filenames,
+          value: guide.template,
+          instructions: 'Load a template found in your <strong>/templates/{path}/</strong> directory.'|t('guide', { path: settings.templatePath }),
+        }) }}
+
+        <input type="hidden" name="weight" value="{{ guide.weight }}">
+      </div>
+      <div slot="components">
+        <p>{{ 'Add basic building blocks to your guide using Twig and Vue components.'|t('guide') }}</p>
+        {% include 'guide/_partials/editor_component_list_items.twig' with { group: 'components' } %}
+      </div>
+      <div slot="images">
+        <p>{{ 'Display screenshots and other images located in your Guide Asset Volume.'|t('guide') }}</p>
+        {% include 'guide/_partials/editor_component_list_items.twig' with { group: 'images' } %}
+      </div>
+      <div slot="guides">
+        <p>{{ 'Include content from other guides into your guide.'|t('guide') }}</p>
+        {% include 'guide/_partials/editor_component_list_items.twig' with { group: 'guides' } %}
+      </div>
+      <div slot="snippets">
+        <p>{{ 'Add these snippets to inform your authors of missing content and provide contextual tips. Edit them to fit your project.'|t('guide') }}</p>
+        {% include 'guide/_partials/editor_component_list_items.twig' with { group: 'snippets' } %}
+      </div>
+      <div slot="editor">
+        {{ codeEditor.textareaField({
+          label: 'Content'|t('guide'),
+          instructions: 'Write in Markdown, HTML, and Twig. If Render Markdown is disabled, wrap Markdown code in <strong class="guide-select-string">{% apply markdown(\'gfm\') %}</strong>'|t('guide'),
+          id: 'contentEditor',
+          name: "contentEditor",
+          placeholder: '',
+          value: guide.content ?? '',
+          rows: 20,
+        }, "content-editor", {
+          language: "twig",
+          theme: "vs-dark",
+        }, {
+          maxEditorRows: 35,
+        }) }}
+      </div>
+
+      <div class="guide-tab-icon" slot="icon-components">{{ svg('@appicons/icons.svg')|raw }}</div>
+      <div class="guide-tab-icon" slot="icon-images">{{ svg('@appicons/image.svg')|raw }}</div>
+      <div class="guide-tab-icon" slot="icon-guides">{{ svg('@wbrowar/guide/assetbundles/static/icon-mask.svg')|raw }}</div>
+      <div class="guide-tab-icon" slot="icon-settings">{{ svg('@appicons/gear.svg')|raw }}</div>
+      <div class="guide-tab-icon" slot="icon-snippets">{{ svg('@appicons/code.svg')|raw }}</div>
+    </guide-editor>
+  </div>
+
+  {% if proEdition and settings.enableGuideCss %}
+    <div id="css" class="hidden">
+      <div class="flex">
+        <span class="flex-grow"></span>
+        {% include 'guide/_partials/copy_text_button.twig' with { text: guide.slug } only %}
+        {% include 'guide/_partials/slideout_button.twig' with { docs: true, label: 'Guide CSS'|t('guide'), slug: 'guide-editor-css' } only %}
+      </div>
+
+      {{ codeEditor.textareaField({
+        label: 'CSS'|t('guide'),
+        id: 'contentCss',
+        instructions: "CSS code that will be loaded on every page in the control panel."|t('guide'),
+        name: "contentCss",
+        placeholder: '',
+        value: guide.contentCss,
+        rows: 20,
+      }, "css-editor", {
+        language: "css",
+        theme: "vs-dark",
+      }) }}
+    </div>
+  {% else %}
+    <input type="hidden" name="contentCss" value="{{ guide.contentCss }}" />
+  {% endif %}
+
+  {% if proEdition and settings.enableGuideJavascript %}
+    <div id="javascript" class="hidden">
+      <div class="flex">
+        <span class="flex-grow"></span>
+        {% include 'guide/_partials/copy_text_button.twig' with { text: guide.slug } only %}
+        {% include 'guide/_partials/slideout_button.twig' with { docs: true, label: 'Guide JavaScript'|t('guide'), slug: 'guide-editor-javascript' } only %}
+      </div>
+
+      {{ codeEditor.textareaField({
+        label: 'JavaScript'|t('guide'),
+        id: 'contentJavascript',
+        instructions: "Code wrapped in a callback function—fired whenever this guide is displayed."|t('guide'),
+        name: "contentJavascript",
+        placeholder: '',
+        value: guide.contentJavascript,
+        rows: 20,
+      }, "javascript-editor", {
+        language: "javascript",
+        theme: "vs-dark",
+      }) }}
+    </div>
+  {% else %}
+    <input type="hidden" name="contentJavascript" value="{{ guide.contentJavascript }}" />
+  {% endif %}
 {% endset %}

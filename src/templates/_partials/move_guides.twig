@@ -1,0 +1,32 @@
+{% if guides|length %}
+  {% for guide in guides %}
+    <div data-guide-move="{{ guide.id }}">
+      {% include 'guide/_partials/guide_display.twig' with {
+        guideDisplayArea: 'uri',
+        guides: [guide],
+      } only %}
+    </div>
+  {% endfor %}
+
+  {% set moveJs %}
+    {% for key in moveMap|keys %}
+      {% set ids = key|split('-') %}
+      {% set moveMethod = moveMap[key].moveMethod %}
+      {% if moveMethod == 'after' %}
+        {% set method = 'after' %}
+      {% elseif moveMethod == 'before' %}
+        {% set method = 'before' %}
+      {% elseif moveMethod == 'prepend' %}
+        {% set method = 'prepend' %}
+      {% else %}
+        {% set method = 'append' %}
+      {% endif %}
+const guideMove{{ ids[0] }}TargetElement = document.querySelector('{{ moveMap[key].selector }}');
+const guideMove{{ ids[0] }}GuideElement = document.querySelector('[data-guide-move="{{ ids[1] }}"]');
+if (guideMove{{ ids[0] }}TargetElement && guideMove{{ ids[0] }}GuideElement) {
+  guideMove{{ ids[0] }}TargetElement.{{ method }}(guideMove{{ ids[0] }}GuideElement);
+}
+    {% endfor %}
+  {% endset %}
+  {% js moveJs on load %}
+{% endif %}

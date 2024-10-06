@@ -1,6 +1,6 @@
 <?php
 /**
- * Guide plugin for Craft CMS 3.x
+ * Guide plugin for Craft CMS 5.x
  *
  * A CMS Guide for Craft CMS.
  *
@@ -10,16 +10,14 @@
 
 namespace wbrowar\guide\services;
 
+use Craft;
+use craft\base\Component;
 use craft\elements\User;
 use wbrowar\guide\Guide as GuidePlugin;
 use wbrowar\guide\helpers\GuideHelpers;
 use wbrowar\guide\models\Guide as GuideModel;
-use wbrowar\guide\records\Placements;
-
-use Craft;
-use craft\base\Component;
-use LitEmoji\LitEmoji;
 use wbrowar\guide\records\Guides;
+use wbrowar\guide\records\Placements;
 
 /**
  * @author    Will Browar
@@ -57,7 +55,7 @@ class Guide extends Component
             $orderBy = $params['orderBy'];
             unset($params['orderBy']);
         } else {
-            $orderBy = 'title';
+            $orderBy = 'weight ASC, title ASC';
         }
 
         switch ($queryType) {
@@ -72,7 +70,6 @@ class Guide extends Component
                         $guide->content = GuideHelpers::decodeEmoji($guide->content);
                     }
                 }
-
                 break;
             case 'new':
                 $guides = new Guides([]);
@@ -86,7 +83,6 @@ class Guide extends Component
                 if (!empty($guides->content)) {
                     $guides->content = GuideHelpers::decodeEmoji($guides->content);
                 }
-
                 break;
             case 'count':
                 $guides = Guides::find()->where($params)->count();
@@ -166,12 +162,16 @@ class Guide extends Component
 
         $record->authorId = $model->authorId;
         $record->content = GuideHelpers::encodeEmoji($model->content);
+        $record->contentCss = $model->contentCss;
+        $record->contentJavascript = $model->contentJavascript;
         $record->contentSource = $model->contentSource;
         $record->contentUrl = $model->contentUrl;
+        $record->renderMarkdown = $model->renderMarkdown;
         $record->summary = $model->summary;
         $record->slug = $this->getUniqueSlug($model->slug, $id ?? 0);
         $record->template = $model->template;
         $record->title = $model->title;
+        $record->weight = $model->weight;
 
         $record->save();
 

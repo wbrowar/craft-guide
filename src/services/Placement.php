@@ -1,6 +1,6 @@
 <?php
 /**
- * Guide plugin for Craft CMS 3.x
+ * Guide plugin for Craft CMS 5.x
  *
  * A CMS Guide for Craft CMS.
  *
@@ -26,6 +26,20 @@ class Placement extends Component
     // Public Methods
     // =========================================================================
 
+    /**
+     * Removes placements for guides that have been deleted.
+     *
+     * @return void
+     */
+    public function cleanUpOrphanedPlacements()
+    {
+        $guideIds = Guide::$plugin->guide->getGuides([], 'ids');
+        $placements = $this->getPlacements(['not in', 'guideId', $guideIds]);
+
+        foreach ($placements as $placement) {
+            $placement->delete();
+        }
+    }
 
     /**
      * Format URI to be stored as a Placement URI
@@ -69,8 +83,8 @@ class Placement extends Component
     {
         $colMd = 2;
         $colSm = 1;
-        $headerMd = 2;
-        $headerSm = 1;
+        $headerMd = 'large';
+        $headerSm = 'small';
         $groups = [];
         
         if (Guide::$pro) {
@@ -80,10 +94,9 @@ class Placement extends Component
             if (!empty($assetVolumes)) {
                 $groups[] = [
                     'columns' => $colSm,
-                    'description' => 'All asset edit pages',
-                    'header' => 'Assets',
+                    'description' => Craft::t('guide', 'Select guides to display on all <strong>Asset</strong> edit pages.'),
+                    'header' => Craft::t('guide', 'Assets'),
                     'headerSize' => $headerMd,
-                    'label' => 'Assets',
                     'name' => 'asset',
                     'groupId' => null,
                 ];
@@ -91,9 +104,8 @@ class Placement extends Component
                 foreach ($assetVolumes as $item) {
                     $groups[] = [
                         'columns' => $colSm,
-                        'description' => 'Assets in the ' . $item->name . ' volume',
+                        'description' => Craft::t('guide', 'Select guides to display on <strong>Asset</strong> edit pages in the <strong>{name}</strong> volume.', ['name' => $item->name]),
                         'header' => $item->name,
-                        'label' => 'Asset Volumes',
                         'headerSize' => $headerSm,
                         'name' => 'assetVolume',
                         'groupId' => $item->uid,
@@ -107,10 +119,9 @@ class Placement extends Component
             if (!empty($categoryGroups)) {
                 $groups[] = [
                     'columns' => $colSm,
-                    'description' => 'All category edit pages',
-                    'header' => 'Categories',
+                    'description' => Craft::t('guide', 'Select guides to display on all <strong>Category</strong> edit pages.'),
+                    'header' => Craft::t('guide', 'Categories'),
                     'headerSize' => $headerMd,
-                    'label' => 'Categories',
                     'name' => 'category',
                     'groupId' => null,
                 ];
@@ -118,10 +129,9 @@ class Placement extends Component
                 foreach ($categoryGroups as $item) {
                     $groups[] = [
                         'columns' => $colSm,
-                        'description' => 'Categories in the ' . $item->name . ' group',
+                        'description' => Craft::t('guide', 'Select guides to display on <strong>Category</strong> edit pages in the <strong>{name}</strong> group.', ['name' => $item->name]),
                         'header' => $item->name,
                         'headerSize' => $headerSm,
-                        'label' => 'Category Groups',
                         'name' => 'categoryGroup',
                         'groupId' => $item->uid,
                     ];
@@ -134,10 +144,9 @@ class Placement extends Component
             if (!empty($sections)) {
                 $groups[] = [
                     'columns' => $colSm,
-                    'description' => 'All entry edit pages',
-                    'header' => 'Entries',
+                    'description' => Craft::t('guide', 'Select guides to display on all <strong>Entry</strong> edit pages.'),
+                    'header' => Craft::t('guide', 'Entries'),
                     'headerSize' => $headerMd,
-                    'label' => 'Entries',
                     'name' => 'entry',
                     'groupId' => null,
                 ];
@@ -145,10 +154,9 @@ class Placement extends Component
                 foreach ($sections as $section) {
                     $groups[] = [
                         'columns' => $colSm,
-                        'description' => 'Entries in the ' . $section->name . ' section',
+                        'description' => Craft::t('guide', 'Select guides to display on <strong>Entry</strong> edit pages in the <strong>{name}</strong> section', ['name' => $section->name]),
                         'header' => $section->name,
                         'headerSize' => $headerSm,
-                        'label' => 'Sections',
                         'name' => 'section',
                         'groupId' => $section->uid,
                     ];
@@ -161,10 +169,9 @@ class Placement extends Component
             if (!empty($globalSets)) {
                 $groups[] = [
                     'columns' => $colSm,
-                    'description' => 'All globals edit pages',
-                    'header' => 'Globals',
+                    'description' => Craft::t('guide', 'Select guides to display on all <strong>Global Set</strong> edit pages.'),
+                    'header' => Craft::t('guide', 'Globals'),
                     'headerSize' => $headerMd,
-                    'label' => 'Globals',
                     'name' => 'global',
                     'groupId' => null,
                 ];
@@ -172,23 +179,41 @@ class Placement extends Component
                 foreach ($globalSets as $globalSet) {
                     $groups[] = [
                         'columns' => $colSm,
-                        'description' => $globalSet->name . ' global edit pages',
+                        'description' => Craft::t('guide', 'Select guides to display on <strong>{name} Global Set</strong> edit pages.', ['name' => $globalSet->name]),
                         'header' => $globalSet->name,
                         'headerSize' => $headerSm,
-                        'label' => 'Global Sets',
                         'name' => 'globalSet',
                         'groupId' => $globalSet->uid,
                     ];
                 }
             }
 
+            // URI
+            $groups[] = [
+                'columns' => $colSm,
+                'description' => Craft::t('guide', 'Display guides on a specific <strong>Control Panel</strong> page <strong>(uri)</strong> next to or inside a specific HTML element <strong>(selector)</strong>.'),
+                'header' => Craft::t('guide', 'Control Panel Pages'),
+                'headerSize' => $headerMd,
+                'name' => 'uri',
+                'groupId' => null,
+            ];
+
+            // UI Elements
+            $groups[] = [
+                'columns' => $colMd,
+                'description' => Craft::t('guide', 'Enable guides to be selected for display in <strong>UI Elements</strong> on element edit pages.'),
+                'header' => Craft::t('guide', 'UI Elements'),
+                'headerSize' => $headerMd,
+                'name' => 'uiElementEnabled',
+                'groupId' => null,
+            ];
+
             // Users
             $groups[] = [
                 'columns' => $colSm,
-                'description' => 'All user edit pages',
-                'header' => 'Users',
+                'description' => Craft::t('guide', 'Select guides to display on all <strong>User</strong> edit pages.'),
+                'header' => Craft::t('guide', 'Users'),
                 'headerSize' => $headerMd,
-                'label' => 'Users',
                 'name' => 'user',
                 'groupId' => null,
             ];
@@ -196,10 +221,9 @@ class Placement extends Component
             // Widgets
             $groups[] = [
                 'columns' => $colMd,
-                'description' => 'User created widgets',
-                'header' => 'Widgets',
+                'description' => Craft::t('guide', 'Enable guides to be selected for display on <strong>Dashboard Widgets</strong>.'),
+                'header' => Craft::t('guide', 'Widgets'),
                 'headerSize' => $headerMd,
-                'label' => 'Widgets',
                 'name' => 'widget',
                 'groupId' => null,
             ];
@@ -213,7 +237,7 @@ class Placement extends Component
      *
      * @return Placements | null
      */
-    public function getPlacements(array $params = [], string $queryType = 'all')
+    public function getPlacements(array $params = [], string $queryType = 'all'): array|Placements|null
     {
         if (!Guide::$pro) {
             $params['group'] = 'nav';
@@ -296,7 +320,7 @@ class Placement extends Component
         $record->group = $model->group;
         $record->groupId = $model->groupId;
         $record->guideId = $model->guideId;
-        $record->portalMethod = $model->portalMethod;
+        $record->moveMethod = $model->moveMethod;
         $record->selector = $model->selector;
         $record->uri = $this->formatUri($model->uri);
 

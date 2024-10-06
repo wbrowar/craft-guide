@@ -1,6 +1,6 @@
 <?php
 /**
- * Guide plugin for Craft CMS 3.x
+ * Guide plugin for Craft CMS 5.x
  *
  * A CMS Guide for Craft CMS.
  *
@@ -10,10 +10,9 @@
 
 namespace wbrowar\guide\widgets;
 
-use wbrowar\guide\Guide as GuidePlugin;
-
 use Craft;
 use craft\base\Widget;
+use wbrowar\guide\Guide as GuidePlugin;
 
 /**
  * Guide Widget
@@ -56,14 +55,11 @@ class Guide extends Widget
     {
         $guide = $this->getGuideFromGuideId();
 
-        if ($this->showTitle) {
-            if ($guide ?? false) {
-                return $guide->title;
-            } else {
-                return Craft::t('guide', 'Guide');
-            }
+        if ($guide ?? false) {
+            return $guide->title;
+        } else {
+            return Craft::t('guide', 'Guide');
         }
-        return '';
     }
 
     /**
@@ -106,12 +102,10 @@ class Guide extends Widget
     public function getSettingsHtml(): ?string
     {
         if (GuidePlugin::$pro) {
-            $placements = GuidePlugin::$plugin->placement->getPlacements(['group' => 'widget']);
-
             return Craft::$app->getView()->renderTemplate(
                 'guide/widgets/guide_settings',
                 [
-                    'selectableGuides' => GuidePlugin::$plugin->guide->getGuidesForUserFromPlacements($placements),
+                    'selectableGuides' => $this->getSelectableGuides(),
                     'userOperations' => GuidePlugin::$plugin->getUserOperations(),
                     'widget' => $this,
                 ]
@@ -131,6 +125,7 @@ class Guide extends Widget
             [
                 'guide' => $this->getGuideFromGuideId(),
                 'proEdition' => GuidePlugin::$pro,
+                'showTitle' => $this->showTitle,
                 'widgetId' => $this->id,
             ]
         );
@@ -140,8 +135,22 @@ class Guide extends Widget
     /**
      * @inheritdoc
      */
+    public function getSelectableGuides()
+    {
+        $placements = GuidePlugin::$plugin->placement->getPlacements(['group' => 'widget']);
+        return GuidePlugin::$plugin->guide->getGuidesForUserFromPlacements($placements);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getGuideFromGuideId()
     {
-        return GuidePlugin::$plugin->guide->getGuides(['id' => $this->guideId], 'one');
+        foreach ($this->getSelectableGuides() as $getSelectableGuide) {
+            if ($getSelectableGuide['id'] == $this->guideId) {
+                return $getSelectableGuide;
+            }
+        }
+        return null;
     }
 }

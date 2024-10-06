@@ -37,7 +37,7 @@
     on: widget.showTitle,
   }) }}
 {% else %}
-  No guides are available for widgets right now.{% if userOperations.useOrganizer %}
-  <a href="{{ url('guide/organizer') }}">Use the Organizer</a> to enable guides for widgets.{% endif %}
+  {{ 'No guides are available for widgets right now.'|t('guide') }}{% if userOperations.useOrganizer %}
+  <a href="{{ url('guide/organizer') }}">{{ 'Use the Organizer to enable guides for widgets.'|t('guide') }}</a>{% endif %}
   <input type="hidden" name="guideId" value="0">
 {% endif %}

@@ -1,0 +1,14 @@
+{% extends 'guide/_partials/render_component.twig' %}
+
+{% set tMessages = {
+  'guideSlideoutSlugError': 'A guide with the slug, "[slug]", doesn’t exist.'|t('guide'),
+} %}
+
+{% set attributes = {
+  'page-slug': slug ?? null,
+  't-messages': tMessages|json_encode,
+} %}
+
+{% set element = 'guide-slideout-button' %}
+
+{% block content -%}<button class="btn" type="button">{{ svg('@wbrowar/guide/assetbundles/static/icon-mask.svg')|raw }}<span>{{ label ?? 'Guide'|t('guide') }}</span></button>{%- endblock %}

@@ -1,0 +1,19 @@
+guide-slideout-button {
+  display: block;
+
+  & > button.btn {
+    gap: .3em;
+    background-color: var(--guide-color-blue);
+    color: white;
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--guide-color-blue), rgb(1, 16, 99) 10%);
+    }
+    & > svg {
+      display: block;
+      width: 1.1em;
+      height: 1.1em;
+      fill: currentColor;
+    }
+  }
+}

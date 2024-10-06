@@ -1,6 +1,6 @@
 <?php
 /**
- * Guide plugin for Craft CMS 3.x
+ * Guide plugin for Craft CMS 5.x
  *
  * A CMS Guide for Craft CMS.
  *
@@ -18,12 +18,16 @@ use craft\db\ActiveRecord;
  * @property integer $id
  * @property integer $authorId
  * @property string $content
+ * @property string $contentCss
+ * @property string $contentJavascript
  * @property string $contentSource
  * @property string $contentUrl
+ * @property boolean $renderMarkdown
  * @property string $slug
  * @property string $summary
  * @property string $template
  * @property string $title
+ * @property integer $weight
  * 
  * @author    Will Browar
  * @package   Guide

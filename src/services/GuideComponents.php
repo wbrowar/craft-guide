@@ -1,6 +1,6 @@
 <?php
 /**
- * Guide plugin for Craft CMS 3.x
+ * Guide plugin for Craft CMS 5.x
  *
  * A CMS Guide for Craft CMS.
  *
@@ -10,12 +10,10 @@
 
 namespace wbrowar\guide\services;
 
-use craft\elements\Asset;
-use craft\helpers\Template;
-use wbrowar\guide\Guide;
-
 use Craft;
 use craft\base\Component;
+use craft\elements\Asset;
+use wbrowar\guide\Guide;
 
 /**
  * @author    Will Browar
@@ -66,13 +64,15 @@ class GuideComponents extends Component
                             $list[] = [
                                 'title' => $asset->title,
                                 'group' => 'images',
-                                'code' => "{{ craft.guide.component('image', { asset: craft.assets.filename('" . $asset->filename . "').volume('" . $assetVolume->handle . "').one() }) }}",
-//                                'documentation' => '<p>Display an image from your <strong>Guide Asset Volume</strong>.</p>',
+                                'contentCode' => "{{ craft.guide.component('image', { asset: craft.assets.filename('" . $asset->filename . "').volume('" . $assetVolume->handle . "').one(), modal: true }) }}",
                                 'props' => [
-                                    'asset' => 'An image asset.',
+                                    'asset' => Craft::t('guide', 'An image asset uploaded to this Craft CMS project.'),
+                                    'modal' => Craft::t('guide', 'Enables a modal to show when the image is clicked.'),
+                                    'src' => Craft::t('guide', 'The URL of the image to be displayed.'),
                                 ],
                                 'thumbnail1x' => $thumbnailUrl1x ?? false,
                                 'thumbnail2x' => $thumbnailUrl2x ?? false,
+                                'summary' => $asset->alt ?? null
                             ];
                         }
                     }
@@ -96,7 +96,8 @@ class GuideComponents extends Component
     {
         if (Guide::$pro) {
             $class = $options['attrs']['class'] ?? [];
-            $class[] = 'g-' . $handle;
+            $class[] = 'guide-component';
+            $class[] = 'guide-component-' . $handle;
 
             $options['attrs'] = $options['attrs'] ?? [];
             $options['attrs']['class'] = $class;

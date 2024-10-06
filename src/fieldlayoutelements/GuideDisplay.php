@@ -1,6 +1,6 @@
 <?php
 /**
- * Guide plugin for Craft CMS 3.x
+ * Guide plugin for Craft CMS 5.x
  *
  * A CMS Guide for Craft CMS.
  *
@@ -60,7 +60,7 @@ class GuideDisplay extends BaseUiElement
      */
     public function settingsHtml(): null|string
     {
-        return Craft::$app->getView()->renderTemplate('guide/fieldlayoutelements/guide_display_settings');
+        return Craft::$app->getView()->renderTemplate('guide/fieldlayoutelements/guide_display_settings.twig');
     }
 
     /**
@@ -69,19 +69,23 @@ class GuideDisplay extends BaseUiElement
     public function formHtml(ElementInterface $element = null, bool $static = false): ?string
     {
         try {
-            $placement = Guide::$plugin->placement->getPlacements(['group' => 'uiElement', 'groupId' => 'uiElement-' . $this->uid], 'one');
+            $allowedGuideIds = Guide::$plugin->placement->getPlacements(['group' => 'uiElementEnabled'], 'guideId');
+            $allowedGuides = Guide::$plugin->guide->getGuides(['id' => $allowedGuideIds]);
 
-            if ($placement) {
+            $placement = Guide::$plugin->placement->getPlacements(['group' => 'uiElement', 'groupId' => 'uiElement-' . $this->uid], 'one');
+            
+            if ($placement && in_array($placement->guideId, $allowedGuideIds)) {
                 $guide = Guide::$plugin->guide->getGuides(['id' => $placement->guideId], 'one');
             }
 
             $content = Template::raw(Guide::$view->renderTemplate('guide/fieldlayoutelements/guide_display_body.twig', [
+                'allowedGuides' => $allowedGuides,
                 'element' => $element,
                 'guide' => $guide ?? null,
                 'placementId' => $placement->id ?? null,
                 'proEdition' => Guide::$pro,
-                'static' => $static,
                 'uid' => $this->uid,
+                'userOperations' => Guide::$plugin->getUserOperations(),
             ]));
         } catch (\Throwable $e) {
             return $this->error($e->getMessage(), 'error');

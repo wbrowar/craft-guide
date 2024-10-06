@@ -1,6 +1,6 @@
 <?php
 /**
- * Guide plugin for Craft CMS 3.x
+ * Guide plugin for Craft CMS 5.x
  *
  * A CMS Guide for Craft CMS.
  *
@@ -18,10 +18,9 @@ use craft\db\ActiveRecord;
  * @property integer $id
  * @property string $access
  * @property string $group
- * @property integer $groupId
- * @property string $theme
+ * @property string $groupId
  * @property integer $guideId
- * @property string $portalMethod
+ * @property string $moveMethod
  * @property string $selector
  * @property string $uri
  * 
