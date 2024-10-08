@@ -32,7 +32,7 @@
     ]
   },
   "guide-display.ts": {
-    "file": "assets/guide-display-CC3tB5E7.js",
+    "file": "assets/guide-display-BJ3Ee2-2.js",
     "name": "guide-display",
     "src": "guide-display.ts",
     "isEntry": true,
@@ -41,7 +41,7 @@
       "_types-BjkgCq3a.js"
     ],
     "css": [
-      "assets/guide-display-8YcmjEqh.css"
+      "assets/guide-display-C0L3yETB.css"
     ]
   },
   "guide-welcome.ts": {

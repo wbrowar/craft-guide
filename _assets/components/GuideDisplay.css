@@ -10,7 +10,7 @@
     display: none;
   }
 }
-.guide-display {
+.guide-display:not(.guide-display-area-uri) {
   container-name: guide-display;
   container-type: inline-size;
 }

@@ -4,10 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.0.2 - 2024-10-08
+### Changed
+- Disabled `guide-display` container query on guides added via the **Control Panel Pages** group.
+
+### Fixed
+- Corrected version number bump from `5.0.1`.
+
+
 ## 5.0.1 - 2024-10-07
 ### Fixed
 - Removed `ul` elements that were mistakenly being rendered on the Guide Export + Import Utility.
 - Updated text in one of the options on the Guide Settings page.
+
 
 ## 5.0.0 - 2024-10-06
 ### Added
