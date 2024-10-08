@@ -124,11 +124,11 @@ export class GuideUtilities extends LitElement {
 
       <p><b>${this.tMessages.step1Title}</b> ${this.tMessages.step1Text}</p>
 
-      ${Object.keys(this.guidesData.guides).map((key) => {
-        const guide = this.guidesData.guides[key]
+      <ul>
+        ${Object.keys(this.guidesData.guides).map((key) => {
+          const guide = this.guidesData.guides[key]
 
-        return html`<ul>
-          <li>
+          return html`<li>
             <input
               id="guide-for-export-${guide.slug}"
               name="guide-for-export-${guide.slug}"
@@ -137,9 +137,9 @@ export class GuideUtilities extends LitElement {
               @input="${() => this._onGuideCheckboxInput(guide.slug)}"
             />
             <label for="guide-for-export-${guide.slug}">${guide.title}</label>
-          </li>
-        </ul>`
-      })}
+          </li>`
+        })}
+      </ul>
 
       <p><b>${this.tMessages.step2Title}</b> ${this.tMessages.step2Text}</p>
 

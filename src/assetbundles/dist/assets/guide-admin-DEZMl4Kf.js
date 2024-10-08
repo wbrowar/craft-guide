@@ -366,8 +366,8 @@ import{n as f,t as x,h as C,k as r,D as d,i as B,r as p,a as q,p as O,R as z,g a
 
       <p><b>${this.tMessages.step1Title}</b> ${this.tMessages.step1Text}</p>
 
-      ${Object.keys(this.guidesData.guides).map(i=>{const t=this.guidesData.guides[i];return r`<ul>
-          <li>
+      <ul>
+        ${Object.keys(this.guidesData.guides).map(i=>{const t=this.guidesData.guides[i];return r`<li>
             <input
               id="guide-for-export-${t.slug}"
               name="guide-for-export-${t.slug}"
@@ -376,8 +376,8 @@ import{n as f,t as x,h as C,k as r,D as d,i as B,r as p,a as q,p as O,R as z,g a
               @input="${()=>this._onGuideCheckboxInput(t.slug)}"
             />
             <label for="guide-for-export-${t.slug}">${t.title}</label>
-          </li>
-        </ul>`})}
+          </li>`})}
+      </ul>
 
       <p><b>${this.tMessages.step2Title}</b> ${this.tMessages.step2Text}</p>
 
