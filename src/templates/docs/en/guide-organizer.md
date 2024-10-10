@@ -30,13 +30,38 @@ If preferred, a setting in **Guide Settings** can be changed to move guides abov
 
 ### Control Panel Pages
 
-Guides can be added to any other page in the CP by providing the page URI and a CSS selector in a guide added to the **Control Panel Pages** group.
+Guides can be added to any other page in the CP by providing a URI pattern and a CSS selector in a guide added to the **Control Panel Pages** group.
+
+The **uri** field determines which pages the guide appears on, based on RegEx patterns that are matched using [PHP’s `preg_match()` method](https://www.php.net/manual/en/function.preg-match.php). See **Matching URI Patterns** below for some tips on working with RegEx patterns to target certain pages in the CP.
 
 <div class="readable guide-component-tip">
   <blockquote class="note tip">The page URI should not include the <code>cpTrigger</code> segment. In most Craft sites this is set to <code>admin</code>, unless it has been changed in the Craft CMS General config. For example, if you want add a guide to the Commerce Orders page at <code>/admin/commerce/orders</code>, enter <code>commerce/orders</code> into the <strong>uri</strong> field.</blockquote>
 </div>
 
 For the **selector** field, enter a valid CSS selector (a class, id, or `data` attribute) of the element where the guide should be added to. By default the guide will appear at the bottom of the selected element, however, you can use the dropdown to move it on top, above, or below the HTML element.
+
+#### Matching URI Patterns
+
+To help you determine if a URI pattern will match against a page in the CP, you can use some online RegEx tools to test your pattern. For example you could do this:
+
+1. Copy the URI you want to match against, for example `/admin/entries`.
+2. Remove the `cpTrigger` from the front of the URI: `/entries`
+2. Remove any leading and trailing slashes: `entries`
+2. Visit https://regex101.com and paste your pattern, `entries`, in the **TEST STRING** field.
+2. Make sure the language is set to PHP and then past `entries` into the **REGULAR EXPRESSION** field.
+3. You’ll see that there’s a match and this means that any page with `entries` in the URI will display your guide.
+4. Once you are done editing your RegEx, copy it and paste it into the Guide Organizer **uri** field.
+
+In the example above, we are matching with all of the pages that include the text, `entries`, but if we want to be more specific here are a few things we can do.
+
+| RegEx                       | Notes                                                                                                                                                                              |
+|-----------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `^entries`                  | Matches any URI that starts with `entries` (because `^` indicates this is the beginning of the URI). This means all entry lists pages and entry edit pages will display the guide. |
+| `^entries$`                 | Matches the **All entries** list page and stops there (because `$` indicates this is the end of the URI).                                                                          |
+| `^entries\/([^\/]+)$`       | Matches all entry list pages except the **All entries** list page. It does not include any of the entry edit pages.                                                                |
+| `^entries?(\/)?([^\/]+)$`   | Matches all entry list pages and it includes the **All entries** list page.                                                                                                        |
+| `^entries\/(.*)\/([^\/]+)$` | Matches _only_ entry edit pages and skips over entry list pages.                                                                                                                   |
+| `^entries\/blogPost`        | Matches entry edit pages in a specific section.                                                                                                                                    |
 
 ## Guide Display
 

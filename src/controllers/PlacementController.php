@@ -26,9 +26,6 @@ class PlacementController extends Controller
     // Public Methods
     // =========================================================================
 
-    // todo Add functions:
-    // todo actionDeletePlacement
-
     /**
      * @return mixed
      */

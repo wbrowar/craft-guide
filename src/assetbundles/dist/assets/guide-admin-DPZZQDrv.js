@@ -258,7 +258,7 @@ import{n as f,t as x,h as C,k as r,D as d,i as B,r as p,a as q,p as O,R as z,g a
                             ${i.name===v.Uri?r`
                                   <div class="guide-organizer-section-uri-fields">
                                     <span class="input"
-                                      ><label for="guide-uri-${e.id}">displayed on page</label>
+                                      ><label for="guide-uri-${e.id}">displayed on page(s)</label>
                                       <input
                                         id="guide-uri-${e.id}"
                                         class="text"

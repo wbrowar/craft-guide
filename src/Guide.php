@@ -587,9 +587,22 @@ class Guide extends Plugin
     {
         $uri = self::$plugin->placement->formatUri(Craft::$app->getRequest()->getFullUri());
 
-        $placements = self::$plugin->placement->getPlacements(['uri' => $uri]);
+        $uriPlacements = self::$plugin->placement->getPlacements(['group' => 'uri'], 'uri');
 
-        if ($placements ?? false) {
+        $placements = array_filter($uriPlacements, function ($placement) use($uri) {
+            $placementUri = $placement->uri;
+
+            if ($placementUri == '*') {
+                $placementUri = '.*';
+            }
+            $placementUri = trim($placementUri, '/');
+            $placementUri = str_replace(['\/', '/'], ['/', '\/'], $placementUri);
+            $placementUri = '/' . $placementUri . '/';
+
+            return preg_match($placementUri, $uri) === 1;
+        });
+
+        if (!empty($placements)) {
             $guideIds = [];
             $moveMap = [];
 
