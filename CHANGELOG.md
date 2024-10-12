@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.1.1 - 2024-10-12
+
+### Fixed
+Fixed typos on the CHANGELOG.
+
 ## 5.1.0 - 2024-10-12
 
 > {warning} This update changes the behavior on how guides added to the **Control Panel Pages** group in the Guide Organizer are matched agains URIs in the Control Panel. The value of the **uri pattern** field may need to be updated for each guide if you find that guides are appearing on the wrong pages in the Control Panel.
