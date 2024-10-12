@@ -12,6 +12,7 @@
    */ #}
 
   {% if docs %}
+    <button class="visually-hidden" type="button">{{ 'This button is a focus trap that grabs focus when the slideout panel is opened and it slides the slideout content to the top when button is focused on.'|t('guide') }}</button>
     <div class="guide">
       {{ source('guide/docs/en/' ~ slug ~ '.md')|md('gfm') }}
     </div>

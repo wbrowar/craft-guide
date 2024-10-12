@@ -24,7 +24,7 @@ export async function showGuideSlideout({
         if (textStatus === 'success') {
           const slideout = new window.Craft.Slideout(response.data)
           slideout.open()
-          slideout.on('close', function () {
+          slideout.on('close', () => {
             slideout.destroy()
           })
         }

@@ -285,7 +285,7 @@ export class GuideOrganizer extends LitElement {
                                         id="guide-uri-${placement.id}"
                                         class="text"
                                         type="text"
-                                        placeholder="uri"
+                                        placeholder="uri pattern"
                                         value="${placement.uri ?? ''}"
                                         ?disabled="${this._getAllPlacementsStatus === ApiStatus.Loading}"
                                         @blur="${() => this._saveUriPlacement(event, 'uri', placement)}"

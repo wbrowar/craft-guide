@@ -1,4 +1,4 @@
-import{n as f,t as x,h as C,k as r,D as d,i as B,r as p,a as q,p as O,R as z,g as P,u as F}from"./globals-Bxb8cv8b.js";import{G as $,E as u,A as m,P as v,a as H,M as A}from"./types-BjkgCq3a.js";async function N(i){if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(i);else{const t=document.createElement("textarea");t.value=i,t.classList.add("sr-only"),document.body.prepend(t),t.select();try{document.execCommand("copy")}catch(s){console.error(s)}finally{t.remove()}}}var J=Object.defineProperty,V=Object.getOwnPropertyDescriptor,j=(i,t,s,a)=>{for(var e=a>1?void 0:a?V(t,s):t,o=i.length-1,n;o>=0;o--)(n=i[o])&&(e=(a?n(t,s,e):n(e))||e);return a&&e&&J(t,s,e),e};let G=class extends C{constructor(){super(...arguments),this.tMessages={},this.copyText=""}async _copyTextToClipboard(i){await N(i),window.Craft.cp.displayNotice(`${this.tMessages.copiedToClipboard}: ${i}`)}async connectedCallback(){super.connectedCallback()}render(){return r`${this.copyText&&this.tMessages?r`
+import{n as f,t as x,h as C,k as r,D as d,i as B,r as p,a as q,p as O,R as z,g as P,u as F}from"./globals-5onGeXZl.js";import{G as $,E as u,A as m,P as v,a as H,M as A}from"./types-BjkgCq3a.js";async function N(i){if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(i);else{const t=document.createElement("textarea");t.value=i,t.classList.add("sr-only"),document.body.prepend(t),t.select();try{document.execCommand("copy")}catch(s){console.error(s)}finally{t.remove()}}}var J=Object.defineProperty,V=Object.getOwnPropertyDescriptor,j=(i,t,s,a)=>{for(var e=a>1?void 0:a?V(t,s):t,o=i.length-1,n;o>=0;o--)(n=i[o])&&(e=(a?n(t,s,e):n(e))||e);return a&&e&&J(t,s,e),e};let G=class extends C{constructor(){super(...arguments),this.tMessages={},this.copyText=""}async _copyTextToClipboard(i){await N(i),window.Craft.cp.displayNotice(`${this.tMessages.copiedToClipboard}: ${i}`)}async connectedCallback(){super.connectedCallback()}render(){return r`${this.copyText&&this.tMessages?r`
           <div
             class="code small light copytextbtn"
             title="${this.tMessages.copyToClipboard}"
@@ -263,7 +263,7 @@ import{n as f,t as x,h as C,k as r,D as d,i as B,r as p,a as q,p as O,R as z,g a
                                         id="guide-uri-${e.id}"
                                         class="text"
                                         type="text"
-                                        placeholder="uri"
+                                        placeholder="uri pattern"
                                         value="${e.uri??""}"
                                         ?disabled="${this._getAllPlacementsStatus===m.Loading}"
                                         @blur="${()=>this._saveUriPlacement(event,"uri",e)}"
