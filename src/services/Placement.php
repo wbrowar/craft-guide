@@ -50,24 +50,15 @@ class Placement extends Component
     {
         $cpTrigger = Craft::$app->getConfig()->getGeneral()->cpTrigger ?? '';
 
-        // Remove leading slash
-        if (substr($uri, 0, 1) == '/') {
-            $uri = substr($uri, 1);
-        }
+        // Remove leading and trailing slashes
+        $uri = trim($uri, '/');
 
-        // Remove CP trigger
-        if (substr($uri, 0, strlen($cpTrigger)) == $cpTrigger) {
+        if (str_starts_with($uri, $cpTrigger)) {
+            // Remove cpTrigger
             $uri = substr($uri, strlen($cpTrigger));
-        }
 
-        // Remove leading slash (if cpTrigger was included)
-        if (substr($uri, 0, 1) == '/') {
-            $uri = substr($uri, 1);
-        }
-
-        // Remove trailing slash
-        if (substr($uri, strlen($uri) - 1, 1) == '/') {
-            $uri = substr($uri, 1);
+            // Remove leading and trailing slashes
+            $uri = trim($uri, '/');
         }
 
         return $uri;
@@ -299,6 +290,12 @@ class Placement extends Component
                 foreach ($placementData as $data) {
                     $placements[] = $data->id;
                 }
+                break;
+            case 'uri':
+                /**
+                 * @var Placements $placements
+                 */
+                $placements = Placements::find()->where($params)->andWhere(['not', ['selector' => '']])->andWhere(['not', ['selector' => null]])->andWhere(['not', ['uri' => '']])->andWhere(['not', ['uri' => null]])->limit($limit)->orderBy($orderBy)->all();
                 break;
         }
 

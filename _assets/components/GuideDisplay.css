@@ -33,6 +33,11 @@ guide-display {
     align-items: start;
     gap: var(--xl);
 
+    /* Hide all options on URI guides. */
+    .guide-display-area-uri & {
+      display: none;
+    }
+
     & nav {
       & ul {
         display: grid;

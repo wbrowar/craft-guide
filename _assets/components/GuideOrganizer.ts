@@ -280,12 +280,12 @@ export class GuideOrganizer extends LitElement {
                               ? html`
                                   <div class="guide-organizer-section-uri-fields">
                                     <span class="input"
-                                      ><label for="guide-uri-${placement.id}">displayed on page</label>
+                                      ><label for="guide-uri-${placement.id}">displayed on page(s)</label>
                                       <input
                                         id="guide-uri-${placement.id}"
                                         class="text"
                                         type="text"
-                                        placeholder="uri"
+                                        placeholder="uri pattern"
                                         value="${placement.uri ?? ''}"
                                         ?disabled="${this._getAllPlacementsStatus === ApiStatus.Loading}"
                                         @blur="${() => this._saveUriPlacement(event, 'uri', placement)}"
