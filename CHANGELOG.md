@@ -6,11 +6,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## 5.1.0 - 2024-10-12
 
-> {warning} This update changes the behavior on how guides added to the **Control Panel Pages** group in the Guide Organizer are matched agains URIs in the Control Panel. The value of the **uri** field may need to be updated for each guide if you find that guides are appearing on the wrong pages in the Control Panel.
+> {warning} This update changes the behavior on how guides added to the **Control Panel Pages** group in the Guide Organizer are matched agains URIs in the Control Panel. The value of the **uri pattern** field may need to be updated for each guide if you find that guides are appearing on the wrong pages in the Control Panel.
 
 ### Changed
-- The **uri patter** field on guides added to the **Control Panel Pages** group now uses RegEx to match the **uri patter** field value to Control Panel URIs.
-  - This makes it easier to put guides on muiltple pages in a section of the control panel. For tips on how to set up a URI pattern, see [the docs for the Guide Organizer](https://github.com/wbrowar/craft-guide/blob/main/src/templates/docs/en/guide-organizer.md).
+- The **uri pattern** field on guides added to the **Control Panel Pages** group now uses RegEx to match the **uri pattern** field value to Control Panel URIs.
+  - This makes it easier to put guides on muiltple pages in a section of the control panel. For tips on how to set up a URI pattern, see [the docs for the Guide Organizer](https://github.com/wbrowar/craft-guide/blob/main/src/templates/docs/en/guide-organizer.md#matching-uri-patterns).
 
 ### Fixed
 - Fixed an error that occured where entering a value in **uri** field and it removed the first letter when a leading or trailing slash was present.
