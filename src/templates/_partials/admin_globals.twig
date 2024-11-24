@@ -3,6 +3,7 @@
   clientName: settings.clientName,
   enableGuideCss: settings.enableGuideCss == true,
   enableGuideJavascript: settings.enableGuideJavascript == true,
+  fieldHeaderButtons: fieldHeaderButtons,
   fun: settings.fun == true,
   myCompanyName: settings.myCompanyName,
   projectName: settings.projectName,
@@ -13,6 +14,7 @@
   id="guide-admin-globals"
   data-asset-path="{{ view.getAssetManager().getPublishedUrl('@wbrowar/guide/assetbundles/static', true) }}"
   data-dev-mode="{{ craft.app.config.general.devMode ? 'true' : 'false' }}"
+  data-field-header-buttons="{{ fieldHeaderButtons|json_encode }}"
   data-guides="{{ guidesForJs|json_encode }}"
   data-pro-edition="{{ proEdition ? 'true' : 'false' }}"
   data-settings="{{ settingsData|json_encode }}"
@@ -39,7 +41,6 @@
     {% js guideJs at beginBody %}
   {% endif %}
 {% endfor %}
-
 
 {# Hide Web Components until defined. #}
 {% set webComponentCss %}

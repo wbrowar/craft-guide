@@ -70,7 +70,17 @@ guide-organizer {
           color: var(--disabled-color);
         }
         & .guide-organizer-title {
+          display: grid;
+          grid-template-columns: max-content 1fr;
+          align-items: center;
+          gap: var(--xs);
           font-weight: 600;
+
+          & > svg {
+            width: 1.3em;
+            height: 1.3em;
+            fill: var(--guide-color-blue);
+          }
         }
         & .guide-organizer-section-uri-fields {
           display: flex;

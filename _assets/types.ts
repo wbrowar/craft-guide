@@ -70,6 +70,15 @@ export enum EditPageLocation {
 }
 
 /*
+ * Guide button for header fields.
+ */
+export interface FieldHeaderButton {
+  label: string
+  slug: string
+  small: boolean
+}
+
+/*
  * Guide data as stored as a GuideModel
  */
 export interface Guide {
@@ -149,6 +158,7 @@ export enum PlacementGroup {
   Category = 'category',
   CategoryGroup = 'categoryGroup',
   Entry = 'entry',
+  Field = 'field',
   Global = 'global',
   GlobalSet = 'globalSet',
   Section = 'section',

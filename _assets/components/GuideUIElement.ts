@@ -54,6 +54,12 @@ export class GuideUIElement extends LitElement {
   placementId = -1
 
   /**
+   * TODO
+   */
+  @property({ attribute: 'show-default-guide', type: Boolean })
+  showDefaultGuide = false
+
+  /**
    * Messages translated via Craft’s `t` filter.
    */
   @property({ attribute: 't-messages', type: Object })
@@ -157,7 +163,7 @@ export class GuideUIElement extends LitElement {
   connectedCallback() {
     super.connectedCallback()
 
-    if (!this.placementId) {
+    if (!this.placementId && !this.showDefaultGuide) {
       this._showSettings = true
     }
 
@@ -181,7 +187,7 @@ export class GuideUIElement extends LitElement {
 
   render() {
     return html`
-      ${!this._guideSelected && this.placementId
+      ${!this._guideSelected && (this.placementId || this.showDefaultGuide)
         ? html`<button
             class="settings"
             type="button"
@@ -193,7 +199,9 @@ export class GuideUIElement extends LitElement {
         : nothing}
       ${this._showSettings && !this._guideSelected ? html`<slot name="settings-display"></slot>` : nothing}
       ${this._showSettings && this._guideSelected ? html`<slot name="guide-selected"></slot>` : nothing}
-      ${!this._showSettings && this.placementId ? html`<slot name="guide-display"></slot>` : nothing}
+      ${!this._showSettings && (this.placementId || this.showDefaultGuide)
+        ? html`<slot name="guide-display"></slot>`
+        : nothing}
     `
   }
 }

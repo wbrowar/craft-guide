@@ -1,4 +1,18 @@
 guide-list {
+  & a {
+    display: grid;
+    grid-template-columns: max-content max-content;
+    align-items: center;
+    gap: var(--xs);
+    font-weight: 600;
+    color: var(--guide-color-blue);
+
+    & > svg {
+      width: 1.3em;
+      height: 1.3em;
+      fill: var(--guide-color-blue);
+    }
+  }
   & td:has(input[type="checkbox"]) {
     line-height: 2.2em;
   }

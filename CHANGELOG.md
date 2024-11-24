@@ -4,10 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.2.0 - 2024-11-24
+
+### Added
+- Added a default guide setting to Guide UI Elements
+
 ## 5.1.1 - 2024-10-12
 
 ### Fixed
-Fixed typos on the CHANGELOG.
+- Fixed typos on the CHANGELOG.
 
 ## 5.1.0 - 2024-10-12
 

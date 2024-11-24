@@ -570,7 +570,22 @@ class Guide extends Plugin
             ];
         }
 
+        // TODO get list of guide buttons for fields
+        $fieldHeaderButtons = [
+            'body' => [
+                'label' => !empty(self::$settings->guideButtonLabel) ? self::$settings->guideButtonLabel : Craft::t('guide', 'Guide'),
+                'slug' => 'cms-user-manual',
+                'small' => true,
+            ],
+            'text' => [
+                'label' => !empty(self::$settings->guideButtonLabel) ? self::$settings->guideButtonLabel : Craft::t('guide', 'Guide'),
+                'slug' => 'cms-user-manual',
+                'small' => true,
+            ],
+        ];
+
         $adminGlobalsVariables = [
+            'fieldHeaderButtons' => $fieldHeaderButtons,
             'guides' => $guides,
             'guidesForJs' => $guidesForJs,
             'proEdition' => self::$pro,

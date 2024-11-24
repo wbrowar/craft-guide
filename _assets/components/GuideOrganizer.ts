@@ -1,6 +1,6 @@
 import { html, LitElement, nothing } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
-import { guides } from '../globals.ts'
+import { guideIconSvg, guides } from '../globals.ts'
 import {
   ApiStatus,
   GuideListGuide,
@@ -194,6 +194,10 @@ export class GuideOrganizer extends LitElement {
     if (widget) {
       this._groupsDataStructured.push(widget)
     }
+    const field = this.groupsData.find((group) => group.name === PlacementGroup.Field)
+    if (field) {
+      this._groupsDataStructured.push(field)
+    }
     const uiElementEnabled = this.groupsData.find((group) => group.name === PlacementGroup.UiElementEnabled)
     if (uiElementEnabled) {
       this._groupsDataStructured.push(uiElementEnabled)
@@ -270,80 +274,77 @@ export class GuideOrganizer extends LitElement {
               ? html`
                   <ul>
                     ${placementsInGroup.map((placement) => {
+                      let groupFields
+
+                      if (group.name === PlacementGroup.Field) {
+                        groupFields = html`<p>Hi</p>`
+                      } else if (group.name === PlacementGroup.Uri) {
+                        groupFields = html`
+                          <div class="guide-organizer-section-uri-fields">
+                            <span class="input"
+                              ><label for="guide-uri-${placement.id}">displayed on page(s)</label>
+                              <input
+                                id="guide-uri-${placement.id}"
+                                class="text"
+                                type="text"
+                                placeholder="uri pattern"
+                                value="${placement.uri ?? ''}"
+                                ?disabled="${this._getAllPlacementsStatus === ApiStatus.Loading}"
+                                @blur="${() => this._saveUriPlacement(event, 'uri', placement)}"
+                            /></span>
+                            <div class="select">
+                              <select
+                                class="input"
+                                ?disabled="${this._getAllPlacementsStatus === ApiStatus.Loading}"
+                                @input="${() => this._saveUriPlacement(event, 'moveMethod', placement)}"
+                              >
+                                <option value="before" ?selected="${placement.moveMethod === MoveMethod.Before}">
+                                  before
+                                </option>
+                                <option value="prepend" ?selected="${placement.moveMethod === MoveMethod.Prepend}">
+                                  at the top of
+                                </option>
+                                <option value="append" ?selected="${placement.moveMethod === MoveMethod.Append}">
+                                  at the bottom of
+                                </option>
+                                <option value="after" ?selected="${placement.moveMethod === MoveMethod.After}">
+                                  after
+                                </option>
+                              </select>
+                            </div>
+
+                            <span class="input"
+                              ><label for="guide-selector-${placement.id}">CSS selector</label>
+                              <input
+                                id="guide-selector-${placement.id}"
+                                class="text"
+                                type="text"
+                                placeholder="selector"
+                                value="${placement.selector ?? ''}"
+                                ?disabled="${this._getAllPlacementsStatus === ApiStatus.Loading}"
+                                @blur="${() => this._saveUriPlacement(event, 'selector', placement)}"
+                            /></span>
+
+                            ${placement.uri && placement.selector
+                              ? html`<span class="guide-uri-valid" title="${this.tMessages.uriPlacementIsValid}"
+                                  >✓</span
+                                >`
+                              : html`<span class="guide-uri-invalid" title="${this.tMessages.uriPlacementIsInvalid}"
+                                  >ⓧ</span
+                                >`}
+                          </div>
+                        `
+                      } else {
+                        groupFields = html`<div><span>${guidesInGroup[placement.guideId].summary}</span></div>`
+                      }
+
                       return guidesInGroup[placement.guideId]
                         ? html`<li>
                             <div class="guide-organizer-title">
-                              <span>${guidesInGroup[placement.guideId].title}</span>
+                              ${unsafeHTML(guideIconSvg)}<span>${guidesInGroup[placement.guideId].title}</span>
                             </div>
 
-                            ${group.name === PlacementGroup.Uri
-                              ? html`
-                                  <div class="guide-organizer-section-uri-fields">
-                                    <span class="input"
-                                      ><label for="guide-uri-${placement.id}">displayed on page(s)</label>
-                                      <input
-                                        id="guide-uri-${placement.id}"
-                                        class="text"
-                                        type="text"
-                                        placeholder="uri pattern"
-                                        value="${placement.uri ?? ''}"
-                                        ?disabled="${this._getAllPlacementsStatus === ApiStatus.Loading}"
-                                        @blur="${() => this._saveUriPlacement(event, 'uri', placement)}"
-                                    /></span>
-                                    <div class="select">
-                                      <select
-                                        class="input"
-                                        ?disabled="${this._getAllPlacementsStatus === ApiStatus.Loading}"
-                                        @input="${() => this._saveUriPlacement(event, 'moveMethod', placement)}"
-                                      >
-                                        <option
-                                          value="before"
-                                          ?selected="${placement.moveMethod === MoveMethod.Before}"
-                                        >
-                                          before
-                                        </option>
-                                        <option
-                                          value="prepend"
-                                          ?selected="${placement.moveMethod === MoveMethod.Prepend}"
-                                        >
-                                          at the top of
-                                        </option>
-                                        <option
-                                          value="append"
-                                          ?selected="${placement.moveMethod === MoveMethod.Append}"
-                                        >
-                                          at the bottom of
-                                        </option>
-                                        <option value="after" ?selected="${placement.moveMethod === MoveMethod.After}">
-                                          after
-                                        </option>
-                                      </select>
-                                    </div>
-
-                                    <span class="input"
-                                      ><label for="guide-selector-${placement.id}">CSS selector</label>
-                                      <input
-                                        id="guide-selector-${placement.id}"
-                                        class="text"
-                                        type="text"
-                                        placeholder="selector"
-                                        value="${placement.selector ?? ''}"
-                                        ?disabled="${this._getAllPlacementsStatus === ApiStatus.Loading}"
-                                        @blur="${() => this._saveUriPlacement(event, 'selector', placement)}"
-                                    /></span>
-
-                                    ${placement.uri && placement.selector
-                                      ? html`<span class="guide-uri-valid" title="${this.tMessages.uriPlacementIsValid}"
-                                          >✓</span
-                                        >`
-                                      : html`<span
-                                          class="guide-uri-invalid"
-                                          title="${this.tMessages.uriPlacementIsInvalid}"
-                                          >ⓧ</span
-                                        >`}
-                                  </div>
-                                `
-                              : html`<div><span>${guidesInGroup[placement.guideId].summary}</span></div>`}
+                            ${groupFields}
 
                             <div class="buttons">
                               <guide-slideout-button page-slug="${guidesInGroup[placement.guideId].slug}">

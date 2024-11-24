@@ -27,9 +27,14 @@ use wbrowar\guide\Guide;
 class GuideDisplay extends BaseUiElement
 {
     /**
-     * @var string A unique ID to help place guides into this UI Element
+     * @var string Deprecated – DO NOT USE
      */
-    public $uiId;
+    public string $uiId = '';
+
+    /**
+     * @var string The slug of a default guide that can be loaded when no other guide has been selected.
+     */
+    public string $defaultGuideSlug = '';
 
     /**
      * @inheritdoc
@@ -60,7 +65,12 @@ class GuideDisplay extends BaseUiElement
      */
     public function settingsHtml(): null|string
     {
-        return Craft::$app->getView()->renderTemplate('guide/fieldlayoutelements/guide_display_settings.twig');
+        return Craft::$app->getView()->renderTemplate(
+            'guide/fieldlayoutelements/guide_display_settings.twig',
+            [
+                'defaultGuideSlug' => $this->defaultGuideSlug ?? null,
+            ]
+        );
     }
 
     /**
@@ -69,28 +79,37 @@ class GuideDisplay extends BaseUiElement
     public function formHtml(ElementInterface $element = null, bool $static = false): ?string
     {
         try {
+            $showDefaultGuide = false;
             $allowedGuideIds = Guide::$plugin->placement->getPlacements(['group' => 'uiElementEnabled'], 'guideId');
             $allowedGuides = Guide::$plugin->guide->getGuides(['id' => $allowedGuideIds]);
 
             $placement = Guide::$plugin->placement->getPlacements(['group' => 'uiElement', 'groupId' => 'uiElement-' . $this->uid], 'one');
-            
+
             if ($placement && in_array($placement->guideId, $allowedGuideIds)) {
                 $guide = Guide::$plugin->guide->getGuides(['id' => $placement->guideId], 'one');
+            } elseif (!empty($this->defaultGuideSlug)) {
+                $guide = Guide::$plugin->guide->getGuides(['slug' => $this->defaultGuideSlug], 'one');
+
+                if ($guide ?? false) {
+                    $showDefaultGuide = true;
+                }
             }
 
             $content = Template::raw(Guide::$view->renderTemplate('guide/fieldlayoutelements/guide_display_body.twig', [
                 'allowedGuides' => $allowedGuides,
+                'defaultGuideSlug' => $this->defaultGuideSlug ?? null,
                 'element' => $element,
                 'guide' => $guide ?? null,
                 'placementId' => $placement->id ?? null,
                 'proEdition' => Guide::$pro,
+                'showDefaultGuide' => $showDefaultGuide,
                 'uid' => $this->uid,
                 'userOperations' => Guide::$plugin->getUserOperations(),
             ]));
         } catch (\Throwable $e) {
             return $this->error($e->getMessage(), 'error');
         }
-
+        
         if ($content == '') {
             return null;
         }
@@ -119,10 +138,5 @@ class GuideDisplay extends BaseUiElement
         return Html::tag('div', $content, [
             'class' => 'pane',
         ]);
-    }
-
-    private function generateRandomString($length = 10):string
-    {
-        return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', intval(ceil($length/strlen($x))) )),1,$length);
     }
 }
