@@ -591,7 +591,7 @@ class Guide extends Plugin
 
             $fieldHandles = [];
             foreach ($fields as $field) {
-                $fieldHandles[$field->uid] = $field->handle;
+                $fieldHandles[$field->uid] = $field->oldHandle ?? $field->handle;
             }
 
             foreach ($fieldPlacements as $placement) {
