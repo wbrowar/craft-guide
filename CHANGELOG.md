@@ -4,10 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## 5.2.0 - 2024-11-24
+## 5.2.0 - 2024-11-26
 
 ### Added
-- Added a default guide setting to Guide UI Elements
+- Added new **Fields** group to the Guide Organizer. [#112](https://github.com/wbrowar/craft-guide/discussions/112)
+  - You can select a guide and assign a field to it. This will put a Guide Button next to the header wherever that field is shown.
+- Added a default guide setting to Guide UI Elements. [#106](https://github.com/wbrowar/craft-guide/issues/106)
+  - This lets you select a guide to be shown in UI Elements by default—if you know what the slug of the guide will be in the production environment.
+
+### Fixed
+- The Craft CMS minimum required version was bumped up to `^5.5.0`. This fixes a CP CSS issue that occurs based on a recent Craft CMS update.
 
 ## 5.1.1 - 2024-10-12
 

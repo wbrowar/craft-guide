@@ -26,7 +26,6 @@ export function addFieldHeaderGuideButton({
       field?.append(spacerElement)
     }
     // Add small guide button
-    // TODO translate 'Guide'
     field?.append(guideButtonNode(buttonOptions))
   })
 }
@@ -42,7 +41,7 @@ export const fieldHeaderButtons: Record<string, FieldHeaderButton> = globalsElem
   : []
 export function guideButtonNode({ label, slug, small = false }: { label: string; slug: string; small?: boolean }) {
   const guideButton = document.createElement('guide-slideout-button')
-  // guideButton.style.marginInlineStart = 'auto'
+  guideButton.style.marginInlineStart = '5px'
   guideButton.setAttribute('page-slug', slug)
   guideButton.innerHTML = `<button class="btn${small ? ' small' : ''}" type="button">
     ${guideIconSvg}

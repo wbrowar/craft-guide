@@ -9,13 +9,13 @@ export class GuideImageModal extends LitElement {
    * =========================================================================
    */
   /**
-   * TODO
+   * The `<img>` element wrapped in this custom element.
    */
   @state()
   private _image: HTMLImageElement | null = null
 
   /**
-   * TODO
+   * The Craft Modal that pops up to show the full-size image when the image is clicked on.
    */
   @state()
   private _modal: any = null

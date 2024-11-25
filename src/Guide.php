@@ -517,7 +517,7 @@ class Guide extends Plugin
             'js' => '',
         ];
 
-        if (App::parseEnv('$VITE_GUIDE_HMR') == 'true') {
+        if (App::parseEnv('$VITE_GUIDE_HMR') == true) {
             return [
                 'js' => 'http://localhost:3100/' . $filename,
             ];

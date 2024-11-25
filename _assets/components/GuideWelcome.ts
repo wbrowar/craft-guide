@@ -152,79 +152,73 @@ export class GuideWelcome extends LitElement {
    * =========================================================================
    */
   /**
-   * TODO
+   * Keeps track of whether or not the book is opened or closed.
    */
   @state()
   private _animationState = 'intro'
 
   /**
-   * TODO
+   * The amount that a value will change when hitting one of the debug buttons.
    */
   @state()
   private _debugIncrement = 0.5
 
   /**
-   * TODO
+   * The location of the camera across the X plane.
    */
   @state()
   private _debugCameraX = 0
 
   /**
-   * TODO
+   * The location of the camera across the Y plane.
    */
   @state()
   private _debugCameraY = 0
 
   /**
-   * TODO
+   * The location of the camera across the Z plane.
    */
   @state()
   private _debugCameraZ = 0
 
   /**
-   * TODO
+   * The rotation of the camera across the X plane.
    */
   @state()
   private _debugCameraRotateX = 0
 
   /**
-   * TODO
+   * The rotation of the camera across the Y plane.
    */
   @state()
   private _debugCameraRotateY = 0
 
   /**
-   * TODO
+   * The rotation of the camera across the Z plane.
    */
   @state()
   private _debugCameraRotateZ = 0
 
   /**
-   * TODO
-   */
-  @state()
-  private _hasBeenInteractedWith = false
-
-  /**
-   * TODO
+   * The path to the guide book 3D asset as it can be loaded in the browser.
    */
   @state()
   private _objectUrl = `${assetPath}/guide-book.gltf`
 
   /**
-   * TODO
+   * Keeps track of whether or not the looping camera animation is paused or playing.
    */
   @state()
   private _playing = true
 
   /**
-   * TODO
+   * Watches for changes in the width and updates the aspect ratio of the 3D scene.
    */
   @state()
   private _resizeObserver: ResizeObserver | null = null
 
   /**
-   * TODO
+   * Settings passed into the Three.js scene that initialize the camera, lights, and the scene background.
    */
   @state()
   private _settings: SceneSettings = {
@@ -285,13 +279,13 @@ export class GuideWelcome extends LitElement {
   }
 
   /**
-   * TODO
+   * Determines if debug controls should be displayed and used.
    */
   @state()
   private _showDebugControls = import.meta.env.DEV
 
   /**
-   * TODO
+   * Determins if the play/pause button should be shown to the user.
    */
   @state()
   private _showPlayToggle = false
@@ -302,7 +296,7 @@ export class GuideWelcome extends LitElement {
    * =========================================================================
    */
   /**
-   * TODO
+   * Opens the book cover and the first and second pages.
    */
   private _animateOpenBook() {
     if (this._bookTop && this._bookLoose && this._bookLoose2) {
@@ -332,7 +326,7 @@ export class GuideWelcome extends LitElement {
   }
 
   /**
-   * TODO
+   * Closes the book and its pages.
    */
   private _animateCloseBook() {
     if (this._bookTop && this._bookLoose && this._bookLoose2) {
@@ -362,7 +356,7 @@ export class GuideWelcome extends LitElement {
   }
 
   /**
-   * TODO
+   * Plays the initial animation of the camera sliding the book into view.
    */
   private _animateSlideInBook() {
     if (this._book) {
@@ -402,7 +396,8 @@ export class GuideWelcome extends LitElement {
   }
 
   /**
-   * TODO
+   * Handles a debug button press. If the `close` button is pressed, the debug buttons will all be removed.
+   * Refreshing the page will bring the debug buttons back.
    */
   private _debugButtonPressed(action: string) {
     if (this._camera) {
@@ -477,7 +472,7 @@ export class GuideWelcome extends LitElement {
   }
 
   /**
-   * TODO
+   * Sets up the Three.js scene, loads the object, begins the animation, and sets up observers.
    */
   private _init() {
     // set container
@@ -594,7 +589,7 @@ export class GuideWelcome extends LitElement {
   }
 
   /**
-   * TODO
+   * Handles clicking anywhere on the 3D scene element.
    */
   private _onContainerClicked() {
     if (this._animationState === 'opened') {
@@ -605,7 +600,7 @@ export class GuideWelcome extends LitElement {
   }
 
   /**
-   * TODO
+   * Pauses the looping camera animation timeline.
    */
   private _pause() {
     if (this._timeline) {
@@ -615,7 +610,7 @@ export class GuideWelcome extends LitElement {
   }
 
   /**
-   * TODO
+   * Plays the looping camera animation timeline.
    */
   private _play() {
     if (this._timeline) {
@@ -625,7 +620,7 @@ export class GuideWelcome extends LitElement {
   }
 
   /**
-   * TODO
+   * Defines and enables each step in the looping camera animation.
    */
   private _playCameraLoop() {
     if (this._camera) {

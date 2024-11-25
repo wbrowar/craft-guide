@@ -27,13 +27,13 @@ export class GuideOrganizer extends LitElement {
   actionUrlGetAllPlacements = ''
 
   /**
-   * TODO
+   * An object of field data, keyed by field UIDs.
    */
   @property({ attribute: 'fields-data', type: Object })
   fieldsData: Record<string, string>[] = []
 
   /**
-   * TODO
+   * The data that is used to render each organizer group, pre-formatted by PHP.
    */
   @property({ attribute: 'groups-data', type: Object })
   groupsData: OrganizerGroup[] = []
@@ -56,13 +56,13 @@ export class GuideOrganizer extends LitElement {
   private _getAllPlacementsStatus: ApiStatus = ApiStatus.Initial
 
   /**
-   * TODO
+   * Sets the order in which each Organizer category is shown.
    */
   @state()
   private _groupsDataStructured: OrganizerGroup[] = []
 
   /**
-   * TODO
+   * All of the placements stored in the DB. This will get updated by API calls as changes are made.
    */
   @state()
   private _placements: Placement[] = []
@@ -73,7 +73,7 @@ export class GuideOrganizer extends LitElement {
    * =========================================================================
    */
   /**
-   * TODO
+   * Adds a new placement into the database.
    */
   private async _addPlacement(event: Event | undefined, group: OrganizerGroup) {
     this._getAllPlacementsStatus = ApiStatus.Loading
@@ -117,7 +117,7 @@ export class GuideOrganizer extends LitElement {
   }
 
   /**
-   * TODO
+   * Deletes a placement from the database.
    */
   private async _deletePlacement(placementId: number, guide: GuideListGuide) {
     this._getAllPlacementsStatus = ApiStatus.Loading
@@ -150,7 +150,7 @@ export class GuideOrganizer extends LitElement {
   }
 
   /**
-   * TODO
+   * Updates a placement in the `field` group to assign the field’s UID to the `groupId` column.
    */
   private async _saveFieldPlacement(event: Event | undefined, placement: Placement) {
     const value = (event?.target as HTMLSelectElement)?.value
@@ -180,7 +180,7 @@ export class GuideOrganizer extends LitElement {
   }
 
   /**
-   * TODO
+   * Updates a placement in the `uri` group based on which field was changed.
    */
   private async _saveUriPlacement(event: Event | undefined, field: string, placement: Placement) {
     const value = (event?.target as HTMLSelectElement)?.value
@@ -231,13 +231,13 @@ export class GuideOrganizer extends LitElement {
     if (widget) {
       this._groupsDataStructured.push(widget)
     }
-    const field = this.groupsData.find((group) => group.name === PlacementGroup.Field)
-    if (field) {
-      this._groupsDataStructured.push(field)
-    }
     const uiElementEnabled = this.groupsData.find((group) => group.name === PlacementGroup.UiElementEnabled)
     if (uiElementEnabled) {
       this._groupsDataStructured.push(uiElementEnabled)
+    }
+    const field = this.groupsData.find((group) => group.name === PlacementGroup.Field)
+    if (field) {
+      this._groupsDataStructured.push(field)
     }
     const entries = this.groupsData.find((group) => group.name === PlacementGroup.Entry)
     if (entries) {
