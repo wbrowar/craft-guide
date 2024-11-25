@@ -82,7 +82,7 @@ guide-organizer {
             fill: var(--guide-color-blue);
           }
         }
-        & .guide-organizer-section-uri-fields {
+        & .guide-organizer-section-flex-fields {
           display: flex;
           flex-flow: row wrap;
           align-items: center;

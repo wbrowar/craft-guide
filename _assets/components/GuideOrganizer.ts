@@ -11,6 +11,7 @@ import {
   PlacementGroup,
 } from '../types.ts'
 import { unsafeHTML } from 'lit-html/directives/unsafe-html.js'
+import { log } from '../utils/console.ts'
 
 @customElement('guide-organizer')
 export class GuideOrganizer extends LitElement {
@@ -26,16 +27,22 @@ export class GuideOrganizer extends LitElement {
   actionUrlGetAllPlacements = ''
 
   /**
-   * Messages translated via Craft’s `t` filter.
+   * TODO
    */
-  @property({ attribute: 't-messages', type: Object })
-  tMessages: Record<string, string> = {}
+  @property({ attribute: 'fields-data', type: Object })
+  fieldsData: Record<string, string>[] = []
 
   /**
    * TODO
    */
   @property({ attribute: 'groups-data', type: Object })
   groupsData: OrganizerGroup[] = []
+
+  /**
+   * Messages translated via Craft’s `t` filter.
+   */
+  @property({ attribute: 't-messages', type: Object })
+  tMessages: Record<string, string> = {}
 
   /**
    * =========================================================================
@@ -140,6 +147,36 @@ export class GuideOrganizer extends LitElement {
 
     this._placements = response
     this._getAllPlacementsStatus = ApiStatus.Success
+  }
+
+  /**
+   * TODO
+   */
+  private async _saveFieldPlacement(event: Event | undefined, placement: Placement) {
+    const value = (event?.target as HTMLSelectElement)?.value
+
+    this._getAllPlacementsStatus = ApiStatus.Loading
+    const params = {
+      access: 'all',
+      group: 'field',
+      groupId: value === '__none__' ? null : value,
+      guideId: placement.guideId,
+      id: placement.id,
+    }
+
+    await window.Craft?.postActionRequest(
+      'guide/placement/save-placement',
+      {
+        data: params,
+      },
+      async (_response: object, textStatus: string) => {
+        if (textStatus === 'success') {
+          window.Craft.cp.displayNotice(this.tMessages.placementUriSaveSuccess)
+          await this._getAllPlacements()
+          this._getAllPlacementsStatus = ApiStatus.Success
+        }
+      }
+    )
   }
 
   /**
@@ -250,6 +287,10 @@ export class GuideOrganizer extends LitElement {
     return html`
       ${this._groupsDataStructured.map((group) => {
         const placementsInGroup = this._placements.filter((placement) => {
+          if ([PlacementGroup.Field].includes(placement.group)) {
+            return placement.group === group.name
+          }
+
           return placement.group === group.name && placement.groupId === group.groupId
         })
         const guidesInGroup: Record<number, GuideListGuide> = {}
@@ -259,10 +300,9 @@ export class GuideOrganizer extends LitElement {
             guidesInGroup[guide.id] = guide
           }
         })
-        const guideOptions =
-          group.name === PlacementGroup.Uri
-            ? guides
-            : guides.filter((guide) => !Object.keys(guidesInGroup).includes(guide.id.toString()))
+        const guideOptions = [PlacementGroup.Field, PlacementGroup.Uri].includes(group.name)
+          ? guides
+          : guides.filter((guide) => !Object.keys(guidesInGroup).includes(guide.id.toString()))
 
         return html`
           <div class="guide-organizer-header guide-organizer-header-${group.headerSize}">
@@ -277,10 +317,45 @@ export class GuideOrganizer extends LitElement {
                       let groupFields
 
                       if (group.name === PlacementGroup.Field) {
-                        groupFields = html`<p>Hi</p>`
+                        log(this.fieldsData, placementsInGroup)
+                        const fieldUidsFromPlacements = placementsInGroup.map((placementInGroup) => {
+                          return placementInGroup.groupId ?? ''
+                        })
+                        groupFields = html`
+                          <div class="guide-organizer-section-flex-fields">
+                            <label for="guide-field-${placement.id}">is assigned to field</label>
+                            <div class="select">
+                              <select
+                                id="guide-field-${placement.id}"
+                                class="input"
+                                ?disabled="${this._getAllPlacementsStatus === ApiStatus.Loading}"
+                                @input="${() => this._saveFieldPlacement(event, placement)}"
+                              >
+                                <option value="__none__">${this.tMessages.addFieldToGuide}</option>
+                                ${this.fieldsData.map((field) => {
+                                  return html`<option
+                                    ?disabled="${fieldUidsFromPlacements.includes(field.uid)}"
+                                    ?selected="${placement.groupId === field.uid}"
+                                    value="${field.uid}"
+                                  >
+                                    ${field.name}
+                                  </option>`
+                                })}
+                              </select>
+                            </div>
+
+                            ${placement.groupId
+                              ? html`<span class="guide-uri-valid" title="${this.tMessages.fieldPlacementIsValid}"
+                                  >✓</span
+                                >`
+                              : html`<span class="guide-uri-invalid" title="${this.tMessages.fieldPlacementIsInvalid}"
+                                  >ⓧ</span
+                                >`}
+                          </div>
+                        `
                       } else if (group.name === PlacementGroup.Uri) {
                         groupFields = html`
-                          <div class="guide-organizer-section-uri-fields">
+                          <div class="guide-organizer-section-flex-fields">
                             <span class="input"
                               ><label for="guide-uri-${placement.id}">displayed on page(s)</label>
                               <input

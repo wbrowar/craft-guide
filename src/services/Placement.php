@@ -162,7 +162,7 @@ class Placement extends Component
                     'columns' => $colMd,
                     'description' => Craft::t(
                         'guide',
-                        'Assign a guide to a field and a Guide Button will show up next to the field header.'
+                        'Assign a guide to a field and a <strong>Guide Button</strong> will show up next to the field header.'
                     ),
                     'header' => Craft::t('guide', 'Fields'),
                     'headerSize' => $headerMd,
