@@ -10,4 +10,27 @@
  * @since     3.0.0
  */ #}
 
-<p>Because UI Elements are saved in project config, you cannot select a guide yet. A select field will appear in your fields where this UI Element will be placed. This will let you select guides that have been created for that environment.</p>
+{% import "_includes/forms" as forms %}
+
+<h2>{{ 'Guide UI Element'|t('guide') }}</h2>
+
+<p>{{ 'Because UI Elements are saved in project config, you cannot select a guide yet. A select field will appear in your fields where this UI Element will be placed. This will let you select a guide that has been enabled in the Guide Organizer.'|t('guide') }}</p>
+
+<p>{{ 'You may set a guide to appear by default by entering a guide slug below. The default guide will be displayed unless a different guide is selected for the UI Element. The default guide does not need to be enabled in the Guide Organizer.'|t('guide') }}</p>
+
+{% set guides = craft.guide.getAll() %}
+
+{{ forms.autosuggestField({
+  label: 'Default Guide Slug'|t('guide'),
+  instructions: 'The slug of a guide that will be loaded by default.'|t('guide'),
+  tip: 'You may not see your guide slug suggested here if there is a difference between the current database and a production database. You can still enter a guide slug that is not in the autocomplete list.'|t('guide'),
+  id: 'defaultGuideSlug',
+  name: 'defaultGuideSlug',
+  suggestions: [
+    {
+      data: guides|column('slug'),
+    },
+  ],
+  value: defaultGuideSlug ?? '',
+}) }}
+

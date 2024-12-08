@@ -1,57 +1,64 @@
 {
-  "_GLTFLoader-MnDJ9iMv.js": {
-    "file": "assets/GLTFLoader-MnDJ9iMv.js",
+  "_GLTFLoader-CnsMw-IL.js": {
+    "file": "assets/GLTFLoader-CnsMw-IL.js",
     "name": "GLTFLoader"
   },
-  "_globals-5onGeXZl.js": {
-    "file": "assets/globals-5onGeXZl.js",
+  "_console-DyT9hXlL.js": {
+    "file": "assets/console-DyT9hXlL.js",
+    "name": "console"
+  },
+  "_globals-Bdsc2fK0.js": {
+    "file": "assets/globals-Bdsc2fK0.js",
     "name": "globals"
   },
-  "_types-BjkgCq3a.js": {
-    "file": "assets/types-BjkgCq3a.js",
+  "_types-DZ_LYyIe.js": {
+    "file": "assets/types-DZ_LYyIe.js",
     "name": "types"
   },
   "guide-admin.ts": {
-    "file": "assets/guide-admin-DeCF3RzN.js",
+    "file": "assets/guide-admin-C3zGCaaO.js",
     "name": "guide-admin",
     "src": "guide-admin.ts",
     "isEntry": true,
     "imports": [
-      "_globals-5onGeXZl.js",
-      "_types-BjkgCq3a.js"
+      "_globals-Bdsc2fK0.js",
+      "_types-DZ_LYyIe.js",
+      "_console-DyT9hXlL.js"
     ]
   },
   "guide-book.ts": {
-    "file": "assets/guide-book-CP34uCEB.js",
+    "file": "assets/guide-book-BFZ4Xm8v.js",
     "name": "guide-book",
     "src": "guide-book.ts",
     "isEntry": true,
     "imports": [
-      "_globals-5onGeXZl.js",
-      "_GLTFLoader-MnDJ9iMv.js"
+      "_globals-Bdsc2fK0.js",
+      "_GLTFLoader-CnsMw-IL.js",
+      "_console-DyT9hXlL.js"
     ]
   },
   "guide-display.ts": {
-    "file": "assets/guide-display-nrzBRgXS.js",
+    "file": "assets/guide-display-gkaUpaQ1.js",
     "name": "guide-display",
     "src": "guide-display.ts",
     "isEntry": true,
     "imports": [
-      "_globals-5onGeXZl.js",
-      "_types-BjkgCq3a.js"
+      "_globals-Bdsc2fK0.js",
+      "_types-DZ_LYyIe.js"
     ],
     "css": [
-      "assets/guide-display-D_ahsUkM.css"
+      "assets/guide-display-D10asdj3.css"
     ]
   },
   "guide-welcome.ts": {
-    "file": "assets/guide-welcome-DW9YBhYF.js",
+    "file": "assets/guide-welcome-BqAVh_oL.js",
     "name": "guide-welcome",
     "src": "guide-welcome.ts",
     "isEntry": true,
     "imports": [
-      "_globals-5onGeXZl.js",
-      "_GLTFLoader-MnDJ9iMv.js"
+      "_globals-Bdsc2fK0.js",
+      "_GLTFLoader-CnsMw-IL.js",
+      "_console-DyT9hXlL.js"
     ]
   }
 }

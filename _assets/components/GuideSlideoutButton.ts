@@ -11,18 +11,19 @@ export class GuideSlideoutButton extends LitElement {
    */
   /**
    * Determines if button should show documentation pages built into Guide.
+   * Setting this to `true` will look in the docs directory instead of query for a guide.
    */
   @property({ attribute: 'docs-page', type: Boolean })
   docs = false
 
   /**
-   * TODO
+   * When on an element edit page, this passes along the ID of the element being edited so it can be referenced in the guide content.
    */
   @property({ attribute: 'element-id', type: Number })
   elementId = 0
 
   /**
-   * TODO
+   * When on an element edit page, this passes the group handle to determine if the referenced element should be an entry or user.
    */
   @property({ attribute: 'group-handle', type: String })
   groupHandle = ''

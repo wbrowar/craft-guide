@@ -23,12 +23,12 @@
   } %}
 
   <guide-ui-element
+      {{ showDefaultGuide ? 'show-default-guide' : '' }}
       group-id="{{ displayId }}"
       placement-id="{{ placementId }}"
       t-messages="{{ tMessages|json_encode }}"
   >
     <span slot="settings-button" style="color: var(--text-color)">{{ svg('@appicons/gear.svg') }}</span>
-{#    <button slot="settings-button" class="btn small icon settings" type="button">{{ 'Settings'|t('guide') }}</button>#}
     <div slot="guide-display">
       {% if guide ?? false %}
         {% include 'guide/_partials/guide_display.twig' with {
@@ -45,7 +45,8 @@
 
     <div slot="settings-display">
       {% if allowedGuides ?? false and allowedGuides|length %}
-        {% set guideOptions = [{ label: 'None'|t('guide'), value: '__none__' }] %}
+        {% set noneLabel = defaultGuideSlug ? 'Default (from UI Element Settings)'|t('guide') : 'None'|t('guide') %}
+        {% set guideOptions = [{ label: noneLabel, value: '__none__' }] %}
         {% for item in allowedGuides %}
           {% set guideOptions = guideOptions|merge([{
             label: item.title,

@@ -27,7 +27,7 @@ export class GuideCopyTextButton extends LitElement {
    * =========================================================================
    */
   /**
-   * TODO
+   * Copies text to the clipboard and then displays a notification when it’s complete.
    */
   private async _copyTextToClipboard(text: string) {
     await copyToClipboard(text)

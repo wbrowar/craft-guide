@@ -11,7 +11,7 @@ export class GuideUtilities extends LitElement {
    * ===========================================================================
    */
   /**
-   * Messages translated via Craft’s `t` filter.
+   * The content for all guides that are available for export.
    */
   @property({ attribute: 'guides-data', type: Object })
   guidesData: { guides: Record<string, Guide> } = { guides: {} }
@@ -28,13 +28,13 @@ export class GuideUtilities extends LitElement {
    * =========================================================================
    */
   /**
-   * TODO
+   * The JSON-formatted data to be exported.
    */
   @state()
   private _exportData = ''
 
   /**
-   * TODO
+   * The guides selected by the user to be exported.
    */
   @state()
   private _selectedGuides: string[] = []
@@ -45,7 +45,7 @@ export class GuideUtilities extends LitElement {
    * =========================================================================
    */
   /**
-   * TODO
+   * Handles copying the export data and setting a notification to the user.
    */
   private async _copyExportData() {
     await copyToClipboard(this._exportData)
@@ -53,7 +53,7 @@ export class GuideUtilities extends LitElement {
   }
 
   /**
-   * TODO
+   * Formats the list of exported guides into the format needed for export and import.
    */
   private _formatExportData() {
     const exportData: { guides: Guide[] } = { guides: [] }
@@ -66,7 +66,7 @@ export class GuideUtilities extends LitElement {
   }
 
   /**
-   * TODO
+   * Handles importing the JSON-formatted import data pasted into the `import-data` field.
    */
   private async _importImportData() {
     const importTextarea: HTMLTextAreaElement | null = this.querySelector('#import-data')
@@ -87,7 +87,7 @@ export class GuideUtilities extends LitElement {
   }
 
   /**
-   * TODO
+   * Handles toggling a selected guide based on the state of its checkbox.
    */
   private _onGuideCheckboxInput(guideSlug: string) {
     if (this._selectedGuides.includes(guideSlug)) {

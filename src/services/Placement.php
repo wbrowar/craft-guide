@@ -153,8 +153,25 @@ class Placement extends Component
                     ];
                 }
             }
+            
+            // UI Elements
+            $fields = Craft::$app->getFields()->getAllFields();
+            
+            if (!empty($fields)) {
+                $groups[] = [
+                    'columns' => $colMd,
+                    'description' => Craft::t(
+                        'guide',
+                        'Assign a guide to a field and a <strong>Guide Button</strong> will show up next to the field header.'
+                    ),
+                    'header' => Craft::t('guide', 'Fields'),
+                    'headerSize' => $headerMd,
+                    'name' => 'field',
+                    'groupId' => null,
+                ];
+            }
 
-            // Entries and sections - if any
+            // Global Sets - if any
             $globalSets = Craft::$app->getGlobals()->getAllSets();
 
             if (!empty($globalSets)) {

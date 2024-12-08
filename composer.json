@@ -2,7 +2,7 @@
     "name": "wbrowar/guide",
     "description": "A CMS Guide for Craft CMS.",
     "type": "craft-plugin",
-    "version": "5.1.1",
+    "version": "5.2.0",
     "keywords": [
         "craft",
         "cms",
@@ -27,7 +27,7 @@
         }
     ],
     "require": {
-        "craftcms/cms": "^5.3.0",
+        "craftcms/cms": "^5.5.0",
         "nystudio107/craft-code-editor": "^1.0.18"
     },
     "autoload": {

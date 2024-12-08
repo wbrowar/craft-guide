@@ -1,6 +1,6 @@
 import { html, LitElement, nothing } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
-import { guides } from '../globals.ts'
+import { guideIconSvg, guides } from '../globals.ts'
 import {
   ApiStatus,
   GuideListGuide,
@@ -11,6 +11,7 @@ import {
   PlacementGroup,
 } from '../types.ts'
 import { unsafeHTML } from 'lit-html/directives/unsafe-html.js'
+import { log } from '../utils/console.ts'
 
 @customElement('guide-organizer')
 export class GuideOrganizer extends LitElement {
@@ -26,16 +27,22 @@ export class GuideOrganizer extends LitElement {
   actionUrlGetAllPlacements = ''
 
   /**
+   * An object of field data, keyed by field UIDs.
+   */
+  @property({ attribute: 'fields-data', type: Object })
+  fieldsData: Record<string, string>[] = []
+
+  /**
+   * The data that is used to render each organizer group, pre-formatted by PHP.
+   */
+  @property({ attribute: 'groups-data', type: Object })
+  groupsData: OrganizerGroup[] = []
+
+  /**
    * Messages translated via Craft’s `t` filter.
    */
   @property({ attribute: 't-messages', type: Object })
   tMessages: Record<string, string> = {}
-
-  /**
-   * TODO
-   */
-  @property({ attribute: 'groups-data', type: Object })
-  groupsData: OrganizerGroup[] = []
 
   /**
    * =========================================================================
@@ -49,13 +56,13 @@ export class GuideOrganizer extends LitElement {
   private _getAllPlacementsStatus: ApiStatus = ApiStatus.Initial
 
   /**
-   * TODO
+   * Sets the order in which each Organizer category is shown.
    */
   @state()
   private _groupsDataStructured: OrganizerGroup[] = []
 
   /**
-   * TODO
+   * All of the placements stored in the DB. This will get updated by API calls as changes are made.
    */
   @state()
   private _placements: Placement[] = []
@@ -66,7 +73,7 @@ export class GuideOrganizer extends LitElement {
    * =========================================================================
    */
   /**
-   * TODO
+   * Adds a new placement into the database.
    */
   private async _addPlacement(event: Event | undefined, group: OrganizerGroup) {
     this._getAllPlacementsStatus = ApiStatus.Loading
@@ -110,7 +117,7 @@ export class GuideOrganizer extends LitElement {
   }
 
   /**
-   * TODO
+   * Deletes a placement from the database.
    */
   private async _deletePlacement(placementId: number, guide: GuideListGuide) {
     this._getAllPlacementsStatus = ApiStatus.Loading
@@ -143,7 +150,37 @@ export class GuideOrganizer extends LitElement {
   }
 
   /**
-   * TODO
+   * Updates a placement in the `field` group to assign the field’s UID to the `groupId` column.
+   */
+  private async _saveFieldPlacement(event: Event | undefined, placement: Placement) {
+    const value = (event?.target as HTMLSelectElement)?.value
+
+    this._getAllPlacementsStatus = ApiStatus.Loading
+    const params = {
+      access: 'all',
+      group: 'field',
+      groupId: value === '__none__' ? null : value,
+      guideId: placement.guideId,
+      id: placement.id,
+    }
+
+    await window.Craft?.postActionRequest(
+      'guide/placement/save-placement',
+      {
+        data: params,
+      },
+      async (_response: object, textStatus: string) => {
+        if (textStatus === 'success') {
+          window.Craft.cp.displayNotice(this.tMessages.placementUriSaveSuccess)
+          await this._getAllPlacements()
+          this._getAllPlacementsStatus = ApiStatus.Success
+        }
+      }
+    )
+  }
+
+  /**
+   * Updates a placement in the `uri` group based on which field was changed.
    */
   private async _saveUriPlacement(event: Event | undefined, field: string, placement: Placement) {
     const value = (event?.target as HTMLSelectElement)?.value
@@ -198,6 +235,10 @@ export class GuideOrganizer extends LitElement {
     if (uiElementEnabled) {
       this._groupsDataStructured.push(uiElementEnabled)
     }
+    const field = this.groupsData.find((group) => group.name === PlacementGroup.Field)
+    if (field) {
+      this._groupsDataStructured.push(field)
+    }
     const entries = this.groupsData.find((group) => group.name === PlacementGroup.Entry)
     if (entries) {
       this._groupsDataStructured.push(entries)
@@ -246,6 +287,10 @@ export class GuideOrganizer extends LitElement {
     return html`
       ${this._groupsDataStructured.map((group) => {
         const placementsInGroup = this._placements.filter((placement) => {
+          if ([PlacementGroup.Field].includes(placement.group)) {
+            return placement.group === group.name
+          }
+
           return placement.group === group.name && placement.groupId === group.groupId
         })
         const guidesInGroup: Record<number, GuideListGuide> = {}
@@ -255,10 +300,9 @@ export class GuideOrganizer extends LitElement {
             guidesInGroup[guide.id] = guide
           }
         })
-        const guideOptions =
-          group.name === PlacementGroup.Uri
-            ? guides
-            : guides.filter((guide) => !Object.keys(guidesInGroup).includes(guide.id.toString()))
+        const guideOptions = [PlacementGroup.Field, PlacementGroup.Uri].includes(group.name)
+          ? guides
+          : guides.filter((guide) => !Object.keys(guidesInGroup).includes(guide.id.toString()))
 
         return html`
           <div class="guide-organizer-header guide-organizer-header-${group.headerSize}">
@@ -270,80 +314,112 @@ export class GuideOrganizer extends LitElement {
               ? html`
                   <ul>
                     ${placementsInGroup.map((placement) => {
+                      let groupFields
+
+                      if (group.name === PlacementGroup.Field) {
+                        log(this.fieldsData, placementsInGroup)
+                        const fieldUidsFromPlacements = placementsInGroup.map((placementInGroup) => {
+                          return placementInGroup.groupId ?? ''
+                        })
+                        groupFields = html`
+                          <div class="guide-organizer-section-flex-fields">
+                            <label for="guide-field-${placement.id}">is assigned to field</label>
+                            <div class="select">
+                              <select
+                                id="guide-field-${placement.id}"
+                                class="input"
+                                ?disabled="${this._getAllPlacementsStatus === ApiStatus.Loading}"
+                                @input="${() => this._saveFieldPlacement(event, placement)}"
+                              >
+                                <option value="__none__">${this.tMessages.addFieldToGuide}</option>
+                                ${this.fieldsData.map((field) => {
+                                  return html`<option
+                                    ?disabled="${fieldUidsFromPlacements.includes(field.uid)}"
+                                    ?selected="${placement.groupId === field.uid}"
+                                    value="${field.uid}"
+                                  >
+                                    ${field.name}
+                                  </option>`
+                                })}
+                              </select>
+                            </div>
+
+                            ${placement.groupId
+                              ? html`<span class="guide-uri-valid" title="${this.tMessages.fieldPlacementIsValid}"
+                                  >✓</span
+                                >`
+                              : html`<span class="guide-uri-invalid" title="${this.tMessages.fieldPlacementIsInvalid}"
+                                  >ⓧ</span
+                                >`}
+                          </div>
+                        `
+                      } else if (group.name === PlacementGroup.Uri) {
+                        groupFields = html`
+                          <div class="guide-organizer-section-flex-fields">
+                            <span class="input"
+                              ><label for="guide-uri-${placement.id}">displayed on page(s)</label>
+                              <input
+                                id="guide-uri-${placement.id}"
+                                class="text"
+                                type="text"
+                                placeholder="uri pattern"
+                                value="${placement.uri ?? ''}"
+                                ?disabled="${this._getAllPlacementsStatus === ApiStatus.Loading}"
+                                @blur="${() => this._saveUriPlacement(event, 'uri', placement)}"
+                            /></span>
+                            <div class="select">
+                              <select
+                                class="input"
+                                ?disabled="${this._getAllPlacementsStatus === ApiStatus.Loading}"
+                                @input="${() => this._saveUriPlacement(event, 'moveMethod', placement)}"
+                              >
+                                <option value="before" ?selected="${placement.moveMethod === MoveMethod.Before}">
+                                  before
+                                </option>
+                                <option value="prepend" ?selected="${placement.moveMethod === MoveMethod.Prepend}">
+                                  at the top of
+                                </option>
+                                <option value="append" ?selected="${placement.moveMethod === MoveMethod.Append}">
+                                  at the bottom of
+                                </option>
+                                <option value="after" ?selected="${placement.moveMethod === MoveMethod.After}">
+                                  after
+                                </option>
+                              </select>
+                            </div>
+
+                            <span class="input"
+                              ><label for="guide-selector-${placement.id}">CSS selector</label>
+                              <input
+                                id="guide-selector-${placement.id}"
+                                class="text"
+                                type="text"
+                                placeholder="selector"
+                                value="${placement.selector ?? ''}"
+                                ?disabled="${this._getAllPlacementsStatus === ApiStatus.Loading}"
+                                @blur="${() => this._saveUriPlacement(event, 'selector', placement)}"
+                            /></span>
+
+                            ${placement.uri && placement.selector
+                              ? html`<span class="guide-uri-valid" title="${this.tMessages.uriPlacementIsValid}"
+                                  >✓</span
+                                >`
+                              : html`<span class="guide-uri-invalid" title="${this.tMessages.uriPlacementIsInvalid}"
+                                  >ⓧ</span
+                                >`}
+                          </div>
+                        `
+                      } else {
+                        groupFields = html`<div><span>${guidesInGroup[placement.guideId].summary}</span></div>`
+                      }
+
                       return guidesInGroup[placement.guideId]
                         ? html`<li>
                             <div class="guide-organizer-title">
-                              <span>${guidesInGroup[placement.guideId].title}</span>
+                              ${unsafeHTML(guideIconSvg)}<span>${guidesInGroup[placement.guideId].title}</span>
                             </div>
 
-                            ${group.name === PlacementGroup.Uri
-                              ? html`
-                                  <div class="guide-organizer-section-uri-fields">
-                                    <span class="input"
-                                      ><label for="guide-uri-${placement.id}">displayed on page(s)</label>
-                                      <input
-                                        id="guide-uri-${placement.id}"
-                                        class="text"
-                                        type="text"
-                                        placeholder="uri pattern"
-                                        value="${placement.uri ?? ''}"
-                                        ?disabled="${this._getAllPlacementsStatus === ApiStatus.Loading}"
-                                        @blur="${() => this._saveUriPlacement(event, 'uri', placement)}"
-                                    /></span>
-                                    <div class="select">
-                                      <select
-                                        class="input"
-                                        ?disabled="${this._getAllPlacementsStatus === ApiStatus.Loading}"
-                                        @input="${() => this._saveUriPlacement(event, 'moveMethod', placement)}"
-                                      >
-                                        <option
-                                          value="before"
-                                          ?selected="${placement.moveMethod === MoveMethod.Before}"
-                                        >
-                                          before
-                                        </option>
-                                        <option
-                                          value="prepend"
-                                          ?selected="${placement.moveMethod === MoveMethod.Prepend}"
-                                        >
-                                          at the top of
-                                        </option>
-                                        <option
-                                          value="append"
-                                          ?selected="${placement.moveMethod === MoveMethod.Append}"
-                                        >
-                                          at the bottom of
-                                        </option>
-                                        <option value="after" ?selected="${placement.moveMethod === MoveMethod.After}">
-                                          after
-                                        </option>
-                                      </select>
-                                    </div>
-
-                                    <span class="input"
-                                      ><label for="guide-selector-${placement.id}">CSS selector</label>
-                                      <input
-                                        id="guide-selector-${placement.id}"
-                                        class="text"
-                                        type="text"
-                                        placeholder="selector"
-                                        value="${placement.selector ?? ''}"
-                                        ?disabled="${this._getAllPlacementsStatus === ApiStatus.Loading}"
-                                        @blur="${() => this._saveUriPlacement(event, 'selector', placement)}"
-                                    /></span>
-
-                                    ${placement.uri && placement.selector
-                                      ? html`<span class="guide-uri-valid" title="${this.tMessages.uriPlacementIsValid}"
-                                          >✓</span
-                                        >`
-                                      : html`<span
-                                          class="guide-uri-invalid"
-                                          title="${this.tMessages.uriPlacementIsInvalid}"
-                                          >ⓧ</span
-                                        >`}
-                                  </div>
-                                `
-                              : html`<div><span>${guidesInGroup[placement.guideId].summary}</span></div>`}
+                            ${groupFields}
 
                             <div class="buttons">
                               <guide-slideout-button page-slug="${guidesInGroup[placement.guideId].slug}">

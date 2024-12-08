@@ -42,16 +42,23 @@ export class GuideUIElement extends LitElement {
    * ===========================================================================
    */
   /**
-   * TODO
+   * The `groupId` column for the placement being rendered. This matches up to the UID of the UI Element.
    */
   @property({ attribute: 'group-id', type: String })
   groupId = ''
 
   /**
-   * TODO
+   * The ID of the placement being rendered.
    */
   @property({ attribute: 'placement-id', type: Number })
   placementId = -1
+
+  /**
+   * If set to `true`, the default guide will be shown if no other guide has been selected.
+   * If set to `false` and there are guides enabled for the UI Elements group, the guide select field will appear by default.
+   */
+  @property({ attribute: 'show-default-guide', type: Boolean })
+  showDefaultGuide = false
 
   /**
    * Messages translated via Craft’s `t` filter.
@@ -65,19 +72,19 @@ export class GuideUIElement extends LitElement {
    * =========================================================================
    */
   /**
-   * The `contentSource` select field.
+   * The `guideIdSelect` select field.
    */
   @state()
   private _guideIdSelect: HTMLSelectElement | null = null
 
   /**
-   * TODO
+   * Tracks whether a guide was selected by the `guideIdSelect` field. If a guide was selected, the UI Element will be hidden until a page refresh.
    */
   @state()
   private _guideSelected = false
 
   /**
-   * TODO
+   * If set to `true`, the settings to select a guide will be made available when there are guides enabled in the UI Element group and when the user has the correct permission.
    */
   @state()
   private _showSettings = false
@@ -88,7 +95,7 @@ export class GuideUIElement extends LitElement {
    * =========================================================================
    */
   /**
-   * TODO
+   * Handles selecting a guide and updating the placement with the selected `guideId`.
    */
   private async _onGuideIdSelected(guideId: string) {
     log('slelected', guideId)
@@ -139,7 +146,7 @@ export class GuideUIElement extends LitElement {
   }
 
   /**
-   * TODO
+   * Toggle the settings that let you pick a new guide for the UI Element.
    */
   private _onSettingsButtonClicked() {
     this._showSettings = !this._showSettings
@@ -157,7 +164,7 @@ export class GuideUIElement extends LitElement {
   connectedCallback() {
     super.connectedCallback()
 
-    if (!this.placementId) {
+    if (!this.placementId && !this.showDefaultGuide) {
       this._showSettings = true
     }
 
@@ -181,7 +188,7 @@ export class GuideUIElement extends LitElement {
 
   render() {
     return html`
-      ${!this._guideSelected && this.placementId
+      ${!this._guideSelected && (this.placementId || this.showDefaultGuide)
         ? html`<button
             class="settings"
             type="button"
@@ -193,7 +200,9 @@ export class GuideUIElement extends LitElement {
         : nothing}
       ${this._showSettings && !this._guideSelected ? html`<slot name="settings-display"></slot>` : nothing}
       ${this._showSettings && this._guideSelected ? html`<slot name="guide-selected"></slot>` : nothing}
-      ${!this._showSettings && this.placementId ? html`<slot name="guide-display"></slot>` : nothing}
+      ${!this._showSettings && (this.placementId || this.showDefaultGuide)
+        ? html`<slot name="guide-display"></slot>`
+        : nothing}
     `
   }
 }

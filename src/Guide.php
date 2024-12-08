@@ -233,7 +233,16 @@ class Guide extends Plugin
                         $event->rules['guide/delete/<guideId:\d{1,}>'] = ['template' => 'guide/delete', 'variables' => ['userOperations' => $userOperations]];
                     }
                     if ($userOperations['useOrganizer']) {
-                        $event->rules['guide/organizer'] = ['template' => 'guide/organizer', 'variables' => ['groupsData' => self::$plugin->placement->getPlacementGroups(), 'userOperations' => $userOperations]];
+                        $fields = Craft::$app->getFields()->getAllFields();
+                        $fieldsData = array_map(function($field) {
+                            return ['name' => $field->name, 'uid' => $field->uid];
+                        }, $fields);
+
+                        $event->rules['guide/organizer'] = ['template' => 'guide/organizer', 'variables' => [
+                            'fieldsData' => $fieldsData,
+                            'groupsData' => self::$plugin->placement->getPlacementGroups(),
+                            'userOperations' => $userOperations,
+                        ]];
                     }
                 }
             );
@@ -508,7 +517,7 @@ class Guide extends Plugin
             'js' => '',
         ];
 
-        if (App::parseEnv('$VITE_GUIDE_HMR') == 'true') {
+        if (App::parseEnv('$VITE_GUIDE_HMR') == true) {
             return [
                 'js' => 'http://localhost:3100/' . $filename,
             ];
@@ -555,7 +564,9 @@ class Guide extends Plugin
      */
     public function renderAdminGlobals()
     {
+        // Get all guides and format for JavaScript
         $guidesForJs = [];
+        $guideSlugsForGuideIds = [];
         $guides = self::$plugin->guide->getGuides();
         foreach ($guides as $guide) {
             $guidesForJs[] = [
@@ -568,9 +579,34 @@ class Guide extends Plugin
                 'weight' => $guide->weight,
                 'viewUrl' => UrlHelper::url('guide/page/' . $guide->slug),
             ];
+            $guideSlugsForGuideIds[$guide->id] = $guide->slug;
+        }
+
+        // List of guide buttons for all fields
+        $fieldHeaderButtons = [];
+        $fieldPlacements = Guide::$plugin->placement->getPlacements(['group' => 'field']);
+
+        if (!empty($fieldPlacements)) {
+            $fields = Craft::$app->getFields()->getAllFields();
+
+            $fieldHandles = [];
+            foreach ($fields as $field) {
+                $fieldHandles[$field->uid] = $field->oldHandle ?? $field->handle;
+            }
+
+            foreach ($fieldPlacements as $placement) {
+                if ($fieldHandles[$placement->groupId] ?? false && $guideSlugsForGuideIds[$placement->guideId] ?? false) {
+                    $fieldHeaderButtons[$fieldHandles[$placement->groupId]] = [
+                        'label' => !empty(self::$settings->guideButtonLabel) ? self::$settings->guideButtonLabel : Craft::t('guide', 'Guide'),
+                        'slug' => $guideSlugsForGuideIds[$placement->guideId],
+                        'small' => true,
+                    ];
+                }
+            }
         }
 
         $adminGlobalsVariables = [
+            'fieldHeaderButtons' => $fieldHeaderButtons,
             'guides' => $guides,
             'guidesForJs' => $guidesForJs,
             'proEdition' => self::$pro,

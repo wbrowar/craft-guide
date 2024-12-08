@@ -1,7 +1,8 @@
 import { html, LitElement } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
-import { guides, proEdition, userOperations } from '../globals.ts'
+import { guideIconSvg, guides, proEdition, userOperations } from '../globals.ts'
 import { ApiStatus, Placement, PlacementGroup } from '../types.ts'
+import { unsafeHTML } from 'lit-html/directives/unsafe-html.js'
 
 @customElement('guide-list')
 export class GuideList extends LitElement {
@@ -120,7 +121,13 @@ export class GuideList extends LitElement {
       const items = []
 
       // Title
-      items.push(proEdition ? html`<a href="${guide.viewUrl}">${guide.title}</a>` : html`<h3>${guide.title}</h3>`)
+      items.push(
+        proEdition
+          ? html`<a href="${guide.viewUrl}" title="${this.tMessages.linkToGuidePage}"
+              >${unsafeHTML(guideIconSvg)}${guide.title}</a
+            >`
+          : html`<h3>${guide.title}</h3>`
+      )
 
       // Summary
       items.push(html`<p>${guide.summary ?? ''}</p>`)
@@ -173,25 +180,27 @@ export class GuideList extends LitElement {
     })
 
     return html`
-      ${rows.length ? html`
-      <div class="tableview tablepane">
-        <table class="data fullwidth">
-          <thead>
-            <tr>
-              ${tableHeaders}
-            </tr>
-          </thead>
-          <tbody>
-            ${rows.map(
-              (row) =>
-                html`<tr>
-                  ${row.map((item) => html`<td>${item}</td>`)}
-                </tr>`
-            )}
-          </tbody>
-        </table>
-      </div>
-      ` : html`<p>${this.tMessages.listEmpty}</p>`}
+      ${rows.length
+        ? html`
+            <div class="tableview tablepane">
+              <table class="data fullwidth">
+                <thead>
+                  <tr>
+                    ${tableHeaders}
+                  </tr>
+                </thead>
+                <tbody>
+                  ${rows.map(
+                    (row) =>
+                      html`<tr>
+                        ${row.map((item) => html`<td>${item}</td>`)}
+                      </tr>`
+                  )}
+                </tbody>
+              </table>
+            </div>
+          `
+        : html`<p>${this.tMessages.listEmpty}</p>`}
     `
   }
 

@@ -35,7 +35,10 @@
 {% set tMessages = {
   'addAGuide': 'Add a Guide'|t('guide'),
   'addGuideToGroupOptionDefault': 'Select a guide to add it to'|t('guide'),
+  'addFieldToGuide': 'Select a field'|t('guide'),
   'emptyGroup': 'No guides have been added to this group. Select a guide from the select field below.'|t('guide'),
+  'fieldPlacementIsValid': 'The settings for this guide are valid.'|t('guide'),
+  'fieldPlacementIsInvalid': 'The settings for this guide are not valid. Please select a field to assign this guide to it.'|t('guide'),
   'guidesDisplayed': 'Guides'|t('guide'),
   'placementDeleteSuccess': '[guide] has been removed.'|t('guide'),
   'placementSaveSuccess': '[guide] has been added to [group].'|t('guide'),
@@ -49,7 +52,8 @@
 {% set content %}
   <guide-organizer
       action-url-get-all-placements="{{ actionUrl('guide/placement/get-all-placements') }}"
-      t-messages="{{ tMessages|json_encode }}"
       groups-data="{{ groupsData|json_encode }}"
+      fields-data="{{ fieldsData|json_encode }}"
+      t-messages="{{ tMessages|json_encode }}"
   ></guide-organizer>
 {% endset %}

@@ -28,6 +28,16 @@ By default, guides that are added to element edit pages will make a button appea
 
 If preferred, a setting in **Guide Settings** can be changed to move guides above or below edit fields across all element edit pages.
 
+### Fields
+
+A guide can be assigned to a field, giving you more in-depth instructions and tips on how to use the field. When that field is shown on an edit page, a guide button will be added next to the field header and that button will open up that guide in a slideout panel. 
+
+In the **Fields** group, add a guide and use the select field to assign it to one of the fields in your Craft CMS project. Only one guide can be added to a field, however, a guide may be added to multiple fields.
+
+<div class="readable guide-component-tip">
+  <blockquote class="note warning">The guide button is matched up to the field based on the field handle. For sites upgraded from Craft 4 to Craft 5, the fields should be merged or the handle renamed before the guide button will appear on an assigned field.</blockquote>
+</div>
+
 ### Control Panel Pages
 
 Guides can be added to any other page in the CP by providing a URI pattern and a CSS selector in a guide added to the **Control Panel Pages** group.
