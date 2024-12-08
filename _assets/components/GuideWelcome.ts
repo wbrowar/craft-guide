@@ -300,8 +300,6 @@ export class GuideWelcome extends LitElement {
    */
   private _animateOpenBook() {
     if (this._bookTop && this._bookLoose && this._bookLoose2) {
-      this._hasBeenInteractedWith = true
-
       this._animationState = 'animating'
       const speed = 3
       gsap.to(this._bookTop.rotation, {
@@ -330,8 +328,6 @@ export class GuideWelcome extends LitElement {
    */
   private _animateCloseBook() {
     if (this._bookTop && this._bookLoose && this._bookLoose2) {
-      this._hasBeenInteractedWith = true
-
       this._animationState = 'animating'
       const speed = 1
       gsap.to(this._bookTop.rotation, {
@@ -383,9 +379,7 @@ export class GuideWelcome extends LitElement {
       })
 
       setTimeout(() => {
-        if (!this._hasBeenInteractedWith) {
-          this._animateOpenBook()
-        }
+        this._animateOpenBook()
       }, 2500)
 
       setTimeout(() => {

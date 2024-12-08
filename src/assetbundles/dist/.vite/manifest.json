@@ -7,8 +7,8 @@
     "file": "assets/console-DyT9hXlL.js",
     "name": "console"
   },
-  "_globals-B1P9Mf0C.js": {
-    "file": "assets/globals-B1P9Mf0C.js",
+  "_globals-Bdsc2fK0.js": {
+    "file": "assets/globals-Bdsc2fK0.js",
     "name": "globals"
   },
   "_types-DZ_LYyIe.js": {
@@ -16,34 +16,34 @@
     "name": "types"
   },
   "guide-admin.ts": {
-    "file": "assets/guide-admin-UqerN9X_.js",
+    "file": "assets/guide-admin-C3zGCaaO.js",
     "name": "guide-admin",
     "src": "guide-admin.ts",
     "isEntry": true,
     "imports": [
-      "_globals-B1P9Mf0C.js",
+      "_globals-Bdsc2fK0.js",
       "_types-DZ_LYyIe.js",
       "_console-DyT9hXlL.js"
     ]
   },
   "guide-book.ts": {
-    "file": "assets/guide-book-Blc543bV.js",
+    "file": "assets/guide-book-BFZ4Xm8v.js",
     "name": "guide-book",
     "src": "guide-book.ts",
     "isEntry": true,
     "imports": [
-      "_globals-B1P9Mf0C.js",
+      "_globals-Bdsc2fK0.js",
       "_GLTFLoader-CnsMw-IL.js",
       "_console-DyT9hXlL.js"
     ]
   },
   "guide-display.ts": {
-    "file": "assets/guide-display-4nsuqJns.js",
+    "file": "assets/guide-display-gkaUpaQ1.js",
     "name": "guide-display",
     "src": "guide-display.ts",
     "isEntry": true,
     "imports": [
-      "_globals-B1P9Mf0C.js",
+      "_globals-Bdsc2fK0.js",
       "_types-DZ_LYyIe.js"
     ],
     "css": [
@@ -51,12 +51,12 @@
     ]
   },
   "guide-welcome.ts": {
-    "file": "assets/guide-welcome-BEwP0P7V.js",
+    "file": "assets/guide-welcome-BqAVh_oL.js",
     "name": "guide-welcome",
     "src": "guide-welcome.ts",
     "isEntry": true,
     "imports": [
-      "_globals-B1P9Mf0C.js",
+      "_globals-Bdsc2fK0.js",
       "_GLTFLoader-CnsMw-IL.js",
       "_console-DyT9hXlL.js"
     ]
