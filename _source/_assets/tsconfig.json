@@ -12,6 +12,7 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["./*"],
+      "rollup/parseAst": ["./node_modules/rollup/dist/parseAst"]
     }
   },
   "include": [

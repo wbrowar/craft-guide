@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.2.3 - 2025-01-29
+
+### Fixed
+- Updated Node dependencies to remove JS vulnerabilities [#116](https://github.com/wbrowar/craft-guide/issues/116)
+
 ## 3.2.2 - 2023-11-13
 
 ### Fixed
