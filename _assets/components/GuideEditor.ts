@@ -330,6 +330,18 @@ export class GuideEditor extends LitElement {
 
   render() {
     const contentButtons = []
+    if (this._componentLists.includes(EditorTabGroup.Settings)) {
+      contentButtons.push(html`
+        <button
+          class="${this._selectedTabGroup === EditorTabGroup.Settings ? 'active' : nothing}"
+          type="button"
+          title="${this.tMessages.settings}"
+          @click="${() => (this._selectedTabGroup = EditorTabGroup.Settings)}"
+        >
+          <slot name="icon-settings"></slot><span>${this.tMessages.settings}</span>
+        </button>
+      `)
+    }
     if (this._componentLists.includes(EditorTabGroup.Components)) {
       contentButtons.push(html`
         <button
@@ -403,22 +415,14 @@ export class GuideEditor extends LitElement {
 
     return html`
       <aside>
-        <div
-          class="guide-editor-content-buttons"
-          style="--guide-editor-content-buttons-columns: ${this._contentSource === GuideContentSource.Field
-            ? 1 + contentButtons.length
-            : 1};"
-        >
-          <button
-            class="${this._selectedTabGroup === EditorTabGroup.Settings ? 'active' : nothing}"
-            type="button"
-            title="${this.tMessages.settings}"
-            @click="${() => (this._selectedTabGroup = EditorTabGroup.Settings)}"
-          >
-            <slot name="icon-settings"></slot><span>${this.tMessages.settings}</span>
-          </button>
-          ${proEdition && this._contentSource === GuideContentSource.Field ? contentButtons : nothing}
-        </div>
+        ${proEdition
+          ? html`<div
+              class="guide-editor-content-buttons"
+              style="--guide-editor-content-buttons-columns: ${contentButtons.length};"
+            >
+              ${contentButtons}
+            </div>`
+          : nothing}
         ${this._selectedTabGroup === EditorTabGroup.Settings ? html`<slot name="settings"></slot>` : nothing}
         ${this._selectedTabGroup === EditorTabGroup.Components ? html`<slot name="components"></slot>` : nothing}
         ${this._selectedTabGroup === EditorTabGroup.Images ? html`<slot name="images"></slot>` : nothing}

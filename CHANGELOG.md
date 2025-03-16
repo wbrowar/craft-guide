@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.3.0 - 2025-03-16
+
+### Changed
+- Users of the **LITE** edition can now create guides in the Guide Editor.
+- Users of the **LITE** edition can now create iframe guides.
+- Updated build tools and Node dependencies.
+
+### Removed
+- Removed the **Settings** tab in the Guide Editor when using the **LITE** edition (since there were no other tabs to select).
+
+
 ## 5.2.0 - 2024-12-08
 
 ### Added
@@ -15,10 +26,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Fixed
 - The Craft CMS minimum required version was bumped up to `^5.5.0`. This fixes a CP CSS issue that occurs based on a recent Craft CMS update.
 
+
 ## 5.1.1 - 2024-10-12
 
 ### Fixed
 - Fixed typos on the CHANGELOG.
+
 
 ## 5.1.0 - 2024-10-12
 
@@ -31,6 +44,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Fixed
 - Fixed an error that occured where entering a value in **uri** field and it removed the first letter when a leading or trailing slash was present.
 - Fixed an issue that occured when a slidout panel is opened and the guide contained a URL, button, or field.
+
 
 ## 5.0.2 - 2024-10-08
 ### Changed

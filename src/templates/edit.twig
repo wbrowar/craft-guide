@@ -92,7 +92,7 @@
         templates-data="{{ templates.contents|json_encode }}"
     >
       <div slot="settings">
-        {% if not proEdition and not settings.templatePath %}
+        {% if not settings.templatePath %}
           <div class="readable">
             <blockquote class="note warn">
               <strong>{{ 'Template Path is Required'|t('guide') }}</strong>
@@ -136,9 +136,8 @@
           label: 'Content Source'|t('guide'),
           id: 'contentSource',
           name: 'contentSource',
-          disabled: not proEdition,
           options: options,
-          value: proEdition ? guide.contentSource : 'template',
+          value: guide.contentSource,
         }) }}
 
         {{ forms.lightswitchField({

@@ -13,7 +13,6 @@ namespace wbrowar\guide\services;
 use Craft;
 use craft\base\Component;
 use craft\elements\User;
-use wbrowar\guide\Guide as GuidePlugin;
 use wbrowar\guide\helpers\GuideHelpers;
 use wbrowar\guide\models\Guide as GuideModel;
 use wbrowar\guide\records\Guides;
@@ -40,10 +39,6 @@ class Guide extends Component
      */
     public function getGuides(array $params = [], string $queryType = 'all')
     {
-        if (!GuidePlugin::$pro) {
-            $params['contentSource'] = 'template';
-        }
-
         if ($params['limit'] ?? false) {
             $limit = $params['limit'];
             unset($params['limit']);

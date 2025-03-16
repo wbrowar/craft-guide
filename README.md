@@ -24,7 +24,7 @@ The Guide Organizer shows you all of the guides in your CMS and makes it easy to
 
 The **PRO** edition of Guide includes the Guide Organizer and a code editor with Twig components that make it easy to create guides and distribute them throughout the Craft CMS Control Panel (edit page slideouts, standalone CP pages, widgets, UI elements, and any CP URL you specify).
 
-The **LITE** edition is offered for developers who prefer to write their own guide Twig templates in their favorite code editor and to display them on the CMS Guide page.
+The **LITE** edition lets you create and manage a CMS user manual that apears in the CMS Guide page.
 
 > [!TIP]
 > Guide’s edition can be upgraded to **PRO** at any time.

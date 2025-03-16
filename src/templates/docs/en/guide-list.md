@@ -2,13 +2,13 @@
 
 Guides are the pieces of content you can move around the Craft CMS CP (Control Panel). A guide can appear on the CMS Guide page, in a dashboard widget, on their own pages, popped out in slideouts, or any other page within the Craft CMS CP.
 
-## Guide Home Page
+## CMS Guide
 
 Multiple Guides can be collected together to form a CMS Manual on the CMS Guide. To get to this page click on the **Guide** menu item in the main menu.
 
 If there are no guides on the CMS Guide page, clicking on the **Guide** menu item will take you to the **Guides** list page.
 
-## Guides List Page
+## Guides
 
 The **Guides** page shows a list of the guides created in your Craft CMS project. From here you may manage your guides, create a new guide, and add guides to the CMS Guide page. The buttons in the **Actions** column let you preview a guide in a slideout, edit a guide’s content, or delete a guide that is no longer needed.
 
