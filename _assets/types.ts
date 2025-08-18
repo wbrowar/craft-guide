@@ -31,10 +31,6 @@ declare global {
   }
 }
 
-if (typeof window !== 'undefined') {
-  window.global = window
-}
-
 export enum ApiStatus {
   Initial = 'initial',
   Loading = 'loading',

@@ -29,14 +29,13 @@
     {% if settings.fun %}
       <div class="guide-book-binding"><guide-book style="margin-inline: auto;"></guide-book></div>
 
-      {% if bookAssets['css'] ?? false %}
-        {% css bookAssets['css'] %}
-      {% endif %}
 
-      {% if bookAssets['js'] ?? false %}
-        {% js bookAssets['js'] with {
+      {% if hmrUrl ?? false %}
+        {% js (hmrUrl ~ 'guide-book.ts') with {
           type: 'module'
         } %}
+      {% else %}
+        {% do view.registerAssetBundle("wbrowar\\guide\\web\\assets\\GuideWelcomeAsset") %}
       {% endif %}
     {% endif %}
   {% else %}
@@ -62,14 +61,12 @@
     </div>
 
     {% if settings.fun %}
-      {% if welcomeAssets['css'] ?? false %}
-        {% css welcomeAssets['css'] %}
-      {% endif %}
-
-      {% if welcomeAssets['js'] ?? false %}
-        {% js welcomeAssets['js'] with {
+      {% if hmrUrl ?? false %}
+        {% js (hmrUrl ~ 'guide-welcome.ts') with {
           type: 'module'
         } %}
+      {% else %}
+        {% do view.registerAssetBundle("wbrowar\\guide\\web\\assets\\GuideWelcomeAsset") %}
       {% endif %}
     {% endif %}
   {% endif %}

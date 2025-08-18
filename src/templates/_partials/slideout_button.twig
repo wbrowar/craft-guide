@@ -7,5 +7,5 @@
 {% endif %}
 
 <guide-slideout-button {{ docs ? 'docs-page' : '' }} {{ elementId ?? false ? 'element-id=' ~ elementId : '' }} {{ groupHandle ?? false ? 'group-handle=' ~ groupHandle : '' }} page-slug="{{ slug }}">
-  <button class="btn" type="button">{{ svg('@wbrowar/guide/assetbundles/static/icon-mask.svg')|raw }}<span>{{ label }}</span></button>
+  <button class="btn" type="button">{{ svg('@wbrowar/guide/icon-mask.svg')|raw }}<span>{{ label }}</span></button>
 </guide-slideout-button>

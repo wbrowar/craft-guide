@@ -4,7 +4,7 @@ export default defineConfig({
   build: {
     emptyOutDir: true,
     manifest: true,
-    outDir: '../src/assetbundles/dist',
+    outDir: '../src/web/assets/dist',
     rollupOptions: {
       input: {
         'guide-admin': './guide-admin.ts',

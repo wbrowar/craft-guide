@@ -31,7 +31,7 @@
     {% endif %}
 
     {% if userOperations.deleteGuides %}
-      <a class="btn delete icon" href="{{ url('guide/delete/' ~ guide.id, 'return=' ~ craft.app.request.url) }}">Delete Guide</a>
+      <a class="btn delete icon" style="display: flex;" href="{{ url('guide/delete/' ~ guide.id, 'return=' ~ craft.app.request.url) }}">Delete Guide</a>
     {% endif %}
   </div>
 {% endblock %}
