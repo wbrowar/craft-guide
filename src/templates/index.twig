@@ -22,22 +22,23 @@
   {% set guides = craft.guide.getAll({ id: cpNavPlacements }) %}
 {% endif %}
 
+{% block footer %}
+  {% if settings.fun %}
+    <div class="guide-book-binding"><guide-book style="margin-inline: auto;"></guide-book></div>
+
+    {% if hmrUrl ?? false %}
+      {% js (hmrUrl ~ 'guide-book.ts') with {
+        type: 'module'
+      } %}
+    {% else %}
+      {% do view.registerAssetBundle("wbrowar\\guide\\web\\assets\\GuideBookAsset") %}
+    {% endif %}
+  {% endif %}
+{% endblock %}
+
 {% set content %}
   {% if guides ?? false %}
     {% include 'guide/_partials/guide_display.twig' with { guideDisplayArea: 'guide', displayId: 'nav', guides: guides } only %}
-
-    {% if settings.fun %}
-      <div class="guide-book-binding"><guide-book style="margin-inline: auto;"></guide-book></div>
-
-
-      {% if hmrUrl ?? false %}
-        {% js (hmrUrl ~ 'guide-book.ts') with {
-          type: 'module'
-        } %}
-      {% else %}
-        {% do view.registerAssetBundle("wbrowar\\guide\\web\\assets\\GuideWelcomeAsset") %}
-      {% endif %}
-    {% endif %}
   {% else %}
     {% if settings.fun %}
       {% set tMessages = {

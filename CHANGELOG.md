@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 5.3.1 - 2025-08-17
 ### Changed
 - Refactored CSS and JavaScript files to be registered as asset bundles, instead of individual file registrations.
+- Moved book on CMS Guide page.
 
 ### Fixed
 - Fixed a stlye regression that occured on delete buttons.

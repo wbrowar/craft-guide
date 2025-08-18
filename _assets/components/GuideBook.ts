@@ -68,9 +68,6 @@ interface SceneSettings {
       z: number
     }
   }
-  scene: {
-    bgColor: string
-  }
 }
 
 @customElement('guide-book')
@@ -87,6 +84,7 @@ export class GuideBook extends LitElement {
   private _bookTop!: Object3D
   private _bookLoose!: Object3D
   private _bookLoose2!: Object3D
+  private _pen!: Object3D
   // private _timeline!: GSAPTimeline
 
   /**
@@ -97,7 +95,7 @@ export class GuideBook extends LitElement {
   static styles = css`
     .guide-book-scene-wrapper {
       display: block;
-      aspect-ratio: 5 / 6;
+      aspect-ratio: 5 / 7;
       max-width: 100%;
       position: relative;
     }
@@ -107,10 +105,6 @@ export class GuideBook extends LitElement {
       left: 0;
       width: 100%;
       height: 100%;
-
-      & canvas {
-        border-radius: var(--guide-border-radius);
-      }
     }
   `
 
@@ -217,15 +211,25 @@ export class GuideBook extends LitElement {
       //   y: 0.249,
       //   z: 0,
       // },
+      // position: {
+      //   x: 3.5889,
+      //   y: 9.19,
+      //   z: -0.35,
+      // },
+      // rotation: {
+      //   x: 4.69,
+      //   y: 0.349,
+      //   z: 0.2,
+      // },
       position: {
-        x: 3.5889,
-        y: 9.19,
-        z: -0.35,
+        x: 0,
+        y: 10.69,
+        z: -0.17,
       },
       rotation: {
-        x: 4.69,
-        y: 0.349,
-        z: 0.2,
+        x: 4.7,
+        y: 0,
+        z: 0,
       },
     },
     lights: {
@@ -256,9 +260,6 @@ export class GuideBook extends LitElement {
         z: 0,
       },
     },
-    scene: {
-      bgColor: import.meta.env.DEV ? 'fuchsia' : 'white',
-    },
   }
 
   /**
@@ -282,7 +283,8 @@ export class GuideBook extends LitElement {
       gsap.to(this._bookTop.rotation, {
         duration: speed,
         // z: 0.6,
-        z: 0.6,
+        // z: 0.6,
+        z: 1,
         ease: 'elastic.out(1, 0.3)',
         onComplete: () => {
           this._animationState = 'opened'
@@ -291,13 +293,15 @@ export class GuideBook extends LitElement {
       gsap.to(this._bookLoose.rotation, {
         duration: speed,
         // z: 0.15,
-        z: 0.3,
+        // z: 0.3,
+        z: 0.75,
         ease: 'elastic.out(1, 0.3)',
       })
       gsap.to(this._bookLoose2.rotation, {
         duration: speed,
         // z: 0.02,
-        z: 0.1,
+        // z: 0.1,
+        z: 0.5,
         ease: 'elastic.out(1, 0.3)',
       })
     }
@@ -404,7 +408,7 @@ export class GuideBook extends LitElement {
 
     if (action === 'close') {
       this._showDebugControls = false
-      this._scene.background = new THREE.Color('white')
+      this._scene.background = null
     }
   }
 
@@ -434,7 +438,9 @@ export class GuideBook extends LitElement {
       )
       // create scene
       this._scene = new THREE.Scene()
-      this._scene.background = new THREE.Color(this._settings.scene.bgColor)
+      if (this._showDebugControls) {
+        this._scene.background = new THREE.Color('fuchsia')
+      }
       // if (this.sceneBackgroundUrl) {
       //   scene.background = new THREE.TextureLoader().load(this.sceneBackgroundUrl)
       // }
@@ -455,7 +461,7 @@ export class GuideBook extends LitElement {
       )
       this._scene.add(this._ambientLight, this._mainLight)
       // create renderer
-      this._renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' })
+      this._renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' })
       this._renderer.setSize(this._container.clientWidth, this._container.clientHeight)
       this._renderer.setPixelRatio(window.devicePixelRatio)
       // this._renderer.outputEncoding = THREE.sRGBEncoding
@@ -494,6 +500,11 @@ export class GuideBook extends LitElement {
           this._bookTop = this._object.scene.getObjectByName('Top')
           this._bookLoose = this._object.scene.getObjectByName('Loose')
           this._bookLoose2 = this._object.scene.getObjectByName('Loose_2')
+
+          this._pen = this._object.scene.getObjectByName('Pen')
+          this._pen.removeFromParent()
+
+          this._object.scene.getObjectByName('Top')
         },
         undefined,
         undefined

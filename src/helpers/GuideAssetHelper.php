@@ -13,7 +13,7 @@ class GuideAssetHelper
 {
     public static function getHmrUrl(): string
     {
-        return App::parseEnv('$VITE_GUIDE_HMR') ? 'http://localhost:3100' : '';
+        return App::parseEnv('$VITE_GUIDE_HMR') ? 'http://localhost:3100/' : '';
     }
 
     /**
