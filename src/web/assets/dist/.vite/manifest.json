@@ -1,64 +1,64 @@
 {
-  "_GLTFLoader-DoXWq-M1.js": {
-    "file": "assets/GLTFLoader-DoXWq-M1.js",
+  "_GLTFLoader.js": {
+    "file": "assets/GLTFLoader.js",
     "name": "GLTFLoader"
   },
-  "_console-DyT9hXlL.js": {
-    "file": "assets/console-DyT9hXlL.js",
+  "_console.js": {
+    "file": "assets/console.js",
     "name": "console"
   },
-  "_globals-tUPxSBuY.js": {
-    "file": "assets/globals-tUPxSBuY.js",
+  "_globals.js": {
+    "file": "assets/globals.js",
     "name": "globals"
   },
-  "_types-B_LyD8Hq.js": {
-    "file": "assets/types-B_LyD8Hq.js",
+  "_types.js": {
+    "file": "assets/types.js",
     "name": "types"
   },
   "guide-admin.ts": {
-    "file": "assets/guide-admin-CT_rerZQ.js",
+    "file": "assets/guide-admin.js",
     "name": "guide-admin",
     "src": "guide-admin.ts",
     "isEntry": true,
     "imports": [
-      "_globals-tUPxSBuY.js",
-      "_types-B_LyD8Hq.js",
-      "_console-DyT9hXlL.js"
+      "_globals.js",
+      "_types.js",
+      "_console.js"
     ]
   },
   "guide-book.ts": {
-    "file": "assets/guide-book-B1LWbOlB.js",
+    "file": "assets/guide-book.js",
     "name": "guide-book",
     "src": "guide-book.ts",
     "isEntry": true,
     "imports": [
-      "_globals-tUPxSBuY.js",
-      "_GLTFLoader-DoXWq-M1.js",
-      "_console-DyT9hXlL.js"
+      "_globals.js",
+      "_GLTFLoader.js",
+      "_console.js"
     ]
   },
   "guide-display.ts": {
-    "file": "assets/guide-display-DUMZWUKq.js",
+    "file": "assets/guide-display.js",
     "name": "guide-display",
     "src": "guide-display.ts",
     "isEntry": true,
     "imports": [
-      "_globals-tUPxSBuY.js",
-      "_types-B_LyD8Hq.js"
+      "_globals.js",
+      "_types.js"
     ],
     "css": [
-      "assets/guide-display-DYFQ2IbI.css"
+      "assets/guide-display.css"
     ]
   },
   "guide-welcome.ts": {
-    "file": "assets/guide-welcome-DmobUkD3.js",
+    "file": "assets/guide-welcome.js",
     "name": "guide-welcome",
     "src": "guide-welcome.ts",
     "isEntry": true,
     "imports": [
-      "_globals-tUPxSBuY.js",
-      "_GLTFLoader-DoXWq-M1.js",
-      "_console-DyT9hXlL.js"
+      "_globals.js",
+      "_GLTFLoader.js",
+      "_console.js"
     ]
   }
 }

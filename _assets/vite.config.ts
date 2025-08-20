@@ -12,6 +12,11 @@ export default defineConfig({
         'guide-display': './guide-display.ts',
         'guide-welcome': './guide-welcome.ts',
       },
+      output: {
+        entryFileNames: `assets/[name].js`,
+        chunkFileNames: `assets/[name].js`,
+        assetFileNames: `assets/[name].[ext]`,
+      },
     },
   },
   server: {

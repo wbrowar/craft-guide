@@ -23,7 +23,7 @@
 {% endif %}
 
 {% block footer %}
-  {% if settings.fun %}
+  {% if (guides ?? false) and settings.fun %}
     <div class="guide-book-binding"><guide-book style="margin-inline: auto;"></guide-book></div>
 
     {% if hmrUrl ?? false %}

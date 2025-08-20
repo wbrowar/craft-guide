@@ -4,7 +4,6 @@ namespace wbrowar\guide\web\assets;
 
 use Craft;
 use craft\web\AssetBundle;
-use wbrowar\guide\helpers\GuideAssetHelper;
 
 /**
  * Static assets for users who can edit guides.
@@ -16,13 +15,9 @@ class GuideAdminAsset extends AssetBundle
      */
     public function init(): void
     {
-        $this->sourcePath = '@wbrowar/guide/web/assets/dist/assets';
+        $this->js = ['guide-admin.js'];
         $this->jsOptions = ['position' => Craft::$app->getView()::POS_BEGIN, 'type' => 'module'];
-
-        $assets = GuideAssetHelper::getPathsToAssetFiles('guide-admin.ts');
-
-        $this->css = !empty($assets['css']['filename']) ? [$assets['css']['filename']] : [];
-        $this->js = !empty($assets['js']['filename']) ? [$assets['js']['filename']] : [];
+        $this->sourcePath = '@wbrowar/guide/web/assets/dist/assets';
 
         parent::init();
     }
