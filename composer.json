@@ -2,7 +2,7 @@
     "name": "wbrowar/guide",
     "description": "A CMS Guide for Craft CMS.",
     "type": "craft-plugin",
-    "version": "5.3.2",
+    "version": "5.3.3",
     "keywords": [
         "craft",
         "cms",
