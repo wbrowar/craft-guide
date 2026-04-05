@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## 5.3.4 - 2026-04-05
+### Changed
+- Updated build tools and Node dependencies.
+
+### Fix
+- Fixed an issue where a CSS selector caused a slow response when loading the Entries page. [#121](https://github.com/wbrowar/craft-guide/issues/121)
+
+
 ## 5.3.3 - 2025-08-19
 ### Fix
 - Moved book into asset folder with the rest of the asset bundle files.

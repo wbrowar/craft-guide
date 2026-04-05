@@ -7,10 +7,6 @@
     "file": "assets/console.js",
     "name": "console"
   },
-  "_globals.js": {
-    "file": "assets/globals.js",
-    "name": "globals"
-  },
   "_types.js": {
     "file": "assets/types.js",
     "name": "types"
@@ -21,9 +17,8 @@
     "src": "guide-admin.ts",
     "isEntry": true,
     "imports": [
-      "_globals.js",
-      "_types.js",
-      "_console.js"
+      "_console.js",
+      "_types.js"
     ]
   },
   "guide-book.ts": {
@@ -32,9 +27,8 @@
     "src": "guide-book.ts",
     "isEntry": true,
     "imports": [
-      "_globals.js",
-      "_GLTFLoader.js",
-      "_console.js"
+      "_console.js",
+      "_GLTFLoader.js"
     ]
   },
   "guide-display.ts": {
@@ -43,7 +37,7 @@
     "src": "guide-display.ts",
     "isEntry": true,
     "imports": [
-      "_globals.js",
+      "_console.js",
       "_types.js"
     ],
     "css": [
@@ -56,9 +50,8 @@
     "src": "guide-welcome.ts",
     "isEntry": true,
     "imports": [
-      "_globals.js",
-      "_GLTFLoader.js",
-      "_console.js"
+      "_console.js",
+      "_GLTFLoader.js"
     ]
   }
 }

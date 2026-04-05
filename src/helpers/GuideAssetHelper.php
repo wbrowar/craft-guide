@@ -11,7 +11,9 @@ class GuideAssetHelper
 {
     public static function getHmrUrl(): string
     {
-        return App::parseEnv('$VITE_GUIDE_HMR') ? 'http://localhost:3100/' : '';
+        $useHmrEnv = App::parseEnv('$VITE_GUIDE_HMR');
+        $useHmr = ((is_string($useHmrEnv) && $useHmrEnv == 'true') || (is_bool($useHmrEnv) && $useHmrEnv == true));
+        return $useHmr ? 'http://localhost:3100/' : '';
     }
 
     /**
@@ -23,7 +25,7 @@ class GuideAssetHelper
      */
     public static function registerAssetFiles(string $filename): void
     {
-        if (App::parseEnv('$VITE_GUIDE_HMR')) {
+        if (!empty(GuideAssetHelper::getHmrUrl())) {
             Craft::$app->getView()->registerJsFile(GuideAssetHelper::getHmrUrl() . $filename, ['defer' => true, 'type' => 'module']);
         } else {
             switch ($filename) {

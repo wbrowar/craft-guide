@@ -1,4 +1,4 @@
-import{n as _,t as w,i as M,E as c,x as o,a as H,r as u,k as N,p as L,T as J,g as x,b as z,u as R}from"./globals.js";import{G as v,E as d,A as p,P as h,a as V,M as T}from"./types.js";import{l as W}from"./console.js";async function B(i){if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(i);else{const t=document.createElement("textarea");t.value=i,t.classList.add("sr-only"),document.body.prepend(t),t.select();try{document.execCommand("copy")}catch(s){console.error(s)}finally{t.remove()}}}var K=Object.defineProperty,Q=Object.getOwnPropertyDescriptor,U=(i,t,s,a)=>{for(var e=a>1?void 0:a?Q(t,s):t,n=i.length-1,r;n>=0;n--)(r=i[n])&&(e=(a?r(t,s,e):r(e))||e);return a&&e&&K(t,s,e),e};let A=class extends M{constructor(){super(...arguments),this.tMessages={},this.copyText=""}async _copyTextToClipboard(i){await B(i),window.Craft.cp.displayNotice(`${this.tMessages.copiedToClipboard}: ${i}`)}async connectedCallback(){super.connectedCallback()}render(){return o`${this.copyText&&this.tMessages?o`
+import{_ as e,a as t,d as n,f as r,g as i,h as a,i as o,l as s,m as c,o as l,p as u,r as d,t as f,u as p,v as m}from"./console.js";import{a as h,i as g,n as _,o as v,r as y,t as b}from"./types.js";async function x(e){if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(e);else{let t=document.createElement(`textarea`);t.value=e,t.classList.add(`sr-only`),document.body.prepend(t),t.select();try{document.execCommand(`copy`)}catch(e){console.error(e)}finally{t.remove()}}}var S=class extends c{constructor(...e){super(...e),this.tMessages={},this.copyText=``}async _copyTextToClipboard(e){await x(e),window.Craft.cp.displayNotice(`${this.tMessages.copiedToClipboard}: ${e}`)}async connectedCallback(){super.connectedCallback()}render(){return e`${this.copyText&&this.tMessages?e`
           <div
             class="code small light copytextbtn"
             title="${this.tMessages.copyToClipboard}"
@@ -9,75 +9,7 @@ import{n as _,t as w,i as M,E as c,x as o,a as H,r as u,k as N,p as L,T as J,g a
             <span class="visually-hidden">${this.tMessages.copyToClipboard}</span>
             <span class="copytextbtn__icon" data-icon="clipboard" aria-hidden="true"></span>
           </div>
-        `:c}`}createRenderRoot(){return this}};U([_({attribute:"t-messages",type:Object})],A.prototype,"tMessages",2);U([_({attribute:"copy-text",type:String})],A.prototype,"copyText",2);A=U([w("guide-copy-text-button")],A);var X=Object.defineProperty,Y=Object.getOwnPropertyDescriptor,m=(i,t,s,a)=>{for(var e=a>1?void 0:a?Y(t,s):t,n=i.length-1,r;n>=0;n--)(r=i[n])&&(e=(a?r(t,s,e):r(e))||e);return a&&e&&X(t,s,e),e};let g=class extends M{constructor(){super(...arguments),this.isNew=!1,this.tMessages={},this.templatesData={},this._componentLists=["settings"],this._contentEditor=null,this._contentSource=v.Field,this._contentSourceSelect=null,this._contentUrlField=null,this._contentUrl="",this._renderMarkdownField=null,this._selectedTabGroup=d.Settings,this._slugHasBeenEdited=!1,this._slugInput=null,this._templateField=null,this._template="__none__",this._titleInput=null}_onContentSourceChange(i){switch(i){case v.Field:this._contentUrlField?.classList.add("hidden"),this._renderMarkdownField?.classList.remove("hidden"),this._templateField?.classList.add("hidden"),this._contentSource=v.Field;break;case v.Iframe:this._contentUrlField?.classList.remove("hidden"),this._renderMarkdownField?.classList.add("hidden"),this._templateField?.classList.add("hidden"),this._contentSource=v.Iframe;break;case v.Template:this._contentUrlField?.classList.add("hidden"),this._renderMarkdownField?.classList.add("hidden"),this._templateField?.classList.remove("hidden"),this._contentSource=v.Template;break}}connectedCallback(){super.connectedCallback(),this._contentSourceSelect=this.querySelector('guide-editor select[name="contentSource"]'),this._contentUrlField=this.querySelector("guide-editor #contentUrl-field"),this._renderMarkdownField=this.querySelector("guide-editor #renderMarkdown-field"),this._slugInput=this.querySelector('guide-editor input[name="slug"]'),this._templateField=this.querySelector("guide-editor #template-field"),this._titleInput=this.querySelector('guide-editor input[name="title"]'),this.isNew&&this._titleInput&&this._titleInput.addEventListener("input",()=>{!this._slugHasBeenEdited&&this._slugInput&&(this._slugInput.value=N(this._titleInput?.value??""),document.querySelector("guide-editor")?.setAttribute("data-guide-slug",this._slugInput.value))}),this._slugInput?.addEventListener("blur",()=>{if(this._slugInput){this._slugHasBeenEdited=!0,this._slugInput.value=N(this._slugInput.value);const s=document.querySelectorAll("guide-copy-text-button"),a=this._slugInput.value;s.forEach(e=>{e.copyText=a}),document.querySelector("guide-editor")?.setAttribute("data-guide-slug",a)}}),this._slugInput?.value&&document.querySelector("guide-editor")?.setAttribute("data-guide-slug",this._slugInput.value),this._contentSourceSelect&&(this._contentSourceSelect.addEventListener("change",()=>{this._onContentSourceChange(this._contentSourceSelect?.value)}),this._onContentSourceChange(this._contentSourceSelect.value));const i=this._contentUrlField?.querySelector("input");i&&(i.addEventListener("blur",()=>{i?.value&&(this._contentUrl=i.value)}),this._contentUrl=i.value);const t=this._templateField?.querySelector("select");if(t&&(t.addEventListener("change",()=>{t?.value&&(this._template=t.value)}),this._template=t.value),this._contentEditor=globalThis.monacoEditorInstances.contentEditor,this._contentEditor){const s=this._contentEditor.getModel().getLineCount(),a=this._contentEditor.getModel().getLineMaxColumn(s);this._contentEditor.setPosition({column:a,lineNumber:s})}this.querySelector("#editor-component-list-components")&&this._componentLists.push("components"),this.querySelector("#editor-component-list-guides")&&this._componentLists.push("guides"),this.querySelector("#editor-component-list-images")&&this._componentLists.push("images"),this.querySelector("#editor-component-list-snippets")&&this._componentLists.push("snippets")}render(){const i=[];this._componentLists.includes(d.Settings)&&i.push(o`
-        <button
-          class="${this._selectedTabGroup===d.Settings?"active":c}"
-          type="button"
-          title="${this.tMessages.settings}"
-          @click="${()=>this._selectedTabGroup=d.Settings}"
-        >
-          <slot name="icon-settings"></slot><span>${this.tMessages.settings}</span>
-        </button>
-      `),this._componentLists.includes(d.Components)&&i.push(o`
-        <button
-          class="${this._selectedTabGroup===d.Components?"active":c}"
-          type="button"
-          title="${this.tMessages.components}"
-          @click="${()=>this._selectedTabGroup=d.Components}"
-        >
-          <slot name="icon-components"></slot><span>${this.tMessages.components}</span>
-        </button>
-      `),this._componentLists.includes(d.Images)&&i.push(o`
-        <button
-          class="${this._selectedTabGroup===d.Images?"active":c}"
-          type="button"
-          title="${this.tMessages.images}"
-          @click="${()=>this._selectedTabGroup=d.Images}"
-        >
-          <slot name="icon-images"></slot><span>${this.tMessages.images}</span>
-        </button>
-      `),this._componentLists.includes(d.Guides)&&i.push(o`
-        <button
-          class="${this._selectedTabGroup===d.Guides?"active":c}"
-          type="button"
-          title="${this.tMessages.guides}"
-          @click="${()=>this._selectedTabGroup=d.Guides}"
-        >
-          <slot name="icon-guides"></slot><span>${this.tMessages.guides}</span>
-        </button>
-      `),this._componentLists.includes(d.Snippets)&&i.push(o`
-        <button
-          class="${this._selectedTabGroup===d.Snippets?"active":c}"
-          type="button"
-          title="${this.tMessages.snippets}"
-          @click="${()=>this._selectedTabGroup=d.Snippets}"
-        >
-          <slot name="icon-snippets"></slot><span>${this.tMessages.snippets}</span>
-        </button>
-      `);let t=o`<div></div>`;return this._contentSource===v.Field?t=o`<div class="guide-editor-content-editor">
-        <div><slot name="editor"></slot></div>
-      </div>`:this._contentSource===v.Iframe?t=o`<div class="guide-editor-content-iframe">
-        <h3>${this.tMessages.iframeLabel}</h3>
-        ${this._contentUrl?o`<iframe src="${this._contentUrl??""}"></iframe>`:o`<p>${this.tMessages.iframeEmpty}</p>`}
-      </div>`:this._contentSource===v.Template&&(t=o`<div class="guide-editor-content-template">
-        <h3>${this.tMessages.templateLabel}</h3>
-        ${this._template!=="__none__"?o`<pre><code>${this.templatesData[this._template]??""}</code><div><!-- Mask --></div></pre>`:o`<p>${this.tMessages.templateEmpty}</p>`}
-      </div>`),o`
-      <aside>
-        ${L?o`<div
-              class="guide-editor-content-buttons"
-              style="--guide-editor-content-buttons-columns: ${i.length};"
-            >
-              ${i}
-            </div>`:c}
-        ${this._selectedTabGroup===d.Settings?o`<slot name="settings"></slot>`:c}
-        ${this._selectedTabGroup===d.Components?o`<slot name="components"></slot>`:c}
-        ${this._selectedTabGroup===d.Images?o`<slot name="images"></slot>`:c}
-        ${this._selectedTabGroup===d.Guides?o`<slot name="guides"></slot>`:c}
-        ${this._selectedTabGroup===d.Snippets?o`<slot name="snippets"></slot>`:c}
-      </aside>
-      ${t}
-    `}};g.styles=H`
+        `:a}`}createRenderRoot(){return this}};p([r({attribute:`t-messages`,type:Object})],S.prototype,`tMessages`,void 0),p([r({attribute:`copy-text`,type:String})],S.prototype,`copyText`,void 0),S=p([u(`guide-copy-text-button`)],S);var C=class extends c{constructor(...e){super(...e),this.isNew=!1,this.tMessages={},this.templatesData={},this._componentLists=[`settings`],this._contentEditor=null,this._contentSource=y.Field,this._contentSourceSelect=null,this._contentUrlField=null,this._contentUrl=``,this._renderMarkdownField=null,this._selectedTabGroup=_.Settings,this._slugHasBeenEdited=!1,this._slugInput=null,this._templateField=null,this._template=`__none__`,this._titleInput=null}static{this.styles=m`
     :host {
       display: grid;
       grid-template-columns: var(--grid-template-columns, minmax(1px, 1fr));
@@ -152,195 +84,255 @@ import{n as _,t as w,i as M,E as c,x as o,a as H,r as u,k as N,p as L,T as J,g a
         }
       }
     }
-  `;m([_({attribute:"is-new",type:Boolean})],g.prototype,"isNew",2);m([_({attribute:"t-messages",type:Object})],g.prototype,"tMessages",2);m([_({attribute:"templates-data",type:Object})],g.prototype,"templatesData",2);m([u()],g.prototype,"_componentLists",2);m([u()],g.prototype,"_contentEditor",2);m([u()],g.prototype,"_contentSource",2);m([u()],g.prototype,"_contentSourceSelect",2);m([u()],g.prototype,"_contentUrlField",2);m([u()],g.prototype,"_contentUrl",2);m([u()],g.prototype,"_renderMarkdownField",2);m([u()],g.prototype,"_selectedTabGroup",2);m([u()],g.prototype,"_slugHasBeenEdited",2);m([u()],g.prototype,"_slugInput",2);m([u()],g.prototype,"_templateField",2);m([u()],g.prototype,"_template",2);m([u()],g.prototype,"_titleInput",2);g=m([w("guide-editor")],g);/**
- * @license
- * Copyright 2017 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */const Z={CHILD:2},tt=i=>(...t)=>({_$litDirective$:i,values:t});class et{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,s,a){this._$Ct=t,this._$AM=s,this._$Ci=a}_$AS(t,s){return this.update(t,s)}update(t,s){return this.render(...s)}}/**
- * @license
- * Copyright 2017 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */class O extends et{constructor(t){if(super(t),this.it=c,t.type!==Z.CHILD)throw Error(this.constructor.directiveName+"() can only be used in child bindings")}render(t){if(t===c||t==null)return this._t=void 0,this.it=t;if(t===J)return t;if(typeof t!="string")throw Error(this.constructor.directiveName+"() called with a non-string value");if(t===this.it)return this._t;this.it=t;const s=[t];return s.raw=s,this._t={_$litType$:this.constructor.resultType,strings:s,values:[]}}}O.directiveName="unsafeHTML",O.resultType=1;const G=tt(O);var st=Object.defineProperty,it=Object.getOwnPropertyDescriptor,E=(i,t,s,a)=>{for(var e=a>1?void 0:a?it(t,s):t,n=i.length-1,r;n>=0;n--)(r=i[n])&&(e=(a?r(t,s,e):r(e))||e);return a&&e&&st(t,s,e),e};let C=class extends M{constructor(){super(...arguments),this.data=void 0,this.tMessages={},this._showProps=!1}_insertTextIntoEditor(i,t){let s;t==="content"?s=globalThis.monacoEditorInstances.contentEditor:t==="css"?s=globalThis.monacoEditorInstances.contentCss:t==="javascript"&&(s=globalThis.monacoEditorInstances.contentJavascript);const a=document.querySelector("guide-editor")?.dataset.guideSlug;if(a){const e=new Date;i=i.replace(/REPLACE_DATE/g,e.toISOString().split("T")[0]).replace(/REPLACE_GUIDE_SLUG/g,a)}if(s){const e=s.getModel().getLineCount(),n=s.getModel().getLineMaxColumn(e),r=s.getSelection(),I={identifier:{major:1,minor:1},range:{startLineNumber:r?.selectionStartLineNumber??e,startColumn:r?.selectionStartColumn??n,endLineNumber:r?.endLineNumber??e,endColumn:r?.endColumn??n},text:i,forceMoveMarkers:!0};s.executeEdits("my-source",[I]),s.focus()}}connectedCallback(){super.connectedCallback()}render(){let i,t;return this.data?.thumbnail1x&&this.data?.thumbnail2x?i=o`<img
+  `}_onContentSourceChange(e){switch(e){case y.Field:this._contentUrlField?.classList.add(`hidden`),this._renderMarkdownField?.classList.remove(`hidden`),this._templateField?.classList.add(`hidden`),this._contentSource=y.Field;break;case y.Iframe:this._contentUrlField?.classList.remove(`hidden`),this._renderMarkdownField?.classList.add(`hidden`),this._templateField?.classList.add(`hidden`),this._contentSource=y.Iframe;break;case y.Template:this._contentUrlField?.classList.add(`hidden`),this._renderMarkdownField?.classList.add(`hidden`),this._templateField?.classList.remove(`hidden`),this._contentSource=y.Template;break}}connectedCallback(){super.connectedCallback(),this._contentSourceSelect=this.querySelector(`guide-editor select[name="contentSource"]`),this._contentUrlField=this.querySelector(`guide-editor #contentUrl-field`),this._renderMarkdownField=this.querySelector(`guide-editor #renderMarkdown-field`),this._slugInput=this.querySelector(`guide-editor input[name="slug"]`),this._templateField=this.querySelector(`guide-editor #template-field`),this._titleInput=this.querySelector(`guide-editor input[name="title"]`),this.isNew&&this._titleInput&&this._titleInput.addEventListener(`input`,()=>{!this._slugHasBeenEdited&&this._slugInput&&(this._slugInput.value=t(this._titleInput?.value??``),document.querySelector(`guide-editor`)?.setAttribute(`data-guide-slug`,this._slugInput.value))}),this._slugInput?.addEventListener(`blur`,()=>{if(this._slugInput){this._slugHasBeenEdited=!0,this._slugInput.value=t(this._slugInput.value);let e=document.querySelectorAll(`guide-copy-text-button`),n=this._slugInput.value;e.forEach(e=>{e.copyText=n}),document.querySelector(`guide-editor`)?.setAttribute(`data-guide-slug`,n)}}),this._slugInput?.value&&document.querySelector(`guide-editor`)?.setAttribute(`data-guide-slug`,this._slugInput.value),this._contentSourceSelect&&(this._contentSourceSelect.addEventListener(`change`,()=>{this._onContentSourceChange(this._contentSourceSelect?.value)}),this._onContentSourceChange(this._contentSourceSelect.value));let e=this._contentUrlField?.querySelector(`input`);e&&(e.addEventListener(`blur`,()=>{e?.value&&(this._contentUrl=e.value)}),this._contentUrl=e.value);let n=this._templateField?.querySelector(`select`);if(n&&(n.addEventListener(`change`,()=>{n?.value&&(this._template=n.value)}),this._template=n.value),this._contentEditor=globalThis.monacoEditorInstances.contentEditor,this._contentEditor){let e=this._contentEditor.getModel().getLineCount(),t=this._contentEditor.getModel().getLineMaxColumn(e);this._contentEditor.setPosition({column:t,lineNumber:e})}this.querySelector(`#editor-component-list-components`)&&this._componentLists.push(`components`),this.querySelector(`#editor-component-list-guides`)&&this._componentLists.push(`guides`),this.querySelector(`#editor-component-list-images`)&&this._componentLists.push(`images`),this.querySelector(`#editor-component-list-snippets`)&&this._componentLists.push(`snippets`)}render(){let t=[];this._componentLists.includes(_.Settings)&&t.push(e`
+        <button
+          class="${this._selectedTabGroup===_.Settings?`active`:a}"
+          type="button"
+          title="${this.tMessages.settings}"
+          @click="${()=>this._selectedTabGroup=_.Settings}"
+        >
+          <slot name="icon-settings"></slot><span>${this.tMessages.settings}</span>
+        </button>
+      `),this._componentLists.includes(_.Components)&&t.push(e`
+        <button
+          class="${this._selectedTabGroup===_.Components?`active`:a}"
+          type="button"
+          title="${this.tMessages.components}"
+          @click="${()=>this._selectedTabGroup=_.Components}"
+        >
+          <slot name="icon-components"></slot><span>${this.tMessages.components}</span>
+        </button>
+      `),this._componentLists.includes(_.Images)&&t.push(e`
+        <button
+          class="${this._selectedTabGroup===_.Images?`active`:a}"
+          type="button"
+          title="${this.tMessages.images}"
+          @click="${()=>this._selectedTabGroup=_.Images}"
+        >
+          <slot name="icon-images"></slot><span>${this.tMessages.images}</span>
+        </button>
+      `),this._componentLists.includes(_.Guides)&&t.push(e`
+        <button
+          class="${this._selectedTabGroup===_.Guides?`active`:a}"
+          type="button"
+          title="${this.tMessages.guides}"
+          @click="${()=>this._selectedTabGroup=_.Guides}"
+        >
+          <slot name="icon-guides"></slot><span>${this.tMessages.guides}</span>
+        </button>
+      `),this._componentLists.includes(_.Snippets)&&t.push(e`
+        <button
+          class="${this._selectedTabGroup===_.Snippets?`active`:a}"
+          type="button"
+          title="${this.tMessages.snippets}"
+          @click="${()=>this._selectedTabGroup=_.Snippets}"
+        >
+          <slot name="icon-snippets"></slot><span>${this.tMessages.snippets}</span>
+        </button>
+      `);let n=e`<div></div>`;return this._contentSource===y.Field?n=e`<div class="guide-editor-content-editor">
+        <div><slot name="editor"></slot></div>
+      </div>`:this._contentSource===y.Iframe?n=e`<div class="guide-editor-content-iframe">
+        <h3>${this.tMessages.iframeLabel}</h3>
+        ${this._contentUrl?e`<iframe src="${this._contentUrl??``}"></iframe>`:e`<p>${this.tMessages.iframeEmpty}</p>`}
+      </div>`:this._contentSource===y.Template&&(n=e`<div class="guide-editor-content-template">
+        <h3>${this.tMessages.templateLabel}</h3>
+        ${this._template===`__none__`?e`<p>${this.tMessages.templateEmpty}</p>`:e`<pre><code>${this.templatesData[this._template]??``}</code><div><!-- Mask --></div></pre>`}
+      </div>`),e`
+      <aside>
+        ${l?e`<div
+              class="guide-editor-content-buttons"
+              style="--guide-editor-content-buttons-columns: ${t.length};"
+            >
+              ${t}
+            </div>`:a}
+        ${this._selectedTabGroup===_.Settings?e`<slot name="settings"></slot>`:a}
+        ${this._selectedTabGroup===_.Components?e`<slot name="components"></slot>`:a}
+        ${this._selectedTabGroup===_.Images?e`<slot name="images"></slot>`:a}
+        ${this._selectedTabGroup===_.Guides?e`<slot name="guides"></slot>`:a}
+        ${this._selectedTabGroup===_.Snippets?e`<slot name="snippets"></slot>`:a}
+      </aside>
+      ${n}
+    `}};p([r({attribute:`is-new`,type:Boolean})],C.prototype,`isNew`,void 0),p([r({attribute:`t-messages`,type:Object})],C.prototype,`tMessages`,void 0),p([r({attribute:`templates-data`,type:Object})],C.prototype,`templatesData`,void 0),p([n()],C.prototype,`_componentLists`,void 0),p([n()],C.prototype,`_contentEditor`,void 0),p([n()],C.prototype,`_contentSource`,void 0),p([n()],C.prototype,`_contentSourceSelect`,void 0),p([n()],C.prototype,`_contentUrlField`,void 0),p([n()],C.prototype,`_contentUrl`,void 0),p([n()],C.prototype,`_renderMarkdownField`,void 0),p([n()],C.prototype,`_selectedTabGroup`,void 0),p([n()],C.prototype,`_slugHasBeenEdited`,void 0),p([n()],C.prototype,`_slugInput`,void 0),p([n()],C.prototype,`_templateField`,void 0),p([n()],C.prototype,`_template`,void 0),p([n()],C.prototype,`_titleInput`,void 0),C=p([u(`guide-editor`)],C);var w={ATTRIBUTE:1,CHILD:2,PROPERTY:3,BOOLEAN_ATTRIBUTE:4,EVENT:5,ELEMENT:6},T=e=>(...t)=>({_$litDirective$:e,values:t}),E=class{constructor(e){}get _$AU(){return this._$AM._$AU}_$AT(e,t,n){this._$Ct=e,this._$AM=t,this._$Ci=n}_$AS(e,t){return this.update(e,t)}update(e,t){return this.render(...t)}},D=class extends E{constructor(e){if(super(e),this.it=a,e.type!==w.CHILD)throw Error(this.constructor.directiveName+`() can only be used in child bindings`)}render(e){if(e===a||e==null)return this._t=void 0,this.it=e;if(e===i)return e;if(typeof e!=`string`)throw Error(this.constructor.directiveName+`() called with a non-string value`);if(e===this.it)return this._t;this.it=e;let t=[e];return t.raw=t,this._t={_$litType$:this.constructor.resultType,strings:t,values:[]}}};D.directiveName=`unsafeHTML`,D.resultType=1;var O=T(D),k=class extends c{constructor(...e){super(...e),this.data=void 0,this.tMessages={},this._showProps=!1}_insertTextIntoEditor(e,t){let n;t===`content`?n=globalThis.monacoEditorInstances.contentEditor:t===`css`?n=globalThis.monacoEditorInstances.contentCss:t===`javascript`&&(n=globalThis.monacoEditorInstances.contentJavascript);let r=document.querySelector(`guide-editor`)?.dataset.guideSlug;if(r){let t=new Date;e=e.replace(/REPLACE_DATE/g,t.toISOString().split(`T`)[0]).replace(/REPLACE_GUIDE_SLUG/g,r)}if(n){let t=n.getModel().getLineCount(),r=n.getModel().getLineMaxColumn(t),i=n.getSelection(),a={identifier:{major:1,minor:1},range:{startLineNumber:i?.selectionStartLineNumber??t,startColumn:i?.selectionStartColumn??r,endLineNumber:i?.endLineNumber??t,endColumn:i?.endColumn??r},text:e,forceMoveMarkers:!0};n.executeEdits(`my-source`,[a]),n.focus()}}connectedCallback(){super.connectedCallback()}render(){let t,n;return t=this.data?.thumbnail1x&&this.data?.thumbnail2x?e`<img
         src="${this.data.thumbnail1x}"
         srcset="${this.data.thumbnail2x} 2x, ${this.data.thumbnail1x}"
-      />`:i=c,this.data?.summary?t=[d.Guides,d.Images].includes(this.data?.group)?o`<p>${this.data.summary}</p>`:o`${G(this.data.summary)}`:t=c,o`
-      ${this.data?o`
+      />`:a,n=this.data?.summary?[_.Guides,_.Images].includes(this.data?.group)?e`<p>${this.data.summary}</p>`:e`${O(this.data.summary)}`:a,e`
+      ${this.data?e`
             <div>
-              ${i}
+              ${t}
               <div class="readable">
                 <h3>${this.data.title}</h3>
-                ${t}
+                ${n}
               </div>
             </div>
             <div class="buttons">
               <button
                 class="btn icon add secondary"
                 type="button"
-                @click="${()=>this._insertTextIntoEditor(this.data?.contentCode??"","content")}"
+                @click="${()=>this._insertTextIntoEditor(this.data?.contentCode??``,`content`)}"
               >
                 ${this.tMessages.addContent}
               </button>
-              ${this.data.cssCode?o`<button
+              ${this.data.cssCode?e`<button
                     class="btn icon add"
                     type="button"
                     style="--guide-editor-component-list-item-button-background-color: var(--green-300);"
-                    @click="${()=>this._insertTextIntoEditor(this.data?.cssCode??"","css")}"
+                    @click="${()=>this._insertTextIntoEditor(this.data?.cssCode??``,`css`)}"
                   >
                     ${this.tMessages.addCss}
-                  </button>`:c}
-              ${this.data.javascriptCode?o`<button
+                  </button>`:a}
+              ${this.data.javascriptCode?e`<button
                     class="btn icon add"
                     type="button"
                     style="--guide-editor-component-list-item-button-background-color: var(--yellow-300);"
-                    @click="${()=>this._insertTextIntoEditor(this.data?.javascriptCode??"","javascript")}"
+                    @click="${()=>this._insertTextIntoEditor(this.data?.javascriptCode??``,`javascript`)}"
                   >
                     ${this.tMessages.addJavascript}
-                  </button>`:c}
-              ${this.data.props?o`<button
+                  </button>`:a}
+              ${this.data.props?e`<button
                     class="btn icon"
-                    data-icon="${this._showProps?"eye-slash":"eye"}"
+                    data-icon="${this._showProps?`eye-slash`:`eye`}"
                     type="button"
                     @click="${()=>this._showProps=!this._showProps}"
                   >
                     ${this.tMessages.variables}
-                  </button>`:c}
+                  </button>`:a}
             </div>
-            ${this.data.props&&this._showProps?o`<h4>${this.tMessages.variables}</h4>
+            ${this.data.props&&this._showProps?e`<h4>${this.tMessages.variables}</h4>
                   <dl>
-                    ${Object.keys(this.data.props).map(s=>o`<dt class="guide-select-string">${s}</dt>
-                        <dd>${this.data?.props?.[s]}</dd>`)}
-                  </dl>`:c}
-          `:c}
-    `}createRenderRoot(){return this}};E([_({attribute:"component-data",type:Object})],C.prototype,"data",2);E([_({attribute:"t-messages",type:Object})],C.prototype,"tMessages",2);E([u()],C.prototype,"_showProps",2);C=E([w("guide-editor-component-list-item")],C);var at=Object.defineProperty,ot=Object.getOwnPropertyDescriptor,P=(i,t,s,a)=>{for(var e=a>1?void 0:a?ot(t,s):t,n=i.length-1,r;n>=0;n--)(r=i[n])&&(e=(a?r(t,s,e):r(e))||e);return a&&e&&at(t,s,e),e};let y=class extends M{constructor(){super(...arguments),this.tMessages={},this.tableHeaders=[],this._getAllPlacementsStatus=p.Initial,this._placements=[]}async _getAllPlacements(){this._getAllPlacementsStatus=p.Loading;const i=await window.Craft?.postActionRequest("guide/placement/get-all-placements");this._placements=i.filter(t=>t.group===h.Nav),this._getAllPlacementsStatus=p.Success}async _onCmsGuideDisabled(i,t){const s=this._placements.find(a=>a.guideId===i);s&&await window.Craft?.postActionRequest("guide/placement/delete-placement",{data:{id:s.id}},(a,e)=>{e==="success"&&(this._getAllPlacements(),window.Craft.cp.displayNotice(this.tMessages.placementDeleteSuccess?.replace("[guide]",t)))})}async _onCmsGuideEnabled(i,t){await window.Craft?.postActionRequest("guide/placement/save-placement",{data:{access:"all",group:"nav",guideId:i}},(s,a)=>{a==="success"&&(this._getAllPlacements(),window.Craft.cp.displayNotice(this.tMessages.placementSaveSuccess?.replace("[guide]",t)))})}async connectedCallback(){super.connectedCallback(),await this._getAllPlacements()}render(){const i=this.tableHeaders.map(s=>o`<th>${s.label}</th>`),t=x.map(s=>{const a=[];a.push(L?o`<a href="${s.viewUrl}" title="${this.tMessages.linkToGuidePage}"
-              >${G(z)}${s.title}</a
-            >`:o`<h3>${s.title}</h3>`),a.push(o`<p>${s.summary??""}</p>`),a.push(o`<guide-copy-text-button
-          copy-text="${s.slug}"
+                    ${Object.keys(this.data.props).map(t=>e`<dt class="guide-select-string">${t}</dt>
+                        <dd>${this.data?.props?.[t]}</dd>`)}
+                  </dl>`:a}
+          `:a}
+    `}createRenderRoot(){return this}};p([r({attribute:`component-data`,type:Object})],k.prototype,`data`,void 0),p([r({attribute:`t-messages`,type:Object})],k.prototype,`tMessages`,void 0),p([n()],k.prototype,`_showProps`,void 0),k=p([u(`guide-editor-component-list-item`)],k);var A=class extends c{constructor(...e){super(...e),this.tMessages={},this.tableHeaders=[],this._getAllPlacementsStatus=b.Initial,this._placements=[]}async _getAllPlacements(){this._getAllPlacementsStatus=b.Loading,this._placements=(await window.Craft?.postActionRequest(`guide/placement/get-all-placements`)).filter(e=>e.group===v.Nav),this._getAllPlacementsStatus=b.Success}async _onCmsGuideDisabled(e,t){let n=this._placements.find(t=>t.guideId===e);n&&await window.Craft?.postActionRequest(`guide/placement/delete-placement`,{data:{id:n.id}},(e,n)=>{n===`success`&&(this._getAllPlacements(),window.Craft.cp.displayNotice(this.tMessages.placementDeleteSuccess?.replace(`[guide]`,t)))})}async _onCmsGuideEnabled(e,t){await window.Craft?.postActionRequest(`guide/placement/save-placement`,{data:{access:`all`,group:`nav`,guideId:e}},(e,n)=>{n===`success`&&(this._getAllPlacements(),window.Craft.cp.displayNotice(this.tMessages.placementSaveSuccess?.replace(`[guide]`,t)))})}async connectedCallback(){super.connectedCallback(),await this._getAllPlacements()}render(){let t=this.tableHeaders.map(t=>e`<th>${t.label}</th>`),n=o.map(t=>{let n=[];n.push(l?e`<a href="${t.viewUrl}" title="${this.tMessages.linkToGuidePage}"
+              >${O(d)}${t.title}</a
+            >`:e`<h3>${t.title}</h3>`),n.push(e`<p>${t.summary??``}</p>`),n.push(e`<guide-copy-text-button
+          copy-text="${t.slug}"
           t-messages="${JSON.stringify(this.tMessages)}"
-        ></guide-copy-text-button>`);const e=this._placements.find(r=>r.guideId===s.id)!==void 0;a.push(o`<input
+        ></guide-copy-text-button>`);let r=this._placements.find(e=>e.guideId===t.id)!==void 0;n.push(e`<input
           type="checkbox"
           switch
-          name="cms-guide-${s.slug}"
-          ?checked="${e}"
-          ?disabled="${this._getAllPlacementsStatus===p.Loading}"
-          @change="${e?()=>this._onCmsGuideDisabled(s.id,s.title):()=>this._onCmsGuideEnabled(s.id,s.title)}"
-        />`);const n=[];return L&&n.push(o`
-          <guide-slideout-button page-slug="${s.slug}">
+          name="cms-guide-${t.slug}"
+          ?checked="${r}"
+          ?disabled="${this._getAllPlacementsStatus===b.Loading}"
+          @change="${r?()=>this._onCmsGuideDisabled(t.id,t.title):()=>this._onCmsGuideEnabled(t.id,t.title)}"
+        />`);let i=[];return l&&i.push(e`
+          <guide-slideout-button page-slug="${t.slug}">
             <button class="btn small" data-icon="eye" type="button">${this.tMessages.preview}</button>
           </guide-slideout-button>
-        `),R.editGuides&&n.push(o`<a class="btn small secondary" data-icon="pencil" href="${s.editUrl}">${this.tMessages.edit}</a>`),R.deleteGuides&&n.push(o`<a class="btn small" data-icon="trash" href="${s.deleteUrl}">${this.tMessages.delete}</a>`),a.push(o`<div class="buttons">${n.map(r=>r)}</div>`),a});return o`
-      ${t.length?o`
+        `),s.editGuides&&i.push(e`<a class="btn small secondary" data-icon="pencil" href="${t.editUrl}">${this.tMessages.edit}</a>`),s.deleteGuides&&i.push(e`<a class="btn small" data-icon="trash" href="${t.deleteUrl}">${this.tMessages.delete}</a>`),n.push(e`<div class="buttons">${i.map(e=>e)}</div>`),n});return e`
+      ${n.length?e`
             <div class="tableview tablepane">
               <table class="data fullwidth">
                 <thead>
                   <tr>
-                    ${i}
+                    ${t}
                   </tr>
                 </thead>
                 <tbody>
-                  ${t.map(s=>o`<tr>
-                        ${s.map(a=>o`<td>${a}</td>`)}
+                  ${n.map(t=>e`<tr>
+                        ${t.map(t=>e`<td>${t}</td>`)}
                       </tr>`)}
                 </tbody>
               </table>
             </div>
-          `:o`<p>${this.tMessages.listEmpty}</p>`}
-    `}createRenderRoot(){return this}};P([_({attribute:"t-messages",type:Object})],y.prototype,"tMessages",2);P([_({attribute:"table-headers",type:Object})],y.prototype,"tableHeaders",2);P([u()],y.prototype,"_getAllPlacementsStatus",2);P([u()],y.prototype,"_placements",2);y=P([w("guide-list")],y);var nt=Object.defineProperty,rt=Object.getOwnPropertyDescriptor,$=(i,t,s,a)=>{for(var e=a>1?void 0:a?rt(t,s):t,n=i.length-1,r;n>=0;n--)(r=i[n])&&(e=(a?r(t,s,e):r(e))||e);return a&&e&&nt(t,s,e),e};let f=class extends M{constructor(){super(...arguments),this.actionUrlGetAllPlacements="",this.fieldsData=[],this.groupsData=[],this.tMessages={},this._getAllPlacementsStatus=p.Initial,this._groupsDataStructured=[],this._placements=[]}async _addPlacement(i,t){this._getAllPlacementsStatus=p.Loading;const s=parseInt(i?.target?.value);if(s){const a=x.find(e=>e.id===s);if(a){const e={access:V.All,group:t.name,guideId:a.id};t.groupId&&(e.groupId=t.groupId),await window.Craft?.postActionRequest("guide/placement/save-placement",{data:e},async(n,r)=>{r==="success"&&(window.Craft.cp.displayNotice(this.tMessages.placementSaveSuccess?.replace("[guide]",a.title).replace("[group]",t.header)),await this._getAllPlacements(),this._getAllPlacementsStatus=p.Success,i?.target&&(i.target.value="__none__"))})}}}async _deletePlacement(i,t){this._getAllPlacementsStatus=p.Loading,await window.Craft?.postActionRequest("guide/placement/delete-placement",{data:{id:i}},async(s,a)=>{a==="success"&&(await this._getAllPlacements(),window.Craft.cp.displayNotice(this.tMessages.placementDeleteSuccess?.replace("[guide]",t.title)),this._getAllPlacementsStatus=p.Success)})}async _getAllPlacements(){this._getAllPlacementsStatus=p.Loading;const i=await window.Craft?.postActionRequest("guide/placement/get-all-placements");this._placements=i,this._getAllPlacementsStatus=p.Success}async _saveFieldPlacement(i,t){const s=i?.target?.value;this._getAllPlacementsStatus=p.Loading;const a={access:"all",group:"field",groupId:s==="__none__"?null:s,guideId:t.guideId,id:t.id};await window.Craft?.postActionRequest("guide/placement/save-placement",{data:a},async(e,n)=>{n==="success"&&(window.Craft.cp.displayNotice(this.tMessages.placementUriSaveSuccess),await this._getAllPlacements(),this._getAllPlacementsStatus=p.Success)})}async _saveUriPlacement(i,t,s){const a=i?.target?.value;if(t==="moveMethod"&&a===s.moveMethod)return;if(t==="selector"&&a===s.selector)return;if(t==="uri"&&a===s.uri)return;this._getAllPlacementsStatus=p.Loading;const e={access:"all",group:"uri",guideId:s.guideId,id:s.id,moveMethod:t==="moveMethod"?a:s.moveMethod,selector:t==="selector"?a:s.selector,uri:t==="uri"?a:s.uri};await window.Craft?.postActionRequest("guide/placement/save-placement",{data:e},async(n,r)=>{r==="success"&&(window.Craft.cp.displayNotice(this.tMessages.placementUriSaveSuccess),await this._getAllPlacements(),this._getAllPlacementsStatus=p.Success)})}connectedCallback(){super.connectedCallback();const i=this.groupsData.find(l=>l.name===h.Widget);i&&this._groupsDataStructured.push(i);const t=this.groupsData.find(l=>l.name===h.UiElementEnabled);t&&this._groupsDataStructured.push(t);const s=this.groupsData.find(l=>l.name===h.Field);s&&this._groupsDataStructured.push(s);const a=this.groupsData.find(l=>l.name===h.Entry);a&&this._groupsDataStructured.push(a);const e=this.groupsData.filter(l=>l.name===h.Section);e?.length&&this._groupsDataStructured.push(...e);const n=this.groupsData.find(l=>l.name===h.Asset);n&&this._groupsDataStructured.push(n);const r=this.groupsData.filter(l=>l.name===h.AssetVolume);r?.length&&this._groupsDataStructured.push(...r);const b=this.groupsData.find(l=>l.name===h.Category);b&&this._groupsDataStructured.push(b);const I=this.groupsData.filter(l=>l.name===h.CategoryGroup);I?.length&&this._groupsDataStructured.push(...I);const j=this.groupsData.find(l=>l.name===h.Global);j&&this._groupsDataStructured.push(j);const k=this.groupsData.filter(l=>l.name===h.GlobalSet);k?.length&&this._groupsDataStructured.push(...k);const F=this.groupsData.find(l=>l.name===h.User);F&&this._groupsDataStructured.push(F);const q=this.groupsData.find(l=>l.name===h.Uri);q&&this._groupsDataStructured.push(q),this._getAllPlacements()}render(){return o`
-      ${this._groupsDataStructured.map(i=>{const t=this._placements.filter(e=>[h.Field].includes(e.group)?e.group===i.name:e.group===i.name&&e.groupId===i.groupId),s={};t.forEach(e=>{const n=x.find(r=>r.id===e.guideId);n&&(s[n.id]=n)});const a=[h.Field,h.Uri].includes(i.name)?x:x.filter(e=>!Object.keys(s).includes(e.id.toString()));return o`
-          <div class="guide-organizer-header guide-organizer-header-${i.headerSize}">
-            <h2>${i.header}</h2>
-            <p>${G(i.description)}</p>
+          `:e`<p>${this.tMessages.listEmpty}</p>`}
+    `}createRenderRoot(){return this}};p([r({attribute:`t-messages`,type:Object})],A.prototype,`tMessages`,void 0),p([r({attribute:`table-headers`,type:Object})],A.prototype,`tableHeaders`,void 0),p([n()],A.prototype,`_getAllPlacementsStatus`,void 0),p([n()],A.prototype,`_placements`,void 0),A=p([u(`guide-list`)],A);var j=class extends c{constructor(...e){super(...e),this.actionUrlGetAllPlacements=``,this.fieldsData=[],this.groupsData=[],this.tMessages={},this._getAllPlacementsStatus=b.Initial,this._groupsDataStructured=[],this._placements=[]}async _addPlacement(e,t){this._getAllPlacementsStatus=b.Loading;let n=parseInt(e?.target?.value);if(n){let r=o.find(e=>e.id===n);if(r){let n={access:h.All,group:t.name,guideId:r.id};t.groupId&&(n.groupId=t.groupId),await window.Craft?.postActionRequest(`guide/placement/save-placement`,{data:n},async(n,i)=>{i===`success`&&(window.Craft.cp.displayNotice(this.tMessages.placementSaveSuccess?.replace(`[guide]`,r.title).replace(`[group]`,t.header)),await this._getAllPlacements(),this._getAllPlacementsStatus=b.Success,e?.target&&(e.target.value=`__none__`))})}}}async _deletePlacement(e,t){this._getAllPlacementsStatus=b.Loading,await window.Craft?.postActionRequest(`guide/placement/delete-placement`,{data:{id:e}},async(e,n)=>{n===`success`&&(await this._getAllPlacements(),window.Craft.cp.displayNotice(this.tMessages.placementDeleteSuccess?.replace(`[guide]`,t.title)),this._getAllPlacementsStatus=b.Success)})}async _getAllPlacements(){this._getAllPlacementsStatus=b.Loading,this._placements=await window.Craft?.postActionRequest(`guide/placement/get-all-placements`),this._getAllPlacementsStatus=b.Success}async _saveFieldPlacement(e,t){let n=e?.target?.value;this._getAllPlacementsStatus=b.Loading;let r={access:`all`,group:`field`,groupId:n===`__none__`?null:n,guideId:t.guideId,id:t.id};await window.Craft?.postActionRequest(`guide/placement/save-placement`,{data:r},async(e,t)=>{t===`success`&&(window.Craft.cp.displayNotice(this.tMessages.placementUriSaveSuccess),await this._getAllPlacements(),this._getAllPlacementsStatus=b.Success)})}async _saveUriPlacement(e,t,n){let r=e?.target?.value;if(t===`moveMethod`&&r===n.moveMethod||t===`selector`&&r===n.selector||t===`uri`&&r===n.uri)return;this._getAllPlacementsStatus=b.Loading;let i={access:`all`,group:`uri`,guideId:n.guideId,id:n.id,moveMethod:t===`moveMethod`?r:n.moveMethod,selector:t===`selector`?r:n.selector,uri:t===`uri`?r:n.uri};await window.Craft?.postActionRequest(`guide/placement/save-placement`,{data:i},async(e,t)=>{t===`success`&&(window.Craft.cp.displayNotice(this.tMessages.placementUriSaveSuccess),await this._getAllPlacements(),this._getAllPlacementsStatus=b.Success)})}connectedCallback(){super.connectedCallback();let e=this.groupsData.find(e=>e.name===v.Widget);e&&this._groupsDataStructured.push(e);let t=this.groupsData.find(e=>e.name===v.UiElementEnabled);t&&this._groupsDataStructured.push(t);let n=this.groupsData.find(e=>e.name===v.Field);n&&this._groupsDataStructured.push(n);let r=this.groupsData.find(e=>e.name===v.Entry);r&&this._groupsDataStructured.push(r);let i=this.groupsData.filter(e=>e.name===v.Section);i?.length&&this._groupsDataStructured.push(...i);let a=this.groupsData.find(e=>e.name===v.Asset);a&&this._groupsDataStructured.push(a);let o=this.groupsData.filter(e=>e.name===v.AssetVolume);o?.length&&this._groupsDataStructured.push(...o);let s=this.groupsData.find(e=>e.name===v.Category);s&&this._groupsDataStructured.push(s);let c=this.groupsData.filter(e=>e.name===v.CategoryGroup);c?.length&&this._groupsDataStructured.push(...c);let l=this.groupsData.find(e=>e.name===v.Global);l&&this._groupsDataStructured.push(l);let u=this.groupsData.filter(e=>e.name===v.GlobalSet);u?.length&&this._groupsDataStructured.push(...u);let d=this.groupsData.find(e=>e.name===v.User);d&&this._groupsDataStructured.push(d);let f=this.groupsData.find(e=>e.name===v.Uri);f&&this._groupsDataStructured.push(f),this._getAllPlacements()}render(){return e`
+      ${this._groupsDataStructured.map(t=>{let n=this._placements.filter(e=>[v.Field].includes(e.group)?e.group===t.name:e.group===t.name&&e.groupId===t.groupId),r={};n.forEach(e=>{let t=o.find(t=>t.id===e.guideId);t&&(r[t.id]=t)});let i=[v.Field,v.Uri].includes(t.name)?o:o.filter(e=>!Object.keys(r).includes(e.id.toString()));return e`
+          <div class="guide-organizer-header guide-organizer-header-${t.headerSize}">
+            <h2>${t.header}</h2>
+            <p>${O(t.description)}</p>
           </div>
-          <div class="guide-organizer-section" data-organizer-group="${i.name}">
-            ${t.length?o`
+          <div class="guide-organizer-section" data-organizer-group="${t.name}">
+            ${n.length?e`
                   <ul>
-                    ${t.map(e=>{let n;if(i.name===h.Field){W(this.fieldsData,t);const r=t.map(b=>b.groupId??"");n=o`
+                    ${n.map(i=>{let o;if(t.name===v.Field){f(this.fieldsData,n);let t=n.map(e=>e.groupId??``);o=e`
                           <div class="guide-organizer-section-flex-fields">
-                            <label for="guide-field-${e.id}">is assigned to field</label>
+                            <label for="guide-field-${i.id}">is assigned to field</label>
                             <div class="select">
                               <select
-                                id="guide-field-${e.id}"
+                                id="guide-field-${i.id}"
                                 class="input"
-                                ?disabled="${this._getAllPlacementsStatus===p.Loading}"
-                                @input="${()=>this._saveFieldPlacement(event,e)}"
+                                ?disabled="${this._getAllPlacementsStatus===b.Loading}"
+                                @input="${()=>this._saveFieldPlacement(event,i)}"
                               >
                                 <option value="__none__">${this.tMessages.addFieldToGuide}</option>
-                                ${this.fieldsData.map(b=>o`<option
-                                    ?disabled="${r.includes(b.uid)}"
-                                    ?selected="${e.groupId===b.uid}"
-                                    value="${b.uid}"
+                                ${this.fieldsData.map(n=>e`<option
+                                    ?disabled="${t.includes(n.uid)}"
+                                    ?selected="${i.groupId===n.uid}"
+                                    value="${n.uid}"
                                   >
-                                    ${b.name}
+                                    ${n.name}
                                   </option>`)}
                               </select>
                             </div>
 
-                            ${e.groupId?o`<span class="guide-uri-valid" title="${this.tMessages.fieldPlacementIsValid}"
+                            ${i.groupId?e`<span class="guide-uri-valid" title="${this.tMessages.fieldPlacementIsValid}"
                                   >✓</span
-                                >`:o`<span class="guide-uri-invalid" title="${this.tMessages.fieldPlacementIsInvalid}"
+                                >`:e`<span class="guide-uri-invalid" title="${this.tMessages.fieldPlacementIsInvalid}"
                                   >ⓧ</span
                                 >`}
                           </div>
-                        `}else i.name===h.Uri?n=o`
+                        `}else o=t.name===v.Uri?e`
                           <div class="guide-organizer-section-flex-fields">
                             <span class="input"
-                              ><label for="guide-uri-${e.id}">displayed on page(s)</label>
+                              ><label for="guide-uri-${i.id}">displayed on page(s)</label>
                               <input
-                                id="guide-uri-${e.id}"
+                                id="guide-uri-${i.id}"
                                 class="text"
                                 type="text"
                                 placeholder="uri pattern"
-                                value="${e.uri??""}"
-                                ?disabled="${this._getAllPlacementsStatus===p.Loading}"
-                                @blur="${()=>this._saveUriPlacement(event,"uri",e)}"
+                                value="${i.uri??``}"
+                                ?disabled="${this._getAllPlacementsStatus===b.Loading}"
+                                @blur="${()=>this._saveUriPlacement(event,`uri`,i)}"
                             /></span>
                             <div class="select">
                               <select
                                 class="input"
-                                ?disabled="${this._getAllPlacementsStatus===p.Loading}"
-                                @input="${()=>this._saveUriPlacement(event,"moveMethod",e)}"
+                                ?disabled="${this._getAllPlacementsStatus===b.Loading}"
+                                @input="${()=>this._saveUriPlacement(event,`moveMethod`,i)}"
                               >
-                                <option value="before" ?selected="${e.moveMethod===T.Before}">
+                                <option value="before" ?selected="${i.moveMethod===g.Before}">
                                   before
                                 </option>
-                                <option value="prepend" ?selected="${e.moveMethod===T.Prepend}">
+                                <option value="prepend" ?selected="${i.moveMethod===g.Prepend}">
                                   at the top of
                                 </option>
-                                <option value="append" ?selected="${e.moveMethod===T.Append}">
+                                <option value="append" ?selected="${i.moveMethod===g.Append}">
                                   at the bottom of
                                 </option>
-                                <option value="after" ?selected="${e.moveMethod===T.After}">
+                                <option value="after" ?selected="${i.moveMethod===g.After}">
                                   after
                                 </option>
                               </select>
                             </div>
 
                             <span class="input"
-                              ><label for="guide-selector-${e.id}">CSS selector</label>
+                              ><label for="guide-selector-${i.id}">CSS selector</label>
                               <input
-                                id="guide-selector-${e.id}"
+                                id="guide-selector-${i.id}"
                                 class="text"
                                 type="text"
                                 placeholder="selector"
-                                value="${e.selector??""}"
-                                ?disabled="${this._getAllPlacementsStatus===p.Loading}"
-                                @blur="${()=>this._saveUriPlacement(event,"selector",e)}"
+                                value="${i.selector??``}"
+                                ?disabled="${this._getAllPlacementsStatus===b.Loading}"
+                                @blur="${()=>this._saveUriPlacement(event,`selector`,i)}"
                             /></span>
 
-                            ${e.uri&&e.selector?o`<span class="guide-uri-valid" title="${this.tMessages.uriPlacementIsValid}"
+                            ${i.uri&&i.selector?e`<span class="guide-uri-valid" title="${this.tMessages.uriPlacementIsValid}"
                                   >✓</span
-                                >`:o`<span class="guide-uri-invalid" title="${this.tMessages.uriPlacementIsInvalid}"
+                                >`:e`<span class="guide-uri-invalid" title="${this.tMessages.uriPlacementIsInvalid}"
                                   >ⓧ</span
                                 >`}
                           </div>
-                        `:n=o`<div><span>${s[e.guideId].summary}</span></div>`;return s[e.guideId]?o`<li>
+                        `:e`<div><span>${r[i.guideId].summary}</span></div>`;return r[i.guideId]?e`<li>
                             <div class="guide-organizer-title">
-                              ${G(z)}<span>${s[e.guideId].title}</span>
+                              ${O(d)}<span>${r[i.guideId].title}</span>
                             </div>
 
-                            ${n}
+                            ${o}
 
                             <div class="buttons">
-                              <guide-slideout-button page-slug="${s[e.guideId].slug}">
+                              <guide-slideout-button page-slug="${r[i.guideId].slug}">
                                 <button class="btn small" data-icon="eye" type="button">
                                   ${this.tMessages.preview}
                                 </button>
@@ -348,31 +340,31 @@ import{n as _,t as w,i as M,E as c,x as o,a as H,r as u,k as N,p as L,T as J,g a
                               <button
                                 class="btn icon delete small"
                                 type="button"
-                                @click="${()=>this._deletePlacement(e.id,s[e.guideId])}"
+                                @click="${()=>this._deletePlacement(i.id,r[i.guideId])}"
                               >
                                 ${this.tMessages.remove}
                               </button>
                             </div>
-                          </li>`:c})}
+                          </li>`:a})}
                   </ul>
-                `:o`<div class="guide-organizer-group-empty">
+                `:e`<div class="guide-organizer-group-empty">
                   <p>${this.tMessages.emptyGroup}</p>
                 </div>`}
-            ${a.length?o`
+            ${i.length?e`
                   <div class="select">
                     <select
                       class="input"
-                      ?disabled="${this._getAllPlacementsStatus===p.Loading}"
-                      @input="${()=>this._addPlacement(event,i)}"
+                      ?disabled="${this._getAllPlacementsStatus===b.Loading}"
+                      @input="${()=>this._addPlacement(event,t)}"
                     >
-                      <option value="__none__">${this.tMessages.addGuideToGroupOptionDefault} ${i.header}</option>
-                      ${a.map(e=>o`<option value="${e.id}">${e.title}</option>`)}
+                      <option value="__none__">${this.tMessages.addGuideToGroupOptionDefault} ${t.header}</option>
+                      ${i.map(t=>e`<option value="${t.id}">${t.title}</option>`)}
                     </select>
                   </div>
-                `:c}
+                `:a}
           </div>
         `})}
-    `}createRenderRoot(){return this}};$([_({attribute:"action-url-get-all-placements"})],f.prototype,"actionUrlGetAllPlacements",2);$([_({attribute:"fields-data",type:Object})],f.prototype,"fieldsData",2);$([_({attribute:"groups-data",type:Object})],f.prototype,"groupsData",2);$([_({attribute:"t-messages",type:Object})],f.prototype,"tMessages",2);$([u()],f.prototype,"_getAllPlacementsStatus",2);$([u()],f.prototype,"_groupsDataStructured",2);$([u()],f.prototype,"_placements",2);f=$([w("guide-organizer")],f);var lt=Object.defineProperty,dt=Object.getOwnPropertyDescriptor,D=(i,t,s,a)=>{for(var e=a>1?void 0:a?dt(t,s):t,n=i.length-1,r;n>=0;n--)(r=i[n])&&(e=(a?r(t,s,e):r(e))||e);return a&&e&&lt(t,s,e),e};let S=class extends M{constructor(){super(...arguments),this.guidesData={guides:{}},this.tMessages={},this._exportData="",this._selectedGuides=[]}async _copyExportData(){await B(this._exportData),window.Craft.cp.displayNotice(`${this.tMessages.copiedToClipboard}`)}_formatExportData(){const i={guides:[]};i.guides=this._selectedGuides.map(t=>this.guidesData.guides[t])??[],this._exportData=JSON.stringify(i)}async _importImportData(){const i=this.querySelector("#import-data");i?.value&&await window.Craft.postActionRequest("guide/import-export/import-json",{guideData:i.value},t=>{t.status==="success"?window.Craft.cp.displayNotice(this.tMessages.guidesImported):window.Craft.cp.displayError(t.error)})}_onGuideCheckboxInput(i){if(this._selectedGuides.includes(i)){const t=this._selectedGuides.indexOf(i);this._selectedGuides.splice(t,1)}else this._selectedGuides.push(i);this._formatExportData()}connectedCallback(){super.connectedCallback(),this._formatExportData()}render(){return o`
+    `}createRenderRoot(){return this}};p([r({attribute:`action-url-get-all-placements`})],j.prototype,`actionUrlGetAllPlacements`,void 0),p([r({attribute:`fields-data`,type:Object})],j.prototype,`fieldsData`,void 0),p([r({attribute:`groups-data`,type:Object})],j.prototype,`groupsData`,void 0),p([r({attribute:`t-messages`,type:Object})],j.prototype,`tMessages`,void 0),p([n()],j.prototype,`_getAllPlacementsStatus`,void 0),p([n()],j.prototype,`_groupsDataStructured`,void 0),p([n()],j.prototype,`_placements`,void 0),j=p([u(`guide-organizer`)],j);var M=class extends c{constructor(...e){super(...e),this.guidesData={guides:{}},this.tMessages={},this._exportData=``,this._selectedGuides=[]}async _copyExportData(){await x(this._exportData),window.Craft.cp.displayNotice(`${this.tMessages.copiedToClipboard}`)}_formatExportData(){let e={guides:[]};e.guides=this._selectedGuides.map(e=>this.guidesData.guides[e])??[],this._exportData=JSON.stringify(e)}async _importImportData(){let e=this.querySelector(`#import-data`);e?.value&&await window.Craft.postActionRequest(`guide/import-export/import-json`,{guideData:e.value},e=>{e.status===`success`?window.Craft.cp.displayNotice(this.tMessages.guidesImported):window.Craft.cp.displayError(e.error)})}_onGuideCheckboxInput(e){if(this._selectedGuides.includes(e)){let t=this._selectedGuides.indexOf(e);this._selectedGuides.splice(t,1)}else this._selectedGuides.push(e);this._formatExportData()}connectedCallback(){super.connectedCallback(),this._formatExportData()}render(){return e`
       <h1>${this.tMessages.title}</h1>
 
       <p>${this.tMessages.instructions}</p>
@@ -386,15 +378,15 @@ import{n as _,t as w,i as M,E as c,x as o,a as H,r as u,k as N,p as L,T as J,g a
       <p><b>${this.tMessages.step1Title}</b> ${this.tMessages.step1Text}</p>
 
       <ul>
-        ${Object.keys(this.guidesData.guides).map(i=>{const t=this.guidesData.guides[i];return o`<li>
+        ${Object.keys(this.guidesData.guides).map(t=>{let n=this.guidesData.guides[t];return e`<li>
             <input
-              id="guide-for-export-${t.slug}"
-              name="guide-for-export-${t.slug}"
+              id="guide-for-export-${n.slug}"
+              name="guide-for-export-${n.slug}"
               type="checkbox"
-              ?checked="${this._selectedGuides.includes(t.slug)}"
-              @input="${()=>this._onGuideCheckboxInput(t.slug)}"
+              ?checked="${this._selectedGuides.includes(n.slug)}"
+              @input="${()=>this._onGuideCheckboxInput(n.slug)}"
             />
-            <label for="guide-for-export-${t.slug}">${t.title}</label>
+            <label for="guide-for-export-${n.slug}">${n.title}</label>
           </li>`})}
       </ul>
 
@@ -440,4 +432,4 @@ import{n as _,t as w,i as M,E as c,x as o,a as H,r as u,k as N,p as L,T as J,g a
       <button class="btn icon submit" data-icon="download" type="button" @click="${this._importImportData}">
         ${this.tMessages.importButton}
       </button>
-    `}createRenderRoot(){return this}};D([_({attribute:"guides-data",type:Object})],S.prototype,"guidesData",2);D([_({attribute:"t-messages",type:Object})],S.prototype,"tMessages",2);D([u()],S.prototype,"_exportData",2);D([u()],S.prototype,"_selectedGuides",2);S=D([w("guide-utilities")],S);
+    `}createRenderRoot(){return this}};p([r({attribute:`guides-data`,type:Object})],M.prototype,`guidesData`,void 0),p([r({attribute:`t-messages`,type:Object})],M.prototype,`tMessages`,void 0),p([n()],M.prototype,`_exportData`,void 0),p([n()],M.prototype,`_selectedGuides`,void 0),M=p([u(`guide-utilities`)],M);
