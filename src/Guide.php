@@ -532,12 +532,33 @@ class Guide extends Plugin
 
             $fieldHandles = [];
             foreach ($fields as $field) {
-                $fieldHandles[$field->uid] = $field->oldHandle ?? $field->handle;
+                $customHandles = [];
+                $layouts = Craft::$app->getFields()->findFieldUsages($field);
+
+                foreach ($layouts as $layout) {
+                    foreach ($layout->getCustomFieldElements() as $layoutElement) {
+                        if ($layoutElement->getFieldUid() === $field->uid) {
+                            $effectiveHandle = $layoutElement->handle ?: $field->handle;
+                            $customHandles[] = $effectiveHandle;
+                        }
+                    }
+                }
+
+                $allHandles = array_values(array_unique($customHandles));
+
+                $fieldHandles[$field->uid] = [
+                    'handle' => $field->oldHandle ?? $field->handle,
+                    'customHandles' => $allHandles,
+                ];
             }
 
             foreach ($fieldPlacements as $placement) {
-                if ($fieldHandles[$placement->groupId] ?? false && $guideSlugsForGuideIds[$placement->guideId] ?? false) {
-                    $fieldHeaderButtons[$fieldHandles[$placement->groupId]] = [
+                if (($fieldHandles[$placement->groupId] ?? false) && ($guideSlugsForGuideIds[$placement->guideId] ?? false)) {
+                    $handles = $fieldHandles[$placement->groupId];
+                    $allHandles = count($handles['customHandles']) ? array_merge([$handles['handle']], $handles['customHandles']) : [$handles['handle']];
+
+                    $fieldHeaderButtons[$handles['handle']] = [
+                        'handles' => array_unique($allHandles),
                         'label' => !empty(self::$settings->guideButtonLabel) ? self::$settings->guideButtonLabel : Craft::t('guide', 'Guide'),
                         'slug' => $guideSlugsForGuideIds[$placement->guideId],
                         'small' => true,

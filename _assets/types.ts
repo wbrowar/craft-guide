@@ -69,6 +69,7 @@ export enum EditPageLocation {
  * Guide button for header fields.
  */
 export interface FieldHeaderButton {
+  handles: string[]
   label: string
   slug: string
   small: boolean

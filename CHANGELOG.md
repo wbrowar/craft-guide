@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## 5.3.5 - 2026-10-09
+### Added
+- Added support for field handles overridden for an entry type. [#122](https://github.com/wbrowar/craft-guide/issues/122)
+  - NOTE: Guides may get added to the wrong field if a field handle is renamed to the name of another field’s handle.
+- Updated compontent documenation.
+
 ## 5.3.4 - 2026-04-05
 ### Changed
 - Updated build tools and Node dependencies.

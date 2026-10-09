@@ -31,7 +31,9 @@ export function addFieldHeaderGuideButton({
 }
 export function addFieldHeaderGuideButtons() {
   Object.keys(fieldHeaderButtons).forEach((key) => {
-    addFieldHeaderGuideButton({ buttonOptions: fieldHeaderButtons[key], fieldHandle: key })
+    fieldHeaderButtons[key].handles.forEach((handle) => {
+      addFieldHeaderGuideButton({ buttonOptions: fieldHeaderButtons[key], fieldHandle: handle })
+    })
   })
 }
 export const assetPath: string = globalsElement?.dataset?.assetPath || ''

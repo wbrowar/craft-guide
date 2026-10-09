@@ -52,6 +52,16 @@ You could use this same `asset` variable when looping through several image asse
 {% endfor %}
 ```
 
+### HTML Attributes
+
+Some components have required or optional attributes, that are documented in the **Guide Editor**. All components allow for HTML attreibutes to be added to the main component element. For example, to add a class to an image component, you can pass in an `attrs` variable into the component’s options:
+
+```twig
+{{ craft.guide.component('image', { asset: craft.assets.filename('my-image.jpg').volume('guide').one(), attrs: { class: 'my-image' } }) }}
+```
+
+The `attrs` object is rendered using Craft CMS’s `attr()` Twig method.
+
 ## Images
 
 When you select a volume for the **Asset Volume** field on the **Guide Settings** page, an **Images** tab will appear in the Guide Editor. All images in the selected asset volume will appear here, making it easy to add them to your guide.
